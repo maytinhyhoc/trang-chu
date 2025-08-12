@@ -1,0 +1,170 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ - Máy tính y học</title>
+    <!-- Tải Tailwind CSS từ CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Màu nền nhẹ */
+        }
+        /* Tùy chỉnh nhỏ cho các phần tử */
+        .gradient-bg {
+            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <!-- Logo/Tên trang web -->
+            <a href="#" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900 mb-4 md:mb-0">
+                Máy tính y học
+            </a>
+            <!-- Navigation Menu -->
+            <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4">
+                <a href="#" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Trang Chủ</a>
+                <a href="#cong-cu" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Công Cụ</a>
+                <a href="#ve-chung-toi" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Về Chúng Tôi</a>
+                <a href="#lien-he" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Liên Hệ</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20 md:py-32 text-center rounded-b-xl shadow-lg">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 animate-pulse">
+                Công Cụ Tính Toán Y Học
+            </h1>
+            <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-90">
+                Cung cấp các công cụ tính toán và phân tích chuyên sâu, hỗ trợ quyết định lâm sàng nhanh chóng và hiệu quả.
+            </p>
+            <a href="#cong-cu" class="bg-white text-indigo-700 hover:bg-indigo-100 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                Khám Phá Các Công Cụ
+            </a>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="cong-cu" class="py-16 md:py-24 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 max-w-5xl">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-12">Các Công Cụ Tính Toán Nổi Bật</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Tool Card 1: ABG Analysis -->
+                <a href="phan-tich-khi-mau.html" class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
+                    <div class="text-5xl text-indigo-500 mb-6">
+                        <!-- Icon cho phân tích -->
+                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l-3 3M9 19V6l3 3m-9 3h2m8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Phân Tích Khí Máu Động Mạch (ABG)</h3>
+                    <p class="text-gray-600">Đánh giá nhanh chóng và chính xác các rối loạn thăng bằng kiềm toan.</p>
+                </a>
+                <!-- Tool Card 2: GFR Calculator -->
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl text-indigo-500 mb-6">
+                        <!-- Icon cho thận/tính toán -->
+                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l-3 3M9 19V6l3 3m-9 3h2m8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2m-8 0h2"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21.5a4.5 4.5 0 00-4.5-4.5h-2a4.5 4.5 0 00-4.5 4.5V22h11v-.5zM12 2.5a4.5 4.5 0 014.5 4.5v15h-9v-15a4.5 4.5 0 014.5-4.5z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Tính Toán Độ Lọc Cầu Thận (GFR)</h3>
+                    <p class="text-gray-600">Ước tính chức năng thận dựa trên các công thức chuẩn.</p>
+                </div>
+                <!-- Tool Card 3: Plasma Exchange Therapy -->
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl text-indigo-500 mb-6">
+                        <!-- Icon cho liệu pháp thay thế huyết tương (medical cross in circle) -->
+                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Liệu pháp thay thế huyết tương</h3>
+                    <p class="text-gray-600">Hỗ trợ tính liều thay huyết tương hay Albumin cần thay thế.</p>
+                </div>
+            </div>
+            <!-- "Xem thêm" Button -->
+            <div class="mt-12 text-center">
+                <a href="#" class="bg-indigo-600 text-white hover:bg-indigo-700 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                    Xem thêm
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="ve-chung-toi" class="py-16 md:py-24 bg-gray-100 rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 max-w-5xl">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2 text-center md:text-left">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">Về Chúng Tôi</h2>
+                <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                    Trang web được xây dựng với mục tiêu cung cấp các công cụ tính toán y học trực tuyến nhanh chóng, chính xác và hoàn toàn miễn phí dành cho cộng đồng người Việt. Các tiện ích hỗ trợ đa dạng, từ phân tích khí máu động mạch, tính độ lọc cầu thận, đến nhiều phép tính y khoa khác, giúp bác sĩ, nhân viên y tế và sinh viên y dễ dàng áp dụng vào thực hành lâm sàng.
+                </p>
+            </div>
+            <div class="md:w-1/2">
+                <!-- Placeholder for an image (e.g., calculator, medical chart, graphs) -->
+                <img src="https://placehold.co/600x400/D1D5DB/1F2937?text=CÔNG+CỤ+Y+TẾ+SỐ" alt="Công cụ y tế số" class="rounded-xl shadow-lg w-full h-auto object-cover">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
+            <p class="mt-2">
+                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
+            </p>
+            <p>
+                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+            </p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
+                <a href="#" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
