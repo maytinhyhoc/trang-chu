@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phân Tích Khí Máu Động Mạch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #analyzeBtn {
+            background-color: #007BFF;
+            color: white;
+        }
+        #analyzeBtn:hover {
+            background-color: #0056b3;
+        }
+        #clearBtn {
+            background-color: #DC3545;
+            color: white;
+        }
+        #clearBtn:hover {
+            background-color: #b02a37;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            font-size: 16px;
+        }
+        @media (max-width: 600px) {
+            body {
+                margin: 10px;
+            }
+            .container {
+                padding: 15px;
+                max-width: 100%;
+            }
+            label {
+                font-size: 16px;
+            }
+            input {
+                font-size: 18px;
+                padding: 10px;
+            }
+            button {
+                font-size: 18px;
+                padding: 12px;
+            }
+            #results {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Phân Tích Khí Máu Động Mạch</h1>
+        <div class="input-group">
+            <label for="ph">pH</label>
+            <input type="number" step="0.01" inputmode="decimal" id="ph" placeholder="Nhập pH (ví dụ: 7.40)">
+        </div>
+        <div class="input-group">
+            <label for="pco2">PCO2 (mmHg)</label>
+            <input type="number" step="0.1" inputmode="decimal" id="pco2" placeholder="Nhập PCO2 (ví dụ: 40)">
+        </div>
+        <div class="input-group">
+            <label for="hco3">[HCO3] (mEq/L)</label>
+            <input type="number" step="0.1" inputmode="decimal" id="hco3" placeholder="Nhập [HCO3] (ví dụ: 24)">
+        </div>
+        <div class="input-group">
+            <label for="na">[Na+] (mEq/L)</label>
+            <input type="number" step="0.1" inputmode="decimal" id="na" placeholder="Nhập [Na+] (ví dụ: 140)">
+        </div>
+        <div class="input-group">
+            <label for="cl">[Cl-] (mEq/L)</label>
+            <input type="number" step="0.1" inputmode="decimal" id="cl" placeholder="Nhập [Cl-] (ví dụ: 100)">
+        </div>
+        <div class="input-group">
+            <label for="albumin">Albumin (g/dL)</label>
+            <input type="number" step="0.1" inputmode="decimal" id="albumin" placeholder="Nhập Albumin (ví dụ: 4.5, để trống nếu không có)">
+        </div>
+        <div class="input-group">
+            <label for="glucose">Glucose (mg/dL)</label>
+            <input type="number" step="0.1" inputmode="decimal" id="glucose" placeholder="Nhập Glucose (ví dụ: 100)">
+        </div>
+        <div class="input-group">
+            <label for="ure">Ure (mmol/L)</label>
+            <input type="number" step="0.1" inputmode="decimal" id="ure" placeholder="Nhập Ure (ví dụ: 5.0, để trống nếu không có)">
+        </div>
+        <div class="input-group">
+            <label for="osm">Osmolality Đo Được (mosm/kg)</label>
+            <input type="number" step="0.1" inputmode="decimal" id="osm" placeholder="Nhập Osmolality (ví dụ: 290)">
+        </div>
+        <button id="analyzeBtn" onclick="analyzeABG()">Phân Tích</button>
+        <button id="clearBtn" onclick="clearInputs()">Xóa Dữ Liệu</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function analyzeABG() {
+            const pH = parseFloat(document.getElementById('ph').value) || 0;
+            const pco2 = parseFloat(document.getElementById('pco2').value) || 0;
+            const hco3 = parseFloat(document.getElementById('hco3').value) || 0;
+            const na = parseFloat(document.getElementById('na').value) || 0;
+            const cl = parseFloat(document.getElementById('cl').value) || 0;
+            const albumin = parseFloat(document.getElementById('albumin').value) || 0;
+            const glucose = parseFloat(document.getElementById('glucose').value) || 0;
+            const ure = parseFloat(document.getElementById('ure').value) || 0;
+            const osm = parseFloat(document.getElementById('osm').value) || 0;
+
+            let results = [];
+            if (pH === 0 || pco2 === 0 || hco3 === 0) {
+                results.push("Lỗi: Vui lòng nhập pH, PCO2 và [HCO3].");
+                document.getElementById('results').innerHTML = results.join('<br>');
+                return;
+            }
+
+            let primaryDisorder = '';
+            if (pH < 7.36 && pco2 > 40) {
+                primaryDisorder = 'Toan Hô Hấp';
+            } else if (pH > 7.44 && pco2 < 40) {
+                primaryDisorder = 'Kiềm Hô Hấp';
+            } else if (pH < 7.36 && pco2 < 40) {
+                primaryDisorder = 'Toan Chuyển Hóa';
+            } else if (pH > 7.44 && pco2 > 40) {
+                primaryDisorder = 'Kiềm Chuyển Hóa';
+            } else if (pH >= 7.36 && pH <= 7.44 && pco2 !== 40) {
+                primaryDisorder = 'Rối Loạn Hỗn Hợp';
+            } else {
+                primaryDisorder = 'Bình Thường';
+            }
+            results.push(`Rối Loạn Nguyên Phát: ${primaryDisorder}`);
+
+            let expectedValue = '', secondaryDisorder = '';
+            if (primaryDisorder === 'Toan Chuyển Hóa') {
+                const deltaHCO3 = 24 - hco3;
+                const expectedPCO2 = 40 - (1.2 * deltaHCO3);
+                expectedValue = `PCO2 Dự Đoán: ${expectedPCO2.toFixed(1)} mmHg`;
+                if (pco2 > expectedPCO2 + 2) {
+                    secondaryDisorder = 'Toan Hô Hấp Thứ Phát';
+                } else if (pco2 < expectedPCO2 - 2) {
+                    secondaryDisorder = 'Kiềm Hô Hấp Thứ Phát';
+                } else {
+                    secondaryDisorder = 'Bù Trừ Đầy Đủ';
+                }
+            } else if (primaryDisorder === 'Kiềm Chuyển Hóa') {
+                const deltaHCO3 = hco3 - 24;
+                const expectedPCO2 = 40 + (0.7 * deltaHCO3);
+                expectedValue = `PCO2 Dự Đoán: ${expectedPCO2.toFixed(1)} mmHg`;
+                if (pco2 > expectedPCO2 + 2) {
+                    secondaryDisorder = 'Toan Hô Hấp Thứ Phát';
+                } else if (pco2 < expectedPCO2 - 2) {
+                    secondaryDisorder = 'Kiềm Hô Hấp Thứ Phát';
+                } else {
+                    secondaryDisorder = 'Bù Trừ Đầy Đủ';
+                }
+            } else if (primaryDisorder === 'Toan Hô Hấp') {
+                const deltaPCO2 = pco2 - 40;
+                const expectedHCO3Acute = 24 + (0.1 * deltaPCO2);
+                const expectedHCO3Chronic = 24 + (0.4 * deltaPCO2);
+                expectedValue = `HCO3 Dự Đoán (Cấp): ${expectedHCO3Acute.toFixed(1)} mEq/L, (Mạn): ${expectedHCO3Chronic.toFixed(1)} mEq/L`;
+                if (hco3 > expectedHCO3Chronic + 2) {
+                    secondaryDisorder = 'Kiềm Chuyển Hóa Thứ Phát';
+                } else if (hco3 < expectedHCO3Acute - 2) {
+                    secondaryDisorder = 'Toan Chuyển Hóa Thứ Phát';
+                } else if (hco3 >= expectedHCO3Acute && hco3 <= expectedHCO3Chronic) {
+                    secondaryDisorder = 'Bù Trừ Một Phần';
+                } else {
+                    secondaryDisorder = 'Không Có Rối Loạn Thứ Phát';
+                }
+            } else if (primaryDisorder === 'Kiềm Hô Hấp') {
+                const deltaPCO2 = 40 - pco2;
+                const expectedHCO3Acute = 24 - (0.2 * deltaPCO2);
+                const expectedHCO3Chronic = 24 - (0.4 * deltaPCO2);
+                expectedValue = `HCO3 Dự Đoán (Cấp): ${expectedHCO3Acute.toFixed(1)} mEq/L, (Mạn): ${expectedHCO3Chronic.toFixed(1)} mEq/L`;
+                if (hco3 > expectedHCO3Acute + 2) {
+                    secondaryDisorder = 'Kiềm Chuyển Hóa Thứ Phát';
+                } else if (hco3 < expectedHCO3Chronic - 2) {
+                    secondaryDisorder = 'Toan Chuyển Hóa Thứ Phát';
+                } else if (hco3 <= expectedHCO3Acute && hco3 >= expectedHCO3Chronic) {
+                    secondaryDisorder = 'Bù Trừ Một Phần';
+                } else {
+                    secondaryDisorder = 'Không Có Rối Loạn Thứ Phát';
+                }
+            } else {
+                expectedValue = 'Không áp dụng';
+                secondaryDisorder = 'Không áp dụng';
+            }
+            results.push(expectedValue);
+            results.push(secondaryDisorder);
+
+            if (na !== 0 && cl !== 0 && hco3 !== 0) {
+                const ag = na - (cl + hco3);
+                results.push(`Anion Gap: ${ag.toFixed(1)} mEq/L`);
+
+                if (albumin !== 0) {
+                    const correctedAG = ag + (2.5 * (4.5 - albumin));
+                    results.push(`Anion Gap Hiệu Chỉnh: ${correctedAG.toFixed(1)} mEq/L`);
+                }
+
+                results.push(ag > 12
+                    ? 'Anion Gap Cao: Có thể do toan lactic, toan ceton, suy thận, hoặc ngộ độc.'
+                    : 'Anion Gap Bình Thường: Có thể do tiêu chảy hoặc truyền NaCl đẳng trương.');
+
+                const deltaGap = (ag - 12) / (24 - hco3);
+                results.push(`Delta Gap: ${deltaGap.toFixed(2)}`);
+                if (deltaGap < 0.8) {
+                    results.push('Delta Gap < 1: Có thể có toan chuyển hóa hyperchloremic.');
+                } else if (deltaGap > 1.2) {
+                    results.push('Delta Gap > 1: Có thể có thêm kiềm chuyển hóa.');
+                } else {
+                    results.push('Delta Gap ≈ 1: Toan chuyển hóa anion gap cao đơn thuần.');
+                }
+            }
+
+            if (na !== 0 && glucose !== 0 && ure !== 0) {
+                const osmCalculated = (2 * na) + (glucose / 18) + (ure / 5.6);
+                results.push(`Osmolality Tính Được: ${osmCalculated.toFixed(1)} mosm/kg`);
+                if (osm !== 0) {
+                    const osmGap = osm - osmCalculated;
+                    results.push(`Osmolal Gap: ${osmGap.toFixed(1)} mosm/kg`);
+                    results.push(osmGap > 10
+                        ? 'Osmolal Gap Cao: Có thể có độc chất (ví dụ: methanol, ethylene glycol).'
+                        : 'Osmolal Gap Bình Thường.');
+                }
+            }
+
+            document.getElementById('results').innerHTML = results.join('<br>');
+        }
+
+        function clearInputs() {
+            document.querySelectorAll('input').forEach(input => {
+                input.value = '';
+            });
+            document.getElementById('results').innerHTML = '';
+        }
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('dblclick', () => {
+                input.value = '';
+            });
+        });
+    </script>
+</body>
+</html>
