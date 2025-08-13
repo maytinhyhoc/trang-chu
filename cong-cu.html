@@ -36,7 +36,7 @@
             <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4">
                 <a href="index.html" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Trang Chủ</a>
                 <a href="#" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100 active-link">Công Cụ</a>
-                <a href="index.html#ve-chung-toi" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Về Chúng Tôi</a>
+                <a href="index.html#ve-chung-toi" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Giới thiệu</a>
                 <a href="index.html#lien-he" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Liên Hệ</a>
             </nav>
         </div>
@@ -69,40 +69,30 @@
                 <!-- Tool Card 1: ABG Analysis -->
                 <a href="phan-tich-khi-mau.html" class="tool-card bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 block text-left">
                     <div class="flex items-center">
-                        <div class="text-4xl text-indigo-500 mr-4">
-                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 13h10M7 17h10M17 4v16a2 2 0 01-2 2H9a2 2 0 01-2-2V4a2 2 0 012-2h6a2 2 0 012 2z"></path>
-                            </svg>
-                        </div>
+                        <!-- Removed icon SVG -->
                         <div>
                             <h3 class="text-xl font-semibold text-gray-900">Phân Tích Khí Máu Động Mạch (ABG)</h3>
-                            <p class="text-base text-gray-600">Đánh giá nhanh chóng và chính xác các rối loạn thăng bằng kiềm toan.</p>
+                            <p class="text-base text-gray-600">Đánh giá nhanh rối loạn thăng bằng kiềm toan.</p> <!-- Shortened description -->
                         </div>
                     </div>
                 </a>
                 <!-- Tool Card 2: GFR Calculator -->
                 <div class="tool-card bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 text-left">
                     <div class="flex items-center">
-                        <div class="text-4xl text-indigo-500 mr-4">
-                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                        </div>
+                        <!-- Removed icon SVG -->
                         <div>
                             <h3 class="text-xl font-semibold text-gray-900">Tính Toán Độ Lọc Cầu Thận (GFR)</h3>
-                            <p class="text-base text-gray-600">Ước tính chức năng thận dựa trên các công thức chuẩn.</p>
+                            <p class="text-base text-gray-600">Ước tính chức năng thận theo công thức chuẩn.</p> <!-- Shortened description -->
                         </div>
                     </div>
                 </div>
                 <!-- Tool Card 3: Plasma Exchange Therapy -->
                 <div class="tool-card bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 text-left">
                     <div class="flex items-center">
-                        <div class="text-4xl text-indigo-500 mr-4">
-                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
+                        <!-- Removed icon SVG -->
                         <div>
-                            <h3 class="text-xl font-semibold text-gray-900">Liệu pháp thay thế huyết tương</h3>
-                            <p class="text-base text-gray-600">Hỗ trợ tính liều thay huyết tương hay Albumin cần thay thế.</p>
+                            <h3 class="text-xl font-semibold text-gray-900">Liệu pháp thay thế huyết tương (TPE)</h3>
+                            <p class="text-base text-gray-600">Hỗ trợ tính liều thay huyết tương/Albumin.</p> <!-- Shortened description -->
                         </div>
                     </div>
                 </div>
@@ -138,9 +128,9 @@
                 const description = card.querySelector('p').textContent.toLowerCase();
 
                 if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.style.display = 'block'; // Show the card
+                    card.style.display = 'block'; // Hiển thị thẻ
                 } else {
-                    card.style.display = 'none'; // Hide the card
+                    card.style.display = 'none'; // Ẩn thẻ
                 }
             });
         });
