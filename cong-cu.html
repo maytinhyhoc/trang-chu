@@ -10,15 +10,15 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Light background color */
+            background-color: #f8fafc; /* Màu nền nhẹ */
         }
-        /* Small customizations for elements */
+        /* Tùy chỉnh nhỏ cho các phần tử */
         .gradient-bg {
-            background: linear-gradient(to right, #6366f1, #a855f7); /* Purple-blue gradient */
+            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
         }
         .active-link {
-            background-color: #e0e7ff; /* Active background color */
-            color: #4f46e5; /* Active text color */
+            background-color: #e0e7ff; /* Màu nền khi active */
+            color: #4f46e5; /* Màu chữ khi active */
             font-weight: 600;
         }
     </style>
@@ -28,7 +28,7 @@
     <!-- Header Section -->
     <header class="bg-white shadow-md py-4">
         <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-            <!-- Logo/Website Name -->
+            <!-- Logo/Tên trang web -->
             <a href="index.html" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900 mb-4 md:mb-0">
                 Máy tính y học
             </a>
@@ -76,8 +76,8 @@
                         </div>
                     </div>
                 </a>
-                <!-- Tool Card 2: GFR Calculator -->
-                <div class="tool-card bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 text-left">
+                <!-- Tool Card 2: GFR Calculator - Corrected to <a> tag -->
+                <a href="#" class="tool-card bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 block text-left">
                     <div class="flex items-center">
                         <div>
                             <h3 class="text-xl font-semibold text-gray-900">Tính Toán Độ Lọc Cầu Thận (GFR)</h3>
@@ -85,8 +85,8 @@
                         </div>
                     </div>
                 </a>
-                <!-- Tool Card 3: Plasma Exchange Therapy -->
-                <div class="tool-card bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 text-left">
+                <!-- Tool Card 3: Plasma Exchange Therapy - Corrected to <a> tag -->
+                <a href="#" class="tool-card bg-gray-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 block text-left">
                     <div class="flex items-center">
                         <div>
                             <h3 class="text-xl font-semibold text-gray-900">Liệu pháp thay thế huyết tương (TPE)</h3>
@@ -117,18 +117,29 @@
     </footer>
 
     <script>
+        // Hàm loại bỏ dấu tiếng Việt
+        function removeDiacritics(str) {
+            return str
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/đ/g, "d")
+                .replace(/Đ/g, "D");
+        }
+
         document.getElementById('toolSearch').addEventListener('keyup', function() {
-            const searchTerm = this.value.toLowerCase();
+            // Lấy từ khóa tìm kiếm và chuyển thành chữ thường, loại bỏ dấu
+            const searchTerm = removeDiacritics(this.value.toLowerCase());
             const toolCards = document.querySelectorAll('.tool-card');
 
             toolCards.forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const description = card.querySelector('p').textContent.toLowerCase();
+                // Lấy tiêu đề và mô tả của thẻ, chuyển thành chữ thường, loại bỏ dấu
+                const title = removeDiacritics(card.querySelector('h3').textContent.toLowerCase());
+                const description = removeDiacritics(card.querySelector('p').textContent.toLowerCase());
 
                 if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.style.display = 'block'; // Show the card
+                    card.style.display = 'block'; // Hiển thị thẻ
                 } else {
-                    card.style.display = 'none'; // Hide the card
+                    card.style.display = 'none'; // Ẩn thẻ
                 }
             });
         });
