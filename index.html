@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Chủ - Máy tính y học</title>
+    <!-- Thêm Favicon cho tab trình duyệt -->
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
     <!-- Tải Tailwind CSS từ CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -24,9 +26,12 @@
     <header class="bg-white shadow-md py-4">
         <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
             <!-- Logo/Tên trang web -->
-            <a href="#" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900 mb-4 md:mb-0">
-                Máy tính y học
-            </a>
+            <div class="flex items-center mb-4 md:mb-0">
+                <img src="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" alt="Logo Máy tính y học" class="h-10 w-10 mr-2 rounded-full"> <!-- Logo bên cạnh tên trang web -->
+                <a href="#" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900">
+                    Máy tính y học
+                </a>
+            </div>
             <!-- Navigation Menu -->
             <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4">
                 <a href="#" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Trang Chủ</a>
