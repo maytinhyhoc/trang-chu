@@ -31,7 +31,8 @@
             </a>
             <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4">
                 <a href="index.html" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Trang Chủ</a>
-                <a href="index.html#cong-cu" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Công Cụ</a>
+                <!-- Link 'Công Cụ' đã được cập nhật để trỏ đến cong-cu.html -->
+                <a href="cong-cu.html" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Công Cụ</a>
                 <a href="index.html#ve-chung-toi" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Giới thiệu</a>
                 <a href="index.html#lien-he" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Liên Hệ</a>
             </nav>
@@ -191,7 +192,7 @@
                 } else if (pco2Status === 'Kiềm hô hấp' && hco3Status === 'Toan chuyển hóa') {
                     primaryDisorder = 'Rối Loạn Hỗn Hợp';
                 } else if (pco2Status !== 'Bình thường' && hco3Status !== 'Bình thường') {
-                     primaryDisorder = 'Rối Loạn Hỗn Hợp';
+                   primaryDisorder = 'Rối Loạn Hỗn Hợp';
                 } else if (pco2Status === 'Bình thường' && hco3Status === 'Bình thường') {
                     primaryDisorder = 'Bình Thường';
                 } else {
@@ -236,7 +237,7 @@
                 const expectedHCO3Acute = 24 + (0.1 * deltaPCO2);
                 const expectedHCO3Chronic = 24 + (0.4 * deltaPCO2);
                 expectedValue = `HCO3 Dự Đoán (Cấp): ${expectedHCO3Acute.toFixed(1)} mEq/L, (Mạn): ${expectedHCO3Chronic.toFixed(1)} mEq/L`;
-                 if (hco3 > expectedHCO3Chronic + 2) {
+                if (hco3 > expectedHCO3Chronic + 2) {
                     secondaryDisorder = 'Có Kiềm Chuyển Hóa thứ phát kèm theo.';
                 } else if (hco3 < expectedHCO3Acute - 2) {
                     secondaryDisorder = 'Có Toan Chuyển Hóa thứ phát kèm theo.';
