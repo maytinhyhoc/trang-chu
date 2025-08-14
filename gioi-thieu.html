@@ -69,11 +69,11 @@
     </header>
 
     <!-- About Us Section -->
-    <section id="gioi-thieu" class="py-12 md:py-16 bg-gray-100 rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 max-w-5xl">
+    <section id="gioi-thieu" class="py-8 md:py-10 bg-gray-100 rounded-lg shadow-inner mx-4 my-4 md:mx-auto md:my-6 max-w-5xl">
         <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
             <div class="md:w-full text-center md:text-left">
-                <h2 class="text-4xl font-bold text-gray-800 mb-6">Giới thiệu</h2>
-                <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Giới thiệu</h2>
+                <p class="text-base text-gray-700 leading-relaxed mb-4">
                     Trang web được xây dựng với mục tiêu cung cấp các công cụ tính toán y học trực tuyến nhanh chóng, chính xác và hoàn toàn miễn phí dành cho cộng đồng. Ngoài các tiện ích như phân tích khí máu động mạch, tính độ lọc cầu thận…, chúng tôi còn tổng hợp và cung cấp nhiều bảng điểm đánh giá lâm sàng phổ biến trong y khoa, giúp hỗ trợ chẩn đoán, tiên lượng và quyết định điều trị. Trang web hướng tới việc giúp bác sĩ, nhân viên y tế và sinh viên y khoa dễ dàng áp dụng vào thực hành lâm sàng, tiết kiệm thời gian và nâng cao độ chính xác.
                 </p>
             </div>
@@ -136,56 +136,6 @@
             Mỗi đóng góp, dù nhỏ, đều là nguồn động lực để chúng tôi tiếp tục phát triển các công cụ cho cộng đồng y khoa Việt Nam.
         </p>
     </section>
-
-    <script>
-        // Nút "Sao chép"
-        document.querySelectorAll('button[data-copy]').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                try {
-                    // Check if clipboard API is available
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        await navigator.clipboard.writeText(btn.getAttribute('data-copy'));
-                    } else {
-                        // Fallback for older browsers or if running in an iframe with restrictions
-                        const textarea = document.createElement('textarea');
-                        textarea.value = btn.getAttribute('data-copy');
-                        textarea.style.position = 'fixed'; // Avoid scrolling to bottom
-                        textarea.style.opacity = '0'; // Hide textarea
-                        document.body.appendChild(textarea);
-                        textarea.focus();
-                        textarea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textarea);
-                    }
-
-                    const old = btn.textContent;
-                    btn.textContent = 'Đã sao chép ✓';
-                    setTimeout(() => btn.textContent = old, 1500);
-                } catch (e) {
-                    // Use a custom message box instead of alert
-                    const messageBox = document.createElement('div');
-                    messageBox.style.cssText = `
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        background-color: #fff;
-                        padding: 20px;
-                        border-radius: 8px;
-                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                        z-index: 1000;
-                        text-align: center;
-                    `;
-                    messageBox.innerHTML = `
-                        <p>Không thể sao chép, vui lòng copy thủ công.</p>
-                        <button onclick="this.parentNode.remove()" style="margin-top: 10px; padding: 8px 16px; background-color: #6366f1; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Đóng</button>
-                    `;
-                    document.body.appendChild(messageBox);
-                }
-            });
-        });
-    </script>
-    <!-- ====== /ỦNG HỘ CHÚNG TÔI ====== -->
 
     <!-- Footer Section -->
     <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
