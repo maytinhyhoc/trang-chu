@@ -1,22 +1,21 @@
+{
+  "name": "Máy Tính Y Học",
+  "short_name": "Máy Tính Y Học",
+  "description": "Các công cụ tính toán và phân tích y học nhanh chóng.",
+  "start_url": "/trang-chu/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#6366f1",
+  "icons": [
     {
-      "name": "Máy tính y học",
-      "short_name": "Y học",
-      "description": "Các công cụ tính toán và phân tích y học nhanh chóng.",
-      "start_url": "/",
-      "display": "standalone",
-      "background_color": "#f8fafc",
-      "theme_color": "#6366f1",
-      "icons": [
-        {
-          "src": "https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        },
-        {
-          "src": "https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png",
-          "sizes": "512x512",
-          "type": "image/png"
-        }
-      ]
+      "src": "https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-    
+  ]
+}
