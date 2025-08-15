@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ - Độ lọc cầu thận (eGFR)</title>
+    <!-- Tải Tailwind CSS từ CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .active-link {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        .score-box {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 2.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .result-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900 mb-4 md:mb-0">
+                Máy tính y học
+            </a>
+            <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4">
+                <a href="index.html" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Trang Chủ</a>
+                <a href="#" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="gioi-thieu.html" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Giới thiệu</a>
+                <a href="index.html#lien-he" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Liên Hệ</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Calculator Section -->
+    <section class="py-8 md:py-16 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 md:max-w-4xl">
+        <div class="container mx-auto px-2 sm:px-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
+                Tính Độ Lọc Cầu Thận (eGFR)
+            </h1>
+
+            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
+                <form id="egfr-calculator-form" class="space-y-6">
+                    <!-- Formula Selection -->
+                    <div class="input-group">
+                        <label for="formula-select" class="block text-sm font-medium text-gray-700 mb-1">Chọn công thức tính eGFR</label>
+                        <select id="formula-select" name="formula" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="ckd-epi-creatinine-2021">CKD-EPI Creatinine (2021) - Dựa vào Creatinin, tuổi và giới tính</option>
+                            <option value="bedside-schwartz">Bedside Schwartz (Trẻ em) - Dựa trên creatinine và chiều cao (dưới 19 tuổi)</option>
+                            <option value="mdrd">MDRD - Dựa vào Creatinin, tuổi và giới tính</option>
+                            <option value="ckd-epi-cystatin-c-2012">CKD-EPI Cystatin C (2012) - Dựa trên cystatin C, tuổi và giới tính</option>
+                            <option value="cockcroft-gault">Cockcroft-Gault - Dựa trên nồng độ creatinine, tuổi, cân nặng và giới tính (Không dùng nếu quá mập hoặc phù nhiều)</option>
+                        </select>
+                    </div>
+
+                    <!-- Input fields - Dynamic based on formula selected -->
+                    <div id="input-fields" class="space-y-6">
+                        <!-- Default inputs for CKD-EPI Creatinine (2021) -->
+                        <div class="input-group formula-field ckd-epi-creatinine-2021 mdrd ckd-epi-cystatin-c-2012 cockcroft-gault">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Giới tính</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="radio" name="gender" value="male" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                    <span class="ml-2 text-gray-700">Nam</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="gender" value="female" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                    <span class="ml-2 text-gray-700">Nữ</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Race field - Only for MDRD -->
+                        <div class="input-group formula-field mdrd hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Chủng tộc</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="radio" name="race" value="non-black" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                    <span class="ml-2 text-gray-700">Không phải người da đen</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="race" value="black" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                    <span class="ml-2 text-gray-700">Người da đen</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="input-group formula-field ckd-epi-creatinine-2021 bedside-schwartz mdrd ckd-epi-cystatin-c-2012 cockcroft-gault">
+                            <label for="age" class="block text-sm font-medium text-gray-700">Tuổi (năm)</label>
+                            <input type="number" id="age" name="age" min="0" max="120" placeholder="Nhập tuổi" required
+                                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                   inputmode="numeric" pattern="[0-9]*">
+                        </div>
+
+                        <div class="input-group formula-field ckd-epi-creatinine-2021 bedside-schwartz mdrd cockcroft-gault">
+                            <label for="creatinine" class="block text-sm font-medium text-gray-700">Creatinine huyết thanh</label>
+                            <div class="flex mt-1">
+                                <input type="number" id="creatinine" name="creatinine" step="any" min="0" placeholder="Nhập giá trị creatinine" required
+                                       class="flex-1 block w-full px-3 py-2 border border-gray-300 rounded-l-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                       inputmode="numeric" pattern="[0-9.]*">
+                                <select id="creatinine-unit" name="creatinine-unit" class="border border-gray-300 rounded-r-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option value="umol/L" selected>µmol/L</option>
+                                    <option value="mg/dL">mg/dL</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group formula-field bedside-schwartz hidden">
+                            <label for="height" class="block text-sm font-medium text-gray-700">Chiều cao</label>
+                            <div class="flex mt-1">
+                                <input type="number" id="height" name="height" step="any" min="0" placeholder="Nhập chiều cao" required
+                                       class="flex-1 block w-full px-3 py-2 border border-gray-300 rounded-l-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                       inputmode="numeric" pattern="[0-9.]*">
+                                <select id="height-unit" name="height-unit" class="border border-gray-300 rounded-r-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option value="cm" selected>cm</option>
+                                    <option value="inch">inch</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group formula-field ckd-epi-cystatin-c-2012 hidden">
+                            <label for="cystatin-c" class="block text-sm font-medium text-gray-700">Cystatin C (mg/L)</label>
+                            <input type="number" id="cystatin-c" name="cystatin-c" step="any" min="0" placeholder="Nhập giá trị cystatin C" required
+                                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                   inputmode="numeric" pattern="[0-9.]*">
+                        </div>
+
+                        <div class="input-group formula-field cockcroft-gault hidden">
+                            <label for="weight" class="block text-sm font-medium text-gray-700">Cân nặng (kg)</label>
+                            <input type="number" id="weight" name="weight" step="any" min="0" placeholder="Nhập cân nặng" required
+                                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                   inputmode="numeric" pattern="[0-9.]*">
+                        </div>
+
+                    </div>
+
+                    <div class="mt-8 flex flex-col md:flex-row gap-4">
+                        <button type="submit" id="calculateBtn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-indigo-700">
+                            Tính toán eGFR
+                        </button>
+                        <button type="button" id="clearBtn" class="flex-1 bg-red-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-red-600">
+                            Xóa Dữ Liệu
+                        </button>
+                    </div>
+                </form>
+
+                <div id="result-container" class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner hidden">
+                    <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">Kết quả</h3>
+                    <div class="flex flex-col md:flex-row justify-center items-center md:space-x-8 space-y-8 md:space-y-0">
+                        <div class="w-full md:w-auto flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">eGFR (mL/min/1.73m²)</p>
+                            <div id="egfr-display" class="score-box">0</div>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                         <p class="text-lg font-medium text-gray-600 mb-2">Đánh giá</p>
+                        <p id="evaluation-text" class="result-text text-indigo-700">Vui lòng điền đầy đủ các thông tin trên để tính toán.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo reserved.</p>
+            <p class="mt-2">
+                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
+            </p>
+            <p>
+                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+            </p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
+                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const formulaSelect = document.getElementById('formula-select');
+            const inputFieldsContainer = document.getElementById('input-fields');
+            const egfrForm = document.getElementById('egfr-calculator-form');
+            const egfrDisplay = document.getElementById('egfr-display');
+            const evaluationText = document.getElementById('evaluation-text');
+            const resultContainer = document.getElementById('result-container');
+            const clearBtn = document.getElementById('clearBtn');
+            const creatinineUnitSelect = document.getElementById('creatinine-unit');
+            const heightUnitSelect = document.getElementById('height-unit'); // New height unit select
+
+            // Function to show/hide input fields based on selected formula
+            function updateInputFields() {
+                const selectedFormula = formulaSelect.value;
+                const allFormulaFields = document.querySelectorAll('.formula-field');
+
+                allFormulaFields.forEach(field => {
+                    field.classList.add('hidden'); // Hide all fields initially
+                    const classes = field.classList;
+                    if (classes.contains(selectedFormula)) {
+                        field.classList.remove('hidden'); // Show only relevant fields
+                        // For radio buttons, uncheck them if they are hidden
+                        const radioInputs = field.querySelectorAll('input[type="radio"]');
+                        radioInputs.forEach(radio => radio.checked = false);
+                        // Clear text inputs
+                        const textInputs = field.querySelectorAll('input[type="number"]');
+                        textInputs.forEach(input => input.value = '');
+                    }
+                });
+
+                // Specifically handle the race field: it should only be visible for MDRD
+                const raceField = document.querySelector('.input-group.formula-field.mdrd');
+                if (selectedFormula === 'mdrd') {
+                    raceField.classList.remove('hidden');
+                } else {
+                    raceField.classList.add('hidden');
+                    raceField.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+                }
+
+
+                // Set required attribute for visible inputs
+                const visibleInputs = document.querySelectorAll('#input-fields .input-group:not(.hidden) input[required], #input-fields .input-group:not(.hidden) select[required]');
+                visibleInputs.forEach(input => input.setAttribute('required', 'true'));
+
+                const hiddenInputs = document.querySelectorAll('#input-fields .input-group.hidden input');
+                hiddenInputs.forEach(input => input.removeAttribute('required'));
+
+                resetResults(); // Reset results when formula changes
+            }
+
+            // Function to reset results display
+            function resetResults() {
+                egfrDisplay.textContent = '0';
+                evaluationText.textContent = 'Vui lòng điền đầy đủ các thông tin trên để tính toán.';
+                evaluationText.className = "result-text text-indigo-700";
+                resultContainer.classList.add('hidden');
+            }
+
+            // Initial call to set up fields based on default selection
+            updateInputFields();
+
+            // Event listener for formula selection change
+            formulaSelect.addEventListener('change', updateInputFields);
+
+            // Event listener for form submission
+            egfrForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const selectedFormula = formulaSelect.value;
+                let egfrValue;
+                let errorMessage = '';
+                
+                // Helper to get checked radio value
+                const getRadioValue = (name) => {
+                    const el = document.querySelector(`input[name="${name}"]:checked`);
+                    return el ? el.value : null;
+                };
+
+                // Helper to get float value from input
+                const getInputValue = (id) => {
+                    const el = document.getElementById(id);
+                    return el ? parseFloat(el.value) : null;
+                };
+
+                // Common inputs
+                const gender = getRadioValue('gender');
+                let race = getRadioValue('race'); // Will be used only by MDRD
+                const age = getInputValue('age');
+                let creatinine = getInputValue('creatinine'); // Will be converted if needed
+                const creatinineUnit = creatinineUnitSelect.value;
+                
+                let height = getInputValue('height'); // Will be converted if needed
+                const heightUnit = heightUnitSelect ? heightUnitSelect.value : 'cm'; // Default to cm if select not visible
+
+                const cystatinC = getInputValue('cystatin-c'); // For CKD-EPI Cystatin C
+                const weight = getInputValue('weight'); // For Cockcroft-Gault
+
+                // Convert creatinine to mg/dL if input is in µmol/L
+                if (creatinineUnit === 'umol/L' && creatinine !== null) {
+                    creatinine = creatinine / 88.4; // 1 mg/dL = 88.4 µmol/L
+                }
+
+                // Convert height to cm if input is in inches
+                if (heightUnit === 'inch' && height !== null) {
+                    height = height * 2.54; // 1 inch = 2.54 cm
+                }
+
+                // Validate common required fields
+                let allRequiredFilled = true;
+                const visibleInputs = document.querySelectorAll('#input-fields .input-group:not(.hidden) input[required]');
+                visibleInputs.forEach(input => {
+                    if (input.type === 'radio') {
+                        const radioGroupName = input.name;
+                        if (!document.querySelector(`input[name="${radioGroupName}"]:checked`)) {
+                            allRequiredFilled = false;
+                        }
+                    } else {
+                        if (input.value === '' || isNaN(parseFloat(input.value))) {
+                            allRequiredFilled = false;
+                        }
+                    }
+                });
+
+                // Also check for selected dropdowns if they are required and visible
+                const visibleSelects = document.querySelectorAll('#input-fields .input-group:not(.hidden) select[required]');
+                visibleSelects.forEach(select => {
+                    if (!select.value) {
+                        allRequiredFilled = false;
+                    }
+                });
+
+
+                if (!allRequiredFilled) {
+                    errorMessage = 'Vui lòng điền đầy đủ tất cả các thông tin bắt buộc.';
+                    egfrDisplay.textContent = '0';
+                    evaluationText.textContent = errorMessage;
+                    evaluationText.className = "result-text text-red-500";
+                    resultContainer.classList.remove('hidden');
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+
+                // Calculate eGFR based on selected formula
+                switch (selectedFormula) {
+                    case 'ckd-epi-creatinine-2021':
+                        if (age < 18) {
+                            errorMessage = 'Công thức CKD-EPI Creatinine (2021) không áp dụng cho người dưới 18 tuổi. Vui lòng chọn Bedside Schwartz cho trẻ em.';
+                            break;
+                        }
+                        let kappa_ckd_epi;
+                        let alpha_ckd_epi;
+                        let femaleMultiplier_ckd_epi = 1;
+
+                        if (gender === 'female') {
+                            kappa_ckd_epi = 0.7;
+                            alpha_ckd_epi = -0.241;
+                            femaleMultiplier_ckd_epi = 1.012;
+                        } else { // male
+                            kappa_ckd_epi = 0.9;
+                            alpha_ckd_epi = -0.302;
+                        }
+
+                        const minTerm_ckd_epi = Math.min(creatinine / kappa_ckd_epi, 1);
+                        const maxTerm_ckd_epi = Math.max(creatinine / kappa_ckd_epi, 1);
+
+                        egfrValue = 142 * Math.pow(minTerm_ckd_epi, alpha_ckd_epi) * Math.pow(maxTerm_ckd_epi, -1.200) * Math.pow(0.9938, age) * femaleMultiplier_ckd_epi;
+                        egfrValue = Math.round(egfrValue * 10) / 10;
+                        break;
+
+                    case 'bedside-schwartz':
+                        if (age >= 19) {
+                            errorMessage = 'Công thức Bedside Schwartz chỉ áp dụng cho người dưới 19 tuổi.';
+                            break;
+                        }
+                        if (creatinine <= 0 || height <= 0) {
+                            errorMessage = 'Creatinine và chiều cao phải lớn hơn 0.';
+                            break;
+                        }
+                        egfrValue = (0.413 * height) / creatinine;
+                        egfrValue = Math.round(egfrValue * 10) / 10;
+                        break;
+
+                    case 'mdrd':
+                        if (age < 18) {
+                            errorMessage = 'Công thức MDRD không áp dụng cho người dưới 18 tuổi. Vui lòng chọn Bedside Schwartz cho trẻ em.';
+                            break;
+                        }
+                        let raceMultiplier_mdrd = 1;
+                        let femaleMultiplier_mdrd = 1;
+
+                        if (race === 'black') {
+                            raceMultiplier_mdrd = 1.212;
+                        }
+                        if (gender === 'female') {
+                            femaleMultiplier_mdrd = 0.742;
+                        }
+                        if (creatinine <= 0) {
+                            errorMessage = 'Creatinine phải lớn hơn 0.';
+                            break;
+                        }
+                        egfrValue = 175 * Math.pow(creatinine, -1.154) * Math.pow(age, -0.203) * raceMultiplier_mdrd * femaleMultiplier_mdrd;
+                        egfrValue = Math.round(egfrValue * 10) / 10;
+                        break;
+
+                    case 'ckd-epi-cystatin-c-2012':
+                        if (age < 18) {
+                            errorMessage = 'Công thức CKD-EPI Cystatin C (2012) không áp dụng cho người dưới 18 tuổi. Vui lòng chọn Bedside Schwartz cho trẻ em.';
+                            break;
+                        }
+                        let kappa_cystatin;
+                        let alpha_cystatin;
+                        let femaleMultiplier_cystatin = 1;
+
+                        if (gender === 'female') {
+                            kappa_cystatin = 0.8;
+                            alpha_cystatin = -0.329;
+                            femaleMultiplier_cystatin = 0.932;
+                        } else { // male
+                            kappa_cystatin = 0.8; // Same kappa for male, different alpha
+                            alpha_cystatin = -0.364;
+                        }
+                        if (cystatinC <= 0) {
+                            errorMessage = 'Cystatin C phải lớn hơn 0.';
+                            break;
+                        }
+
+                        const minTerm_cystatin = Math.min(cystatinC / kappa_cystatin, 1);
+                        const maxTerm_cystatin = Math.max(cystatinC / kappa_cystatin, 1);
+
+                        egfrValue = 133 * Math.pow(minTerm_cystatin, alpha_cystatin) * Math.pow(maxTerm_cystatin, -0.499) * Math.pow(0.996, age) * femaleMultiplier_cystatin;
+                        egfrValue = Math.round(egfrValue * 10) / 10;
+                        break;
+
+                    case 'cockcroft-gault':
+                        if (age < 18) {
+                            errorMessage = 'Công thức Cockcroft-Gault không áp dụng cho người dưới 18 tuổi. Vui lòng chọn Bedside Schwartz cho trẻ em.';
+                            break;
+                        }
+                        if (creatinine <= 0 || weight <= 0) {
+                            errorMessage = 'Creatinine và cân nặng phải lớn hơn 0.';
+                            break;
+                        }
+                        let femaleFactor_cg = 1;
+                        if (gender === 'female') {
+                            femaleFactor_cg = 0.85;
+                        }
+                        // Cockcroft-Gault estimates CrCl, not eGFR, so the unit is mL/min
+                        egfrValue = ((140 - age) * weight) / (creatinine * 72) * femaleFactor_cg;
+                        egfrValue = Math.round(egfrValue * 10) / 10;
+                        break;
+
+                    default:
+                        errorMessage = 'Vui lòng chọn một công thức tính eGFR.';
+                        break;
+                }
+
+                if (errorMessage) {
+                    egfrDisplay.textContent = '0';
+                    evaluationText.textContent = errorMessage;
+                    evaluationText.className = "result-text text-red-500";
+                } else {
+                    egfrDisplay.textContent = egfrValue;
+
+                    // Evaluate for CKD-EPI and MDRD (eGFR classification)
+                    if (['ckd-epi-creatinine-2021', 'mdrd', 'ckd-epi-cystatin-c-2012'].includes(selectedFormula)) {
+                        if (egfrValue >= 90) {
+                            evaluationText.textContent = `Chức năng thận G1: Bình thường hoặc tăng.`;
+                            evaluationText.className = "result-text text-green-700";
+                        } else if (egfrValue >= 60 && egfrValue <= 89) {
+                            evaluationText.textContent = `Chức năng thận G2: Giảm nhẹ.`;
+                            evaluationText.className = "result-text text-lime-700";
+                        } else if (egfrValue >= 45 && egfrValue <= 59) {
+                            evaluationText.textContent = `Chức năng thận G3a: Giảm nhẹ đến trung bình.`;
+                            evaluationText.className = "result-text text-yellow-600";
+                        } else if (egfrValue >= 30 && egfrValue <= 44) {
+                            evaluationText.textContent = `Chức năng thận G3b: Giảm trung bình đến nặng.`;
+                            evaluationText.className = "result-text text-orange-600";
+                        } else if (egfrValue >= 15 && egfrValue <= 29) {
+                            evaluationText.textContent = `Chức năng thận G4: Giảm nặng.`;
+                            evaluationText.className = "result-text text-red-600";
+                        } else { // egfrValue < 15
+                            evaluationText.textContent = `Chức năng thận G5: Suy thận giai đoạn cuối.`;
+                            evaluationText.className = "result-text text-red-800";
+                        }
+                    } else if (selectedFormula === 'cockcroft-gault') {
+                         evaluationText.textContent = `Độ thanh thải Creatinine (CrCl): ${egfrValue} mL/min.`;
+                         evaluationText.className = "result-text text-indigo-700";
+                    } else if (selectedFormula === 'bedside-schwartz') {
+                         evaluationText.textContent = `Độ lọc cầu thận (eGFR): ${egfrValue} mL/min/1.73m². (Công thức dành cho trẻ em)`;
+                         evaluationText.className = "result-text text-indigo-700";
+                    }
+                }
+
+                resultContainer.classList.remove('hidden');
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Event listener for clear button
+            clearBtn.addEventListener('click', function() {
+                egfrForm.reset(); // Reset form fields
+                creatinineUnitSelect.value = 'umol/L'; // Reset creatinine unit to default
+                if (heightUnitSelect) { // Check if height unit select exists
+                    heightUnitSelect.value = 'cm'; // Reset height unit to default
+                }
+                updateInputFields(); // Re-render fields based on default/last selected formula
+                resetResults(); // Reset result display
+            });
+        });
+    </script>
+</body>
+</html>
