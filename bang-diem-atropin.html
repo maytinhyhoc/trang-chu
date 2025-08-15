@@ -10,16 +10,11 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Màu nền nhẹ */
-        }
-        /* Gradient background specific to the header if needed for consistency with original.
-           The main content section will not have this. */
-        .gradient-bg-header {
-            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
+            background-color: #f8fafc;
         }
         .active-link {
-            background-color: #e0e7ff; /* Màu nền khi active */
-            color: #4f46e5; /* Màu chữ khi active */
+            background-color: #e0e7ff;
+            color: #4f46e5;
             font-weight: 600;
         }
         .score-box {
@@ -33,10 +28,9 @@
             text-align: center;
         }
         .result-text {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 600;
         }
-         /* Tùy chỉnh nhỏ cho các phần tử */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -52,11 +46,9 @@
     <!-- Header Section -->
     <header class="bg-white shadow-md py-4">
         <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-            <!-- Logo/Tên trang web -->
             <a href="index.html" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900 mb-4 md:mb-0">
                 Máy tính y học
             </a>
-            <!-- Navigation Menu -->
             <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4">
                 <a href="index.html" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Trang Chủ</a>
                 <a href="#" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100 active-link">Công Cụ</a>
@@ -66,8 +58,8 @@
         </div>
     </header>
 
-    <!-- Main Score Calculator Section - Adjusted to match the ABG page layout -->
-    <section class="py-8 md:py-16 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 md:max-w-3xl">
+    <!-- Main Score Calculator Section -->
+    <section class="py-8 md:py-16 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 md:max-w-4xl">
         <div class="container mx-auto px-2 sm:px-4">
             <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
                 Bảng điểm Atropin
@@ -75,107 +67,123 @@
 
             <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
                 <form id="atropine-score-form" class="space-y-6">
-                    <!-- Suy giảm ý thức -->
+                    <!-- Da -->
                     <div class="input-group">
-                        <label for="consciousness" class="block text-sm font-medium text-gray-700 mb-1">1. Suy giảm ý thức</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">1. Da</label>
                         <div class="space-y-2">
                             <label class="flex items-center">
-                                <input type="radio" name="consciousness" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Tỉnh táo</span>
+                                <input type="radio" name="da" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Khô, lạnh</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="consciousness" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Lơ mơ hoặc hôn mê</span>
+                                <input type="radio" name="da" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Hồng, ấm</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="da" value="2" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Nóng, đỏ</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Đồng tử co nhỏ (< 2mm) -->
+                    <!-- Đồng tử -->
                     <div class="input-group">
-                        <label for="pupil" class="block text-sm font-medium text-gray-700 mb-1">2. Đồng tử co nhỏ (&lt; 2mm)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">2. Đồng tử</label>
                         <div class="space-y-2">
                             <label class="flex items-center">
                                 <input type="radio" name="pupil" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Không có</span>
+                                <span class="ml-2 text-gray-700">Co nhỏ (&lt; 3mm)</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="radio" name="pupil" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Có</span>
+                                <span class="ml-2 text-gray-700">3 - 5 mm</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="pupil" value="2" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">> 5 mm</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Thở rít hoặc thở khò khè -->
+                    <!-- Mạch -->
                     <div class="input-group">
-                        <label for="wheezing" class="block text-sm font-medium text-gray-700 mb-1">3. Thở rít hoặc thở khò khè</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">3. Mạch</label>
                         <div class="space-y-2">
                             <label class="flex items-center">
-                                <input type="radio" name="wheezing" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Không có</span>
+                                <input type="radio" name="pulse" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Chậm (&lt; 70 lần/ph)</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="wheezing" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Có</span>
+                                <input type="radio" name="pulse" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">70 - 100 lần/ph</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="pulse" value="2" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">> 100 lần/ph</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Huyết áp tối đa < 80 mmHg -->
+                    <!-- Hô hấp -->
                     <div class="input-group">
-                        <label for="blood-pressure" class="block text-sm font-medium text-gray-700 mb-1">4. Huyết áp tối đa &lt; 80 mmHg</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">4. Hô hấp</label>
                         <div class="space-y-2">
                             <label class="flex items-center">
-                                <input type="radio" name="blood-pressure" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Không có</span>
+                                <input type="radio" name="breathing" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Thở rít, khò khè, tiết dịch</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="blood-pressure" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Có</span>
+                                <input type="radio" name="breathing" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Phổi không ran, không tăng tiết, không co thắt</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="breathing" value="2" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Không tăng tiết, đàm khô quánh</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Nhịp tim < 60 nhịp/phút -->
+                    <!-- Tinh thần -->
                     <div class="input-group">
-                        <label for="heart-rate" class="block text-sm font-medium text-gray-700 mb-1">5. Nhịp tim &lt; 60 nhịp/phút</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">5. Tinh thần</label>
                         <div class="space-y-2">
                             <label class="flex items-center">
-                                <input type="radio" name="heart-rate" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Không có</span>
+                                <input type="radio" name="mental" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Tỉnh</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="heart-rate" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Có</span>
+                                <input type="radio" name="mental" value="2" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Kích thích, sảng hay li bì</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Nhịp thở < 12 nhịp/phút -->
+                    <!-- Bụng -->
                     <div class="input-group">
-                        <label for="breathing-rate" class="block text-sm font-medium text-gray-700 mb-1">6. Nhịp thở &lt; 12 nhịp/phút</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">6. Bụng</label>
                         <div class="space-y-2">
                             <label class="flex items-center">
-                                <input type="radio" name="breathing-rate" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Không có</span>
+                                <input type="radio" name="abdomen" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Mềm</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="breathing-rate" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Có</span>
+                                <input type="radio" name="abdomen" value="2" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Chướng, gõ vang</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Tiết dịch phế quản nhiều -->
+                    <!-- Cầu BQ -->
                     <div class="input-group">
-                        <label for="bronchial-secretion" class="block text-sm font-medium text-gray-700 mb-1">7. Tiết dịch phế quản nhiều</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">7. Cầu BQ</label>
                         <div class="space-y-2">
                             <label class="flex items-center">
-                                <input type="radio" name="bronchial-secretion" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Không có</span>
+                                <input type="radio" name="bladder" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Không sờ thấy</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="bronchial-secretion" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <span class="ml-2 text-gray-700">Có</span>
+                                <input type="radio" name="bladder" value="2" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">Căng</span>
                             </label>
                         </div>
                     </div>
@@ -193,28 +201,38 @@
                 <div id="result-container" class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner hidden">
                     <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">Kết quả</h3>
                     <div class="flex flex-col md:flex-row justify-center items-center md:space-x-8 space-y-8 md:space-y-0">
-                        <div class="w-full md:w-auto flex-1">
-                            <div class="flex flex-col items-center">
-                                <p class="text-lg font-medium text-gray-600 mb-2">Tổng điểm</p>
-                                <div id="atropine-score-display" class="score-box">0</div>
-                            </div>
+                        <div class="w-full md:w-auto flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Tổng điểm Ngấm (ΣA)</p>
+                            <div id="atropine-saturation-display" class="score-box">0</div>
                         </div>
                         <div class="w-full md:w-auto flex-1 text-center">
-                            <p class="text-lg font-medium text-gray-600 mb-2">Đánh giá và đề xuất</p>
-                            <p id="evaluation-text" class="result-text text-indigo-700">Vui lòng chọn các mục trên để tính điểm.</p>
+                            <p class="text-lg font-medium text-gray-600 mb-2">Tổng điểm Quá liều (ΣB)</p>
+                            <div id="atropine-overdose-display" class="score-box">0</div>
                         </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                         <p class="text-lg font-medium text-gray-600 mb-2">Đánh giá và đề xuất</p>
+                        <p id="evaluation-text" class="result-text text-indigo-700">Vui lòng chọn các mục trên để tính điểm.</p>
                     </div>
                 </div>
 
                 <div class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
-                    <h4 class="text-lg font-bold text-gray-800 mb-2">Giải thích bảng điểm</h4>
-                    <p>Bảng điểm Atropin được sử dụng để **đánh giá mức độ ngộ độc phospho hữu cơ** và quan trọng hơn là **đánh giá mức độ đáp ứng với Atropin** (mức độ no atropin) dựa trên các dấu hiệu lâm sàng. Mỗi dấu hiệu tương ứng với 1 điểm.</p>
-                    <p class="mt-2">Tổng điểm sẽ giúp bác sĩ **điều chỉnh liều Atropin phù hợp** để đạt được hiệu quả điều trị tối ưu, đặc biệt trong các trường hợp ngộ độc nặng.</p>
-                    <ul class="list-disc list-inside mt-4 space-y-1">
-                        <li><strong>Điểm 0:</strong> Bệnh nhân đã **đạt mức độ no Atropin** hoặc không có chỉ định Atropin ban đầu.</li>
-                        <li><strong>Điểm 1 - 3:</strong> Bệnh nhân **có chỉ định Atropin** hoặc cần **tăng liều để đạt mức độ no Atropin**.</li>
-                        <li><strong>Điểm ≥ 4:</strong> Bệnh nhân ngộ độc nặng, **chưa đạt mức độ no Atropin**, cần điều trị tích cực với liều Atropin cao và các biện pháp hồi sức khác.</li>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">Giải thích bảng điểm và điều chỉnh liều</h4>
+                    <p>Bảng điểm này được sử dụng để theo dõi và điều chỉnh liều atropin trong điều trị ngộ độc phospho hữu cơ dựa trên 2 trạng thái chính: <strong>ngấm atropin</strong> và <strong>quá liều atropin</strong>. Mỗi triệu chứng được chấm điểm tương ứng theo trạng thái.</p>
+                    <p class="mt-2"><strong>Cách tính:</strong></p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                        <li><strong>Tổng điểm Ngấm (ΣA):</strong> Là tổng điểm của các triệu chứng thuộc cột "Ngấm atropin" (điểm 1).</li>
+                        <li><strong>Tổng điểm Quá liều (ΣB):</strong> Là tổng điểm của các triệu chứng thuộc cột "Quá liều atropin" (điểm 2).</li>
                     </ul>
+                    <p class="mt-4"><strong>Sau khi tính điểm, tổng điểm atropin = ΣA + ΣB. Dựa vào tổng điểm này, ta có thể điều chỉnh liều như sau:</strong></p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                        <li><strong>&lt; 4 điểm:</strong> Bệnh nhân <strong>thiếu atropin</strong> &rarr; <strong>tăng liều atropin</strong>.</li>
+                        <li><strong>= 4 - 6 điểm:</strong> Bệnh nhân đã <strong>ngấm atropin tốt</strong> &rarr; <strong>duy trì liều atropin</strong>.</li>
+                        <li><strong>> 6 điểm:</strong> Bệnh nhân <strong>quá liều atropin</strong> &rarr; <strong>giảm liều atropin</strong>.</li>
+                    </ul>
+                    <p class="mt-4 text-sm text-red-600">
+                        <strong>Lưu ý quan trọng:</strong> Không nên để nhịp tim tăng quá cao (≥ 120 lần/phút) khi dùng atropin vì có thể gây ra các biến chứng nghiêm trọng (đặc biệt ở bệnh nhân cao tuổi có sẵn bệnh tim mạch) như loạn nhịp tim hay nhồi máu cơ tim.
+                    </p>
                 </div>
             </div>
         </div>
@@ -223,7 +241,7 @@
     <!-- Footer Section -->
     <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
         <div class="container mx-auto px-4">
-            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
+            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo reserved.</p>
             <p class="mt-2">
                 Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
             </p>
@@ -239,47 +257,57 @@
 
     <script>
         document.getElementById('atropine-score-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Ngăn form gửi đi
+            event.preventDefault();
 
-            let totalScore = 0;
+            let scoreA = 0; // ΣA (điểm ngấm)
+            let scoreB = 0; // ΣB (điểm quá liều)
             let allAnswered = true;
 
-            // Lặp qua tất cả các nhóm input radio
-            const groups = ['consciousness', 'pupil', 'wheezing', 'blood-pressure', 'heart-rate', 'breathing-rate', 'bronchial-secretion'];
+            const groups = ['da', 'pupil', 'pulse', 'breathing', 'mental', 'abdomen', 'bladder'];
+
             groups.forEach(groupName => {
                 const checked = document.querySelector(`input[name="${groupName}"]:checked`);
-                if (checked) {
-                    totalScore += parseInt(checked.value);
-                } else {
+                if (!checked) {
                     allAnswered = false;
+                } else {
+                    const value = parseInt(checked.value);
+                    if (value === 1) { // Triệu chứng ngấm
+                        scoreA += 1;
+                    } else if (value === 2) { // Triệu chứng quá liều
+                        scoreB += 2; // Điểm quá liều là 2
+                    }
                 }
             });
 
             const resultContainer = document.getElementById('result-container');
-            const scoreDisplay = document.getElementById('atropine-score-display');
+            const saturationDisplay = document.getElementById('atropine-saturation-display');
+            const overdoseDisplay = document.getElementById('atropine-overdose-display');
             const evaluationText = document.getElementById('evaluation-text');
 
             if (!allAnswered) {
-                evaluationText.textContent = 'Vui lòng trả lời tất cả các câu hỏi.';
+                evaluationText.textContent = 'Vui lòng chọn tất cả các triệu chứng để tính điểm.';
                 evaluationText.className = "result-text text-red-500";
                 resultContainer.classList.remove('hidden');
                 resultContainer.scrollIntoView({ behavior: 'smooth' });
                 return;
             }
 
-            // Hiển thị kết quả
-            scoreDisplay.textContent = totalScore;
+            saturationDisplay.textContent = scoreA;
+            overdoseDisplay.textContent = scoreB;
 
-            // Đưa ra đánh giá và đề xuất dựa trên điểm
-            if (totalScore === 0) {
-                evaluationText.textContent = "Bệnh nhân đã đạt mức độ no Atropin hoặc không có chỉ định Atropin ban đầu.";
-                evaluationText.className = "result-text text-green-700";
-            } else if (totalScore >= 1 && totalScore <= 3) {
-                evaluationText.textContent = "Bệnh nhân có chỉ định Atropin hoặc cần tăng liều để đạt mức độ no Atropin.";
-                evaluationText.className = "result-text text-yellow-700";
-            } else { // totalScore >= 4
-                evaluationText.textContent = "Bệnh nhân ngộ độc nặng, chưa đạt mức độ no Atropin, cần điều trị tích cực với liều Atropin cao và các biện pháp hồi sức khác.";
+            // Tính tổng điểm atropin = ΣA + ΣB
+            const totalAtropineScore = scoreA + scoreB;
+
+            // Đánh giá và đề xuất dựa trên tổng điểm
+            if (totalAtropineScore < 4) {
+                evaluationText.textContent = `Tổng điểm Atropin: ${totalAtropineScore}. Bệnh nhân THIẾU ATROPIN. Cần TĂNG LIỀU ATROPIN.`;
                 evaluationText.className = "result-text text-red-700";
+            } else if (totalAtropineScore >= 4 && totalAtropineScore <= 6) {
+                evaluationText.textContent = `Tổng điểm Atropin: ${totalAtropineScore}. Bệnh nhân đã NGẤM ATROPIN TỐT. Cần DUY TRÌ LIỀU ATROPIN.`;
+                evaluationText.className = "result-text text-green-700";
+            } else { // totalAtropineScore > 6
+                evaluationText.textContent = `Tổng điểm Atropin: ${totalAtropineScore}. Bệnh nhân CÓ DẤU HIỆU QUÁ LIỀU ATROPIN. Cần GIẢM LIỀU ATROPIN và theo dõi sát.`;
+                evaluationText.className = "result-text text-orange-500";
             }
 
             resultContainer.classList.remove('hidden');
@@ -287,18 +315,16 @@
         });
 
         document.getElementById('clearBtn').addEventListener('click', function() {
-            // Uncheck all radio buttons
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
                 radio.checked = false;
             });
 
-            // Reset score and evaluation text
-            document.getElementById('atropine-score-display').textContent = '0';
+            document.getElementById('atropine-saturation-display').textContent = '0';
+            document.getElementById('atropine-overdose-display').textContent = '0';
             document.getElementById('evaluation-text').textContent = 'Vui lòng chọn các mục trên để tính điểm.';
             document.getElementById('evaluation-text').className = "result-text text-indigo-700";
-            document.getElementById('result-container').classList.add('hidden'); // Hide results again
+            document.getElementById('result-container').classList.add('hidden');
         });
     </script>
-
 </body>
 </html>
