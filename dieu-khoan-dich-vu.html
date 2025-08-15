@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điều khoản dịch vụ - Máy tính y học</title>
+    <!-- Thêm Favicon cho tab trình duyệt -->
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <!-- Thêm Apple Touch Icon cho màn hình chính trên iOS -->
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
+    <!-- Liên kết đến manifest.json để hỗ trợ PWA -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Tải Tailwind CSS từ CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Màu nền nhẹ */
+        }
+        /* Tùy chỉnh nhỏ cho các phần tử */
+        .gradient-bg {
+            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <!-- Logo/Tên trang web -->
+            <div class="flex items-center mb-4 md:mb-0">
+                <a href="index.html" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900">
+                    Máy tính y học
+                </a>
+            </div>
+            <!-- Navigation Menu -->
+            <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4">
+                <a href="index.html" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Trang Chủ</a>
+                <a href="cong-cu.html" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Công Cụ</a>
+                <a href="gioi-thieu.html" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Giới thiệu</a>
+                <a href="#lien-he" class="text-lg font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Liên Hệ</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Terms of Service Section -->
+    <section class="py-16 md:py-24 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 max-w-4xl">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl font-bold text-gray-800 mb-12">Điều khoản dịch vụ</h1>
+            <div class="text-left text-gray-700 space-y-8 px-4 md:px-8">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">1. Mục đích sử dụng</h3>
+                    <p class="text-lg leading-relaxed">
+                        Trang web được cung cấp miễn phí nhằm hỗ trợ tính toán và tra cứu các thông số y khoa. Các công cụ chỉ mang tính chất tham khảo và không thay thế chẩn đoán hay điều trị y khoa từ bác sĩ.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">2. Giới hạn trách nhiệm</h3>
+                    <p class="text-lg leading-relaxed">
+                        Chúng tôi không chịu trách nhiệm đối với bất kỳ sai sót, chậm trễ hoặc thiệt hại nào phát sinh từ việc sử dụng thông tin hoặc công cụ trên trang web. Người dùng chịu trách nhiệm xác minh tính chính xác trước khi áp dụng vào thực tế lâm sàng.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">3. Sử dụng hợp pháp</h3>
+                    <p class="text-lg leading-relaxed">
+                        Người dùng cam kết không sử dụng trang web vào mục đích vi phạm pháp luật hoặc xâm phạm quyền của bên thứ ba.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">4. Thay đổi nội dung</h3>
+                    <p class="text-lg leading-relaxed">
+                        Chúng tôi có quyền thay đổi, cập nhật hoặc ngừng cung cấp bất kỳ tính năng hoặc nội dung nào trên trang web mà không cần thông báo trước.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
+            <p class="mt-2">
+                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
+            </p>
+            <p>
+                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+            </p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
+                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
