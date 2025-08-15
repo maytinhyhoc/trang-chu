@@ -23,21 +23,7 @@
             background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
         }
         /* Styling for the new instructions section */
-        #huong-dan-cai-dat h1 {
-            background: linear-gradient(90deg, #1e40af, #3b82f6); /* Blue gradient */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2.5rem; /* Larger heading */
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-        #huong-dan-cai-dat .section-title {
-            color: #334155;
-            font-size: 1.8rem; /* Slightly smaller for sections */
-            font-weight: 600;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
+        /* Removed custom CSS for font-size/line-height as Tailwind classes are applied directly */
         #huong-dan-cai-dat .instructions-list {
             list-style: none;
             padding: 0;
@@ -50,9 +36,7 @@
             border-radius: 0.75rem; /* Rounded corners for list items */
             padding: 1rem 1.5rem;
             margin-bottom: 1rem;
-            font-size: 1.1rem;
-            color: #1f2937;
-            line-height: 1.6; /* Ensure list items have good line height */
+            color: #1f2937; /* Text color */
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         #huong-dan-cai-dat .instructions-list li:hover {
@@ -65,8 +49,7 @@
             border-radius: 0.75rem;
             padding: 1rem 1.5rem;
             margin-top: 2rem;
-            font-size: 1rem;
-            color: #78350f;
+            color: #78350f; /* Text color */
             text-align: left;
         }
         .hidden {
@@ -101,7 +84,7 @@
             <h1 class="text-4xl md:text-6xl font-extrabold mb-6 animate-pulse">
                 Công Cụ Tính Toán Y Học
             </h1>
-            <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-90 leading-relaxed">
+            <p class="text-base md:text-xl mb-10 max-w-3xl mx-auto opacity-90 leading-normal">
                 Cung cấp các công cụ tính toán và phân tích chuyên sâu, hỗ trợ quyết định lâm sàng nhanh chóng và hiệu quả.
             </p>
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
@@ -129,7 +112,7 @@
                         </svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-gray-900 mb-4">Phân Tích Khí Máu Động Mạch (ABG)</h3>
-                    <p class="text-gray-600 text-base leading-relaxed">Đánh giá nhanh chóng và chính xác các rối loạn thăng bằng kiềm toan.</p>
+                    <p class="text-gray-600 text-sm leading-normal">Đánh giá nhanh chóng và chính xác các rối loạn thăng bằng kiềm toan.</p>
                 </a>
                 <!-- Tool Card 2: GFR Calculator -->
                 <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
@@ -140,7 +123,7 @@
                         </svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-gray-900 mb-4">Tính Toán Độ Lọc Cầu Thận (GFR)</h3>
-                    <p class="text-gray-600 text-base leading-relaxed">Ước tính chức năng thận dựa trên các công thức chuẩn.</p>
+                    <p class="text-gray-600 text-sm leading-normal">Ước tính chức năng thận dựa trên các công thức chuẩn.</p>
                 </div>
                 <!-- Tool Card 3: BMI Calculator -->
                 <a href="bmi.html" class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
@@ -153,7 +136,7 @@
                         </svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-gray-900 mb-4">Tính chỉ số khối cơ thể (BMI)</h3>
-                    <p class="text-gray-600 text-base leading-relaxed">Xác định tình trạng cân nặng của cơ thể dựa trên chiều cao và cân nặng.</p>
+                    <p class="text-gray-600 text-sm leading-normal">Xác định tình trạng cân nặng của cơ thể dựa trên chiều cao và cân nặng.</p>
                 </a>
             </div>
             <!-- "Xem thêm" Button -->
@@ -168,38 +151,38 @@
     <!-- Hướng dẫn cài đặt trên điện thoại -->
     <section id="huong-dan-cai-dat" class="py-16 md:py-24 max-w-5xl mx-auto my-8 md:my-12 scroll-mt-32 bg-white rounded-lg shadow-inner">
         <div class="px-4 py-8">
-            <h1 class="text-4xl font-bold text-gray-800 mb-6">Hướng dẫn cài đặt cho điện thoại</h1>
-            <p class="text-gray-700 mb-6 text-lg leading-relaxed">Biến trang web này thành một ứng dụng trên điện thoại của bạn chỉ với vài bước đơn giản. Điều này giúp bạn truy cập nhanh chóng như một ứng dụng thông thường!</p>
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">Hướng dẫn cài đặt cho điện thoại</h1>
+            <p class="text-gray-700 mb-6 text-base leading-normal">Biến trang web này thành một ứng dụng trên điện thoại của bạn chỉ với vài bước đơn giản. Điều này giúp bạn truy cập nhanh chóng như một ứng dụng thông thường!</p>
 
             <!-- General instruction for unknown OS -->
             <div id="general-instructions">
-                <h2 class="section-title">Hướng dẫn chung</h2>
-                <p class="text-gray-600 mb-4 leading-relaxed">Để thêm trang web vào màn hình chính, bạn thường tìm biểu tượng "Chia sẻ" hoặc biểu tượng menu (thường là <strong>ba dấu chấm ⋮</strong> hoặc <strong>ba dấu gạch ngang ☰</strong>) trong trình duyệt của mình, sau đó tìm tùy chọn "Thêm vào màn hình chính" hoặc "Cài đặt ứng dụng".</p>
-                <p class="text-gray-600 leading-relaxed">Hệ thống của bạn không xác định hoặc không được hỗ trợ cụ thể. Vui lòng làm theo hướng dẫn chung hoặc kiểm tra cài đặt trình duyệt của bạn.</p>
+                <h2 class="text-xl font-semibold section-title">Hướng dẫn chung</h2>
+                <p class="text-gray-600 mb-4 text-sm leading-normal">Để thêm trang web vào màn hình chính, bạn thường tìm biểu tượng "Chia sẻ" hoặc biểu tượng menu (thường là <strong>ba dấu chấm ⋮</strong> hoặc <strong>ba dấu gạch ngang ☰</strong>) trong trình duyệt của mình, sau đó tìm tùy chọn "Thêm vào màn hình chính" hoặc "Cài đặt ứng dụng".</p>
+                <p class="text-gray-600 text-sm leading-normal">Hệ thống của bạn không xác định hoặc không được hỗ trợ cụ thể. Vui lòng làm theo hướng dẫn chung hoặc kiểm tra cài đặt trình duyệt của bạn.</p>
             </div>
 
             <!-- iOS Instructions -->
             <div id="ios-instructions" class="hidden">
-                <h2 class="section-title">Dành cho iPhone/iPad (iOS)</h2>
+                <h2 class="text-xl font-semibold section-title">Dành cho iPhone/iPad (iOS)</h2>
                 <div class="flex flex-col md:flex-row gap-6 mt-6">
                     <!-- Safari -->
                     <div class="flex-1 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Trên Safari</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Trên Safari</h3>
                         <ol class="instructions-list">
-                            <li>1. Mở trang web này trong trình duyệt <strong>Safari</strong> của bạn.</li>
-                            <li>2. Nhấn vào biểu tượng <strong>Chia sẻ</strong> <span class="font-bold text-lg text-blue-600">⬆️</span> ở cuối màn hình.</li>
-                            <li>3. Cuộn xuống và chọn <strong>"Thêm vào Màn hình chính"</strong>.</li>
-                            <li>4. Đặt tên cho ứng dụng (tùy chọn) và nhấn <strong>"Thêm"</strong>.</li>
+                            <li class="text-sm leading-normal">1. Mở trang web này trong trình duyệt <strong>Safari</strong> của bạn.</li>
+                            <li class="text-sm leading-normal">2. Nhấn vào biểu tượng <strong>Chia sẻ</strong> <span class="font-bold text-base text-blue-600">⬆️</span> ở cuối màn hình.</li>
+                            <li class="text-sm leading-normal">3. Cuộn xuống và chọn <strong>"Thêm vào Màn hình chính"</strong>.</li>
+                            <li class="text-sm leading-normal">4. Đặt tên cho ứng dụng (tùy chọn) và nhấn <strong>"Thêm"</strong>.</li>
                         </ol>
                     </div>
                     <!-- Chrome for iOS -->
                     <div class="flex-1 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Trên Chrome</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Trên Chrome</h3>
                         <ol class="instructions-list">
-                            <li>1. Mở trang web này trong trình duyệt <strong>Chrome</strong> của bạn.</li>
-                            <li>2. Nhấn vào biểu tượng <strong>Menu</strong> <span class="font-bold text-lg text-blue-600">⋯</span> (ba dấu chấm) ở góc dưới bên phải màn hình.</li>
-                            <li>3. Cuộn xuống và chọn <strong>"Thêm vào Màn hình chính"</strong>.</li>
-                            <li>4. Đặt tên cho ứng dụng (tùy chọn) và nhấn <strong>"Thêm"</strong>.</li>
+                            <li class="text-sm leading-normal">1. Mở trang web này trong trình duyệt <strong>Chrome</strong> của bạn.</li>
+                            <li class="text-sm leading-normal">2. Nhấn vào biểu tượng <strong>Menu</strong> <span class="font-bold text-base text-blue-600">⋯</span> (ba dấu chấm) ở góc dưới bên phải màn hình.</li>
+                            <li class="text-sm leading-normal">3. Cuộn xuống và chọn <strong>"Thêm vào Màn hình chính"</strong>.</li>
+                            <li class="text-sm leading-normal">4. Đặt tên cho ứng dụng (tùy chọn) và nhấn <strong>"Thêm"</strong>.</li>
                         </ol>
                     </div>
                 </div>
@@ -207,20 +190,20 @@
 
             <!-- Android Instructions -->
             <div id="android-instructions" class="hidden">
-                <h2 class="section-title">Dành cho Điện thoại Android 🤖</h2>
+                <h2 class="text-xl font-semibold section-title">Dành cho Điện thoại Android 🤖</h2>
                 <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 mt-6">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Trên Chrome (hoặc hầu hết các trình duyệt)</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Trên Chrome (hoặc hầu hết các trình duyệt)</h3>
                     <ol class="instructions-list">
-                        <li>1. Mở trang web này trong trình duyệt <strong>Chrome</strong> của bạn.</li>
-                        <li>2. Nhấn vào biểu tượng <strong>Menu</strong> <span class="font-bold text-lg text-blue-600">⋮</span> (ba dấu chấm) ở góc trên bên phải màn hình.</li>
-                        <li>3. Chọn <strong>"Thêm vào Màn hình chính"</strong> hoặc <strong>"Cài đặt ứng dụng"</strong>.</li>
-                        <li>4. Đặt tên cho ứng dụng (tùy chọn) và nhấn <strong>"Thêm"</strong> hoặc <strong>"Cài đặt"</strong>.</li>
+                        <li class="text-sm leading-normal">1. Mở trang web này trong trình duyệt <strong>Chrome</strong> của bạn.</li>
+                        <li class="text-sm leading-normal">2. Nhấn vào biểu tượng <strong>Menu</strong> <span class="font-bold text-base text-blue-600">⋮</span> (ba dấu chấm) ở góc trên bên phải màn hình.</li>
+                        <li class="text-sm leading-normal">3. Chọn <strong>"Thêm vào Màn hình chính"</strong> hoặc <strong>"Cài đặt ứng dụng"</strong>.</li>
+                        <li class="text-sm leading-normal">4. Đặt tên cho ứng dụng (tùy chọn) và nhấn <strong>"Thêm"</strong> hoặc <strong>"Cài đặt"</strong>.</li>
                     </ol>
                 </div>
             </div>
 
             <div class="note">
-                <p class="leading-relaxed"><strong>Lưu ý:</strong> Các bước có thể hơi khác nhau tùy thuộc vào phiên bản trình duyệt và hệ điều hành của bạn. Nếu bạn không tìm thấy tùy chọn này, hãy thử tìm kiếm "thêm trang web vào màn hình chính [tên trình duyệt của bạn]" để biết thêm chi tiết.</p>
+                <p class="leading-normal text-xs"><strong>Lưu ý:</strong> Các bước có thể hơi khác nhau tùy thuộc vào phiên bản trình duyệt và hệ điều hành của bạn. Nếu bạn không tìm thấy tùy chọn này, hãy thử tìm kiếm "thêm trang web vào màn hình chính [tên trình duyệt của bạn]" để biết thêm chi tiết.</p>
             </div>
         </div>
     </section>
@@ -228,11 +211,11 @@
     <!-- Footer Section -->
     <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
         <div class="container mx-auto px-4">
-            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-            <p class="mt-2 leading-relaxed">
+            <p class="text-sm leading-normal">&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
+            <p class="mt-2 text-sm leading-normal">
                 Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
             </p>
-            <p class="leading-relaxed">
+            <p class="text-sm leading-normal">
                 Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
             </p>
             <div class="flex justify-center space-x-4 mt-4">
