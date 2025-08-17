@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công Cụ - Thang điểm CHA2DS2-VASc</title>
+    <title>Công Cụ - Thang điểm CHA2DS2-VA/VASc</title>
     <!-- Tải Tailwind CSS từ CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -44,23 +44,23 @@
 <body class="text-gray-800">
 
     <!-- Header Section -->
-<header class="bg-white shadow-md py-4">
-    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-        <!-- Logo/Tên trang web -->
-        <div class="flex items-center mb-4 md:mb-0">
-            <a href="#" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900">
-                Máy tính y học
-            </a>
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <!-- Logo/Tên trang web -->
+            <div class="flex items-center mb-4 md:mb-0">
+                <a href="#" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900">
+                    Máy tính y học
+                </a>
+            </div>
+            <!-- Navigation Menu -->
+            <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4">
+                <a href="index.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Trang Chủ</a>
+                <a href="cong-cu.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Công Cụ</a>
+                <a href="gioi-thieu.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Giới thiệu</a>
+                <a href="#lien-he" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Liên Hệ</a>
+            </nav>
         </div>
-        <!-- Navigation Menu -->
-        <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4">
-            <a href="index.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Trang Chủ</a>
-            <a href="cong-cu.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Công Cụ</a>
-            <a href="gioi-thieu.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Giới thiệu</a>
-            <a href="#lien-he" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-2 rounded-md hover:bg-gray-100">Liên Hệ</a>
-        </nav>
-    </div>
-</header>
+    </header>
 
     <!-- Main Score Calculator Section -->
     <section class="py-8 md:py-16 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 md:max-w-4xl">
@@ -72,11 +72,26 @@
                 </svg>
             </a>
             <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
-                Thang điểm CHA2DS2-VASc
+                Thang điểm CHA2DS2-VA/VASc
             </h1>
 
             <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
                 <form id="chads-vasc-form" class="space-y-6">
+                    <!-- Tùy chọn thang điểm -->
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Chọn loại thang điểm:</label>
+                        <div class="flex items-center space-x-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="scoreType" value="CHA2DS2-VA" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" checked>
+                                <span class="ml-2 text-gray-700">CHA₂DS₂-VA (ESC 2024)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="scoreType" value="CHA2DS2-VASc" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <span class="ml-2 text-gray-700">CHA₂DS₂-VASc (Thang điểm cũ)</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- Suy tim (Congestive heart failure) -->
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">1. Suy tim sung huyết (C)</label>
@@ -171,9 +186,9 @@
                         </div>
                     </div>
 
-                    <!-- Giới tính (Sex category) -->
-                    <div class="input-group">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">7. Giới tính (S)</label>
+                    <!-- Giới tính (Sex category) - Chỉ hiện khi chọn CHA2DS2-VASc cũ -->
+                    <div id="sex-input-group" class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">7. Giới tính (Sc)</label>
                         <div class="flex items-center space-x-4">
                             <label class="flex items-center">
                                 <input type="radio" name="Sex" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
@@ -200,7 +215,7 @@
                     <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">Kết quả</h3>
                     <div class="flex flex-col md:flex-row justify-center items-center md:space-x-8 space-y-8 md:space-y-0">
                         <div class="w-full md:w-auto flex-1 text-center">
-                            <p class="text-lg font-medium text-gray-600 mb-2">Tổng điểm CHA2DS2-VASc</p>
+                            <p class="text-lg font-medium text-gray-600 mb-2">Tổng điểm</p>
                             <div id="chads-vasc-score-display" class="score-box">0</div>
                         </div>
                     </div>
@@ -210,26 +225,8 @@
                     </div>
                 </div>
 
-                <div class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
-                    <h4 class="text-lg font-bold text-gray-800 mb-2">Giải thích Thang điểm CHA2DS2-VASc</h4>
-                    <p>Thang điểm CHA2DS2-VASc được dùng để đánh giá nguy cơ đột quỵ do thiếu máu cục bộ ở bệnh nhân rung nhĩ không do van tim. Điểm số cao hơn tương ứng với nguy cơ đột quỵ cao hơn và chỉ định điều trị chống đông máu.</p>
-                    <p class="mt-2"><strong>Các yếu tố và điểm số:</strong></p>
-                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
-                        <li><strong>C</strong>: Suy tim sung huyết (1 điểm)</li>
-                        <li><strong>H</strong>: Tăng huyết áp (1 điểm)</li>
-                        <li><strong>A2</strong>: Tuổi ≥ 75 tuổi (2 điểm)</li>
-                        <li><strong>D</strong>: Đái tháo đường (1 điểm)</li>
-                        <li><strong>S2</strong>: Đột quỵ/TIA/Thuyên tắc huyết khối (2 điểm)</li>
-                        <li><strong>V</strong>: Bệnh mạch máu (nhồi máu cơ tim trước đây, bệnh động mạch ngoại biên, mảng xơ vữa động mạch chủ) (1 điểm)</li>
-                        <li><strong>A</strong>: Tuổi 65-74 tuổi (1 điểm)</li>
-                        <li><strong>Sc</strong>: Giới tính nữ (1 điểm)</li>
-                    </ul>
-                    <p class="mt-4"><strong>Khuyến cáo điều trị:</strong></p>
-                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
-                        <li><strong>Nam: 0 điểm; Nữ: 1 điểm</strong> &rarr; Nguy cơ thấp. Không cần điều trị chống đông.</li>
-                        <li><strong>Nam: 1 điểm; Nữ: 2 điểm</strong> &rarr; Nguy cơ trung bình. Cân nhắc điều trị chống đông.</li>
-                        <li><strong>Nam: ≥ 2 điểm; Nữ: ≥ 3 điểm</strong> &rarr; Nguy cơ cao. Khuyến cáo điều trị chống đông bằng thuốc kháng vitamin K (như Warfarin) hoặc thuốc chống đông đường uống không kháng vitamin K (NOACs).</li>
-                    </ul>
+                <div id="explanation-container" class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
+                    <!-- Nội dung giải thích sẽ được cập nhật bởi JavaScript -->
                 </div>
             </div>
         </div>
@@ -253,18 +250,96 @@
     </footer>
 
     <script>
+        const scoreTypeRadios = document.querySelectorAll('input[name="scoreType"]');
+        const sexInputGroup = document.getElementById('sex-input-group');
+        const explanationContainer = document.getElementById('explanation-container');
+        const formTitle = document.querySelector('h1');
+
+        // Hàm cập nhật nội dung giải thích và hiển thị/ẩn giới tính
+        function updateUIBasedOnScoreType() {
+            const selectedScoreType = document.querySelector('input[name="scoreType"]:checked').value;
+            let explanationContent = '';
+            let titleText = '';
+
+            if (selectedScoreType === 'CHA2DS2-VA') {
+                sexInputGroup.classList.add('hidden');
+                titleText = 'Thang điểm CHA2DS2-VA (ESC 2024)';
+                explanationContent = `
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">Giải thích Thang điểm CHA2DS2-VA (Theo ESC 2024)</h4>
+                    <p>Thang điểm CHA2DS2-VA được dùng để đánh giá nguy cơ đột quỵ do thiếu máu cục bộ ở bệnh nhân rung nhĩ không do van tim. Điểm số cao hơn tương ứng với nguy cơ đột quỵ cao hơn và chỉ định điều trị chống đông máu.</p>
+                    <p class="mt-2"><strong>Các yếu tố và điểm số:</strong></p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                        <li><strong>C</strong>: Suy tim sung huyết (1 điểm)</li>
+                        <li><strong>H</strong>: Tăng huyết áp (1 điểm)</li>
+                        <li><strong>A2</strong>: Tuổi ≥ 75 tuổi (2 điểm)</li>
+                        <li><strong>D</strong>: Đái tháo đường (1 điểm)</li>
+                        <li><strong>S2</strong>: Đột quỵ/TIA/Thuyên tắc huyết khối (2 điểm)</li>
+                        <li><strong>V</strong>: Bệnh mạch máu (nhồi máu cơ tim trước đây, bệnh động mạch ngoại biên, mảng xơ vữa động mạch chủ) (1 điểm)</li>
+                        <li><strong>A</strong>: Tuổi 65-74 tuổi (1 điểm)</li>
+                    </ul>
+                    <p class="mt-4"><strong>Khuyến cáo điều trị (theo ESC 2024):</strong></p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                        <li><strong>0 điểm</strong> &rarr; Nguy cơ thấp. Không cần điều trị chống đông.</li>
+                        <li><strong>1 điểm</strong> &rarr; Nguy cơ trung bình. Cân nhắc điều trị chống đông.</li>
+                        <li><strong>≥ 2 điểm</strong> &rarr; Nguy cơ cao. Khuyến cáo điều trị chống đông bằng thuốc kháng vitamin K (như Warfarin) hoặc thuốc chống đông đường uống không kháng vitamin K (NOACs).</li>
+                        <li><strong>Lưu ý:</strong> Bệnh nhân rung nhĩ kèm <strong>bệnh cơ tim phì đại</strong> hoặc <strong>amyloidosis tim</strong> được khuyến cáo dùng thuốc chống đông bất kể điểm số CHA2DS2-VA.</li>
+                    </ul>
+                `;
+            } else { // CHA2DS2-VASc
+                sexInputGroup.classList.remove('hidden');
+                titleText = 'Thang điểm CHA2DS2-VASc (Thang điểm cũ)';
+                explanationContent = `
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">Giải thích Thang điểm CHA2DS2-VASc (Thang điểm cũ)</h4>
+                    <p>Thang điểm CHA2DS2-VASc được dùng để đánh giá nguy cơ đột quỵ do thiếu máu cục bộ ở bệnh nhân rung nhĩ không do van tim. Điểm số cao hơn tương ứng với nguy cơ đột quỵ cao hơn và chỉ định điều trị chống đông máu.</p>
+                    <p class="mt-2"><strong>Các yếu tố và điểm số:</strong></p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                        <li><strong>C</strong>: Suy tim sung huyết (1 điểm)</li>
+                        <li><strong>H</strong>: Tăng huyết áp (1 điểm)</li>
+                        <li><strong>A2</strong>: Tuổi ≥ 75 tuổi (2 điểm)</li>
+                        <li><strong>D</strong>: Đái tháo đường (1 điểm)</li>
+                        <li><strong>S2</strong>: Đột quỵ/TIA/Thuyên tắc huyết khối (2 điểm)</li>
+                        <li><strong>V</strong>: Bệnh mạch máu (nhồi máu cơ tim trước đây, bệnh động mạch ngoại biên, mảng xơ vữa động mạch chủ) (1 điểm)</li>
+                        <li><strong>A</strong>: Tuổi 65-74 tuổi (1 điểm)</li>
+                        <li><strong>Sc</strong>: Giới tính nữ (1 điểm)</li>
+                    </ul>
+                    <p class="mt-4"><strong>Khuyến cáo điều trị (theo thang điểm cũ):</strong></p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                        <li><strong>Nam: 0 điểm; Nữ: 1 điểm</strong> &rarr; Nguy cơ thấp. Không cần điều trị chống đông.</li>
+                        <li><strong>Nam: 1 điểm; Nữ: 2 điểm</strong> &rarr; Nguy cơ trung bình. Cân nhắc điều trị chống đông.</li>
+                        <li><strong>Nam: ≥ 2 điểm; Nữ: ≥ 3 điểm</strong> &rarr; Nguy cơ cao. Khuyến cáo điều trị chống đông bằng thuốc kháng vitamin K (như Warfarin) hoặc thuốc chống đông đường uống không kháng vitamin K (NOACs).</li>
+                    </ul>
+                `;
+            }
+            explanationContainer.innerHTML = explanationContent;
+            formTitle.textContent = titleText; // Cập nhật tiêu đề form
+            clearForm(); // Xóa dữ liệu cũ khi thay đổi loại thang điểm
+        }
+
+        // Lắng nghe sự kiện thay đổi radio button scoreType
+        scoreTypeRadios.forEach(radio => {
+            radio.addEventListener('change', updateUIBasedOnScoreType);
+        });
+
+        // Gọi hàm lần đầu để thiết lập UI mặc định
+        updateUIBasedOnScoreType();
+
         document.getElementById('chads-vasc-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
             let score = 0;
             let allAnswered = true;
+            const selectedScoreType = document.querySelector('input[name="scoreType"]:checked').value;
 
             // Danh sách các nhóm input radio
-            const radioGroupNames = ['C', 'H', 'A', 'D', 'S', 'V', 'Sex'];
+            const radioGroupNames = ['C', 'H', 'A', 'D', 'S', 'V'];
+            
+            // Nếu là CHA2DS2-VASc, thêm 'Sex' vào danh sách để tính điểm
+            if (selectedScoreType === 'CHA2DS2-VASc') {
+                radioGroupNames.push('Sex');
+            }
 
             radioGroupNames.forEach(groupName => {
                 const selectedOption = document.querySelector(`input[name="${groupName}"]:checked`);
-                // Kiểm tra xem đã có tùy chọn nào được chọn trong nhóm này chưa
                 if (!selectedOption) {
                     allAnswered = false;
                 } else {
@@ -286,14 +361,10 @@
 
             scoreDisplay.textContent = score;
 
-            // Lấy giới tính để đưa ra khuyến cáo chính xác
-            const sex = document.querySelector('input[name="Sex"]:checked').value;
-
-            // Đánh giá và đề xuất dựa trên điểm
             let evaluation = "";
             let evaluationClass = "";
 
-            if (sex === '0') { // Nam
+            if (selectedScoreType === 'CHA2DS2-VA') {
                 if (score === 0) {
                     evaluation = "Nguy cơ thấp. Không cần điều trị chống đông.";
                     evaluationClass = "result-text text-green-700";
@@ -304,37 +375,55 @@
                     evaluation = "Nguy cơ cao. Khuyến cáo điều trị chống đông.";
                     evaluationClass = "result-text text-red-700";
                 }
-            } else { // Nữ
-                if (score <= 1) {
-                    evaluation = "Nguy cơ thấp. Không cần điều trị chống đông.";
-                    evaluationClass = "result-text text-green-700";
-                } else if (score === 2) {
-                    evaluation = "Nguy cơ trung bình. Cân nhắc điều trị chống đông.";
-                    evaluationClass = "result-text text-orange-500";
-                } else { // score >= 3
-                    evaluation = "Nguy cơ cao. Khuyến cáo điều trị chống đông.";
-                    evaluationClass = "result-text text-red-700";
+                evaluationText.textContent = `Tổng điểm CHA2DS2-VA: ${score}. ${evaluation}`;
+            } else { // CHA2DS2-VASc
+                const sex = document.querySelector('input[name="Sex"]:checked').value;
+                if (sex === '0') { // Nam
+                    if (score === 0) {
+                        evaluation = "Nguy cơ thấp. Không cần điều trị chống đông.";
+                        evaluationClass = "result-text text-green-700";
+                    } else if (score === 1) {
+                        evaluation = "Nguy cơ trung bình. Cân nhắc điều trị chống đông.";
+                        evaluationClass = "result-text text-orange-500";
+                    } else { // score >= 2
+                        evaluation = "Nguy cơ cao. Khuyến cáo điều trị chống đông.";
+                        evaluationClass = "result-text text-red-700";
+                    }
+                } else { // Nữ
+                    if (score <= 1) {
+                        evaluation = "Nguy cơ thấp. Không cần điều trị chống đông.";
+                        evaluationClass = "result-text text-green-700";
+                    } else if (score === 2) {
+                        evaluation = "Nguy cơ trung bình. Cân nhắc điều trị chống đông.";
+                        evaluationClass = "result-text text-orange-500";
+                    } else { // score >= 3
+                        evaluation = "Nguy cơ cao. Khuyến cáo điều trị chống đông.";
+                        evaluationClass = "result-text text-red-700";
+                    }
                 }
+                evaluationText.textContent = `Tổng điểm CHA2DS2-VASc: ${score}. ${evaluation}`;
             }
             
-            evaluationText.textContent = `Tổng điểm CHA2DS2-VASc: ${score}. ${evaluation}`;
             evaluationText.className = evaluationClass;
-
             resultContainer.classList.remove('hidden');
             resultContainer.scrollIntoView({ behavior: 'smooth' });
         });
 
-        document.getElementById('clearBtn').addEventListener('click', function() {
-            // Xóa tất cả các lựa chọn radio
+        function clearForm() {
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.checked = false;
+                // Đảm bảo không xóa lựa chọn thang điểm
+                if (radio.name !== 'scoreType') {
+                    radio.checked = false;
+                }
             });
 
             document.getElementById('chads-vasc-score-display').textContent = '0';
             document.getElementById('evaluation-text').textContent = 'Vui lòng chọn các mục trên để tính điểm.';
             document.getElementById('evaluation-text').className = "result-text text-indigo-700";
             document.getElementById('result-container').classList.add('hidden');
-        });
+        }
+
+        document.getElementById('clearBtn').addEventListener('click', clearForm);
     </script>
 
 </body>
