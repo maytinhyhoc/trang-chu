@@ -48,23 +48,22 @@
         }
     }
 
-    /* Fixed header for mobile (Đoạn code đã được di chuyển ra ngoài) */
-    @media (max-width: 767px) {
+    /* Fixed header for mobile */
+    @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
         header {
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 1000;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
+            z-index: 1000; /* Ensure header stays on top of other content */
+            padding-top: 0.25rem; /* Reduced padding for mobile */
+            padding-bottom: 0.25rem; /* Reduced padding for mobile */
         }
         body {
-            padding-top: 60px;
+            padding-top: 60px; /* Add padding to prevent content from going under the fixed header */
         }
-        /* Further reduce padding for navigation links on mobile */
         .nav-link-mobile-padding {
-            padding-top: 0.1rem;
-            padding-bottom: 0.1rem;
+            padding-top: 0.1rem; /* Smaller top padding */
+            padding-bottom: 0.1rem; /* Smaller bottom padding */
         }
         .mobile-nav-margin-fix {
             margin-top: 0;
