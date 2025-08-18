@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Công Cụ - Thang điểm CHA2DS2-VA/VASc</title>
-    <!-- Tải Tailwind CSS từ CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -38,23 +37,24 @@
         }
         input[type="number"] {
             -moz-appearance: textfield;
+        }
         /* Fixed header for mobile */
-        @media (max-width: 767px) { /* Adjust breakpoint as needed, Tailwind's 'md' is 768px */
+        @media (max-width: 767px) {
             header {
                 position: fixed;
                 top: 0;
                 width: 100%;
-                z-index: 1000; /* Ensure header stays on top */
-                padding-top: 0.25rem; /* Reduced padding-top for mobile */
-                padding-bottom: 0.25rem; /* Reduced padding-bottom for mobile */
+                z-index: 1000;
+                padding-top: 0.25rem;
+                padding-bottom: 0.25rem;
             }
             body {
-                padding-top: 60px; /* Adjusted padding to prevent content from going under the fixed header */
+                padding-top: 60px;
             }
             /* Further reduce padding for navigation links on mobile */
             .nav-link-mobile-padding {
-                padding-top: 0.1rem; /* Smaller top padding */
-                padding-bottom: 0.1rem; /* Smaller bottom padding */
+                padding-top: 0.1rem;
+                padding-bottom: 0.1rem;
             }
             .mobile-nav-margin-fix {
                 margin-top: 0;
@@ -64,16 +64,13 @@
 </head>
 <body class="text-gray-800">
 
-    <!-- Header Section -->
     <header class="bg-white shadow-md py-4 md:py-4">
         <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-            <!-- Logo/Tên trang web (Hidden on mobile, visible on desktop) -->
             <div class="flex items-center mb-4 md:mb-0 hidden md:flex">
                 <a href="#" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900">
                     Máy tính y học
                 </a>
             </div>
-            <!-- Navigation Menu -->
             <nav class="flex flex-wrap justify-center space-x-1 md:space-x-4 w-full md:w-auto mobile-nav-margin-fix">
                 <a href="index.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-1 rounded-md hover:bg-gray-100 nav-link-mobile-padding">Trang Chủ</a>
                 <a href="cong-cu.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-1 rounded-md hover:bg-gray-100 nav-link-mobile-padding">Công Cụ</a>
@@ -83,22 +80,19 @@
         </div>
     </header>
 
-    <!-- Main Score Calculator Section -->
     <section class="py-8 md:py-16 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 md:max-w-4xl">
         <div class="container mx-auto px-2 sm:px-4">
-            <!-- Nút quay lại -->
             <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
             <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
-                Thang điểm CHA2DS2-VA/VASc
+                Thang điểm CHA2DS2-VA (ESC 2024)
             </h1>
 
             <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
                 <form id="chads-vasc-form" class="space-y-6">
-                    <!-- Tùy chọn thang điểm -->
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Chọn loại thang điểm:</label>
                         <div class="flex items-center space-x-4">
@@ -113,7 +107,6 @@
                         </div>
                     </div>
 
-                    <!-- Suy tim (Congestive heart failure) -->
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">1. Suy tim sung huyết (C)</label>
                         <div class="flex items-center space-x-4">
@@ -128,7 +121,6 @@
                         </div>
                     </div>
 
-                    <!-- Tăng huyết áp (Hypertension) -->
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">2. Tăng huyết áp (H)</label>
                         <div class="flex items-center space-x-4">
@@ -143,7 +135,6 @@
                         </div>
                     </div>
 
-                    <!-- Tuổi -->
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">3. Tuổi (A)</label>
                         <div class="flex items-center space-x-4">
@@ -162,7 +153,6 @@
                         </div>
                     </div>
 
-                    <!-- Đái tháo đường (Diabetes mellitus) -->
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">4. Đái tháo đường (D)</label>
                         <div class="flex items-center space-x-4">
@@ -171,13 +161,12 @@
                                 <span class="ml-2 text-gray-700">Có</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="D" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <input type="radio" name="D" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-ring-indigo-500">
                                 <span class="ml-2 text-gray-700">Không</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Đột quỵ/Tiền sử đột quỵ (Stroke) -->
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">5. Đột quỵ/TIA/Thuyên tắc huyết khối (S)</label>
                         <div class="flex items-center space-x-4">
@@ -192,7 +181,6 @@
                         </div>
                     </div>
 
-                    <!-- Bệnh mạch máu (Vascular disease) -->
                     <div class="input-group">
                         <label class="block text-sm font-medium text-gray-700 mb-1">6. Bệnh mạch máu (V)</label>
                         <div class="flex items-center space-x-4">
@@ -207,8 +195,7 @@
                         </div>
                     </div>
 
-                    <!-- Giới tính (Sex category) - Chỉ hiện khi chọn CHA2DS2-VASc cũ -->
-                    <div id="sex-input-group" class="input-group">
+                    <div id="sex-input-group" class="input-group hidden">
                         <label class="block text-sm font-medium text-gray-700 mb-1">7. Giới tính (Sc)</label>
                         <div class="flex items-center space-x-4">
                             <label class="flex items-center">
@@ -241,19 +228,17 @@
                         </div>
                     </div>
                     <div class="mt-6 text-center">
-                         <p class="text-lg font-medium text-gray-600 mb-2">Đánh giá và đề xuất</p>
+                        <p class="text-lg font-medium text-gray-600 mb-2">Đánh giá và đề xuất</p>
                         <p id="evaluation-text" class="result-text text-indigo-700">Vui lòng chọn các mục trên để tính điểm.</p>
                     </div>
                 </div>
 
                 <div id="explanation-container" class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
-                    <!-- Nội dung giải thích sẽ được cập nhật bởi JavaScript -->
-                </div>
+                    </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer Section -->
     <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
         <div class="container mx-auto px-4">
             <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
@@ -351,20 +336,23 @@
             let allAnswered = true;
             const selectedScoreType = document.querySelector('input[name="scoreType"]:checked').value;
 
-            // Danh sách các nhóm input radio
+            // Danh sách các nhóm input radio cần kiểm tra
             const radioGroupNames = ['C', 'H', 'A', 'D', 'S', 'V'];
             
-            // Nếu là CHA2DS2-VASc, thêm 'Sex' vào danh sách để tính điểm
+            // Nếu là CHA2DS2-VASc, thêm 'Sex' vào danh sách
             if (selectedScoreType === 'CHA2DS2-VASc') {
                 radioGroupNames.push('Sex');
             }
 
+            // Kiểm tra và tính điểm
             radioGroupNames.forEach(groupName => {
                 const selectedOption = document.querySelector(`input[name="${groupName}"]:checked`);
                 if (!selectedOption) {
                     allAnswered = false;
                 } else {
-                    score += parseInt(selectedOption.value);
+                    if (groupName !== 'Sex' || selectedScoreType !== 'CHA2DS2-VASc') {
+                        score += parseInt(selectedOption.value);
+                    }
                 }
             });
 
@@ -380,51 +368,57 @@
                 return;
             }
 
-            scoreDisplay.textContent = score;
-
             let evaluation = "";
             let evaluationClass = "";
+            let finalScore = score; // Sử dụng biến tạm để tính điểm cuối cùng
 
             if (selectedScoreType === 'CHA2DS2-VA') {
-                if (score === 0) {
+                // Đánh giá theo thang CHA2DS2-VA
+                if (finalScore === 0) {
                     evaluation = "Nguy cơ thấp. Không cần điều trị chống đông.";
                     evaluationClass = "result-text text-green-700";
-                } else if (score === 1) {
+                } else if (finalScore === 1) {
                     evaluation = "Nguy cơ trung bình. Cân nhắc điều trị chống đông.";
                     evaluationClass = "result-text text-orange-500";
-                } else { // score >= 2
+                } else { // finalScore >= 2
                     evaluation = "Nguy cơ cao. Khuyến cáo điều trị chống đông.";
                     evaluationClass = "result-text text-red-700";
                 }
-                evaluationText.textContent = `Tổng điểm CHA2DS2-VA: ${score}. ${evaluation}`;
+                evaluationText.textContent = `Tổng điểm CHA2DS2-VA: ${finalScore}. ${evaluation}`;
             } else { // CHA2DS2-VASc
                 const sex = document.querySelector('input[name="Sex"]:checked').value;
+                if (sex === '1') { // Nữ
+                    finalScore += 1; // Cộng thêm 1 điểm cho giới tính nữ
+                }
+                
+                // Đánh giá theo thang CHA2DS2-VASc và giới tính
                 if (sex === '0') { // Nam
-                    if (score === 0) {
+                    if (finalScore === 0) {
                         evaluation = "Nguy cơ thấp. Không cần điều trị chống đông.";
                         evaluationClass = "result-text text-green-700";
-                    } else if (score === 1) {
+                    } else if (finalScore === 1) {
                         evaluation = "Nguy cơ trung bình. Cân nhắc điều trị chống đông.";
                         evaluationClass = "result-text text-orange-500";
-                    } else { // score >= 2
+                    } else { // finalScore >= 2
                         evaluation = "Nguy cơ cao. Khuyến cáo điều trị chống đông.";
                         evaluationClass = "result-text text-red-700";
                     }
                 } else { // Nữ
-                    if (score <= 1) {
+                    if (finalScore <= 1) {
                         evaluation = "Nguy cơ thấp. Không cần điều trị chống đông.";
                         evaluationClass = "result-text text-green-700";
-                    } else if (score === 2) {
+                    } else if (finalScore === 2) {
                         evaluation = "Nguy cơ trung bình. Cân nhắc điều trị chống đông.";
                         evaluationClass = "result-text text-orange-500";
-                    } else { // score >= 3
+                    } else { // finalScore >= 3
                         evaluation = "Nguy cơ cao. Khuyến cáo điều trị chống đông.";
                         evaluationClass = "result-text text-red-700";
                     }
                 }
-                evaluationText.textContent = `Tổng điểm CHA2DS2-VASc: ${score}. ${evaluation}`;
+                evaluationText.textContent = `Tổng điểm CHA2DS2-VASc: ${finalScore}. ${evaluation}`;
             }
             
+            scoreDisplay.textContent = finalScore;
             evaluationText.className = evaluationClass;
             resultContainer.classList.remove('hidden');
             resultContainer.scrollIntoView({ behavior: 'smooth' });
