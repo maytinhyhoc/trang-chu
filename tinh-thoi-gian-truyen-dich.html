@@ -33,7 +33,7 @@
         .input-group label {
             font-size: 0.95rem; /* Slightly larger for better readability */
         }
-        input[type="number"], input[type="time"] { /* Changed from datetime-local to time */
+        input[type="number"], input[type="time"] {
             font-size: 1rem; /* Consistent input font size */
         }
         input[type="radio"] + span {
@@ -46,23 +46,23 @@
         }
         input[type="number"] {
             -moz-appearance: textfield;
-         /* Fixed header for mobile */
-        @media (max-width: 767px) { /* Adjust breakpoint as needed, Tailwind's 'md' is 768px */
+        }
+        /* Fixed header for mobile */
+        @media (max-width: 767px) {
             header {
                 position: fixed;
                 top: 0;
                 width: 100%;
-                z-index: 1000; /* Ensure header stays on top */
-                padding-top: 0.25rem; /* Reduced padding-top for mobile */
-                padding-bottom: 0.25rem; /* Reduced padding-bottom for mobile */
+                z-index: 1000;
+                padding-top: 0.25rem;
+                padding-bottom: 0.25rem;
             }
             body {
-                padding-top: 60px; /* Adjusted padding to prevent content from going under the fixed header */
+                padding-top: 60px;
             }
-            /* Further reduce padding for navigation links on mobile */
             .nav-link-mobile-padding {
-                padding-top: 0.1rem; /* Smaller top padding */
-                padding-bottom: 0.1rem; /* Smaller bottom padding */
+                padding-top: 0.1rem;
+                padding-bottom: 0.1rem;
             }
             .mobile-nav-margin-fix {
                 margin-top: 0;
@@ -72,16 +72,13 @@
 </head>
 <body class="text-gray-800">
 
-    <!-- Header Section -->
     <header class="bg-white shadow-md py-4 md:py-4">
         <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-            <!-- Logo/Tên trang web (Hidden on mobile, visible on desktop) -->
             <div class="flex items-center mb-4 md:mb-0 hidden md:flex">
                 <a href="#" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900">
                     Máy tính y học
                 </a>
             </div>
-            <!-- Navigation Menu -->
             <nav class="flex flex-wrap justify-center space-x-1 md:space-x-4 w-full md:w-auto mobile-nav-margin-fix">
                 <a href="index.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-1 rounded-md hover:bg-gray-100 nav-link-mobile-padding">Trang Chủ</a>
                 <a href="cong-cu.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-1 rounded-md hover:bg-gray-100 nav-link-mobile-padding">Công Cụ</a>
@@ -160,7 +157,7 @@
                         </div>
                     </div>
                     <div class="mt-6 text-center">
-                         <p class="text-base md:text-lg font-medium text-gray-600 mb-2">Chi tiết</p>
+                        <p class="text-base md:text-lg font-medium text-gray-600 mb-2">Chi tiết</p>
                         <p id="detail-text" class="result-text text-indigo-700">Vui lòng điền đầy đủ các thông tin trên để tính toán.</p>
                         <p id="end-time-display" class="result-text text-gray-800 mt-2 hidden"></p>
                     </div>
@@ -207,85 +204,74 @@
 
             // Event listener for form submission
             infusionTimeForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent default form submission
+                event.preventDefault();
 
-                // Get input values
                 const volume = parseFloat(document.getElementById('volume').value);
-                const dripFactor = parseFloat(document.querySelector('input[name="drip-factor"]:checked').value);
+                const dripFactorChecked = document.querySelector('input[name="drip-factor"]:checked');
                 const flowRate = parseFloat(document.getElementById('flow-rate').value);
-                const startTimeValue = startTimeInput.value; // Now this will be a "HH:MM" string
+                const startTimeValue = startTimeInput.value;
 
-                // Validate inputs
-                if (isNaN(volume) || isNaN(dripFactor) || isNaN(flowRate) || volume <= 0 || flowRate <= 0) {
+                if (!volume || !dripFactorChecked || !flowRate || volume <= 0 || flowRate <= 0) {
                     infusionTimeDisplay.textContent = '0';
                     detailText.textContent = 'Vui lòng nhập các giá trị hợp lệ.';
-                    detailText.className = "result-text text-red-500"; // Set text color to red for error
+                    detailText.className = "result-text text-red-500";
                     endTimeDisplay.textContent = '';
                     endTimeDisplay.classList.add('hidden');
-                } else {
-                    // Calculate total drops
-                    const totalDrops = volume * dripFactor;
-                    // Calculate total minutes required for infusion
-                    const totalMinutes = totalDrops / flowRate;
-                    
-                    // Convert total minutes into hours and remaining minutes
-                    const hours = Math.floor(totalMinutes / 60);
-                    const minutes = Math.round(totalMinutes % 60);
-
-                    // Format the time string for infusion duration
-                    let durationString = '';
-                    if (hours > 0) {
-                        durationString += `${hours} giờ `;
-                    }
-                    if (minutes > 0 || hours === 0) { // Display minutes even if hours is 0, as long as minutes > 0
-                        durationString += `${minutes} phút`;
-                    }
-                    
-                    // Display the calculated duration
-                    infusionTimeDisplay.textContent = durationString.trim();
-                    detailText.textContent = `Tổng thời gian truyền dịch là khoảng ${durationString.trim()}.`;
-                    detailText.className = "result-text text-green-700"; // Set text color to green for success
-
-                    // Calculate end time if start time is provided
-                    if (startTimeValue) {
-                        const today = new Date(); // Get current date to anchor the time
-                        const [startHour, startMinute] = startTimeValue.split(':').map(Number);
-                        
-                        // Set the start time on today's date
-                        const startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), startHour, startMinute, 0, 0);
-                        
-                        // Calculate end time by adding totalMinutes to startTime
-                        const endTime = new Date(startTime.getTime() + totalMinutes * 60 * 1000); 
-
-                        // Format end time for display
-                        const formattedHour = endTime.getHours().toString().padStart(2, '0');
-                        const formattedMinute = endTime.getMinutes().toString().padStart(2, '0');
-                        
-                        let endTimeText = `Dự kiến kết thúc vào: ${formattedHour}:${formattedMinute}`;
-                        
-                        // Check if the end time crosses midnight (i.e., if the date changed)
-                        if (endTime.getDate() !== startTime.getDate()) {
-                            endTimeText += ' (ngày hôm sau)';
-                        }
-
-                        endTimeDisplay.textContent = endTimeText;
-                        endTimeDisplay.classList.remove('hidden');
-                        endTimeDisplay.className = "result-text text-gray-800 mt-2"; // Keep consistency
-                    } else {
-                        endTimeDisplay.textContent = '';
-                        endTimeDisplay.classList.add('hidden');
-                    }
+                    resultContainer.classList.remove('hidden');
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+                    return;
                 }
+                
+                const dripFactor = parseFloat(dripFactorChecked.value);
+                const totalDrops = volume * dripFactor;
+                const totalMinutes = totalDrops / flowRate;
+                
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = Math.round(totalMinutes % 60);
 
-                // Show the result container and scroll to it
+                let durationString = '';
+                if (hours > 0) {
+                    durationString += `${hours} giờ `;
+                }
+                if (minutes > 0 || hours === 0) {
+                    durationString += `${minutes} phút`;
+                }
+                
+                infusionTimeDisplay.textContent = durationString.trim();
+                detailText.textContent = `Tổng thời gian truyền dịch là khoảng ${durationString.trim()}.`;
+                detailText.className = "result-text text-green-700";
+
+                if (startTimeValue) {
+                    const today = new Date();
+                    const [startHour, startMinute] = startTimeValue.split(':').map(Number);
+                    
+                    const startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), startHour, startMinute, 0, 0);
+                    const endTime = new Date(startTime.getTime() + totalMinutes * 60 * 1000);
+
+                    const formattedHour = endTime.getHours().toString().padStart(2, '0');
+                    const formattedMinute = endTime.getMinutes().toString().padStart(2, '0');
+                    
+                    let endTimeText = `Dự kiến kết thúc vào: ${formattedHour}:${formattedMinute}`;
+                    
+                    if (endTime.getDate() !== startTime.getDate()) {
+                        endTimeText += ' (ngày hôm sau)';
+                    }
+
+                    endTimeDisplay.textContent = endTimeText;
+                    endTimeDisplay.classList.remove('hidden');
+                    endTimeDisplay.className = "result-text text-gray-800 mt-2";
+                } else {
+                    endTimeDisplay.textContent = '';
+                    endTimeDisplay.classList.add('hidden');
+                }
+                
                 resultContainer.classList.remove('hidden');
                 resultContainer.scrollIntoView({ behavior: 'smooth' });
             });
 
-            // Event listener for clear button
             clearBtn.addEventListener('click', function() {
-                infusionTimeForm.reset(); // Reset all form fields
-                resetResults(); // Reset the result display
+                infusionTimeForm.reset();
+                resetResults();
             });
         });
     </script>
