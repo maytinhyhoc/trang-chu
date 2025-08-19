@@ -11,7 +11,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             color: #1e293b; /* Darker text for better contrast */
-            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
+            padding-top: 55px; /* Điều chỉnh padding-top mặc định */
         }
         .active-link {
             background-color: #e0e7ff;
@@ -67,7 +67,7 @@
                 width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
             }
             body {
-                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
+                padding-top: 50px; /* Adjusted padding for mobile */
             }
         }
     </style>
@@ -97,14 +97,14 @@
         </div>
     </header>
 
-    <section class="py-8 md:py-16 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 md:max-w-4xl">
+    <section class="py-2 md:py-4 bg-white rounded-lg shadow-inner mx-4 mt-2 md:mx-auto md:mt-4 md:max-w-4xl">
         <div class="container mx-auto px-2 sm:px-4">
             <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
-            <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-4">
+            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 mb-4">
                 Tính tốc độ truyền thuốc qua bơm tiêm điện/máy truyền dịch
             </h1>
 
@@ -206,13 +206,18 @@
             const body = document.body;
 
             function adjustBodyPadding() {
-                const headerHeight = header.offsetHeight;
-                body.style.paddingTop = `${headerHeight}px`;
+                // For this specific request, we'll set fixed padding, so disable dynamic calculation
+                // if you want to re-enable dynamic padding later, remove these two lines:
+                // const headerHeight = header.offsetHeight;
+                // body.style.paddingTop = `${headerHeight}px`;
+
+                // The CSS now handles the padding-top directly.
             }
 
-            // Adjust padding on load and on window resize
+            // Call it once in case the header height affects initial layout
             adjustBodyPadding();
-            window.addEventListener('resize', adjustBodyPadding);
+            // Remove the resize listener if padding is no longer dynamic based on header height
+            // window.addEventListener('resize', adjustBodyPadding);
 
             const infusionPumpForm = document.getElementById('infusion-pump-form');
             const infusionRateDisplay = document.getElementById('infusion-rate-display');
