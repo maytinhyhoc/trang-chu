@@ -9,8 +9,10 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f8fafc; /* Light background color */
+            padding-top: 55px; /* Giảm padding-top cho desktop */
         }
+        /* Small customizations for elements */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -19,34 +21,47 @@
         input[type="number"] {
             -moz-appearance: textfield;
         }
-        @media (max-width: 767px) {
+        /* Responsive adjustments for mobile for the new header */
+        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
             header .logo-text {
-                display: none;
+                display: none; /* Ẩn logo trên mobile */
             }
             .header-content {
-                flex-direction: column;
-                align-items: center;
-                gap: 0.5rem;
+                flex-direction: column; /* Sắp xếp theo cột trên mobile */
+                align-items: center; /* Căn giữa các mục trên mobile */
+                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
             }
             .nav-menu {
-                justify-content: center;
-                flex-wrap: nowrap;
-                padding-bottom: 0.5rem;
-                width: 100%;
-                overflow-x: auto;
+                justify-content: center; /* Căn giữa menu trên mobile */
+                flex-wrap: nowrap; /* Không xuống dòng các link nav */
+                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
+                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
+                overflow-x: auto; /* Cho phép cuộn ngang */
+                -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên iOS */
+            }
+            body {
+                padding-top: 50px; /* Giảm padding-top cho mobile */
             }
         }
     </style>
 </head>
 <body class="text-gray-800">
+
+    <!-- Header Section (combined navigation and search bar, fixed at top) -->
     <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
+        <!-- Main header content container, flex direction changes based on screen size -->
         <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
+            <!-- Logo/Tên trang web -->
+            <!-- Order-1 on desktop to keep it left, hidden on mobile -->
             <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
                 <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
                     Máy tính y học
                 </a>
             </div>
-            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto md:order-2 md:flex-shrink-0">
+
+            <!-- Navigation Menu -->
+            <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
+            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-2 md:flex-shrink-0">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
                 <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
@@ -55,55 +70,68 @@
         </div>
     </header>
 
+    <!-- Adjusted vertical padding and removed max-w-3xl for mobile optimization -->
     <section class="py-2 md:py-4 bg-white rounded-lg shadow-inner mx-4 mt-2 md:mx-auto md:mt-4 md:max-w-3xl">
+        <!-- Adjusted horizontal padding for wider content on mobile -->
         <div class="container mx-auto px-2 sm:px-4">
-            <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300" aria-label="Quay lại trang công cụ">
+            <!-- Back button placed above the title and aligned to the left -->
+            <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
+            <!-- Title, centered -->
             <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 mb-4">
                 Phân Tích Khí Máu Động Mạch
             </h1>
+
+            <!-- Adjusted inner padding of the grey block -->
             <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
+                <!-- Removed instructional text "Nhập các thông số khí máu..." -->
+                <!-- <p class="text-center text-lg text-gray-600 mb-8">
+                    Nhập các thông số khí máu để phân tích các rối loạn thăng bằng kiềm toan.
+                </p> -->
+
+                <!-- Adjusted spacing between input groups from space-y-6 to space-y-3 -->
                 <div class="space-y-3">
                     <div class="input-group grid grid-cols-2 items-center gap-x-4">
-                        <label for="ph" class="block text-sm font-medium text-gray-700 text-left" lang="vi">pH</label>
-                        <input type="number" step="0.01" inputmode="decimal" đàn="ph" placeholder="(VD: 7.40)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
+                        <label for="ph" class="block text-sm font-medium text-gray-700 text-left">pH</label>
+                        <input type="number" step="0.01" inputmode="decimal" id="ph" placeholder="(VD: 7.40)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
                     </div>
                     <div class="input-group grid grid-cols-2 items-center gap-x-4">
-                        <label for="pco2" class="block text-sm font-medium text-gray-700 text-left" lang="vi">PCO2 (mmHg)</label>
+                        <label for="pco2" class="block text-sm font-medium text-gray-700 text-left">PCO2 (mmHg)</label>
                         <input type="number" step="0.1" inputmode="decimal" id="pco2" placeholder="(VD: 40)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
                     </div>
                     <div class="input-group grid grid-cols-2 items-center gap-x-4">
-                        <label for="hco3" class="block text-sm font-medium text-gray-700 text-left" lang="vi">[HCO3] (mEq/L)</label>
+                        <label for="hco3" class="block text-sm font-medium text-gray-700 text-left">[HCO3] (mEq/L)</label>
                         <input type="number" step="0.1" inputmode="decimal" id="hco3" placeholder="(VD: 24)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
                     </div>
                     <div class="input-group grid grid-cols-2 items-center gap-x-4">
-                        <label for="na" class="block text-sm font-medium text-gray-700 text-left" lang="vi">[Na+] (mEq/L)</label>
+                        <label for="na" class="block text-sm font-medium text-gray-700 text-left">[Na+] (mEq/L)</label>
                         <input type="number" step="0.1" inputmode="decimal" id="na" placeholder="(VD: 140)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
                     </div>
                     <div class="input-group grid grid-cols-2 items-center gap-x-4">
-                        <label for="cl" class="block text-sm font-medium text-gray-700 text-left" lang="vi">[Cl-] (mEq/L)</label>
+                        <label for="cl" class="block text-sm font-medium text-gray-700 text-left">[Cl-] (mEq/L)</label>
                         <input type="number" step="0.1" inputmode="decimal" id="cl" placeholder="(VD: 100)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
                     </div>
                     <div class="input-group grid grid-cols-2 items-center gap-x-4">
-                        <label for="albumin" class="block text-sm font-medium text-gray-700 text-left" lang="vi">Albumin (g/dL)</label>
+                        <label for="albumin" class="block text-sm font-medium text-gray-700 text-left">Albumin (g/dL)</label>
                         <input type="number" step="0.1" inputmode="decimal" id="albumin" placeholder="(VD: 4.5, để trống nếu không có)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
                     </div>
                     <div class="input-group grid grid-cols-2 items-center gap-x-4">
-                        <label for="glucose" class="block text-sm font-medium text-gray-700 text-left" lang="vi">Glucose (mg/dL)</label>
+                        <label for="glucose" class="block text-sm font-medium text-gray-700 text-left">Glucose (mg/dL)</label>
                         <input type="number" step="0.1" inputmode="decimal" id="glucose" placeholder="(VD: 100)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
                     </div>
                     <div class="input-group grid grid-cols-2 items-center gap-x-4">
-                        <label for="ure" class="block text-sm font-medium text-gray-700 text-left" lang="vi">Ure (mmol/L)</label>
+                        <label for="ure" class="block text-sm font-medium text-gray-700 text-left">Ure (mmol/L)</label>
                         <input type="number" step="0.1" inputmode="decimal" id="ure" placeholder="(VD: 5.0, để trống nếu không có)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
                     </div>
                     <div class="input-group grid grid-cols-2 items-center gap-x-4">
-                        <label for="osm" class="block text-sm font-medium text-gray-700 text-left" lang="vi">Osmolality Đo Được (mosm/kg)</label>
+                        <label for="osm" class="block text-sm font-medium text-gray-700 text-left">Osmolality Đo Được (mosm/kg)</label>
                         <input type="number" step="0.1" inputmode="decimal" id="osm" placeholder="(VD: 290)" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150">
                     </div>
                 </div>
+
                 <div class="mt-8 flex flex-col md:flex-row gap-4">
                     <button id="analyzeBtn" onclick="analyzeABG()" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-indigo-700">
                         Phân Tích
@@ -112,9 +140,12 @@
                         Xóa Dữ Liệu
                     </button>
                 </div>
-                <div id="results" class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner" role="region" aria-live="polite">
+                
+                <!-- Adjusted inner padding of the results box -->
+                <div id="results" class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
                     <p class="text-center font-semibold text-gray-500">Kết quả phân tích sẽ hiển thị ở đây.</p>
                 </div>
+
             </div>
         </div>
     </section>
@@ -129,19 +160,19 @@
                 Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
             </p>
             <div class="flex justify-center space-x-4 mt-4">
+                <!-- Updated privacy policy link -->
                 <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
+                <!-- Updated terms of service link -->
                 <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
             </div>
         </div>
     </footer>
-
+    
     <script>
-        const inputs = document.querySelectorAll('input');
-
         function analyzeABG() {
-            const pH = parseFloat(document.getElementById('ph').value);
-            const pco2 = parseFloat(document.getElementById('pco2').value);
-            const hco3 = parseFloat(document.getElementById('hco3').value);
+            const pH = parseFloat(document.getElementById('ph').value) || 0;
+            const pco2 = parseFloat(document.getElementById('pco2').value) || 0;
+            const hco3 = parseFloat(document.getElementById('hco3').value) || 0;
             const na = parseFloat(document.getElementById('na').value) || 0;
             const cl = parseFloat(document.getElementById('cl').value) || 0;
             const albumin = parseFloat(document.getElementById('albumin').value) || 0;
@@ -150,13 +181,8 @@
             const osm = parseFloat(document.getElementById('osm').value) || 0;
 
             let results = [];
-            if (isNaN(pH) || isNaN(pco2) || isNaN(hco3)) {
+            if (pH === 0 || pco2 === 0 || hco3 === 0) {
                 results.push("<p class='text-red-500'>Lỗi: Vui lòng nhập pH, PCO2 và [HCO3].</p>");
-                document.getElementById('results').innerHTML = results.join('');
-                return;
-            }
-            if (pH < 0 || pH > 14 || pco2 < 0 || hco3 < 0) {
-                results.push("<p class='text-red-500'>Lỗi: Giá trị pH, PCO2, hoặc [HCO3] không hợp lệ.</p>");
                 document.getElementById('results').innerHTML = results.join('');
                 return;
             }
@@ -189,6 +215,7 @@
                 hco3Status = 'Bình thường';
             }
 
+            // Simple combined logic for primary disorder
             if (phStatus === 'Toan máu') {
                 if (pco2Status === 'Toan hô hấp') {
                     primaryDisorder = 'Toan Hô Hấp';
@@ -209,9 +236,9 @@
                 if (pco2Status === 'Toan hô hấp' && hco3Status === 'Kiềm chuyển hóa') {
                     primaryDisorder = 'Rối Loạn Hỗn Hợp';
                 } else if (pco2Status === 'Kiềm hô hấp' && hco3Status === 'Toan chuyển hóa') {
-                    primaryDisorder = 'Rối Loạn Hỗn Hợp';
+                    primaryDisorder = 'Rối Loạn Hỗn Hỗn Hợp';
                 } else if (pco2Status !== 'Bình thường' && hco3Status !== 'Bình thường') {
-                    primaryDisorder = 'Rối Loạn Hỗn Hợp';
+                   primaryDisorder = 'Rối Loạn Hỗn Hợp';
                 } else {
                     primaryDisorder = 'Bình Thường';
                 }
@@ -303,7 +330,7 @@
                     ? '<strong class="text-red-600">Anion Gap Cao</strong>: Có thể do toan lactic, toan ceton, suy thận, hoặc ngộ độc.'
                     : '<strong class="text-green-600">Anion Gap Bình Thường</strong>: Có thể do tiêu chảy hoặc truyền NaCl đẳng trương.'}</p>`);
 
-                if (ag > 12 && hco3 !== 24) {
+                if (ag > 12) {
                     const deltaGap = (ag - 12) / (24 - hco3);
                     results.push(`<p>Delta Gap: <strong class="font-semibold">${deltaGap.toFixed(2)}</strong> (Bình thường: 1-2)</p>`);
                     if (deltaGap < 0.8) {
@@ -313,8 +340,6 @@
                     } else {
                         results.push('<p>Kết luận: Delta Gap ≈ 1: Toan chuyển hóa anion gap cao đơn thuần.</p>');
                     }
-                } else if (ag > 12 && hco3 === 24) {
-                    results.push('<p>Kết luận: Delta Gap không tính được do [HCO3] = 24 mEq/L.</p>');
                 }
             }
 
@@ -334,30 +359,30 @@
 
             document.getElementById('results').innerHTML = results.join('');
             
+            // Cuộn đến đầu phần kết quả, có tính đến chiều cao của header
             const resultsElement = document.getElementById('results');
             const headerElement = document.querySelector('header');
-            if (resultsElement && headerElement && !isNaN(headerElement.offsetHeight)) {
+            if (resultsElement && headerElement) {
                 const headerHeight = headerElement.offsetHeight;
-                const targetPosition = resultsElement.offsetTop - headerHeight - 10;
+                const targetPosition = resultsElement.offsetTop - headerHeight - 10; // Trừ thêm 10px để tạo một chút khoảng trống
                 window.scrollTo({ top: targetPosition, behavior: 'smooth' });
             }
         }
 
         function clearInputs() {
-            if (confirm('Bạn có chắc chắn muốn xóa tất cả dữ liệu?')) {
-                inputs.forEach(input => {
-                    input.value = '';
-                });
-                document.getElementById('results').innerHTML = '<p class="text-center font-semibold text-gray-500">Kết quả phân tích sẽ hiển thị ở đây.</p>';
-            }
+            document.querySelectorAll('input').forEach(input => {
+                input.value = '';
+            });
+            document.getElementById('results').innerHTML = '<p class="text-center font-semibold text-gray-500">Kết quả phân tích sẽ hiển thị ở đây.</p>';
         }
 
-        inputs.forEach(input => {
+        document.querySelectorAll('input').forEach(input => {
             input.addEventListener('dblclick', () => {
                 input.value = '';
             });
         });
 
+        // JavaScript to dynamically adjust body padding based on fixed header height
         document.addEventListener('DOMContentLoaded', function() {
             const header = document.querySelector('header');
             const body = document.body;
@@ -367,16 +392,9 @@
                 body.style.paddingTop = `${headerHeight}px`;
             }
 
+            // Adjust padding on load and on window resize
             adjustBodyPadding();
             window.addEventListener('resize', adjustBodyPadding);
-
-            document.querySelector('a[href="#lien-he"]').addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.getElementById('lien-he');
-                const headerHeight = header.offsetHeight;
-                const targetPosition = target.offsetTop - headerHeight - 10;
-                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-            });
         });
     </script>
 </body>
