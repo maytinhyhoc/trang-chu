@@ -10,6 +10,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* Light background color */
+            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
         }
         /* Small adjustments for input elements */
         input[type="number"]::-webkit-outer-spin-button,
@@ -254,8 +255,25 @@
             transform: scale(1.02);
         }
 
-        /* Mobile responsiveness adjustments */
-        @media (max-width: 640px) {
+        /* Responsive adjustments for mobile */ 
+        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */ 
+            header .logo-text { 
+                display: none; /* Ẩn logo trên mobile */ 
+            } 
+            .header-content { 
+                flex-direction: column; /* Sắp xếp theo cột trên mobile */ 
+                align-items: center; /* Căn giữa các mục trên mobile */ 
+                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */ 
+            } 
+            .nav-menu { 
+                justify-content: center; /* Căn giữa menu trên mobile */ 
+                flex-wrap: nowrap; /* Không xuống dòng các link nav */ 
+                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */ 
+                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */ 
+            } 
+            body { 
+                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */ 
+            } 
             .input-field, .unit-selector {
                 padding: 0.375rem 0.5rem; /* py-1.5 px-2 equivalent */
                 font-size: 0.9rem;
@@ -302,50 +320,33 @@
             .input-item {
                 margin-bottom: 0.75rem; /* Adjust margin for mobile inputs */
             }
-         /* Fixed header for mobile */
-        @media (max-width: 767px) { /* Adjust breakpoint as needed, Tailwind's 'md' is 768px */
-            header {
-                position: fixed;
-                top: 0;
-                width: 100%;
-                z-index: 1000; /* Ensure header stays on top */
-                padding-top: 0.25rem; /* Reduced padding-top for mobile */
-                padding-bottom: 0.25rem; /* Reduced padding-bottom for mobile */
-            }
-            body {
-                padding-top: 60px; /* Adjusted padding to prevent content from going under the fixed header */
-            }
-            /* Further reduce padding for navigation links on mobile */
-            .nav-link-mobile-padding {
-                padding-top: 0.1rem; /* Smaller top padding */
-                padding-bottom: 0.1rem; /* Smaller bottom padding */
-            }
-            .mobile-nav-margin-fix {
-                margin-top: 0;
-            }
         }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Header Section -->
-    <header class="bg-white shadow-md py-4 md:py-4">
-        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-            <!-- Logo/Tên trang web (Hidden on mobile, visible on desktop) -->
-            <div class="flex items-center mb-4 md:mb-0 hidden md:flex">
-                <a href="#" class="text-3xl font-bold text-indigo-700 rounded-lg p-2 transition duration-300 hover:text-indigo-900">
-                    Máy tính y học
-                </a>
-            </div>
-            <!-- Navigation Menu -->
-            <nav class="flex flex-wrap justify-center space-x-1 md:space-x-4 w-full md:w-auto mobile-nav-margin-fix">
-                <a href="index.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-1 rounded-md hover:bg-gray-100 nav-link-mobile-padding">Trang Chủ</a>
-                <a href="cong-cu.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-1 rounded-md hover:bg-gray-100 nav-link-mobile-padding">Công Cụ</a>
-                <a href="gioi-thieu.html" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-1 rounded-md hover:bg-gray-100 nav-link-mobile-padding">Giới thiệu</a>
-                <a href="#lien-he" class="text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 p-1 rounded-md hover:bg-gray-100 nav-link-mobile-padding">Liên Hệ</a>
-            </nav>
-        </div>
-    </header>
+    <!-- Header Section (combined navigation and search bar, fixed at top) --> 
+    <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20"> 
+        <!-- Main header content container, flex direction changes based on screen size --> 
+        <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center"> 
+            <!-- Logo/Tên trang web --> 
+            <!-- Order-1 on desktop to keep it left, hidden on mobile --> 
+            <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1"> 
+                <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl"> 
+                    Máy tính y học 
+                </a> 
+            </div> 
+
+            <!-- Navigation Menu --> 
+            <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) --> 
+            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-2 md:flex-shrink-0"> 
+                <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a> 
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a> 
+                <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a> 
+                <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a> 
+            </nav> 
+        </div> 
+    </header> 
 
     <section class="py-8 md:py-16 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 md:max-w-3xl">
         <div class="container mx-auto px-2 sm:px-4">
@@ -519,7 +520,21 @@
         </div>
     </footer>
     
-    <script>
+    <script> 
+        // JavaScript to dynamically adjust body padding based on fixed header height 
+        document.addEventListener('DOMContentLoaded', function() { 
+            const header = document.querySelector('header'); 
+            const body = document.body; 
+
+            function adjustBodyPadding() { 
+                const headerHeight = header.offsetHeight; 
+                body.style.paddingTop = `${headerHeight}px`; 
+            } 
+
+            // Adjust padding on load and on window resize 
+            adjustBodyPadding(); 
+            window.addEventListener('resize', adjustBodyPadding); 
+        }); 
         // DOM elements
         const ageInput = document.getElementById('age');
         const heightInput = document.getElementById('height');
