@@ -10,7 +10,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* Light background color */
-            padding-top: 55px; /* Giảm padding-top cho desktop */
+            /* padding-top sẽ được JS tính toán cho desktop */
         }
         /* Small customizations for elements */
         input[type="number"]::-webkit-outer-spin-button,
@@ -21,27 +21,26 @@
         input[type="number"] {
             -moz-appearance: textfield;
         }
-        /* Responsive adjustments for mobile for the new header */
+        /* Responsive adjustments for mobile */
         @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
-            header .logo-text {
-                display: none; /* Ẩn logo trên mobile */
-            }
-            .header-content {
-                flex-direction: column; /* Sắp xếp theo cột trên mobile */
-                align-items: center; /* Căn giữa các mục trên mobile */
-                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
-            }
-            .nav-menu {
-                justify-content: center; /* Căn giữa menu trên mobile */
-                flex-wrap: nowrap; /* Không xuống dòng các link nav */
-                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
-                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
-                overflow-x: auto; /* Cho phép cuộn ngang */
-                -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên iOS */
+            header {
+                display: none; /* Ẩn hoàn toàn header trên mobile */
             }
             body {
-                padding-top: 50px; /* Giảm padding-top cho mobile */
+                padding-top: 20px !important; /* Đặt padding cố định khi header ẩn */
             }
+        }
+
+        /* Styling for the active navigation link (Công Cụ) */
+        .active-link {
+            background-color: #e0e7ff; /* Màu nền nhẹ nhàng (tương ứng với indigo-100) */
+            color: #4338ca; /* Màu chữ đậm hơn (tương ứng với indigo-700) */
+            border-radius: 9999px; /* Để có hình dạng bo tròn hoàn toàn */
+        }
+        /* Ensure no box-shadow or border-bottom on the header */
+        header {
+            box-shadow: none !important; /* Đảm bảo không có bóng đổ */
+            border-bottom: none !important; /* Đảm bảo không có đường viền dưới */
         }
     </style>
 </head>
@@ -63,7 +62,7 @@
             <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
             <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-2 md:flex-shrink-0">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 px-3 py-1 rounded-full active-link">Công Cụ</a>
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
@@ -71,7 +70,7 @@
     </header>
 
     <!-- Adjusted vertical padding and removed max-w-3xl for mobile optimization -->
-    <section class="py-2 md:py-4 bg-white rounded-lg shadow-inner mx-4 mt-2 md:mx-auto md:mt-4 md:max-w-3xl">
+    <section class="py-2 md:py-4 bg-white rounded-lg shadow-inner mx-4">
         <!-- Adjusted horizontal padding for wider content on mobile -->
         <div class="container mx-auto px-2 sm:px-4">
             <!-- Back button placed above the title and aligned to the left -->
@@ -237,26 +236,18 @@
                     primaryDisorder = 'Rối Loạn Hỗn Hợp';
                 } else if (pco2Status === 'Kiềm hô hấp' && hco3Status === 'Toan chuyển hóa') {
                     primaryDisorder = 'Rối Loạn Hỗn Hỗn Hợp';
-                } else if (pco2Status !== 'Bình thường' && hco3Status !== 'Bình thường') {
-                   primaryDisorder = 'Rối Loạn Hỗn Hợp';
                 } else {
                     primaryDisorder = 'Bình Thường';
                 }
             }
-            results.push(`<p class="mb-2"><strong class="text-indigo-600">Phân tích bước 1:</strong></p>`);
-            results.push(`<ul class="list-disc list-inside space-y-1 pl-4">`);
-            results.push(`<li>Trạng thái pH: <span class="font-semibold">${phStatus}</span></li>`);
-            results.push(`<li>Rối loạn hô hấp: <span class="font-semibold">${pco2Status}</span></li>`);
-            results.push(`<li>Rối loạn chuyển hóa: <span class="font-semibold">${hco3Status}</span></li>`);
-            results.push(`</ul>`);
-            results.push(`<p class="mt-4"><strong class="text-indigo-600">Rối Loạn Nguyên Phát:</strong> <span class="font-semibold">${primaryDisorder}</span></p>`);
+            
+            // Declare expectedValue and secondaryDisorder once at the top of the function
+            let expectedValue = 'Không áp dụng';
+            let secondaryDisorder = 'Không áp dụng';
 
-            results.push(`<hr class="my-4 border-gray-200">`);
-            results.push(`<p class="mb-2"><strong class="text-indigo-600">Phân tích bù trừ:</strong></p>`);
-            let expectedValue = '', secondaryDisorder = '';
             if (primaryDisorder === 'Toan Chuyển Hóa') {
                 const deltaHCO3 = 24 - hco3;
-                const expectedPCO2 = 40 - (1.2 * deltaHCO3);
+                expectedPCO2 = 40 - (1.2 * deltaHCO3);
                 expectedValue = `PCO2 Dự Đoán (theo công thức Winter): ${expectedPCO2.toFixed(1)} mmHg`;
                 if (Math.abs(pco2 - expectedPCO2) <= 2) {
                     secondaryDisorder = 'Bù trừ đầy đủ (chuyển hóa và hô hấp đi đôi nhau).';
@@ -267,7 +258,7 @@
                 }
             } else if (primaryDisorder === 'Kiềm Chuyển Hóa') {
                 const deltaHCO3 = hco3 - 24;
-                const expectedPCO2 = 40 + (0.7 * deltaHCO3);
+                expectedPCO2 = 40 + (0.7 * deltaHCO3);
                 expectedValue = `PCO2 Dự Đoán: ${expectedPCO2.toFixed(1)} mmHg`;
                 if (Math.abs(pco2 - expectedPCO2) <= 2) {
                     secondaryDisorder = 'Bù trừ đầy đủ.';
@@ -308,65 +299,110 @@
                 } else {
                     secondaryDisorder = 'Bù trừ không hoàn toàn.';
                 }
-            } else {
-                expectedValue = 'Không áp dụng';
-                secondaryDisorder = 'Không áp dụng';
             }
-            results.push(`<p>${expectedValue}</p>`);
-            results.push(`<p>Kết luận bù trừ: <strong class="font-semibold">${secondaryDisorder}</strong></p>`);
 
-            if (na !== 0 && cl !== 0 && hco3 !== 0) {
+            results.push(`<p class="mb-2"><strong class="text-indigo-600">Phân tích bước 1:</strong></p>`);
+            results.push(`<ul class="list-disc list-inside space-y-1 pl-4">`);
+            results.push(`<li>Trạng thái pH: <span class="font-semibold">${phStatus}</span></li>`);
+            results.push(`<li>Rối loạn hô hấp: <span class="font-semibold">${pco2Status}</span></li>`);
+            results.push(`<li>Rối loạn chuyển hóa: <span class="font-semibold">${hco3Status}</span></li>`);
+            results.push(`</ul>`);
+            results.push(`<p class="mt-4"><strong class="text-indigo-600">Rối Loạn Nguyên Phát:</strong> <span class="font-semibold">${primaryDisorder}</span></p>`);
+
+            results.push(`<hr class="my-4 border-gray-200">`);
+            results.push(`<p class="mb-2"><strong class="text-indigo-600">Phân tích bù trừ:</strong></p>`);
+            results.push(`<ul class="list-disc list-inside space-y-1 pl-4">`);
+            results.push(`<li>${expectedValue}</li>`);
+            results.push(`<li>${secondaryDisorder}</li>`);
+            results.push(`</ul>`);
+
+
+            // Anion Gap (AG)
+            if (na && cl && hco3) {
+                const anionGap = na - (cl + hco3);
                 results.push(`<hr class="my-4 border-gray-200">`);
-                results.push(`<p class="mb-2"><strong class="text-indigo-600">Phân tích Anion Gap:</strong></p>`);
-                const ag = na - (cl + hco3);
-                results.push(`<p>Anion Gap: <strong class="font-semibold">${ag.toFixed(1)} mEq/L</strong> (Bình thường: 8-12 mEq/L)</p>`);
+                results.push(`<p class="mb-2"><strong class="text-indigo-600">Khoảng Trống Anion (Anion Gap - AG):</strong></p>`);
+                results.push(`<p>AG: ${anionGap.toFixed(2)} mEq/L</p>`);
 
-                if (albumin !== 0) {
-                    const correctedAG = ag + (2.5 * (4.5 - albumin));
-                    results.push(`<p>Anion Gap Hiệu Chỉnh: <strong class="font-semibold">${correctedAG.toFixed(1)} mEq/L</strong></p>`);
+                let agInterpretation = '';
+                if (anionGap > 12) {
+                    agInterpretation = '<strong class="text-red-600">AG Cao</strong>: Cho thấy Toan Chuyển Hóa có tăng AG.';
+                } else if (anionGap < 6) {
+                    agInterpretation = '<strong class="text-orange-600">AG Thấp</strong>: Ít gặp, có thể do giảm albumin hoặc tăng cation ngoại sinh.';
+                } else {
+                    agInterpretation = '<strong class="text-green-600">AG Bình Thường</strong>: Nếu có Toan Chuyển Hóa thì là Toan Chuyển Hóa AG bình thường (hyperchloremic).';
                 }
+                results.push(`<p>${agInterpretation}</p>`);
 
-                results.push(`<p class="mt-2">Kết quả: ${ag > 12
-                    ? '<strong class="text-red-600">Anion Gap Cao</strong>: Có thể do toan lactic, toan ceton, suy thận, hoặc ngộ độc.'
-                    : '<strong class="text-green-600">Anion Gap Bình Thường</strong>: Có thể do tiêu chảy hoặc truyền NaCl đẳng trương.'}</p>`);
+                // Delta-Delta (if AG is high)
+                if (anionGap > 12) {
+                    results.push(`<hr class="my-4 border-gray-200">`);
+                    results.push(`<p class="mb-2"><strong class="text-indigo-600">Delta-Delta (ΔAG/ΔHCO3):</strong></p>`);
+                    const deltaAG = anionGap - 12; // Assuming normal AG is 12
+                    const deltaHCO3_DD = 24 - hco3; // Assuming normal HCO3 is 24
 
-                if (ag > 12) {
-                    const deltaGap = (ag - 12) / (24 - hco3);
-                    results.push(`<p>Delta Gap: <strong class="font-semibold">${deltaGap.toFixed(2)}</strong> (Bình thường: 1-2)</p>`);
-                    if (deltaGap < 0.8) {
-                        results.push('<p>Kết luận: Delta Gap < 1: Có thể có toan chuyển hóa hyperchloremic kèm theo.</p>');
-                    } else if (deltaGap > 1.2) {
-                        results.push('<p>Kết luận: Delta Gap > 1: Có thể có thêm kiềm chuyển hóa.</p>');
+                    if (deltaHCO3_DD !== 0) { // Avoid division by zero
+                        const deltaDeltaRatio = deltaAG / deltaHCO3_DD;
+                        results.push(`<p>Tỷ lệ Delta-Delta (ΔAG/ΔHCO3): ${deltaDeltaRatio.toFixed(2)}</p>`);
+
+                        if (deltaDeltaRatio < 0.4) {
+                            results.push(`<p><strong class="text-red-600">Tỷ lệ < 0.4</strong>: Cho thấy toan chuyển hóa AG tăng kèm theo toan chuyển hóa AG bình thường (do mất HCO3-) hoặc kiềm chuyển hóa.</p>`);
+                        } else if (deltaDeltaRatio >= 0.4 && deltaDeltaRatio < 0.8) {
+                            results.push(`<p><strong class="text-orange-600">Tỷ lệ 0.4 - 0.8</strong>: Toan chuyển hóa AG tăng đơn thuần, nhưng cũng có thể có toan chuyển hóa AG tăng kèm toan chuyển hóa AG bình thường nhẹ.</p>`);
+                        } else if (deltaDeltaRatio >= 0.8 && deltaDeltaRatio <= 2.0) {
+                            results.push(`<p><strong class="text-green-600">Tỷ lệ 0.8 - 2.0</strong>: Toan chuyển hóa AG tăng đơn thuần.</p>`);
+                        } else { // deltaDeltaRatio > 2.0
+                            results.push(`<p><strong class="text-red-600">Tỷ lệ > 2.0</strong>: Toan chuyển hóa AG tăng kèm Kiềm Chuyển Hóa.</p>`);
+                        }
                     } else {
-                        results.push('<p>Kết luận: Delta Gap ≈ 1: Toan chuyển hóa anion gap cao đơn thuần.</p>');
+                        results.push(`<p class="text-gray-500">Không thể tính tỷ lệ Delta-Delta do ΔHCO3 = 0.</p>`);
                     }
                 }
+            } else {
+                results.push(`<hr class="my-4 border-gray-200">`);
+                results.push(`<p class="text-gray-500">Vui lòng nhập đủ [Na+], [Cl-], [HCO3] để tính Khoảng Trống Anion và Delta-Delta.</p>`);
             }
 
-            if (na !== 0 && glucose !== 0 && ure !== 0) {
+            // Corrected Anion Gap (cAG) and Osmolal Gap (OG)
+            if (na && albumin) {
+                const correctedAnionGap = (na - (cl + hco3)) + (2.5 * (4.5 - albumin)); // Assuming normal albumin 4.5
                 results.push(`<hr class="my-4 border-gray-200">`);
-                results.push(`<p class="mb-2"><strong class="text-indigo-600">Phân tích Osmolal Gap:</strong></p>`);
-                const osmCalculated = (2 * na) + (glucose / 18) + (ure / 2.8);
-                results.push(`<p>Osmolality Tính Được: <strong class="font-semibold">${osmCalculated.toFixed(1)} mosm/kg</strong></p>`);
-                if (osm !== 0) {
-                    const osmGap = osm - osmCalculated;
-                    results.push(`<p>Osmolal Gap: <strong class="font-semibold">${osmGap.toFixed(1)} mosm/kg</strong> (Bình thường: <10)</p>`);
-                    results.push(`<p class="mt-2">Kết quả: ${osmGap > 10
+                results.push(`<p class="mb-2"><strong class="text-indigo-600">Khoảng Trống Anion Đã Hiệu Chỉnh (Corrected Anion Gap - cAG):</strong></p>`);
+                results.push(`<p>cAG: ${correctedAnionGap.toFixed(2)} mEq/L</p>`);
+                if (correctedAnionGap > 12) {
+                    results.push(`<p><strong class="text-red-600">cAG Cao</strong>: Chỉ điểm toan chuyển hóa có AG tăng thực sự, không bị che lấp bởi albumin thấp.</p>`);
+                } else {
+                    results.push(`<p><strong class="text-green-600">cAG Bình Thường</strong>.</p>`);
+                }
+            } else {
+                results.push(`<hr class="my-4 border-gray-200">`);
+                results.push(`<p class="text-gray-500">Vui lòng nhập đủ [Na+], [Cl-], [HCO3] và Albumin để tính cAG.</p>`);
+            }
+
+            if (na && glucose && ure && osm) {
+                // Assuming BUN in mg/dL for typical formula, if ure is mmol/L, conversion is needed.
+                // Standard formula: Calculated Osm = 2*Na + Glucose/18 + BUN/2.8 (if Glucose and BUN are in mg/dL)
+                // If ure is in mmol/L, then Urea (mg/dL) = ure (mmol/L) * 2.8055
+                // Assuming ure is already in the appropriate unit for direct use in the formula if not mg/dL,
+                // or assume conversion is handled if input unit is mmol/L.
+                // Let's assume glucose is mg/dL and ure is mmol/L, so convert ure to BUN in mg/dL
+                const ure_mgdl = ure * 2.8055; // 1 mmol/L Urea = 2.8055 mg/dL BUN
+                const calculatedOsmolality = (2 * na) + (glucose / 18) + (ure_mgdl / 2.8);
+                const osmolalGap = osm - calculatedOsmolality;
+                results.push(`<hr class="my-4 border-gray-200">`);
+                results.push(`<p class="mb-2"><strong class="text-indigo-600">Khoảng Trống Thẩm Thấu (Osmolal Gap - OG):</strong></p>`);
+                results.push(`<p>Osmolality Tính Toán: ${calculatedOsmolality.toFixed(2)} mosm/kg</p>`);
+                results.push(`<p>Osmolal Gap: ${osmolalGap.toFixed(2)} mosm/kg</p>`);
+                results.push(`<p>${osmolalGap > 10
                         ? '<strong class="text-red-600">Osmolal Gap Cao</strong>: Có thể có độc chất ngoại sinh (ví dụ: methanol, ethylene glycol).'
                         : '<strong class="text-green-600">Osmolal Gap Bình Thường</strong>.'}</p>`);
-                }
+            } else {
+                results.push(`<hr class="my-4 border-gray-200">`);
+                results.push(`<p class="text-gray-500">Vui lòng nhập đủ [Na+], Glucose, Ure và Osmolality Đo Được để tính Khoảng Trống Thẩm Thấu.</p>`);
             }
 
+
             document.getElementById('results').innerHTML = results.join('');
-            
-            // Cuộn đến đầu phần kết quả, có tính đến chiều cao của header
-            const resultsElement = document.getElementById('results');
-            const headerElement = document.querySelector('header');
-            if (resultsElement && headerElement) {
-                const headerHeight = headerElement.offsetHeight;
-                const targetPosition = resultsElement.offsetTop - headerHeight - 10; // Trừ thêm 10px để tạo một chút khoảng trống
-                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-            }
         }
 
         function clearInputs() {
@@ -388,8 +424,13 @@
             const body = document.body;
 
             function adjustBodyPadding() {
-                const headerHeight = header.offsetHeight;
-                body.style.paddingTop = `${headerHeight}px`;
+                // Only adjust padding if header is visible (i.e., not on mobile)
+                if (window.getComputedStyle(header).display !== 'none') {
+                    const headerHeight = header.offsetHeight;
+                    body.style.paddingTop = `${headerHeight + 20}px`; // Add some extra space
+                } else {
+                    body.style.paddingTop = `20px`; // Default padding for mobile
+                }
             }
 
             // Adjust padding on load and on window resize
