@@ -10,7 +10,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* Light background color */
-            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
+            padding-top: 55px; /* Giảm padding-top cho desktop */
         }
         /* Small customizations for elements */
         input[type="number"]::-webkit-outer-spin-button,
@@ -40,20 +40,8 @@
                 -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên iOS */
             }
             body {
-                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
+                padding-top: 50px; /* Giảm padding-top cho mobile */
             }
-        }
-
-        /* Styling for the active navigation link (Công Cụ) */
-        .active-link {
-            background-color: #e0e7ff; /* Màu nền nhẹ nhàng (tương ứng với indigo-100) */
-            color: #4338ca; /* Màu chữ đậm hơn (tương ứng với indigo-700) */
-            border-radius: 9999px; /* Để có hình dạng bo tròn hoàn toàn */
-        }
-        /* Ensure no box-shadow on the header */
-        header {
-            box-shadow: none !important; /* Đảm bảo không có bóng đổ */
-            border-bottom: none !important; /* Đảm bảo không có đường viền dưới */
         }
     </style>
 </head>
@@ -75,7 +63,7 @@
             <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
             <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-2 md:flex-shrink-0">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 px-3 py-1 rounded-full active-link">Công Cụ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
@@ -83,7 +71,7 @@
     </header>
 
     <!-- Adjusted vertical padding and removed max-w-3xl for mobile optimization -->
-    <section class="py-2 md:py-4 bg-white rounded-lg shadow-inner mx-4" >
+    <section class="py-2 md:py-4 bg-white rounded-lg shadow-inner mx-4 mt-2 md:mx-auto md:mt-4 md:max-w-3xl">
         <!-- Adjusted horizontal padding for wider content on mobile -->
         <div class="container mx-auto px-2 sm:px-4">
             <!-- Back button placed above the title and aligned to the left -->
@@ -249,6 +237,8 @@
                     primaryDisorder = 'Rối Loạn Hỗn Hợp';
                 } else if (pco2Status === 'Kiềm hô hấp' && hco3Status === 'Toan chuyển hóa') {
                     primaryDisorder = 'Rối Loạn Hỗn Hỗn Hợp';
+                } else if (pco2Status !== 'Bình thường' && hco3Status !== 'Bình thường') {
+                   primaryDisorder = 'Rối Loạn Hỗn Hợp';
                 } else {
                     primaryDisorder = 'Bình Thường';
                 }
