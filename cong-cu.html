@@ -2,7 +2,8 @@
 <html lang="vi"> 
 <head> 
     <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!-- Đã chỉnh sửa thẻ viewport để ngăn chặn zoom trên mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
     <title>Công Cụ - Máy tính y học</title> 
     <!-- Tải Tailwind CSS từ CDN --> 
     <script src="https://cdn.tailwindcss.com"></script> 
@@ -60,6 +61,10 @@
             body { 
                 padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */ 
             } 
+            /* Đảm bảo font size của input đủ lớn để ngăn zoom trên mobile */
+            .search-bar-container input {
+                font-size: 16px !important; 
+            }
         } 
     </style> 
 </head> 
