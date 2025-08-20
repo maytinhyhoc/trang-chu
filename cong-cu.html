@@ -2,10 +2,8 @@
 <html lang="vi"> 
 <head> 
     <meta charset="UTF-8"> 
-    <!-- Đã chỉnh sửa thẻ viewport để ngăn chặn zoom trên mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
-    <title>Máy tính y học</title> 
-    <!-- Tải Tailwind CSS từ CDN --> 
+    <title>Công Cụ - Máy tính y học</title> 
     <script src="https://cdn.tailwindcss.com"></script> 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"> 
     <style> 
@@ -67,29 +65,17 @@
             }
         } 
     </style> 
-    <!-- Thêm Favicon cho tab trình duyệt -->
-    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
-    <!-- Thêm Apple Touch Icon cho màn hình chính trên iOS -->
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
-    <!-- Liên kết đến manifest.json để hỗ trợ PWA -->
-    <link rel="manifest" href="manifest.json">
 </head> 
 <body class="text-gray-800"> 
 
-    <!-- Header Section (combined navigation and search bar, fixed at top) --> 
     <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20"> 
-        <!-- Main header content container, flex direction changes based on screen size -->
         <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center"> 
-            <!-- Logo/Tên trang web --> 
-            <!-- Order-1 on desktop to keep it left, hidden on mobile -->
             <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1"> 
                 <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl"> 
                     Máy tính y học 
                 </a> 
             </div> 
 
-            <!-- Navigation Menu --> 
-            <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
             <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-3 md:flex-shrink-0"> 
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a> 
                 <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a> 
@@ -97,19 +83,15 @@
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a> 
             </nav> 
 
-            <!-- Search Bar --> 
-            <!-- Order-3 on mobile (below nav), order-2 on desktop (center) -->
             <div class="search-bar-container w-full max-w-sm md:max-w-xs md:mx-4 md:order-2 md:flex-grow"> 
                 <input type="text" id="toolSearch" placeholder="Tìm kiếm..." class="w-full p-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"> 
             </div> 
         </div> 
     </header> 
 
-    <!-- Main Tools Listing Section --> 
     <section id="danh-muc-cong-cu" class="pt-2 pb-96 md:py-8 bg-white rounded-lg shadow-inner mx-4 my-2 md:mx-auto md:my-12 max-w-5xl"> 
         <div class="container mx-auto px-4 text-center"> 
             <div id="toolList" class="flex flex-col gap-3"> 
-                <!-- Tool Card 1: ABG Analysis --> 
                 <a href="phan-tich-khi-mau.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left"> 
                     <div class="flex items-center justify-between"> 
                         <div> 
@@ -118,7 +100,6 @@
                         </div> 
                     </div> 
                 </a> 
-                <!-- Tool Card 2: GFR Calculator --> 
                 <a href="do-loc-cau-than.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left"> 
                     <div class="flex items-center justify-between"> 
                         <div> 
@@ -127,7 +108,6 @@
                         </div> 
                     </div> 
                 </a> 
-                <!-- Tool Card 3: Plasma Exchange Therapy --> 
                 <a href="tpe.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left"> 
                     <div class="flex items-center justify-between"> 
                         <div> 
@@ -136,7 +116,6 @@
                         </div> 
                     </div> 
                 </a> 
-                <!-- New Tool Card: BMI Calculator --> 
                 <a href="bmi.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left"> 
                     <div class="flex items-center justify-between"> 
                         <div> 
@@ -145,7 +124,6 @@
                         </div> 
                     </div> 
                 </a> 
-                <!-- New Tool Card: Atropine Score --> 
                 <a href="bang-diem-atropin.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left"> 
                     <div class="flex items-center justify-between"> 
                         <div> 
@@ -154,7 +132,6 @@
                         </div> 
                     </div> 
                 </a> 
-                <!-- New Tool Card: CHA2DS2-VASc Score --> 
                 <a href="chads-vasc.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left" data-search-keywords="chads-vasc chadsvasc thang diem CHA2DS2-VASc"> 
                     <div class="flex items-center justify-between"> 
                         <div> 
@@ -163,7 +140,6 @@
                         </div> 
                     </div> 
                 </a> 
-                <!-- New Tool Card: HAS-BLED Score --> 
                 <a href="hasbled.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left" data-search-keywords="has-bled hasbled thang diem HAS-BLED"> 
                     <div class="flex items-center justify-between"> 
                         <div> 
@@ -172,7 +148,6 @@
                         </div> 
                     </div> 
                 </a> 
-                <!-- New Tool Card: Calculate Infusion Time --> 
                 <a href="tinh-thoi-gian-truyen-dich.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left" data-search-keywords="tinh thoi gian truyen dich infusion time"> 
                     <div class="flex items-center justify-between"> 
                         <div> 
@@ -181,7 +156,6 @@
                         </div> 
                     </div> 
                 </a> 
-                <!-- New Tool Card: Calculate Infusion Rate --> 
                 <a href="tinh-toc-do-truyen.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left" data-search-keywords="tinh toc do truyen thuoc bom tiem dien may truyen dich infusion rate pump"> 
                     <div class="flex items-center justify-between"> 
                         <div> 
@@ -190,11 +164,34 @@
                         </div> 
                     </div> 
                 </a> 
+                <a href="thang-diem-nihss.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left" data-search-keywords="thang diem dot quy nihss national institutes of health stroke scale"> 
+                    <div class="flex items-center justify-between"> 
+                        <div> 
+                            <h3 class="text-base font-semibold text-gray-900">Thang điểm đột quỵ NIH (NIHSS)</h3> 
+                            <p class="text-xs text-gray-600">Đánh giá mức độ nặng của đột quỵ cấp và tiên lượng bệnh.</p> 
+                        </div> 
+                    </div> 
+                </a>
+                <a href="dem-giot-dich-truyen.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left" data-search-keywords="may dem giot dich truyen droplet counter"> 
+                    <div class="flex items-center justify-between"> 
+                        <div> 
+                            <h3 class="text-base font-semibold text-gray-900">Máy đếm giọt dịch truyền</h3> 
+                            <p class="text-xs text-gray-600">Đếm số giọt dịch truyền trong 1 phút để xác định tốc độ.</p> 
+                        </div> 
+                    </div> 
+                </a>
+                <a href="ldlc.html" class="tool-card bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 block text-left" data-search-keywords="ldlc esc eas cholesterol"> 
+                    <div class="flex items-center justify-between"> 
+                        <div> 
+                            <h3 class="text-base font-semibold text-gray-900">Tính và phân loại LDLc theo ESC/EAS</h3> 
+                            <p class="text-xs text-gray-600">Đánh giá mức độ LDLc theo hướng dẫn.</p> 
+                        </div> 
+                    </div> 
+                </a>
             </div> 
         </div> 
     </section> 
 
-    <!-- Footer Section --> 
     <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner"> 
         <div class="container mx-auto px-4"> 
             <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p> 

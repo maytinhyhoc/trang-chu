@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính & Phân loại LDLc - Máy tính y học</title>
+    <!-- Tải Tailwind CSS từ CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Màu nền nhẹ */
+            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
+            color: #1e293b; /* Darker text for better contrast */
+        }
+        /* Tùy chỉnh nhỏ cho các phần tử */
+        .gradient-bg {
+            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
+        }
+        .active-link {
+            background-color: #e0e7ff; /* Màu nền khi active */
+            color: #4f46e5; /* Màu chữ khi active */
+            font-weight: 600;
+        }
+        /* Thêm cuộn ngang cho thanh nav trên mobile */
+        .nav-scrollable {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* Cho cuộn mượt mà trên iOS */
+            scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
+        }
+        .nav-scrollable::-webkit-scrollbar {
+            display: none; /* Ẩn scrollbar trên Chrome/Safari */
+        }
+        .score-box {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 2.5rem; /* Main result score font size */
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .result-text {
+            font-size: 1.125rem; /* Adjusted for better consistency */
+            font-weight: 600;
+        }
+        .input-group label {
+            font-size: 0.95rem; /* Slightly larger for better readability */
+        }
+        input[type="number"] {
+            font-size: 1rem; /* Consistent input font size */
+        }
+        input[type="radio"] + span {
+            font-size: 0.95rem; /* Consistent radio label font size */
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        /* Responsive adjustments for mobile */
+        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
+            header .logo-text {
+                display: none; /* Ẩn logo trên mobile */
+            }
+            .header-content {
+                flex-direction: column; /* Sắp xếp theo cột trên mobile */
+                align-items: center; /* Căn giữa các mục trên mobile */
+                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
+            }
+            .nav-menu {
+                justify-content: center; /* Căn giữa menu trên mobile */
+                flex-wrap: nowrap; /* Không xuống dòng các link nav */
+                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
+                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
+            }
+            .search-bar-container {
+                width: calc(100% - 2rem); /* Chiều rộng full trừ padding ngang */
+                padding-left: 0; /* Bỏ padding ngang ở đây vì đã tính vào width */
+                padding-right: 0;
+                margin-top: 0.5rem; /* Khoảng cách với thanh nav */
+                margin-left: auto; /* Căn giữa */
+                margin-right: auto; /* Căn giữa */
+            }
+            body {
+                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
+            }
+            .lipid-input-grid {
+                grid-template-columns: 1fr; /* Stack columns on small screens */
+            }
+            .lipid-input-grid .label-col {
+                text-align: left; /* Align labels to left on small screens */
+            }
+            /* Make direct input row behave similarly to lipid-input-grid */
+            .direct-input-group {
+                grid-template-columns: 1fr; /* Stack on mobile by default */
+            }
+            .direct-input-group .label-col {
+                 text-align: left;
+            }
+        }
+        /* Sửa lỗi zoom khi bấm vào thanh tìm kiếm trên mobile */
+        #toolSearch {
+            font-size: 16px; /* Đảm bảo font size tối thiểu 16px để ngăn zoom tự động */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header Section (combined navigation and search bar, fixed at top) -->
+    <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
+        <!-- Main header content container, flex direction changes based on screen size -->
+        <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
+            <!-- Logo/Tên trang web -->
+            <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
+                <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
+                    Máy tính y học
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-3 md:flex-shrink-0">
+                <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
+                <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
+            </nav>
+
+            <!-- Search Bar -->
+            <div class="search-bar-container w-full max-w-sm md:max-w-xs md:mx-4 md:order-2 md:flex-grow">
+                <input type="text" id="toolSearch" placeholder="Tìm kiếm..." class="w-full p-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
+            </div>
+        </div>
+    </header>
+
+    <section class="py-4 md:py-8 bg-white rounded-lg shadow-inner mx-4 mt-4 md:mx-auto md:mt-8 md:max-w-4xl">
+        <div class="container mx-auto px-2 sm:px-4">
+            <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 mb-4">
+                Tính & Phân loại LDLc theo ESC/EAS
+            </h1>
+
+            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
+                <div class="flex justify-center space-x-4 mb-6">
+                    <button id="direct-input-btn" type="button" class="px-6 py-3 rounded-full font-semibold transition duration-300 hover:bg-indigo-700 shadow-md cursor-pointer">
+                        Nhập LDLc
+                    </button>
+                    <button id="calculate-ldlc-btn" type="button" class="px-6 py-3 rounded-full font-semibold transition duration-300 hover:bg-gray-300 shadow-sm cursor-pointer">
+                        Tính LDLc
+                    </button>
+                </div>
+
+                <!-- Form nhập LDLc trực tiếp -->
+                <form id="direct-ldlc-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 items-center direct-input-group">
+                        <label for="ldlc-direct" class="block text-sm font-medium text-gray-700 label-col">LDLc</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="ldlc-direct" name="ldlc-direct" min="0" step="0.01" required
+                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                   inputmode="decimal">
+                            <select id="ldlc-unit-direct" name="ldlc-unit-direct" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="mmol/L">mmol/L</option>
+                                <option value="mg/dL">mg/dL</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phân tầng nguy cơ tim mạch</label>
+                        <div class="p-4 bg-gray-100 rounded-lg border border-gray-200 mb-4 text-sm text-gray-700">
+                             <p class="font-semibold mb-1">Tiêu chí phân tầng nguy cơ tim mạch theo ESC/EAS 2021:</p>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li><strong class="text-red-600">Rất cao:</strong> Bệnh tim mạch xơ vữa (ASCVD) đã được xác định lâm sàng (tiền sử nhồi máu cơ tim, đột quỵ, bệnh động mạch ngoại biên, v.v.), đái tháo đường có tổn thương cơ quan đích hoặc ít nhất 3 yếu tố nguy cơ chính, bệnh thận mạn Giai đoạn 3b-5, tăng cholesterol gia đình với ASCVD hoặc 1 yếu tố nguy cơ chính khác.</li>
+                                    <li><strong class="text-orange-500">Cao:</strong> Tăng cholesterol gia đình không có ASCVD hoặc yếu tố nguy cơ chính khác, tăng huyết áp độ 3, đái tháo đường ≥ 10 năm hoặc có 1 yếu tố nguy cơ khác, bệnh thận mạn Giai đoạn 3a, điểm SCORE ≥ 5% và &lt; 10% (nguy cơ tử vong 10 năm).</li>
+                                    <li><strong class="text-yellow-600">Trung bình:</strong> Bệnh nhân trẻ tuổi (ĐTĐ type 1 &lt; 35 tuổi, ĐTĐ type 2 &lt; 50 tuổi) với thời gian mắc ĐTĐ &lt; 10 năm và không có yếu tố nguy cơ. Điểm SCORE ≥ 1% và &lt; 5%.</li>
+                                    <li><strong class="text-green-600">Thấp:</strong> Điểm SCORE &lt; 1%.</li>
+                                </ul>
+                        </div>
+                        <div class="mt-2 space-y-2">
+                            <label class="block text-sm font-medium text-gray-700">Chọn mức độ nguy cơ của bạn:</label>
+                            <div class="flex items-center">
+                                <input type="radio" id="risk-very-high" name="risk-category" value="very-high" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300" checked>
+                                <label for="risk-very-high" class="ml-3 block text-sm font-medium text-gray-700">Rất cao</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="risk-high" name="risk-category" value="high" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="risk-high" class="ml-3 block text-sm font-medium text-gray-700">Cao</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="risk-moderate" name="risk-category" value="moderate" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="risk-moderate" class="ml-3 block text-sm font-medium text-gray-700">Trung bình</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="risk-low" name="risk-category" value="low" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="risk-low" class="ml-3 block text-sm font-medium text-gray-700">Thấp</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex flex-col md:flex-row gap-4">
+                        <button type="submit" id="calculate-direct-btn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-indigo-700">
+                            Phân loại & Khuyến cáo
+                        </button>
+                        <button type="button" id="clear-direct-btn" class="flex-1 bg-red-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-red-600">
+                            Xóa Dữ Liệu
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Form tính LDLc từ các chỉ số khác -->
+                <form id="calculate-ldlc-form" class="space-y-6 hidden">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 items-center lipid-input-grid">
+                        <!-- Total Cholesterol (TC) -->
+                        <label for="tc-value" class="block text-sm font-medium text-gray-700 label-col">Total Cholesterol (TC)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="tc-value" name="tc-value" min="0" step="0.01" required
+                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                   inputmode="decimal">
+                            <select id="tc-unit" name="tc-unit" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="mmol/L">mmol/L</option>
+                                <option value="mg/dL">mg/dL</option>
+                            </select>
+                        </div>
+
+                        <!-- HDL Cholesterol (HDLc) -->
+                        <label for="hdlc-value" class="block text-sm font-medium text-gray-700 label-col">HDL Cholesterol (HDLc)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="hdlc-value" name="hdlc-value" min="0" step="0.01" required
+                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                   inputmode="decimal">
+                            <select id="hdlc-unit" name="hdlc-unit" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="mmol/L">mmol/L</option>
+                                <option value="mg/dL">mg/dL</option>
+                            </select>
+                        </div>
+
+                        <!-- Triglyceride (TG) -->
+                        <label for="tg-value" class="block text-sm font-medium text-gray-700 label-col">Triglyceride (TG)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="tg-value" name="tg-value" min="0" step="0.01" required
+                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                   inputmode="decimal">
+                            <select id="tg-unit" name="tg-unit" class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="mmol/L">mmol/L</option>
+                                <option value="mg/dL">mg/dL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4 italic mt-4">Sử dụng công thức Friedewald: LDLc = TC - HDLc - (TG/2.2) khi đơn vị là mmol/L, hoặc LDLc = TC - HDLc - (TG/5) khi đơn vị là mg/dL. Công thức này không áp dụng khi Triglyceride > 4.5 mmol/L (hoặc > 400 mg/dL).</p>
+                    
+                    <div class="input-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phân tầng nguy cơ tim mạch</label>
+                        <div class="p-4 bg-gray-100 rounded-lg border border-gray-200 mb-4 text-sm text-gray-700">
+                            <p class="font-semibold mb-1">Tiêu chí phân tầng nguy cơ tim mạch theo ESC/EAS 2021:</p>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li><strong class="text-red-600">Rất cao:</strong> Bệnh tim mạch xơ vữa (ASCVD) đã được xác định lâm sàng (tiền sử nhồi máu cơ tim, đột quỵ, bệnh động mạch ngoại biên, v.v.), đái tháo đường có tổn thương cơ quan đích hoặc ít nhất 3 yếu tố nguy cơ chính, bệnh thận mạn Giai đoạn 3b-5, tăng cholesterol gia đình với ASCVD hoặc 1 yếu tố nguy cơ chính khác.</li>
+                                    <li><strong class="text-orange-500">Cao:</strong> Tăng cholesterol gia đình không có ASCVD hoặc yếu tố nguy cơ chính khác, tăng huyết áp độ 3, đái tháo đường ≥ 10 năm hoặc có 1 yếu tố nguy cơ khác, bệnh thận mạn Giai đoạn 3a, điểm SCORE ≥ 5% và &lt; 10% (nguy cơ tử vong 10 năm).</li>
+                                    <li><strong class="text-yellow-600">Trung bình:</strong> Bệnh nhân trẻ tuổi (ĐTĐ type 1 &lt; 35 tuổi, ĐTĐ type 2 &lt; 50 tuổi) với thời gian mắc ĐTĐ &lt; 10 năm và không có yếu tố nguy cơ. Điểm SCORE ≥ 1% và &lt; 5%.</li>
+                                    <li><strong class="text-green-600">Thấp:</strong> Điểm SCORE &lt; 1%.</li>
+                                </ul>
+                        </div>
+                        <div class="mt-2 space-y-2">
+                            <label class="block text-sm font-medium text-gray-700">Chọn mức độ nguy cơ của bạn:</label>
+                            <div class="flex items-center">
+                                <input type="radio" id="risk-very-high-calc" name="risk-category-calc" value="very-high" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300" checked>
+                                <label for="risk-very-high-calc" class="ml-3 block text-sm font-medium text-gray-700">Rất cao</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="risk-high-calc" name="risk-category-calc" value="high" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="risk-high-calc" class="ml-3 block text-sm font-medium text-gray-700">Cao</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="risk-moderate-calc" name="risk-category-calc" value="moderate" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="risk-moderate-calc" class="ml-3 block text-sm font-medium text-gray-700">Trung bình</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="risk-low-calc" name="risk-category-calc" value="low" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="risk-low-calc" class="ml-3 block text-sm font-medium text-gray-700">Thấp</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex flex-col md:flex-row gap-4">
+                        <button type="submit" id="calculate-ldlc-full-btn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-indigo-700">
+                            Tính LDLc & Phân loại
+                        </button>
+                        <button type="button" id="clear-calculate-ldlc-btn" class="flex-1 bg-red-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-red-600">
+                            Xóa Dữ Liệu
+                        </button>
+                    </div>
+                </form>
+
+                <div id="result-container" class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner hidden">
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-800 text-center mb-6">Kết quả LDLc & Khuyến cáo</h3>
+                    <div class="flex flex-col md:flex-row justify-center items-center md:space-x-8 space-y-8 md:space-y-0">
+                        <div class="w-full md:w-auto flex-1 text-center">
+                            <p class="text-base md:text-lg font-medium text-gray-600 mb-2">Giá trị LDLc</p>
+                            <div id="ldlc-display" class="score-box">0.00 mmol/L</div>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                         <p class="text-base md:text-lg font-medium text-gray-600 mb-2">Phân loại & Khuyến cáo</p>
+                        <p id="recommendation-text" class="result-text text-indigo-700">Vui lòng điền đầy đủ các thông tin để tính toán.</p>
+                        <p id="warning-text" class="result-text text-red-500 mt-2 hidden"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
+            <p class="mt-2">
+                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
+            </p>
+            <p>
+                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+            </p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
+                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // JavaScript to dynamically adjust body padding based on fixed header height
+            const header = document.querySelector('header');
+            const body = document.body;
+
+            function adjustBodyPadding() {
+                const headerHeight = header.offsetHeight;
+                body.style.paddingTop = `${headerHeight}px`;
+            }
+
+            adjustBodyPadding();
+            window.addEventListener('resize', adjustBodyPadding);
+
+            // Element selectors
+            const directInputBtn = document.getElementById('direct-input-btn');
+            const calculateLdlcBtn = document.getElementById('calculate-ldlc-btn');
+            const directLdlcForm = document.getElementById('direct-ldlc-form');
+            const calculateLdlcForm = document.getElementById('calculate-ldlc-form');
+            const resultContainer = document.getElementById('result-container');
+            const ldlcDisplay = document.getElementById('ldlc-display');
+            const recommendationText = document.getElementById('recommendation-text');
+            const warningText = document.getElementById('warning-text');
+
+            const ldlcDirectInput = document.getElementById('ldlc-direct');
+            const ldlcUnitDirectSelect = document.getElementById('ldlc-unit-direct');
+            const riskCategoryDirectRadios = document.querySelectorAll('input[name="risk-category"]');
+            const clearDirectBtn = document.getElementById('clear-direct-btn');
+
+            const tcValueInput = document.getElementById('tc-value');
+            const hdlcValueInput = document.getElementById('hdlc-value');
+            const tgValueInput = document.getElementById('tg-value');
+            const tcUnitSelect = document.getElementById('tc-unit');
+            const hdlcUnitSelect = document.getElementById('hdlc-unit');
+            const tgUnitSelect = document.getElementById('tg-unit');
+            const riskCategoryCalcRadios = document.querySelectorAll('input[name="risk-category-calc"]');
+            const clearCalculateLdlcBtn = document.getElementById('clear-calculate-ldlc-btn');
+
+
+            // Function to reset results display
+            function resetResults() {
+                ldlcDisplay.textContent = '0.00 mmol/L';
+                recommendationText.textContent = 'Vui lòng điền đầy đủ các thông tin để tính toán.';
+                recommendationText.className = "result-text text-indigo-700";
+                warningText.classList.add('hidden');
+                resultContainer.classList.add('hidden');
+            }
+
+            // Function to switch between forms
+            function showForm(formToShow) {
+                console.log('showForm called with:', formToShow); // Log to console for debugging
+                // Common classes for active state
+                const activeClasses = ['bg-indigo-600', 'text-white', 'shadow-md'];
+                // Common classes for inactive state (using shadow-sm for a subtle shadow)
+                const inactiveClasses = ['bg-gray-200', 'text-gray-700', 'shadow-sm']; 
+
+                if (formToShow === 'direct') {
+                    directLdlcForm.classList.remove('hidden');
+                    calculateLdlcForm.classList.add('hidden');
+
+                    // Apply active styles to directInputBtn
+                    if (directInputBtn) {
+                        directInputBtn.classList.add(...activeClasses);
+                        directInputBtn.classList.remove(...inactiveClasses);
+                    }
+                    // Apply inactive styles to calculateLdlcBtn
+                    if (calculateLdlcBtn) {
+                        calculateLdlcBtn.classList.add(...inactiveClasses);
+                        calculateLdlcBtn.classList.remove(...activeClasses);
+                    }
+                } else {
+                    directLdlcForm.classList.add('hidden');
+                    calculateLdlcForm.classList.remove('hidden');
+
+                    // Apply inactive styles to directInputBtn
+                    if (directInputBtn) {
+                        directInputBtn.classList.add(...inactiveClasses);
+                        directInputBtn.classList.remove(...activeClasses);
+                    }
+                    // Apply active styles to calculateLdlcBtn
+                    if (calculateLdlcBtn) {
+                        calculateLdlcBtn.classList.add(...activeClasses);
+                        calculateLdlcBtn.classList.remove(...inactiveClasses);
+                    }
+                }
+                resetResults();
+            }
+
+            // ESC/EAS Guidelines for LDLc targets (in mmol/L)
+            const ldlcTargets = {
+                'very-high': { target: 1.4, reduction: 'giảm ít nhất 50%' },
+                'high': { target: 1.8, reduction: 'giảm ít nhất 50%' },
+                'moderate': { target: 2.6 },
+                'low': { target: 3.0 }
+            };
+
+            // Function to get selected risk category
+            function getSelectedRiskCategory(radioGroup) {
+                for (const radio of radioGroup) {
+                    if (radio.checked) {
+                        return radio.value;
+                    }
+                }
+                return null;
+            }
+
+            // Function to determine recommendation
+            function getRecommendation(ldlcValue, riskCategory, unit) {
+                let ldlcMmolL = ldlcValue;
+                if (unit === 'mg/dL') {
+                    ldlcMmolL = ldlcValue / 38.6; // Convert mg/dL to mmol/L
+                }
+
+                const targetInfo = ldlcTargets[riskCategory];
+                if (!targetInfo) {
+                    return { text: "Không xác định phân tầng nguy cơ.", type: "error" };
+                }
+
+                const targetValue = targetInfo.target;
+                let recommendationText = "";
+                let textColor = "";
+
+                if (ldlcMmolL < targetValue) {
+                    recommendationText = `🎉 LDLc của bệnh nhân (${ldlcMmolL.toFixed(2)} mmol/L) đã đạt mục tiêu khuyến cáo cho phân tầng nguy cơ <strong>${riskCategory === 'very-high' ? 'Rất cao' : riskCategory === 'high' ? 'Cao' : riskCategory === 'moderate' ? 'Trung bình' : 'Thấp'}</strong> (< ${targetValue} mmol/L). Duy trì lối sống và theo dõi định kỳ.`;
+                    textColor = "text-green-700";
+                } else {
+                    switch (riskCategory) {
+                        case 'very-high':
+                            recommendationText = `⚠️ LDLc của bệnh nhân (${ldlcMmolL.toFixed(2)} mmol/L) chưa đạt mục tiêu (< ${targetValue} mmol/L và giảm ít nhất 50%). Cần khẩn trương xem xét <strong>tăng cường điều trị</strong>: liệu pháp statin liều cao và/hoặc có thể cân nhắc thêm Ezetimibe hoặc PCSK9i nếu không đạt mục tiêu.`;
+                            textColor = "text-red-600";
+                            break;
+                        case 'high':
+                            recommendationText = `⚠️ LDLc của bệnh nhân (${ldlcMmolL.toFixed(2)} mmol/L) chưa đạt mục tiêu (< ${targetValue} mmol/L và giảm ít nhất 50%). Xem xét <strong>liệu pháp statin phù hợp</strong> và <strong>thay đổi lối sống tích cực</strong>. Có thể cân nhắc thêm Ezetimibe nếu không đạt mục tiêu.`;
+                            textColor = "text-orange-500";
+                            break;
+                        case 'moderate':
+                            recommendationText = `⚠️ LDLc của bệnh nhân (${ldlcMmolL.toFixed(2)} mmol/L) chưa đạt mục tiêu (< ${targetValue} mmol/L). Tập trung vào <strong>thay đổi lối sống lành mạnh</strong>. Nếu không đạt, cân nhắc <strong>liệu pháp statin</strong> với mục tiêu đạt LDLc < ${targetValue} mmol/L.`;
+                            textColor = "text-yellow-600";
+                            break;
+                        case 'low':
+                            recommendationText = `⚠️ LDLc của bệnh nhân (${ldlcMmolL.toFixed(2)} mmol/L) chưa đạt mục tiêu (< ${targetValue} mmol/L). Khuyến khích <strong>duy trì lối sống lành mạnh</strong>. Thường không cần can thiệp dược lý trừ khi có yếu tố nguy cơ mới phát sinh hoặc tình trạng lâm sàng thay đổi.`;
+                            textColor = "text-indigo-700"; // Changed from red for low risk, but still above target. Can be adjusted.
+                            break;
+                        default:
+                            recommendationText = "Vui lòng kiểm tra lại phân tầng nguy cơ.";
+                            textColor = "text-gray-700";
+                    }
+                }
+                return { text: recommendationText, type: "success", color: textColor };
+            }
+
+            // Handle Direct LDLc Input Form submission
+            directLdlcForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const ldlcValue = parseFloat(ldlcDirectInput.value);
+                const ldlcUnit = ldlcUnitDirectSelect.value;
+                const riskCategory = getSelectedRiskCategory(riskCategoryDirectRadios);
+
+                if (isNaN(ldlcValue) || ldlcValue < 0 || !riskCategory) {
+                    recommendationText.textContent = 'Vui lòng nhập giá trị LDLc hợp lệ và chọn phân tầng nguy cơ.';
+                    recommendationText.className = "result-text text-red-500";
+                    warningText.classList.add('hidden');
+                    ldlcDisplay.textContent = '0.00 ' + ldlcUnit; // Display original unit
+                    resultContainer.classList.remove('hidden');
+                    return;
+                }
+
+                ldlcDisplay.textContent = `${ldlcValue.toFixed(2)} ${ldlcUnit}`;
+                const result = getRecommendation(ldlcValue, riskCategory, ldlcUnit);
+                recommendationText.innerHTML = result.text; // Use innerHTML to allow bold tags
+                recommendationText.className = `result-text ${result.color}`;
+                warningText.classList.add('hidden'); // Hide any previous warnings
+
+                resultContainer.classList.remove('hidden');
+                resultContainer.scrollIntoView({ behavior: 'smooth' }); // Added back scroll here
+            });
+
+            // Handle Calculate LDLc Form submission
+            calculateLdlcForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const tcValue = parseFloat(tcValueInput.value);
+                const hdlcValue = parseFloat(hdlcValueInput.value);
+                const tgValue = parseFloat(tgValueInput.value);
+                
+                const tcUnit = tcUnitSelect.value;
+                const hdlcUnit = hdlcUnitSelect.value;
+                const tgUnit = tgUnitSelect.value;
+
+                // Validate that all units are the same for calculation
+                if (tcUnit !== hdlcUnit || hdlcUnit !== tgUnit) {
+                    recommendationText.textContent = 'Vui lòng chọn cùng một đơn vị cho tất cả các chỉ số lipid (TC, HDLc, TG).';
+                    recommendationText.className = "result-text text-red-500";
+                    warningText.classList.add('hidden');
+                    ldlcDisplay.textContent = '0.00 mmol/L'; // Default display
+                    resultContainer.classList.remove('hidden');
+                    return;
+                }
+
+                const lipidUnit = tcUnit; // Use any of them as they are guaranteed to be same
+                const riskCategory = getSelectedRiskCategory(riskCategoryCalcRadios);
+
+                if (isNaN(tcValue) || isNaN(hdlcValue) || isNaN(tgValue) || tcValue < 0 || hdlcValue < 0 || tgValue < 0 || !riskCategory) {
+                    recommendationText.textContent = 'Vui lòng nhập các giá trị lipid hợp lệ và chọn phân tầng nguy cơ.';
+                    recommendationText.className = "result-text text-red-500";
+                    warningText.classList.add('hidden');
+                    ldlcDisplay.textContent = '0.00 ' + lipidUnit; // Display original unit
+                    resultContainer.classList.remove('hidden');
+                    return;
+                }
+
+                let calculatedLdlc;
+                let tgThresholdExceeded = false;
+                warningText.classList.add('hidden'); // Hide previous warnings
+
+                if (lipidUnit === 'mmol/L') {
+                    if (tgValue > 4.5) {
+                        tgThresholdExceeded = true;
+                        warningText.textContent = '⚠️ Triglyceride > 4.5 mmol/L. Công thức Friedewald không đáng tin cậy. LDLc có thể không chính xác.';
+                        warningText.classList.remove('hidden');
+                    }
+                    calculatedLdlc = tcValue - hdlcValue - (tgValue / 2.2);
+                } else { // mg/dL
+                    if (tgValue > 400) {
+                        tgThresholdExceeded = true;
+                        warningText.textContent = '⚠️ Triglyceride > 400 mg/dL. Công thức Friedewald không đáng tin cậy. LDLc có thể không chính xác.';
+                        warningText.classList.remove('hidden');
+                    }
+                    calculatedLdlc = tcValue - hdlcValue - (tgValue / 5);
+                }
+
+                if (calculatedLdlc < 0) {
+                    calculatedLdlc = 0; // LDLc cannot be negative
+                    warningText.textContent = 'Giá trị LDLc tính toán ra âm. Vui lòng kiểm tra lại các chỉ số nhập vào.';
+                    warningText.classList.remove('hidden');
+                }
+
+                ldlcDisplay.textContent = `${calculatedLdlc.toFixed(2)} ${lipidUnit}`;
+                const result = getRecommendation(calculatedLdlc, riskCategory, lipidUnit);
+                recommendationText.innerHTML = result.text; // Use innerHTML to allow bold tags
+                recommendationText.className = `result-text ${result.color}`;
+
+                resultContainer.classList.remove('hidden');
+                resultContainer.scrollIntoView({ behavior: 'smooth' }); // Added back scroll here
+            });
+
+            // Clear buttons functionality
+            clearDirectBtn.addEventListener('click', function() {
+                directLdlcForm.reset();
+                resetResults();
+                ldlcUnitDirectSelect.value = 'mmol/L'; // Reset unit to default
+                riskCategoryDirectRadios[0].checked = true; // Default to Very High
+            });
+
+            clearCalculateLdlcBtn.addEventListener('click', function() {
+                calculateLdlcForm.reset();
+                resetResults();
+                tcUnitSelect.value = 'mmol/L'; // Reset unit to default
+                hdlcUnitSelect.value = 'mmol/L';
+                tgUnitSelect.value = 'mmol/L';
+                riskCategoryCalcRadios[0].checked = true; // Default to Very High
+            });
+
+            // Attach event listeners to toggle buttons
+            if (directInputBtn) {
+                directInputBtn.addEventListener('click', () => {
+                    console.log('directInputBtn clicked');
+                    showForm('direct');
+                });
+            } else {
+                console.error("directInputBtn not found for click listener attachment.");
+            }
+
+            if (calculateLdlcBtn) {
+                calculateLdlcBtn.addEventListener('click', () => {
+                    console.log('calculateLdlcBtn clicked');
+                    showForm('calculate');
+                });
+            } else {
+                console.error("calculateLdlcBtn not found for click listener attachment.");
+            }
+
+            // Initialize to show direct input form
+            showForm('direct');
+        });
+    </script>
+</body>
+</html>
