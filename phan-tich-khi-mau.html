@@ -3,25 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phân Tích Khí Máu Động Mạch</title>
+    <title>Công Cụ - Máy tính y học</title>
+    <!-- Tải Tailwind CSS từ CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Light background color */
-            padding-top: 55px; /* Giảm padding-top cho desktop */
+            background-color: #f8fafc; /* Màu nền nhẹ */
+            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
         }
-        /* Small customizations for elements */
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        /* Tùy chỉnh nhỏ cho các phần tử */
+        .gradient-bg {
+            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
         }
-        input[type="number"] {
-            -moz-appearance: textfield;
+        .active-link {
+            background-color: #e0e7ff; /* Màu nền khi active */
+            color: #4f46e5; /* Màu chữ khi active */
+            font-weight: 600;
         }
-        /* Responsive adjustments for mobile for the new header */
+        /* Thêm cuộn ngang cho thanh nav trên mobile */
+        .nav-scrollable {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* Cho cuộn mượt mà trên iOS */
+            scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
+        }
+        .nav-scrollable::-webkit-scrollbar {
+            display: none; /* Ẩn scrollbar trên Chrome/Safari */
+        }
+        /* Responsive adjustments for mobile */
         @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
             header .logo-text {
                 display: none; /* Ẩn logo trên mobile */
@@ -36,12 +46,22 @@
                 flex-wrap: nowrap; /* Không xuống dòng các link nav */
                 padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
                 width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
-                overflow-x: auto; /* Cho phép cuộn ngang */
-                -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên iOS */
+            }
+            .search-bar-container {
+                width: calc(100% - 2rem); /* Chiều rộng full trừ padding ngang */
+                padding-left: 0; /* Bỏ padding ngang ở đây vì đã tính vào width */
+                padding-right: 0;
+                margin-top: 0.5rem; /* Khoảng cách với thanh nav */
+                margin-left: auto; /* Căn giữa */
+                margin-right: auto; /* Căn giữa */
             }
             body {
-                padding-top: 50px; /* Giảm padding-top cho mobile */
+                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
             }
+        }
+        /* Sửa lỗi zoom khi bấm vào thanh tìm kiếm trên mobile */
+        #toolSearch {
+            font-size: 16px; /* Đảm bảo font size tối thiểu 16px để ngăn zoom tự động */
         }
     </style>
 </head>
@@ -61,12 +81,18 @@
 
             <!-- Navigation Menu -->
             <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
-            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-2 md:flex-shrink-0">
+            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-3 md:flex-shrink-0">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
                 <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
+
+            <!-- Search Bar -->
+            <!-- Order-3 on mobile (below nav), order-2 on desktop (center) -->
+            <div class="search-bar-container w-full max-w-sm md:max-w-xs md:mx-4 md:order-2 md:flex-grow">
+                <input type="text" id="toolSearch" placeholder="Tìm kiếm..." class="w-full p-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
+            </div>
         </div>
     </header>
 
@@ -236,10 +262,11 @@
                 if (pco2Status === 'Toan hô hấp' && hco3Status === 'Kiềm chuyển hóa') {
                     primaryDisorder = 'Rối Loạn Hỗn Hợp';
                 } else if (pco2Status === 'Kiềm hô hấp' && hco3Status === 'Toan chuyển hóa') {
-                    primaryDisorder = 'Rối Loạn Hỗn Hỗn Hợp';
+                   primaryDisorder = 'Rối Loạn Hỗn Hỗn Hợp';
                 } else if (pco2Status !== 'Bình thường' && hco3Status !== 'Bình thường') {
                    primaryDisorder = 'Rối Loạn Hỗn Hợp';
-                } else {
+                }
+                 else {
                     primaryDisorder = 'Bình Thường';
                 }
             }
