@@ -2,249 +2,481 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Công Cụ - Máy tính y học</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ - Thể tích Plasma/Albumin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Màu nền nhẹ */
-            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
-        }
-        /* Tùy chỉnh nhỏ cho các phần tử */
-        .gradient-bg {
-            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
-        }
-        .active-link {
-            background-color: #e0e7ff; /* Màu nền khi active */
-            color: #4f46e5; /* Màu chữ khi active */
-            font-weight: 600;
-        }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc; /* Light background color */
+        padding-top: 55px; /* Điều chỉnh padding-top ban đầu */
+    }
+    .active-link {
+        background-color: #e0e7ff;
+        color: #4f46e5;
+        font-weight: 600;
+    }
+    .score-box {
+        background-color: #e0e7ff;
+        color: #4f46e5;
+        padding: 1rem 0.5rem; /* Adjusted padding for smaller screens */
+        border-radius: 0.75rem;
+        font-size: 2.0rem; /* Adjusted font size for smaller screens */
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        min-width: 100px; /* Ensure minimum width for boxes */
+        word-wrap: break-word; /* Allow text to break for smaller screens */
+    }
 
-        /* Thêm cuộn ngang cho thanh nav trên mobile */
-        .nav-scrollable {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* Cho cuộn mượt mà trên iOS */
-            scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
-        }
-        .nav-scrollable::-webkit-scrollbar {
-            display: none; /* Ẩn scrollbar trên Chrome/Safari */
-        }
-
-        /* Responsive adjustments for mobile */
-        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
-            header .logo-text {
-                display: none; /* Ẩn logo trên mobile */
-            }
-            .header-content {
-                flex-direction: column; /* Sắp xếp theo cột trên mobile */
-                align-items: center; /* Căn giữa các mục trên mobile */
-                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
-            }
-            .nav-menu {
-                justify-content: center; /* Căn giữa menu trên mobile */
-                flex-wrap: nowrap; /* Không xuống dòng các link nav */
-                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
-                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
-            }
-            .search-bar-container {
-                width: calc(100% - 2rem); /* Chiều rộng full trừ padding ngang */
-                padding-left: 0; /* Bỏ padding ngang ở đây vì đã tính vào width */
-                padding-right: 0;
-                margin-top: 0.5rem; /* Khoảng cách với thanh nav */
-                margin-left: auto; /* Căn giữa */
-                margin-right: auto; /* Căn giữa */
-            }
-            body {
-                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
-            }
-        }
-        /* Existing styles for score-box, result-text, etc. from original file kept */
+    /* Adjustments for larger screens */
+    @media (min-width: 768px) {
         .score-box {
-            background-color: #e0e7ff;
-            color: #4f46e5;
-            padding: 1rem 0.5rem; /* Adjusted padding for smaller screens */
-            border-radius: 0.75rem;
-            font-size: 2.0rem; /* Adjusted font size for smaller screens */
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            min-width: 100px; /* Ensure minimum width for boxes */
-            word-wrap: break-word; /* Allow text to break for smaller screens */
+            padding: 1rem 2rem;
+            font-size: 2.5rem;
         }
+    }
 
-        /* Adjustments for larger screens */
-        @media (min-width: 768px) {
-            .score-box {
-                padding: 1rem 2rem;
-                font-size: 2.5rem;
-            }
-        }
+    .result-text {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    } /* THÊM DẤU NGOẶC NHỌN ĐÓNG NÀY */
 
-        .result-text {
-            font-size: 1.25rem;
-            font-weight: 600;
+    /* Responsive adjustments for mobile */
+    @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
+        header .logo-text {
+            display: none; /* Ẩn logo trên mobile */
         }
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        .header-content {
+            flex-direction: column; /* Sắp xếp theo cột trên mobile */
+            align-items: center; /* Căn giữa các mục trên mobile */
+            gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
         }
-        input[type="number"] {
-            -moz-appearance: textfield;
+        .nav-menu {
+            justify-content: center; /* Căn giữa menu trên mobile */
+            flex-wrap: nowrap; /* Không xuống dòng các link nav */
+            padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
+            width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
         }
-    </style>
+        body {
+            padding-top: 50px; /* Adjusted padding for mobile */
+        }
+    }
+</style>
 </head>
 <body class="text-gray-800">
 
-<header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
-    <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
-        <a href="index.html" class="flex items-center space-x-2 text-indigo-700 hover:text-indigo-900 transition-colors duration-300 mb-2 md:mb-0">
-            <svg class="h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <span class="text-xl font-bold logo-text">Máy tính y học</span>
-        </a>
+    <!-- Header Section (combined navigation and search bar, fixed at top) -->
+    <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
+        <!-- Main header content container, flex direction changes based on screen size -->
+        <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
+            <!-- Logo/Tên trang web -->
+            <!-- Order-1 on desktop to keep it left, hidden on mobile -->
+            <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
+                <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
+                    Máy tính y học
+                </a>
+            </div>
 
-        <div class="flex-grow max-w-lg mx-auto md:mx-0 search-bar-container w-full md:w-auto">
-            <div class="relative w-full">
-                <input type="text" id="searchInput" placeholder="Tìm kiếm công cụ..." class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow duration-300">
-                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <!-- Navigation Menu -->
+            <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
+            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-2 md:flex-shrink-0">
+                <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
+                <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="py-2 md:py-4 bg-white rounded-lg shadow-inner mx-4 mt-2 md:mt-4 md:mx-auto md:max-w-4xl">
+        <div class="container mx-auto px-2 sm:px-4">
+            <!-- Back button added here -->
+            <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
+            </a>
+            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 mb-4">
+                Thể tích Plasma/Albumin trong liệu pháp thay huyết tương
+            </h1>
+
+            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
+                <form id="plasma-albumin-form" class="space-y-6">
+                    <div class="input-group">
+                        <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Cân nặng (kg)</label>
+                        <input type="number" id="weight" name="weight" min="1" step="0.1" placeholder="> 0" class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" inputmode="numeric">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="hct" class="block text-sm font-medium text-gray-700 mb-1">HCT (%)</label>
+                        <input type="number" id="hct" name="hct" min="0" max="100" step="1" placeholder="0 - 100" class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" inputmode="numeric">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="replacement-fluid" class="block text-sm font-medium text-gray-700 mb-1">Dịch thay thế</label>
+                        <select id="replacement-fluid" name="replacement-fluid" class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+                            <option value="FFP">Huyết tương (FFP)</option>
+                            <option value="Albumin">Albumin 5%</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="k-factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số K</label>
+                        <select id="k-factor" name="k-factor" class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+                            <option value="0.65">0.65 (nữ)</option>
+                            <option value="0.7">0.7 (nam)</option>
+                        </select>
+                    </div>
+
+                    <!-- Plasma bag volume input, visible only for FFP -->
+                    <div id="plasma-bag-volume-group" class="input-group">
+                        <label for="plasma-bag-volume" class="block text-sm font-medium text-gray-700 mb-1">Thể tích túi huyết tương (ml)</label>
+                        <input type="number" id="plasma-bag-volume" name="plasma-bag-volume" min="1" step="0.1" value="150" placeholder="Thể tích túi huyết tương (ml)" class="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" inputmode="numeric">
+                    </div>
+
+                    <div class="mt-8 flex flex-col md:flex-row gap-4">
+                        <button type="submit" id="calculateBtn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-indigo-700">
+                            Tính thể tích
+                        </button>
+                        <button type="button" id="clearBtn" class="flex-1 bg-red-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-red-600">
+                            Xóa Dữ Liệu
+                        </button>
+                    </div>
+                </form>
+
+                <div id="result-container" class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner hidden">
+                    <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">Kết quả</h3>
+                    <!-- EPV display in its own row/section -->
+                    <div class="flex flex-col justify-center items-center mb-4">
+                        <p class="text-lg font-medium text-gray-600 mb-2">Thể tích huyết tương ước tính (EPV)</p>
+                        <div id="epv-display" class="score-box">0</div>
+                        <p class="text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                    </div>
+                    <!-- 1.0x EPV and 1.5x EPV in a row (always two columns) -->
+                    <div class="flex flex-row justify-center items-center space-x-2 sm:space-x-8 space-y-0 mt-6">
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Thể tích thay thế (1.0 lần EPV)</p>
+                            <div id="one-x-epv-display" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                        </div>
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Thể tích thay thế (1.5 lần EPV)</p>
+                            <div id="one-point-five-x-epv-display" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <p id="explanation-text" class="result-text"></p>
+                    </div>
+                </div>
+
+                <!-- FFP Bag results, visible only for FFP -->
+                <div id="ffp-bag-results" class="hidden mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
+                    <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">Số túi FFP cần dùng</h3>
+                    <div class="flex flex-row justify-center items-center space-x-2 sm:space-x-8 space-y-0">
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Số túi FFP cần dùng (1.0 lần EPV)</p>
+                            <div id="ffp-bags-display-1x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(túi)</p>
+                        </div>
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Số túi FFP cần dùng (1.5 lần EPV)</p>
+                            <div id="ffp-bags-display-1_5x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(túi)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Albumin 5% and 20% dilution results, visible only for Albumin -->
+                <div id="albumin-results-section" class="hidden mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
+                    <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">Thông tin chi tiết Albumin</h3>
+                    <div class="flex flex-row justify-center items-center space-x-2 sm:space-x-8 space-y-0">
+                        <!-- Albumin (g) -->
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Albumin cần dùng (g) (1.0 lần EPV)</p>
+                            <div id="albumin-grams-1x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(g)</p>
+                        </div>
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Albumin cần dùng (g) (1.5 lần EPV)</p>
+                            <div id="albumin-grams-1_5x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(g)</p>
+                        </div>
+                    </div>
+
+                    <h4 class="text-xl font-bold text-gray-800 text-center mt-8 mb-4">Pha loãng Albumin 20% thành 5%</h4>
+                    <div class="flex flex-row justify-center items-center space-x-2 sm:space-x-8 space-y-0">
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Thể tích Albumin 20% pha với (1.0 lần EPV)</p>
+                            <div id="volume-alb20-1x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                        </div>
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Thể tích NaCl 0.9% (1.0 lần EPV)</p>
+                            <div id="volume-nacl-1x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                        </div>
+                    </div>
+                     <div class="flex flex-row justify-center items-center space-x-2 sm:space-x-8 space-y-0 mt-6">
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Thể tích Albumin 20% pha với (1.5 lần EPV)</p>
+                            <div id="volume-alb20-1_5x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                        </div>
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Thể tích NaCl 0.9% (1.5 lần EPV)</p>
+                            <div id="volume-nacl-1_5x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                        </div>
+                    </div>
+
+
+                    <h4 class="text-xl font-bold text-gray-800 text-center mt-8 mb-4">Tương đương với Albumin 20% chai 50ml</h4>
+                    <div class="flex flex-row justify-center items-center space-x-2 sm:space-x-8 space-y-0">
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Số chai 50ml cần dùng (1.0 lần EPV)</p>
+                            <div id="albumin-bottles-50ml-1x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(chai)</p>
+                        </div>
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Số chai 50ml cần dùng (1.5 lần EPV)</p>
+                            <div id="albumin-bottles-50ml-1_5x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(chai)</p>
+                        </div>
+                    </div>
+
+                    <h4 class="text-xl font-bold text-gray-800 text-center mt-8 mb-4">Tương đương với Albumin 20% chai 100ml</h4>
+                    <div class="flex flex-row justify-center items-center space-x-2 sm:space-x-8 space-y-0">
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Số chai 100ml cần dùng (1.0 lần EPV)</p>
+                            <div id="albumin-bottles-100ml-1x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(chai)</p>
+                        </div>
+                        <div class="w-1/2 flex-1 text-center">
+                            <p class="text-lg font-medium text-gray-600 mb-2">Số chai 100ml cần dùng (1.5 lần EPV)</p>
+                            <div id="albumin-bottles-100ml-1_5x" class="score-box">0</div>
+                            <p class="text-sm font-medium text-gray-500 mt-1">(chai)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">Công thức tính toán</h4>
+                    <p class="mt-2"><strong>Thể tích huyết tương ước tính (EPV):</strong></p>
+                    <p class="mt-1 ml-4 italic">EPV [ml] = K_factor × Cân nặng (kg) × (100 - HCT[%]) / 100</p>
+                    <p class="mt-4">Trong đó:</p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                        <li>Nếu Hệ số K = 0.65 (nữ), thì K_factor = 65.</li>
+                        <li>Nếu Hệ số K = 0.7 (nam), thì K_factor = 70.</li>
+                    </ul>
+                    <p class="mt-2"><strong>Thể tích thay thế (1.0 lần EPV):</strong></p>
+                    <p class="mt-1 ml-4 italic">Thể tích = EPV × 1.0</p>
+                    <p class="mt-2"><strong>Thể tích thay thế (1.5 lần EPV):</strong></p>
+                    <p class="mt-1 ml-4 italic">Thể tích = EPV × 1.5</p>
+                    <p class="mt-2"><strong>Số túi FFP cần dùng:</strong></p>
+                    <p class="mt-1 ml-4 italic">Số túi FFP = Ciel(Thể tích thay thế / Thể tích túi huyết tương)</p>
+                    <p class="mt-2"><strong>Lượng Albumin (g) cần dùng:</strong></p>
+                    <p class="mt-1 ml-4 italic">Lượng Albumin (g) = Thể tích Albumin 5% cần dùng (ml) × 0.05</p>
+                     <p class="mt-2"><strong>Chuyển đổi từ Albumin 5% sang Albumin 20% pha với NaCl 0.9%:</strong></p>
+                    <p class="mt-1 ml-4 italic">Thể tích Albumin 20% = Thể tích Albumin 5% cần dùng × 0.25</p>
+                    <p class="mt-1 ml-4 italic">Thể tích Natri Clorid 0.9% = Thể tích Albumin 5% cần dùng - Thể tích Albumin 20%</p>
+                    <p class="mt-2"><strong>Chuyển đổi sang số chai Albumin 20% 50ml/100ml:</strong></p>
+                    <p class="mt-1 ml-4 italic">Số chai 50ml = (Thể tích Albumin 20% / 50) (làm tròn 1 chữ số thập phân)</p>
+                    <p class="mt-1 ml-4 italic">Số chai 100ml = (Thể tích Albumin 20% / 100) (làm tròn 1 chữ số thập phân)</p>
+                    <p class="mt-4"><strong>Lưu ý:</strong></p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                        <li>Các thể tích thay thế 1.0 lần và 1.5 lần EPV là các giá trị tham chiếu phổ biến trong liệu pháp thay huyết tương.</li>
+                    </ul>
+                </div>
             </div>
         </div>
+    </section>
 
-        <nav class="nav-scrollable overflow-x-auto whitespace-nowrap md:overflow-visible md:whitespace-normal w-full md:w-auto mt-2 md:mt-0">
-            <div class="flex space-x-4 p-2 nav-menu justify-center md:justify-end">
-                <a href="index.html" class="px-3 py-2 rounded-full text-gray-600 hover:bg-gray-200 transition-colors duration-300">Trang chủ</a>
-                <a href="cong-cu.html" class="px-3 py-2 rounded-full text-gray-600 hover:bg-gray-200 transition-colors duration-300 active-link">Công cụ</a>
-                <a href="gioi-thieu.html" class="px-3 py-2 rounded-full text-gray-600 hover:bg-gray-200 transition-colors duration-300">Giới thiệu</a>
-            </div>
-        </nav>
-    </div>
-</header>
-<main class="container mx-auto px-4 py-8">
-    <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold text-center text-gray-900 mb-6">Tính Thể Tích Huyết Tương Trao Đổi (TPE)</h1>
-        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
-            <p class="text-sm text-gray-600 italic text-center mb-6">
-                Công cụ này ước tính thể tích huyết tương cần trao đổi dựa trên cân nặng bệnh nhân và hệ số K.
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo riserv.</p>
+            <p class="mt-2">
+                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
             </p>
-
-            <form id="plasma-albumin-form" class="space-y-6">
-                <div class="input-group">
-                    <label for="weight" class="block text-gray-700 font-semibold mb-2">Cân nặng (kg):</label>
-                    <input type="number" step="0.1" id="weight" name="weight" placeholder="Nhập cân nặng" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow duration-300" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="k-factor" class="block text-gray-700 font-semibold mb-2">Hệ số K (L/kg):</label>
-                    <p class="text-sm text-gray-500 mb-2">Mặc định: 0.65 (sử dụng 0.70 cho những trường hợp đặc biệt)</p>
-                    <input type="number" step="0.01" id="k-factor" name="k-factor" value="0.65" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow duration-300" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="plasma-bag-volume" class="block text-gray-700 font-semibold mb-2">Thể tích một đơn vị huyết tương tươi đông lạnh (FFP) (mL):</label>
-                    <input type="number" step="1" id="plasma-bag-volume" name="plasma-bag-volume" value="150" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow duration-300" required>
-                </div>
-
-                <div class="mt-8 flex justify-center space-x-4">
-                    <button type="submit" class="px-6 py-3 rounded-full bg-indigo-600 text-white font-bold hover:bg-indigo-700 transition-colors duration-300 shadow-md">Tính toán</button>
-                    <button type="button" id="clearBtn" class="px-6 py-3 rounded-full bg-gray-300 text-gray-800 font-bold hover:bg-gray-400 transition-colors duration-300 shadow-md">Xóa</button>
-                </div>
-            </form>
-
-            <div id="result-container" class="mt-8 hidden animate-fade-in-up">
-                <h2 class="text-xl font-bold text-center text-gray-900 mb-4">Kết quả:</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-gray-200">
-                        <span class="text-gray-700 font-semibold mb-2">Thể tích huyết tương ước tính (EPV):</span>
-                        <div class="score-box">
-                            <span id="epv-display">0</span>
-                            <span class="text-sm text-gray-500 ml-2">mL</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md border border-gray-200">
-                        <span class="text-gray-700 font-semibold mb-2">Thể tích huyết tương cần trao đổi (TPE):</span>
-                        <div class="score-box">
-                            <span id="tpe-display">0</span>
-                            <span class="text-sm text-gray-500 ml-2">mL</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="ffp-bag-results" class="mt-4 hidden animate-fade-in-up text-center">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">Số lượng đơn vị FFP ước tính:</h3>
-                    <p class="text-gray-600 mb-1">
-                        Trao đổi 1 thể tích huyết tương (1.0x TPE):
-                        <span class="font-bold text-indigo-700" id="ffpBagsDisplay1x">0</span> đơn vị
-                    </p>
-                    <p class="text-gray-600">
-                        Trao đổi 1.5 thể tích huyết tương (1.5x TPE):
-                        <span class="font-bold text-indigo-700" id="ffpBagsDisplay1_5x">0</span> đơn vị
-                    </p>
-                </div>
+            <p>
+                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+            </p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
+                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
             </div>
         </div>
-    </div>
-</main>
+    </footer>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('plasma-albumin-form');
-        const weightInput = document.getElementById('weight');
-        const kFactorInput = document.getElementById('k-factor');
-        const plasmaBagVolumeInput = document.getElementById('plasma-bag-volume');
-        const calculateBtn = form.querySelector('button[type="submit"]');
-        const clearBtn = document.getElementById('clearBtn');
-        const resultContainer = document.getElementById('result-container');
-        const epvDisplay = document.getElementById('epv-display');
-        const tpeDisplay = document.getElementById('tpe-display');
-        const ffpBagsDisplay1x = document.getElementById('ffpBagsDisplay1x');
-        const ffpBagsDisplay1_5x = document.getElementById('ffpBagsDisplay1_5x');
-        const ffpBagResults = document.getElementById('ffp-bag-results');
+    <script>
+        // Function to clear results and hide containers
+        function clearAndHideResults() {
+            document.getElementById('epv-display').textContent = '0';
+            document.getElementById('one-x-epv-display').textContent = '0';
+            document.getElementById('one-point-five-x-epv-display').textContent = '0';
 
-        function toggleInputFieldsAndClearResults() {
-            // This function is for initial state and clearing
-            resultContainer.classList.add('hidden');
-            ffpBagResults.classList.add('hidden');
+            // Clear Albumin specific results
+            document.getElementById('albumin-grams-1x').textContent = '0';
+            document.getElementById('albumin-grams-1_5x').textContent = '0';
+            document.getElementById('volume-alb20-1x').textContent = '0';
+            document.getElementById('volume-nacl-1x').textContent = '0';
+            document.getElementById('volume-alb20-1_5x').textContent = '0';
+            document.getElementById('volume-nacl-1_5x').textContent = '0';
+            document.getElementById('albumin-bottles-50ml-1x').textContent = '0';
+            document.getElementById('albumin-bottles-50ml-1_5x').textContent = '0';
+            document.getElementById('albumin-bottles-100ml-1x').textContent = '0';
+            document.getElementById('albumin-bottles-100ml-1_5x').textContent = '0';
+
+            // Clear FFP specific results
+            document.getElementById('ffp-bags-display-1x').textContent = '0';
+            document.getElementById('ffp-bags-display-1_5x').textContent = '0';
+
+            // Hide all result containers
+            document.getElementById('result-container').classList.add('hidden');
+            document.getElementById('ffp-bag-results').classList.add('hidden');
+            document.getElementById('albumin-results-section').classList.add('hidden');
+
+            document.getElementById('explanation-text').textContent = '';
+            document.getElementById('explanation-text').className = "result-text";
         }
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Function to handle visibility of fields based on replacement fluid type and clear results
+        function toggleInputFieldsAndClearResults() {
+            const replacementFluid = document.getElementById('replacement-fluid').value;
+            const plasmaBagVolumeGroup = document.getElementById('plasma-bag-volume-group');
+            
+            clearAndHideResults(); // Clear all results and hide all related containers first
 
-            const weight = parseFloat(weightInput.value);
-            const kFactor = parseFloat(kFactorInput.value);
-            const plasmaBagVolume = parseInt(plasmaBagVolumeInput.value);
+            if (replacementFluid === 'Albumin') {
+                plasmaBagVolumeGroup.classList.add('hidden');
+                document.getElementById('plasma-bag-volume').value = "150"; // Reset value but keep hidden
+            } else { // FFP
+                plasmaBagVolumeGroup.classList.remove('hidden');
+            }
+        }
 
-            if (isNaN(weight) || isNaN(kFactor) || isNaN(plasmaBagVolume) || weight <= 0 || kFactor <= 0 || plasmaBagVolume <= 0) {
-                // Display error message
-                epvDisplay.textContent = 'Lỗi';
-                tpeDisplay.textContent = 'Lỗi';
-                ffpBagResults.classList.add('hidden');
+        // Add event listener for replacement fluid selection
+        document.getElementById('replacement-fluid').addEventListener('change', toggleInputFieldsAndClearResults);
+
+        // Event listener for form submission
+        document.getElementById('plasma-albumin-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const weight = parseFloat(document.getElementById('weight').value);
+            const hct = parseFloat(document.getElementById('hct').value);
+            const kFactor = parseFloat(document.getElementById('k-factor').value);
+            const replacementFluid = document.getElementById('replacement-fluid').value;
+            const plasmaBagVolume = parseFloat(document.getElementById('plasma-bag-volume').value);
+
+            const resultContainer = document.getElementById('result-container');
+            const epvDisplay = document.getElementById('epv-display');
+            const oneXEpvDisplay = document.getElementById('one-x-epv-display');
+            const onePointFiveXEpvDisplay = document.getElementById('one-point-five-x-epv-display');
+            const explanationText = document.getElementById('explanation-text');
+
+            const ffpBagResults = document.getElementById('ffp-bag-results');
+            const ffpBagsDisplay1x = document.getElementById('ffp-bags-display-1x');
+            const ffpBagsDisplay1_5x = document.getElementById('ffp-bags-display-1_5x');
+
+            const albuminResultsSection = document.getElementById('albumin-results-section');
+            const albuminGrams1x = document.getElementById('albumin-grams-1x');
+            const albuminGrams1_5x = document.getElementById('albumin-grams-1_5x');
+            const volumeAlb20_1x = document.getElementById('volume-alb20-1x');
+            const volumeNaCl_1x = document.getElementById('volume-nacl-1x');
+            const volumeAlb20_1_5x = document.getElementById('volume-alb20-1_5x');
+            const volumeNaCl_1_5x = document.getElementById('volume-nacl-1_5x');
+            const albuminBottles50ml1x = document.getElementById('albumin-bottles-50ml-1x');
+            const albuminBottles50ml1_5x = document.getElementById('albumin-bottles-50ml-1_5x');
+            const albuminBottles100ml1x = document.getElementById('albumin-bottles-100ml-1x');
+            const albuminBottles100ml1_5x = document.getElementById('albumin-bottles-100ml-1_5x');
+
+
+            // Clear previous results and hide all specific sections initially
+            clearAndHideResults();
+
+            // Basic validation for common fields
+            if (isNaN(weight) || isNaN(hct) || isNaN(kFactor) || weight <= 0 || hct < 0 || hct > 100) {
+                explanationText.textContent = 'Vui lòng nhập các giá trị hợp lệ cho Cân nặng, HCT và Hệ số K.';
+                explanationText.className = "result-text text-red-500";
                 resultContainer.classList.remove('hidden');
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
                 return;
             }
 
-            // Calculations
-            const epv = weight * kFactor * 1000;
-            const tpe = epv;
+            // Validate plasmaBagVolume only if FFP is selected and input field is visible
+            if (replacementFluid === 'FFP' && (isNaN(plasmaBagVolume) || plasmaBagVolume <= 0)) {
+                explanationText.textContent = 'Vui lòng nhập giá trị hợp lệ cho Thể tích túi huyết tương.';
+                explanationText.className = "result-text text-red-500";
+                resultContainer.classList.remove('hidden');
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
 
-            epvDisplay.textContent = epv.toFixed(0);
-            tpeDisplay.textContent = tpe.toFixed(0);
+            // Apply the EPV formula: EPV [ml] = kFactor * cân nặng [kg] * (100 - HCT[%])
+            const epv = kFactor * weight * (100 - hct);
 
-            // Calculate FFP bags
-            const numFfpBags1x = Math.ceil(tpe / plasmaBagVolume);
-            const numFfpBags1_5x = Math.ceil((tpe * 1.5) / plasmaBagVolume);
+            // Calculate 1.0x EPV and 1.5x EPV for display
+            const epvOneX = epv * 1.0;
+            const epvOnePointFiveX = epv * 1.5;
 
-            ffpBagsDisplay1x.textContent = numFfpBags1x;
-            ffpBagsDisplay1_5x.textContent = numFfpBags1_5x;
-
+            epvDisplay.textContent = epv.toFixed(2);
+            oneXEpvDisplay.textContent = epvOneX.toFixed(2);
+            onePointFiveXEpvDisplay.textContent = epvOnePointFiveX.toFixed(2);
+            
             resultContainer.classList.remove('hidden');
-            ffpBagResults.classList.remove('hidden'); // Show FFP bag results container
             resultContainer.scrollIntoView({ behavior: 'smooth' });
+
+            if (replacementFluid === 'Albumin') {
+                // Calculate grams of Albumin
+                const albuminGrams_1x = epvOneX * 0.05; // 5% concentration means 0.05g/ml
+                const albuminGrams_1_5x = epvOnePointFiveX * 0.05;
+                albuminGrams1x.textContent = albuminGrams_1x.toFixed(1);
+                albuminGrams1_5x.textContent = albuminGrams_1_5x.toFixed(1);
+
+
+                // Calculate for 1.0x EPV (Albumin 20% dilution)
+                const volumeAlb20Percent1x = epvOneX * 0.25; // 5% concentration / 20% concentration = 0.25
+                const volumeNaCl1x = epvOneX - volumeAlb20Percent1x;
+                volumeAlb20_1x.textContent = volumeAlb20Percent1x.toFixed(1);
+                volumeNaCl_1x.textContent = volumeNaCl1x.toFixed(1);
+
+                const numBottles50ml1x = (volumeAlb20Percent1x / 50).toFixed(1); // Round to 1 decimal
+                const numBottles100ml1x = (volumeAlb20Percent1x / 100).toFixed(1); // Round to 1 decimal
+                albuminBottles50ml1x.textContent = numBottles50ml1x;
+                albuminBottles100ml1x.textContent = numBottles100ml1x;
+
+                // Calculate for 1.5x EPV (Albumin 20% dilution)
+                const volumeAlb20Percent1_5x = epvOnePointFiveX * 0.25;
+                const volumeNaCl1_5x = epvOnePointFiveX - volumeAlb20Percent1_5x;
+                volumeAlb20_1_5x.textContent = volumeAlb20Percent1_5x.toFixed(1);
+                volumeNaCl_1_5x.textContent = volumeNaCl1_5x.toFixed(1);
+
+                const numBottles50ml1_5x = (volumeAlb20Percent1_5x / 50).toFixed(1); // Round to 1 decimal
+                const numBottles100ml1_5x = (volumeAlb20Percent1_5x / 100).toFixed(1); // Round to 1 decimal
+                albuminBottles50ml1_5x.textContent = numBottles50ml1_5x;
+                albuminBottles100ml1_5x.textContent = numBottles100ml1_5x;
+
+                albuminResultsSection.classList.remove('hidden'); // Show albumin specific results container
+            } else { // FFP
+                // Calculate number of FFP bags
+                const numFfpBags1x = Math.ceil(epvOneX / plasmaBagVolume);
+                const numFfpBags1_5x = Math.ceil(epvOnePointFiveX / plasmaBagVolume);
+
+                ffpBagsDisplay1x.textContent = numFfpBags1x;
+                ffpBagsDisplay1_5x.textContent = numFfpBags1_5x;
+
+                ffpBagResults.classList.remove('hidden'); // Show FFP bag results container
+            }
         });
 
         // Event listener for clear button
