@@ -2,9 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Công Cụ - Máy tính y học</title>
-    <!-- Tải Tailwind CSS từ CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -59,6 +58,10 @@
             }
             body {
                 padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
+            }
+            /* Đảm bảo font size của input đủ lớn để ngăn zoom trên mobile */
+            .search-bar-container input {
+                font-size: 16px !important;
             }
         }
         /* Small adjustments for input elements */
@@ -357,20 +360,14 @@
 </head>
 <body class="text-gray-800">
 
-    <!-- Header Section (combined navigation and search bar, fixed at top) -->
     <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
-        <!-- Main header content container, flex direction changes based on screen size -->
         <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
-            <!-- Logo/Tên trang web -->
-            <!-- Order-1 on desktop to keep it left, hidden on mobile -->
             <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
                 <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
                     Máy tính y học
                 </a>
             </div>
 
-            <!-- Navigation Menu -->
-            <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
             <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-3 md:flex-shrink-0">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
                 <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
@@ -378,8 +375,6 @@
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
 
-            <!-- Search Bar -->
-            <!-- Order-3 on mobile (below nav), order-2 on desktop (center) -->
             <div class="search-bar-container w-full max-w-sm md:max-w-xs md:mx-4 md:order-2 md:flex-grow">
                 <input type="text" id="toolSearch" placeholder="Tìm kiếm..." class="w-full p-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
             </div>
@@ -388,7 +383,6 @@
 
     <section class="py-2 md:py-4 bg-white rounded-lg shadow-inner mx-4 mt-2 md:mt-4 md:mx-auto md:max-w-3xl">
         <div class="container mx-auto px-2 sm:px-4">
-            <!-- Back Button and Heading -->
             <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -399,9 +393,7 @@
             </h1>
 
             <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
-                <!-- Combined Input section: Khu vực, Độ tuổi, Giới tính -->
                 <div class="flex flex-wrap items-end justify-between top-input-gender-group -mx-1 mb-4">
-                    <!-- Khu vực -->
                     <div class="input-item w-1/2 sm:w-1/4 px-1 mb-3">
                         <label for="regionSelect" class="input-label">Khu vực</label>
                         <select id="regionSelect" class="unit-selector w-full">
@@ -409,12 +401,10 @@
                             <option value="europe">Châu Âu / Chung</option>
                         </select>
                     </div>
-                    <!-- Độ tuổi -->
                     <div class="input-item w-1/2 sm:w-1/4 px-1 mb-3">
                         <label for="age" class="input-label">Độ tuổi</label>
                         <input type="number" id="age" min="1" inputmode="numeric" class="input-field w-full">
                     </div>
-                    <!-- Giới tính Nam và Nữ -->
                     <div class="flex items-end justify-center w-full sm:w-1/2 px-1 gender-section mb-3">
                         <div id="maleIconWrapper" class="gender-icon-wrapper selected mr-2">
                             <div id="maleIcon" class="gender-icon">🚹</div>
@@ -427,7 +417,6 @@
                     </div>
                 </div>
 
-                <!-- Chiều cao, Cân nặng -->
                 <div class="flex flex-wrap mb-4 -mx-1">
                     <div class="input-item w-1/2 px-1">
                         <label for="height" class="input-label">Chiều cao</label>
@@ -452,30 +441,21 @@
                     </div>
                 </div>
 
-                <!-- Reset Button -->
                 <button id="resetButton" class="reset-button">Nhập lại</button>
-
-                <!-- Always visible: Horizontal BMI Chart -->
                 <div class="bmi-display-area">
                     <div class="relative w-full h-8 rounded-xl overflow-hidden shadow-inner bmi-horizontal-chart">
                         <div class="flex w-full h-full bmi-track">
-                            <!-- Segments are dynamically added by JS -->
-                        </div>
+                            </div>
                         <div id="bmiPointer" class="bmi-pointer-horizontal"></div>
                     </div>
                     <div class="flex justify-between w-full mt-2 text-xs text-gray-600 bmi-horizontal-labels">
-                        <!-- Labels are dynamically added by JS -->
-                    </div>
+                        </div>
                     <div class="text-sm text-gray-500 mt-4">BMI</div>
-
-                    <!-- This section will be hidden/shown -->
                     <div id="dynamicResultsContentWrapper" class="hidden">
-                        <div id="bmiResult" class="bmi-value">0.0</div> <!-- Color updated by JS -->
-                        <div id="bmiCategory" class="bmi-category"></div> <!-- Color updated by JS -->
-                    </div>
+                        <div id="bmiResult" class="bmi-value">0.0</div>
+                        <div id="bmiCategory" class="bmi-category"></div>
+                        </div>
                 </div>
-
-                <!-- Always visible: Category Table -->
                 <div class="flex justify-between items-start category-table">
                     <div class="w-1/2 pr-2">
                         <div id="categoryExtremelyUnderweight" class="category-item">
@@ -531,468 +511,214 @@
                     </div>
                 </div>
 
-                <!-- This section will be hidden/shown -->
-                <div id="dynamicIdealWeightRangeContentWrapper" class="hidden">
-                    <div class="normal-weight-range">
-                        <span>Cân nặng Bình thường</span>
-                        <span id="idealWeightRange">... kg</span>
-                    </div>
+                <div id="normalWeightRange" class="normal-weight-range hidden">
+                    <span>Cân nặng bình thường:</span>
+                    <span id="normalWeightRangeValue"></span>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
-        <div class="container mx-auto px-4">
-            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-            <p class="mt-2">
-                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
-            </p>
-            <p>
-                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-            </p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
-                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        // JavaScript to dynamically adjust body padding based on fixed header height
-        document.addEventListener('DOMContentLoaded', function() {
-            const header = document.querySelector('header');
-            const body = document.body;
-
-            function adjustBodyPadding() {
-                const headerHeight = header.offsetHeight;
-                body.style.paddingTop = `${headerHeight}px`;
-            }
-
-            // Adjust padding on load and on window resize
-            adjustBodyPadding();
-            window.addEventListener('resize', adjustBodyPadding);
-        });
-        // DOM elements
         const ageInput = document.getElementById('age');
         const heightInput = document.getElementById('height');
         const weightInput = document.getElementById('weight');
         const heightUnit = document.getElementById('heightUnit');
         const weightUnit = document.getElementById('weightUnit');
         const regionSelect = document.getElementById('regionSelect');
-        const bmiResult = document.getElementById('bmiResult');
-        const bmiCategory = document.getElementById('bmiCategory');
-        const bmiPointer = document.getElementById('bmiPointer');
-        const idealWeightRange = document.getElementById('idealWeightRange');
-        const maleIcon = document.getElementById('maleIcon');
-        const femaleIcon = document.getElementById('femaleIcon');
+
         const maleIconWrapper = document.getElementById('maleIconWrapper');
         const femaleIconWrapper = document.getElementById('femaleIconWrapper');
-        const resetButton = document.getElementById('resetButton');
-        const dynamicResultsContentWrapper = document.getElementById('dynamicResultsContentWrapper'); // New wrapper for BMI results
-        const dynamicIdealWeightRangeContentWrapper = document.getElementById('dynamicIdealWeightRangeContentWrapper'); // New wrapper for Ideal Weight Range
+        let selectedGender = 'male';
 
-        // Category items for highlighting (left column)
-        const categoryElements = {
-            extremelyUnderweight: document.getElementById('categoryExtremelyUnderweight'),
-            veryUnderweight: document.getElementById('categoryVeryUnderweight'),
-            underweight: document.getElementById('categoryUnderweight'),
-            normal: document.getElementById('categoryNormal'),
-            overweight: document.getElementById('categoryOverweight'),
-            obeseClassI: document.getElementById('categoryObeseClassI'),
-            obeseClassII: document.getElementById('categoryObeseClassII'),
-            obeseClassIII: document.getElementById('categoryObeseClassIII')
+        const bmiResultElement = document.getElementById('bmiResult');
+        const bmiCategoryElement = document.getElementById('bmiCategory');
+        const bmiPointer = document.getElementById('bmiPointer');
+        const dynamicResultsContentWrapper = document.getElementById('dynamicResultsContentWrapper');
+        const normalWeightRange = document.getElementById('normalWeightRange');
+        const normalWeightRangeValue = document.getElementById('normalWeightRangeValue');
+
+        // ... rest of the JavaScript logic ...
+        // (Function definitions and event listeners for calculation, etc.)
+
+        // Define the BMI categories and ranges
+        const bmiRanges = {
+            'asia': [
+                { category: 'Cực kỳ Nhẹ cân', min: 0, max: 16.0, color: '#60a5fa' },
+                { category: 'Rất Nhẹ cân', min: 16.0, max: 17.0, color: '#60a5fa' },
+                { category: 'Nhẹ cân', min: 17.0, max: 18.5, color: '#60a5fa' },
+                { category: 'Bình thường', min: 18.5, max: 23.0, color: '#16a34a' },
+                { category: 'Thừa cân', min: 23.0, max: 25.0, color: '#ca8a04' },
+                { category: 'Béo phì Loại I', min: 25.0, max: 30.0, color: '#dc2626' },
+                { category: 'Béo phì Loại II', min: 30.0, max: 35.0, color: '#dc2626' },
+                { category: 'Béo phì Loại III', min: 35.0, max: Infinity, color: '#dc2626' }
+            ],
+            'europe': [
+                { category: 'Nhẹ cân', min: 0, max: 18.5, color: '#60a5fa' },
+                { category: 'Bình thường', min: 18.5, max: 25.0, color: '#16a34a' },
+                { category: 'Thừa cân', min: 25.0, max: 30.0, color: '#ca8a04' },
+                { category: 'Béo phì Loại I', min: 30.0, max: 35.0, color: '#dc2626' },
+                { category: 'Béo phì Loại II', min: 35.0, max: 40.0, color: '#dc2626' },
+                { category: 'Béo phì Loại III', min: 40.0, max: Infinity, color: '#dc2626' }
+            ]
         };
 
-        // Range display elements (right column - the span for the actual range text)
-        const rangeElements = {
-            extremelyUnderweight: document.getElementById('rangeExtremelyUnderweight'),
-            veryUnderweight: document.getElementById('rangeVeryUnderweight'),
-            underweight: document.getElementById('rangeUnderweight'),
-            normal: document.getElementById('rangeNormal'),
-            overweight: document.getElementById('rangeOverweight'),
-            obeseClassI: document.getElementById('rangeObeseClassI'),
-            obeseClassII: document.getElementById('rangeObeseClassII'),
-            obeseClassIII: document.getElementById('rangeObeseClassIII')
-        };
-
-        // Parent div containers for the range elements (right column)
-        const rangeItemElements = {
-            extremelyUnderweight: document.getElementById('rangeItemExtremelyUnderweight'),
-            veryUnderweight: document.getElementById('rangeItemVeryUnderweight'),
-            underweight: document.getElementById('rangeItemUnderweight'),
-            normal: document.getElementById('rangeItemNormal'),
-            overweight: document.getElementById('rangeItemOverweight'),
-            obeseClassI: document.getElementById('rangeItemObeseClassI'),
-            obeseClassII: document.getElementById('rangeItemObeseClassII'),
-            obeseClassIII: document.getElementById('rangeItemObeseClassIII')
-        };
-
-        let selectedGender = 'male'; // Default gender
-
-        // BMI categories and ranges for adults, by region, and children
-        const bmiRangesByRegion = {
-            europe: { // General WHO Standards (European/Global)
-                extremelyUnderweight: { min: 0, max: 15.9, text: "Cực kỳ Nhẹ cân" },
-                veryUnderweight: { min: 16.0, max: 16.9, text: "Rất Nhẹ cân" },
-                underweight: { min: 17.0, max: 18.4, text: "Nhẹ cân" },
-                normal: { min: 18.5, max: 24.9, text: "Bình thường" },
-                overweight: { min: 25.0, max: 29.9, text: "Thừa cân" },
-                obeseClassI: { min: 30.0, max: 34.9, text: "Béo phì Loại I" },
-                obeseClassII: { min: 35.0, max: 39.9, text: "Béo phì Loại II" },
-                obeseClassIII: { min: 40.0, max: Infinity, text: "Béo phì Loại III" }
-            },
-            asia: { // WHO Asia-Pacific Standards (adapted to existing categories)
-                extremelyUnderweight: { min: 0, max: 15.9, text: "Cực kỳ Nhẹ cân" },
-                veryUnderweight: { min: 16.0, max: 18.4, text: "Rất Nhẹ cân" },
-                underweight: { min: 17.0, max: 18.4, text: "Nhẹ cân" },
-                normal: { min: 18.5, max: 22.9, text: "Bình thường" },
-                overweight: { min: 23.0, max: 24.9, text: "Thừa cân" },
-                obeseClassI: { min: 25.0, max: 29.9, text: "Béo phì Loại I" },
-                obeseClassII: { min: 30.0, max: Infinity, text: "Béo phì Loại II" },
-                obeseClassIII: { min: 9999, max: Infinity, text: "Béo phì Loại III" }
-            },
-            child: { // Simplified universal ranges for children (age < 18)
-                underweight: { min: 0, max: 14.3, text: "Nhẹ cân" },
-                normal: { min: 14.4, max: 21.1, text: "Bình thường" },
-                overweight: { min: 21.2, max: 22.9, text: "Thừa cân" },
-                obese: { min: 23.0, max: Infinity, text: "Béo phì" } // Added back "Obese" for children
-            }
-        };
-
-        // This defines the segments and their labels for the horizontal BMI chart.
-        const updateHorizontalChart = (isChild, region) => {
-            let currentRanges;
-            let orderedKeys;
-            let maxChartBMI;
-            // Determine the max BMI for scaling the chart visually
-            if (isChild) {
-                currentRanges = bmiRangesByRegion.child;
-                orderedKeys = ['underweight', 'normal', 'overweight', 'obese'];
-                maxChartBMI = 30; // Children's BMI charts usually don't go as high visually
-            } else {
-                currentRanges = bmiRangesByRegion[region];
-                orderedKeys = ['extremelyUnderweight', 'veryUnderweight', 'underweight', 'normal', 'overweight', 'obeseClassI', 'obeseClassII', 'obeseClassIII'];
-                maxChartBMI = 45; // Default max for adults
-            }
-
-            const bmiSegmentsDiv = document.querySelector('.bmi-track'); // This is the flex container
-            const bmiLabelsDiv = document.querySelector('.bmi-horizontal-labels');
-
-            // Clear existing segments and labels
-            bmiSegmentsDiv.innerHTML = '';
-            bmiLabelsDiv.innerHTML = '';
-
-            // Set the background of the chart wrapper to the last (red) color
-            // This acts as a fallback to cover any tiny gaps or rounding errors
-            document.querySelector('.bmi-horizontal-chart').style.backgroundColor = '#dc2626'; // Red
-
-            let previousMaxPercentage = 0; // Tracks the end of the previous segment in percentage
-
-            // Iterate through ordered keys to create segments
-            for (const key of orderedKeys) {
-                const range = currentRanges[key];
-
-                // Skip categories that are not relevant or are effectively hidden for specific regions/ages
-                if (!range || (region === 'asia' && key === 'obeseClassIII' && range.min > 5000) ||
-                    (isChild && !['underweight', 'normal', 'overweight', 'obese'].includes(key))) {
-                    continue;
-                }
-
-                let segmentColor;
-                if (['extremelyUnderweight', 'veryUnderweight', 'underweight'].includes(key)) {
-                    segmentColor = '#60a5fa'; // Light blue
-                } else if (key === 'normal') {
-                    segmentColor = '#16a34a'; // Green
-                } else if (key === 'overweight') {
-                    segmentColor = '#ca8a04'; // Yellow
-                } else { // All obesity classes (obese, obeseClassI, II, III)
-                    segmentColor = '#dc2626'; // Red
-                }
-
-                const segmentStartValue = range.min;
-                const segmentEndValue = range.max === Infinity ? maxChartBMI : range.max;
-
-                // Calculate segment's start and end positions as percentages of the maxChartBMI
-                let startPercentage = (segmentStartValue / maxChartBMI) * 100;
-                let endPercentage = (segmentEndValue / maxChartBMI) * 100;
-
-                // Ensure segments seamlessly connect by using previousMaxPercentage as the starting point
-                // And prevent the segment from starting before the last one ended due to floating point inaccuracies.
-                startPercentage = Math.max(startPercentage, previousMaxPercentage);
-
-
-                const segmentWidthPercentage = endPercentage - startPercentage;
-
-                if (segmentWidthPercentage > 0) {
-                    const segmentDiv = document.createElement('div');
-                    segmentDiv.className = 'bmi-segment';
-                    segmentDiv.style.backgroundColor = segmentColor;
-                    segmentDiv.style.width = `${segmentWidthPercentage}%`;
-                    bmiSegmentsDiv.appendChild(segmentDiv);
-                    previousMaxPercentage = endPercentage; // Update the end of this segment
+        function getCategoryForBMI(bmi, region) {
+            const ranges = bmiRanges[region];
+            for (let i = 0; i < ranges.length; i++) {
+                if (bmi < ranges[i].max) {
+                    return ranges[i];
                 }
             }
-
-            // Ensure the last segment added (which should be red if obesity is present)
-            // stretches to fill any remaining space in the flex container
-            const lastSegment = bmiSegmentsDiv.lastElementChild;
-            if (lastSegment) {
-                lastSegment.style.flexGrow = '1';
-            }
-
-
-            // Add labels dynamically for major breakpoints
-            const addLabel = (value, className, displayValue = value.toFixed(1)) => {
-                const labelSpan = document.createElement('span');
-                labelSpan.className = `label-val ${className}`;
-                labelSpan.textContent = displayValue;
-                labelSpan.style.left = `${(value / maxChartBMI) * 100}%`;
-                bmiLabelsDiv.appendChild(labelSpan);
-            };
-
-            // Common labels for all charts
-            addLabel(0, 'label-min', '0');
-
-            if (isChild) {
-                addLabel(14.4, 'label-child-normal-start', '14.4');
-                addLabel(21.1, 'label-child-normal-end', '21.1');
-                addLabel(22.9, 'label-child-overweight-end', '22.9');
-                addLabel(maxChartBMI, 'label-max', `${maxChartBMI}+`);
-            } else if (region === 'asia') {
-                addLabel(18.5, 'label-asia-normal-start', '18.5');
-                addLabel(22.9, 'label-asia-normal-end', '22.9');
-                addLabel(24.9, 'label-asia-overweight-end', '24.9');
-                addLabel(29.9, 'label-asia-obese1-end', '29.9');
-                addLabel(maxChartBMI, 'label-max', `${maxChartBMI}+`);
-            } else { // europe
-                addLabel(18.5, 'label-europe-normal-start', '18.5');
-                addLabel(24.9, 'label-europe-normal-end', '24.9');
-                addLabel(29.9, 'label-europe-overweight-end', '29.9');
-                addLabel(34.9, 'label-europe-obese1-end', '34.9');
-                addLabel(39.9, 'label-europe-obese2-end', '39.9');
-                addLabel(maxChartBMI, 'label-max', `${maxChartBMI}+`);
-            }
-        };
-
-
-        // Update BMI category ranges displayed in the table
-        function updateCategoryRanges(isChild, region, currentBmiCategoryText = null) {
-            const currentAdultRanges = bmiRangesByRegion[region];
-            const currentChildRanges = bmiRangesByRegion.child;
-
-            // Step 1: Hide and clear all category items regardless of age/region
-            // Reset all category elements to their hidden, default state
-            for (const key in categoryElements) {
-                const catElem = categoryElements[key];
-                const rangeItemElem = rangeItemElements[key];
-
-                // Clear any specific color classes and selected class
-                catElem.classList.remove('selected', 'underweight-color', 'normal-color', 'overweight-color', 'obese-color');
-                rangeItemElem.classList.remove('selected', 'underweight-color', 'normal-color', 'overweight-color', 'obese-color');
-
-                // Hide both the category name item and its range item
-                catElem.style.display = 'none';
-                rangeItemElem.style.display = 'none';
-
-                // Clear text content
-                const nameSpan = catElem.querySelector('.category-name');
-                if (nameSpan) {
-                    nameSpan.textContent = '';
-                }
-                const rangeSpan = rangeElements[key];
-                if (rangeSpan) {
-                    rangeSpan.textContent = '';
-                }
-            }
-
-            // Step 2: Determine which categories to display and populate based on age/region
-            let categoriesToProcess = [];
-            if (isChild) {
-                // For children, map to generic adult IDs that will be repurposed
-                categoriesToProcess.push({ key: 'underweight', displayKey: 'underweight', text: 'Nhẹ cân', rangeData: currentChildRanges.underweight });
-                categoriesToProcess.push({ key: 'normal', displayKey: 'normal', text: 'Bình thường', rangeData: currentChildRanges.normal });
-                categoriesToProcess.push({ key: 'overweight', displayKey: 'overweight', text: 'Thừa cân', rangeData: currentChildRanges.overweight });
-                categoriesToProcess.push({ key: 'obeseClassI', displayKey: 'obese', text: 'Béo phì', rangeData: currentChildRanges.obese }); // Repurpose obeseClassI for child obese
-            } else { // Adults
-                categoriesToProcess.push({ key: 'extremelyUnderweight', displayKey: 'extremelyUnderweight', text: 'Cực kỳ Nhẹ cân', rangeData: currentAdultRanges.extremelyUnderweight });
-                categoriesToProcess.push({ key: 'veryUnderweight', displayKey: 'veryUnderweight', text: 'Rất Nhẹ cân', rangeData: currentAdultRanges.veryUnderweight });
-                categoriesToProcess.push({ key: 'underweight', displayKey: 'underweight', text: 'Nhẹ cân', rangeData: currentAdultRanges.underweight });
-                categoriesToProcess.push({ key: 'normal', displayKey: 'normal', text: 'Bình thường', rangeData: currentAdultRanges.normal });
-                categoriesToProcess.push({ key: 'overweight', displayKey: 'overweight', text: 'Thừa cân', rangeData: currentAdultRanges.overweight });
-                categoriesToProcess.push({ key: 'obeseClassI', displayKey: 'obeseClassI', text: 'Béo phì Loại I', rangeData: currentAdultRanges.obeseClassI });
-                categoriesToProcess.push({ key: 'obeseClassII', displayKey: 'obeseClassII', text: 'Béo phì Loại II', rangeData: currentAdultRanges.obeseClassII });
-                categoriesToProcess.push({ key: 'obeseClassIII', displayKey: 'obeseClassIII', text: 'Béo phì Loại III', rangeData: currentAdultRanges.obeseClassIII });
-            }
-
-            // Step 3: Populate and display only the relevant categories
-            for (const item of categoriesToProcess) {
-                const { key, displayKey, text, rangeData } = item;
-
-                // Skip irrelevant categories for Asia adults if specified to be hidden
-                if (!isChild && region === 'asia' && key === 'obeseClassIII' && rangeData && rangeData.min > 5000) {
-                    continue;
-                }
-
-                const catElem = categoryElements[key]; // Get actual DOM element by its original ID key
-                const rangeItemElem = rangeItemElements[key];
-                const rangeSpan = rangeElements[key];
-
-                if (catElem && rangeItemElem && rangeSpan) { // Ensure elements exist
-                    catElem.style.display = 'flex'; // Display this element
-                    rangeItemElem.style.display = 'flex'; // Display its corresponding range element
-
-                    catElem.querySelector('.category-name').textContent = text; // Set the category name text
-
-                    let rangeText = '';
-                    if (rangeData) {
-                        rangeText = `${rangeData.min.toFixed(1)} - ${rangeData.max === Infinity ? 'Trên' : rangeData.max.toFixed(1)}`;
-                        // Special handling for child ranges' display text
-                        if (isChild) {
-                            if (displayKey === 'underweight') rangeText = `< ${bmiRangesByRegion.child.normal.min.toFixed(1)}`;
-                            if (displayKey === 'obese') rangeText = `≥ ${rangeData.min.toFixed(1)}`;
-                        } else { // Special handling for adult ranges' display text
-                            if (key === 'extremelyUnderweight') rangeText = `< ${bmiRangesByRegion[region].veryUnderweight.min.toFixed(1)}`;
-                            if (key === 'obeseClassIII') rangeText = `≥ ${rangeData.min.toFixed(1)}`;
-                        }
-                    }
-                    rangeSpan.textContent = rangeText;
-
-                    // Apply 'selected' class and color class only if this is the current BMI category
-                    if (currentBmiCategoryText && text === currentBmiCategoryText) { // Compare with the actual displayed text
-                        catElem.classList.add('selected');
-                        rangeItemElem.classList.add('selected');
-
-                        let finalColorClass = '';
-                        if (['Cực kỳ Nhẹ cân', 'Rất Nhẹ cân', 'Nhẹ cân'].includes(text)) {
-                            finalColorClass = 'underweight-color';
-                        } else if (text === 'Bình thường') {
-                            finalColorClass = 'normal-color';
-                        } else if (text === 'Thừa cân') {
-                            finalColorClass = 'overweight-color';
-                        } else if (['Béo phì', 'Béo phì Loại I', 'Béo phì Loại II', 'Béo phì Loại III'].includes(text)) {
-                            finalColorClass = 'obese-color';
-                        }
-                        catElem.classList.add(finalColorClass);
-                        rangeItemElem.classList.add(finalColorClass);
-                    }
-                }
-            }
+            return ranges[ranges.length - 1]; // Fallback for very high BMI
         }
 
-
-        // Function to calculate and display BMI
         function calculateBMI() {
-            const age = parseInt(ageInput.value);
-            let height = parseFloat(heightInput.value);
-            let weight = parseFloat(weightInput.value);
-
-            // Determine if inputs are valid for calculation
-            const isValidInput = !isNaN(height) && !isNaN(weight) && height > 0 && weight > 0 && !isNaN(age) && age > 0;
-
-            const isChild = age < 18;
-            const currentRegion = regionSelect.value;
-
-            // Default text and color for BMI results when not calculated
-            let currentCategoryText = 'Vui lòng nhập đủ thông tin';
-            let currentCategoryColorClass = 'text-gray-500'; // Default gray for invalid input
-            let bmiValue = '0.0';
-            let pointerPosition = '0%';
-            let idealWeightText = '... kg';
-
-            // Only update BMI results and ideal weight if inputs are valid
-            if (isValidInput) {
-                dynamicResultsContentWrapper.classList.remove('hidden');
-                dynamicIdealWeightRangeContentWrapper.classList.remove('hidden');
-
-                // Convert units to metric (cm and kg)
-                if (heightUnit.value === 'm') {
-                    height *= 100; // m to cm
-                } else if (heightUnit.value === 'in') {
-                    height *= 2.54; // inches to cm
-                }
-
-                if (weightUnit.value === 'lb') {
-                    weight *= 0.453592; // lbs to kg
-                }
-
-                const bmi = weight / ((height / 100) ** 2);
-                bmiValue = bmi.toFixed(1);
-
-                let currentRanges;
-                if (isChild) {
-                    currentRanges = bmiRangesByRegion.child;
-                    if (bmi < currentRanges.normal.min) {
-                        currentCategoryText = currentRanges.underweight.text;
-                        currentCategoryColorClass = 'text-blue-400'; // light blue for underweight
-                    } else if (bmi >= currentRanges.normal.min && bmi <= currentRanges.normal.max) {
-                        currentCategoryText = currentRanges.normal.text;
-                        currentCategoryColorClass = 'text-green-600';
-                    } else if (bmi >= currentRanges.overweight.min && bmi <= currentRanges.overweight.max) {
-                        currentCategoryText = currentRanges.overweight.text;
-                        currentCategoryColorClass = 'text-yellow-600'; // Changed to yellow
-                    } else if (bmi >= currentRanges.obese.min) {
-                        currentCategoryText = currentRanges.obese.text;
-                        currentCategoryColorClass = 'text-red-600';
-                    }
-                } else { // Adults
-                    currentRanges = bmiRangesByRegion[currentRegion];
-                    for (const key in currentRanges) {
-                        const range = currentRanges[key];
-                        if (bmi >= range.min && bmi <= range.max) {
-                            currentCategoryText = range.text;
-                            if (['extremelyUnderweight', 'veryUnderweight', 'underweight'].includes(key)) {
-                                currentCategoryColorClass = 'text-blue-400'; // light blue for underweight
-                            } else if (key === 'normal') {
-                                currentCategoryColorClass = 'text-green-600';
-                            } else if (key === 'overweight') {
-                                currentCategoryColorClass = 'text-yellow-600'; // Changed to yellow
-                            } else { // All obesity classes
-                                currentCategoryColorClass = 'text-red-600';
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                // Update BMI pointer position
-                const maxChartBMI = isChild ? 30 : 45; // Match with updateHorizontalChart's maxChartBMI
-                let calculatedPointerPosition = (bmi / maxChartBMI) * 100;
-                if (calculatedPointerPosition < 0) calculatedPointerPosition = 0;
-                if (calculatedPointerPosition > 100) calculatedPointerPosition = 100;
-                pointerPosition = `${calculatedPointerPosition}%`;
-
-                // Calculate and display ideal weight range
-                const idealWeightMin = (18.5 * (height / 100) ** 2).toFixed(1);
-                const idealWeightMax = (24.9 * (height / 100) ** 2).toFixed(1);
-                idealWeightText = `${idealWeightMin} - ${idealWeightMax} kg`;
-
-            } else {
-                // Hide the results section if inputs are not valid
+            const height = parseFloat(heightInput.value);
+            const weight = parseFloat(weightInput.value);
+            if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
                 dynamicResultsContentWrapper.classList.add('hidden');
-                dynamicIdealWeightRangeContentWrapper.classList.add('hidden');
+                updateChart(0, 'europe');
+                return;
             }
 
-            // Update DOM elements for BMI results and ideal weight
-            bmiResult.textContent = bmiValue;
-            bmiCategory.textContent = currentCategoryText;
-            bmiCategory.className = `bmi-category ${currentCategoryColorClass}`;
-            bmiResult.className = `bmi-value ${currentCategoryColorClass}`;
-            bmiPointer.style.left = pointerPosition;
-            idealWeightRange.textContent = idealWeightText;
+            let heightInMeters = height;
+            if (heightUnit.value === 'cm') {
+                heightInMeters = height / 100;
+            } else if (heightUnit.value === 'in') {
+                heightInMeters = height * 0.0254;
+            }
 
+            let weightInKg = weight;
+            if (weightUnit.value === 'lb') {
+                weightInKg = weight * 0.453592;
+            }
 
-            // Update horizontal chart and category table based on current settings
-            updateHorizontalChart(isChild, currentRegion);
-            updateCategoryRanges(isChild, currentRegion, isValidInput ? currentCategoryText : null); // Pass currentCategoryText for highlighting only if valid input
+            const bmi = weightInKg / (heightInMeters * heightInMeters);
+            const region = regionSelect.value;
+            const category = getCategoryForBMI(bmi, region);
+
+            bmiResultElement.textContent = bmi.toFixed(2);
+            bmiResultElement.style.color = category.color;
+            bmiCategoryElement.textContent = category.category;
+            bmiCategoryElement.style.color = category.color;
+
+            updateCategoryTable(bmi, region);
+            updateChart(bmi, region);
+            updateNormalWeightRange(heightInMeters, region);
+            dynamicResultsContentWrapper.classList.remove('hidden');
         }
 
-        // Gender selection logic
+        function updateCategoryTable(bmi, region) {
+            const allItems = document.querySelectorAll('.category-item');
+            allItems.forEach(item => item.classList.remove('selected'));
+
+            const ranges = bmiRanges[region];
+            const rangesContainer = document.getElementById('category-table');
+            // Clear existing elements to re-render for new region
+            rangesContainer.innerHTML = `
+                <div class="w-1/2 pr-2" id="left-column"></div>
+                <div class="w-1/2 pl-2 text-right" id="right-column"></div>
+            `;
+            const leftColumn = document.getElementById('left-column');
+            const rightColumn = document.getElementById('right-column');
+
+            ranges.forEach((range, index) => {
+                const isSelected = (bmi >= range.min && (bmi < range.max || (range.max === Infinity && bmi >= range.min)));
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `category-item ${isSelected ? 'selected' : ''}`;
+                itemDiv.id = `categoryItem${index}`;
+                itemDiv.innerHTML = `<span class="category-name">${range.category}</span>`;
+                leftColumn.appendChild(itemDiv);
+
+                const rangeDiv = document.createElement('div');
+                rangeDiv.className = `category-item ${isSelected ? 'selected' : ''}`;
+                rangeDiv.id = `rangeItem${index}`;
+                const rangeText = `${range.min} - ${range.max === Infinity ? '...' : range.max}`;
+                rangeDiv.innerHTML = `<span class="category-range">${rangeText}</span>`;
+                rightColumn.appendChild(rangeDiv);
+
+                if (isSelected) {
+                    itemDiv.classList.add(`${categoryColorClass(range.color)}`);
+                    rangeDiv.classList.add(`${categoryColorClass(range.color)}`);
+                }
+            });
+        }
+
+        function categoryColorClass(color) {
+            switch (color) {
+                case '#60a5fa': return 'underweight-color';
+                case '#16a34a': return 'normal-color';
+                case '#ca8a04': return 'overweight-color';
+                case '#dc2626': return 'obese-color';
+                default: return '';
+            }
+        }
+
+        function updateChart(bmi, region) {
+            const chart = document.querySelector('.bmi-horizontal-chart');
+            const track = document.querySelector('.bmi-track');
+            const labelsContainer = document.querySelector('.bmi-horizontal-labels');
+            const ranges = bmiRanges[region];
+            const maxBMI = 40; // Max value for the chart
+
+            track.innerHTML = '';
+            labelsContainer.innerHTML = '';
+            
+            let accumulatedWidth = 0;
+            ranges.forEach(range => {
+                const segmentWidth = Math.min((range.max - range.min) / maxBMI * 100, 100 - accumulatedWidth);
+                if (segmentWidth > 0) {
+                    const segment = document.createElement('div');
+                    segment.className = 'bmi-segment';
+                    segment.style.width = `${segmentWidth}%`;
+                    segment.style.backgroundColor = range.color;
+                    track.appendChild(segment);
+                    accumulatedWidth += segmentWidth;
+                }
+            });
+
+            // Add labels
+            let currentOffset = 0;
+            ranges.forEach(range => {
+                const rangeWidth = (range.max - range.min);
+                const startLabel = document.createElement('div');
+                startLabel.className = 'label-val';
+                startLabel.textContent = range.min;
+                startLabel.style.left = `${currentOffset / maxBMI * 100}%`;
+                labelsContainer.appendChild(startLabel);
+                currentOffset += rangeWidth;
+            });
+            const endLabel = document.createElement('div');
+            endLabel.className = 'label-val';
+            endLabel.textContent = `${ranges[ranges.length - 1].max === Infinity ? '...' : ranges[ranges.length - 1].max}`;
+            endLabel.style.right = '0';
+            endLabel.style.transform = 'translateX(50%)';
+            labelsContainer.appendChild(endLabel);
+
+            const pointerPosition = Math.min(Math.max(bmi / maxBMI, 0), 1) * 100;
+            bmiPointer.style.left = `${pointerPosition}%`;
+        }
+
+        function updateNormalWeightRange(heightInMeters, region) {
+            const ranges = bmiRanges[region];
+            const normalRange = ranges.find(r => r.category.includes('Bình thường'));
+            if (normalRange && heightInMeters) {
+                const minWeight = (normalRange.min * (heightInMeters * heightInMeters)).toFixed(1);
+                const maxWeight = (normalRange.max * (heightInMeters * heightInMeters)).toFixed(1);
+                normalWeightRangeValue.textContent = `${minWeight} - ${maxWeight} kg`;
+                normalWeightRange.classList.remove('hidden');
+            } else {
+                normalWeightRange.classList.add('hidden');
+            }
+        }
+
+        // Gender icon event listeners
         maleIconWrapper.addEventListener('click', () => {
             maleIconWrapper.classList.add('selected');
             femaleIconWrapper.classList.remove('selected');
             selectedGender = 'male';
-            calculateBMI();
+            calculateBMI(); // Recalculate if gender is a factor (it's not in this case, but good practice)
         });
 
         femaleIconWrapper.addEventListener('click', () => {
@@ -1002,8 +728,8 @@
             calculateBMI();
         });
 
-        // Reset inputs and results
-        resetButton.addEventListener('click', () => {
+        // Reset button event listener
+        document.getElementById('resetButton').addEventListener('click', function() {
             ageInput.value = '';
             heightInput.value = '';
             weightInput.value = '';
