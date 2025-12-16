@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Mục Thuốc & Vật Tư Y Tế</title>
+    <!-- Tải Tailwind CSS từ CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        /* --- Styles đồng bộ với tra-cuu-che-do-an.html --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Màu nền nhẹ */
+            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
+        }
+        /* Tùy chỉnh nhỏ cho các phần tử */
+        .gradient-bg {
+            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
+        }
+        .active-link {
+            background-color: #e0e7ff; /* Màu nền khi active */
+            color: #4f46e5; /* Màu chữ khi active */
+            font-weight: 600;
+        }
+        /* Thêm cuộn ngang cho thanh nav trên mobile */
+        .nav-scrollable {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* Cho cuộn mượt mà trên iOS */
+            scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
+        }
+        .nav-scrollable::-webkit-scrollbar {
+            display: none; /* Ẩn scrollbar trên Chrome/Safari */
+        }
+        /* Responsive adjustments for mobile */
+        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
+            header .logo-text {
+                display: none; /* Ẩn logo trên mobile */
+            }
+            .header-content {
+                flex-direction: column; /* Sắp xếp theo cột trên mobile */
+                align-items: center; /* Căn giữa các mục trên mobile */
+                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
+            }
+            .nav-menu {
+                justify-content: center; /* Căn giữa menu trên mobile */
+                flex-wrap: nowrap; /* Không xuống dòng các link nav */
+                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
+                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
+            }
+            .search-bar-container {
+                width: calc(100% - 2rem); /* Chiều rộng full trừ padding ngang */
+                padding-left: 0; /* Bỏ padding ngang ở đây vì đã tính vào width */
+                padding-right: 0;
+                margin-top: 0.5rem; /* Khoảng cách với thanh nav */
+                margin-left: auto; /* Căn giữa */
+                margin-right: auto; /* Căn giữa */
+            }
+            body {
+                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
+            }
+        }
+        /* Sửa lỗi zoom khi bấm vào thanh tìm kiếm trên mobile */
+        /* QUAN TRỌNG: Input phải >= 16px để iOS không tự zoom */
+        #headerSearch, #tableSearchInput {
+            font-size: 16px !important; 
+        }
+
+        /* --- CSS Riêng cho Danh mục thuốc --- */
+        .table-container { overflow-x: auto; }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #4f46e5;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Header Section (Đồng bộ hoàn toàn với tra-cuu-che-do-an.html) -->
+    <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
+        <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
+            <!-- Logo/Tên trang web -->
+            <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
+                <a href="index.html" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
+                    Máy tính y học
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-3 md:flex-shrink-0">
+                <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
+                <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
+            </nav>
+
+            <!-- Search Bar (Header Search - GIỮ NGUYÊN visual, nhưng không dùng để lọc thuốc) -->
+            <div class="search-bar-container w-full max-w-sm md:max-w-xs md:mx-4 md:order-2 md:flex-grow">
+                <input type="text" id="headerSearch" placeholder="Tìm kiếm..." class="w-full p-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-4 md:py-8">
+        
+        <!-- Nút Quay lại và Tiêu đề (Đã thu gọn margin) -->
+        <div class="mb-2 md:mb-6">
+            <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 mb-2 md:mb-4">
+                Danh Mục Thuốc & Vật Tư Y Tế
+            </h1>
+        </div>
+
+        <!-- Phần Nội dung chính (Đã thu gọn padding) -->
+        <div class="mt-2 md:mt-12 bg-white rounded-lg shadow-lg p-3 md:p-8">
+            
+            <!-- VÙNG TÌM KIẾM CHÍNH CHO BẢNG THUỐC -->
+            <div class="mb-3 md:mb-6">
+                <div class="relative w-full max-w-2xl mx-auto">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-search text-gray-400"></i>
+                    </div>
+                    <!-- Đã đổi text-sm thành text-base để tránh zoom trên mobile -->
+                    <input type="text" id="tableSearchInput" 
+                        class="block w-full pl-10 pr-3 py-2 md:py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-base shadow-sm transition duration-150 ease-in-out" 
+                        placeholder="Nhập mã, tên thuốc hoặc hoạt chất..." 
+                        onkeyup="filterTable()">
+                </div>
+            </div>
+
+            <!-- Controls & Status Container (Thu gọn margin/padding) -->
+            <div class="flex flex-col md:flex-row gap-2 md:gap-4 mb-3 md:mb-6 items-center justify-between border-b border-gray-100 pb-2 md:pb-4">
+                <!-- Status Indicators -->
+                <div class="text-xs md:text-sm text-gray-600 flex items-center gap-2 order-2 md:order-1 w-full md:w-auto">
+                    <span class="flex items-center gap-1 bg-gray-50 px-2 md:px-3 py-1 rounded-full border border-gray-200">
+                        <span id="connectionStatus" class="w-2 h-2 rounded-full bg-gray-400"></span>
+                        <span id="connectionText">Đang kết nối...</span>
+                    </span>
+                    <span id="resultCount" class="font-medium hidden sm:inline"></span>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="hidden flex-col items-center justify-center py-6 md:py-12">
+                <div class="spinner mb-4"></div>
+                <p class="text-gray-500 font-medium">Đang tải dữ liệu...</p>
+            </div>
+
+            <!-- Search Prompt State -->
+            <div id="searchPrompt" class="hidden flex-col items-center justify-center py-6 md:py-12 text-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 mx-auto max-w-2xl">
+                <div class="bg-indigo-50 rounded-full p-4 md:p-6 mb-3 md:mb-4">
+                    <i class="fa-solid fa-magnifying-glass text-indigo-400 text-2xl md:text-4xl"></i>
+                </div>
+                <h3 class="text-base md:text-lg font-medium text-gray-900">Sẵn sàng tra cứu</h3>
+                <p class="text-xs md:text-base text-gray-500 mt-1 max-w-sm px-4">Nhập từ khóa vào ô tìm kiếm ở trên để xem kết quả.</p>
+            </div>
+
+            <!-- Table -->
+            <div id="tableContainer" class="overflow-hidden rounded-lg border border-gray-200 hidden">
+                <div class="table-container">
+                    <table class="min-w-full divide-y divide-gray-200" id="medicineTable">
+                        <thead class="bg-indigo-50">
+                            <!-- Giảm padding header bảng trên mobile (px-2 py-2) -->
+                            <tr>
+                                <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer hover:text-indigo-700 transition-colors whitespace-nowrap" onclick="sortTable(0)">
+                                    Mã <i class="fa-solid fa-sort ml-1"></i>
+                                </th>
+                                <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer hover:text-indigo-700 transition-colors" onclick="sortTable(1)">
+                                    Tên - Hàm Lượng <i class="fa-solid fa-sort ml-1"></i>
+                                </th>
+                                <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer hover:text-indigo-700 transition-colors" onclick="sortTable(2)">
+                                    Hoạt Chất <i class="fa-solid fa-sort ml-1"></i>
+                                </th>
+                                <th scope="col" class="px-2 py-2 md:px-6 md:py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                                    ĐVT
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
+                            <!-- Rows will be populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Empty/Error State -->
+            <div id="emptyState" class="hidden text-center py-6 md:py-12">
+                <div class="bg-gray-50 inline-block p-4 md:p-6 rounded-full mb-3 md:mb-4">
+                    <i class="fa-solid fa-box-open text-gray-300 text-3xl md:text-5xl"></i>
+                </div>
+                <p class="text-gray-800 font-medium text-base md:text-lg mb-1" id="errorTitle">Không tìm thấy kết quả</p>
+                <p class="text-gray-500 text-xs md:text-sm" id="errorMsg">Thử tìm kiếm với từ khóa khác.</p>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer (Đồng bộ hoàn toàn với tra-cuu-che-do-an.html) -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner mt-auto">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
+            <p class="mt-2">
+                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
+            </p>
+            <p>
+                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+            </p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
+                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- JS xử lý Layout (Padding cho Header cố định - Đồng bộ với tra-cuu-che-do-an.html) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('header');
+            const body = document.body;
+
+            function adjustBodyPadding() {
+                const headerHeight = header.offsetHeight;
+                body.style.paddingTop = `${headerHeight}px`;
+            }
+
+            adjustBodyPadding();
+            window.addEventListener('resize', adjustBodyPadding);
+            
+            // Khởi động load dữ liệu ngay khi DOM sẵn sàng
+            loadGoogleSheetData();
+            
+            // Focus vào ô tìm kiếm chính (trong body)
+            const tableSearchInput = document.getElementById('tableSearchInput');
+            if(tableSearchInput) tableSearchInput.focus();
+        });
+
+        // --- JS xử lý Dữ liệu thuốc ---
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTX-zpXLpeS6eKPt668fSZgDNqZSmLZI1BrzUiA9nDE-sUczgZRuJDLkQz4u8f_OAxPfZNOCI37g3d1/pub?output=csv';
+
+        let rawData = [];
+
+        // Elements
+        const tableContainer = document.getElementById('tableContainer');
+        const tableBody = document.getElementById('tableBody');
+        const tableSearchInput = document.getElementById('tableSearchInput'); // Input tìm kiếm TRONG BODY
+        const resultCount = document.getElementById('resultCount');
+        const emptyState = document.getElementById('emptyState');
+        const loadingState = document.getElementById('loadingState');
+        const searchPrompt = document.getElementById('searchPrompt'); 
+        const errorTitle = document.getElementById('errorTitle');
+        const errorMsg = document.getElementById('errorMsg');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const connectionText = document.getElementById('connectionText');
+
+        async function loadGoogleSheetData() {
+            showLoading(true);
+            updateStatus('loading');
+            
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                if (!response.ok) throw new Error('Không thể kết nối đến Google Sheets');
+                
+                const csvText = await response.text();
+                processCSV(csvText, 'Google Sheets');
+            } catch (error) {
+                console.error('Lỗi tải dữ liệu:', error);
+                showLoading(false);
+                updateStatus('error');
+                showError('Không thể tải dữ liệu', 'Vui lòng kiểm tra kết nối mạng.');
+            }
+        }
+
+        function updateStatus(status) {
+            if (status === 'success') {
+                connectionStatus.className = 'w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.5)]';
+                connectionText.innerText = 'Đã kết nối dữ liệu';
+                connectionText.className = 'text-green-700 font-medium';
+            } else if (status === 'loading') {
+                connectionStatus.className = 'w-2 h-2 rounded-full bg-yellow-500 animate-pulse';
+                connectionText.innerText = 'Đang đồng bộ...';
+                connectionText.className = 'text-yellow-700';
+            } else {
+                connectionStatus.className = 'w-2 h-2 rounded-full bg-red-500';
+                connectionText.innerText = 'Mất kết nối';
+                connectionText.className = 'text-red-700';
+            }
+        }
+
+        function showLoading(isLoading) {
+            if (isLoading) {
+                loadingState.classList.remove('hidden');
+                loadingState.classList.add('flex');
+                tableContainer.classList.add('hidden');
+                emptyState.classList.add('hidden');
+                searchPrompt.classList.add('hidden');
+            } else {
+                loadingState.classList.add('hidden');
+                loadingState.classList.remove('flex');
+            }
+        }
+
+        function resetToPromptState() {
+            tableContainer.classList.add('hidden');
+            emptyState.classList.add('hidden');
+            searchPrompt.classList.remove('hidden');
+            searchPrompt.classList.add('flex');
+            resultCount.innerText = `Đã tải ${rawData.length} mục.`;
+        }
+
+        function showError(title, msg) {
+            tableContainer.classList.add('hidden');
+            searchPrompt.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            errorTitle.innerText = title;
+            errorMsg.innerText = msg;
+            resultCount.innerText = 'Thông báo';
+        }
+
+        function processCSV(text, sourceName) {
+            const lines = text.split('\n');
+            const newData = [];
+            
+            let startIndex = 0;
+            for(let i=0; i < Math.min(lines.length, 10); i++) {
+                if (lines[i].toLowerCase().includes('mã thuốc')) {
+                    startIndex = i + 1;
+                    break;
+                }
+            }
+
+            for (let i = startIndex; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (!line) continue;
+
+                const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                
+                if (parts.length >= 2) {
+                    const clean = (str) => str ? str.replace(/^"|"$/g, '').trim() : '';
+                    
+                    const code = clean(parts[0]);
+                    const name = clean(parts[1]);
+                    const active = clean(parts[2]);
+                    const unit = clean(parts[3]);
+
+                    if (code && name) {
+                        newData.push({ code, name, active, unit });
+                    }
+                }
+            }
+
+            if (newData.length > 0) {
+                rawData = newData;
+                showLoading(false);
+                
+                // Nếu thanh tìm kiếm đã có chữ (do người dùng nhập trước), thì lọc luôn
+                if (tableSearchInput.value.trim() !== "") {
+                    filterTable();
+                } else {
+                    resetToPromptState();
+                }
+                
+                updateStatus('success');
+                console.log(`Đã tải ${newData.length} dòng từ ${sourceName}`);
+            } else {
+                showLoading(false);
+                showError('Dữ liệu trống', 'Không tìm thấy dòng dữ liệu nào hợp lệ.');
+            }
+        }
+
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+            
+            if (data.length === 0) {
+                showError('Không tìm thấy kết quả', `Không tìm thấy thuốc nào khớp với từ khóa "${tableSearchInput.value}"`);
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+                searchPrompt.classList.add('hidden');
+                tableContainer.classList.remove('hidden');
+                resultCount.innerText = `Tìm thấy ${data.length} kết quả`;
+            }
+
+            const displayData = data.slice(0, 100);
+
+            displayData.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-indigo-50 transition-colors duration-200 group border-b last:border-b-0 border-gray-100';
+                
+                const activeIngredientHtml = item.active 
+                    ? `<span class="px-1 md:px-2 py-0.5 md:py-1 inline-flex text-[10px] md:text-xs leading-4 md:leading-5 font-semibold rounded-full bg-green-100 text-green-800 border border-green-200 whitespace-nowrap">${item.active}</span>`
+                    : '<span class="text-gray-300 italic text-[10px] md:text-xs">--</span>';
+
+                // Tối ưu padding và font size cho mobile (text-xs, padding nhỏ)
+                row.innerHTML = `
+                    <td class="px-2 py-2 md:px-6 md:py-4 whitespace-nowrap text-xs md:text-sm font-bold text-indigo-600 font-mono">
+                        ${item.code}
+                    </td>
+                    <td class="px-2 py-2 md:px-6 md:py-4">
+                        <div class="text-xs md:text-sm text-gray-900 font-medium group-hover:text-indigo-900 transition-colors">${item.name}</div>
+                    </td>
+                    <td class="px-2 py-2 md:px-6 md:py-4">
+                        ${activeIngredientHtml}
+                    </td>
+                    <td class="px-2 py-2 md:px-6 md:py-4 whitespace-nowrap text-xs md:text-sm text-gray-500">
+                        ${item.unit}
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            if (data.length > 100) {
+                 const row = document.createElement('tr');
+                 row.innerHTML = `<td colspan="4" class="px-2 py-2 md:px-6 md:py-4 text-center text-xs text-gray-400 italic bg-gray-50">... và ${data.length - 100} kết quả khác ...</td>`;
+                 tableBody.appendChild(row);
+            }
+        }
+
+        function filterTable() {
+            const query = tableSearchInput.value.toLowerCase().trim();
+            
+            if (!query) {
+                resetToPromptState();
+                return;
+            }
+
+            const filteredData = rawData.filter(item => {
+                return (
+                    item.code.toLowerCase().includes(query) ||
+                    item.name.toLowerCase().includes(query) ||
+                    (item.active && item.active.toLowerCase().includes(query))
+                );
+            });
+            
+            renderTable(filteredData);
+        }
+
+        let sortDirection = 1;
+        function sortTable(columnIndex) {
+            if (tableContainer.classList.contains('hidden')) return;
+
+            const keys = ['code', 'name', 'active'];
+            const key = keys[columnIndex];
+
+            rawData.sort((a, b) => {
+                const valA = (a[key] || '').toLowerCase();
+                const valB = (b[key] || '').toLowerCase();
+                if (valA < valB) return -1 * sortDirection;
+                if (valA > valB) return 1 * sortDirection;
+                return 0;
+            });
+
+            sortDirection *= -1;
+            
+            const icons = document.querySelectorAll('th i');
+            icons.forEach(i => i.className = 'fa-solid fa-sort ml-1 text-gray-300');
+            icons[columnIndex].className = sortDirection === 1 
+                ? 'fa-solid fa-sort-up ml-1 text-indigo-600' 
+                : 'fa-solid fa-sort-down ml-1 text-indigo-600';
+
+            filterTable(); 
+        }
+    </script>
+</body>
+</html>
