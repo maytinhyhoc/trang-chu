@@ -28,28 +28,46 @@
             list-style: none;
             padding: 0;
             text-align: left;
-            margin-top: 1.5rem;
+            margin-top: 1.25rem; /* Tăng khoảng cách một chút */
         }
         #huong-dan-cai-dat .instructions-list li {
-            background-color: #e0f2fe; /* Light blue background for list items */
-            border-left: 5px solid #3b82f6; /* Blue border on left */
-            border-radius: 0.75rem; /* Rounded corners for list items */
-            padding: 1rem 1.5rem;
-            margin-bottom: 1rem;
-            color: #1f2937; /* Text color */
+            background-color: #e0f2fe;
+            border-left: 4px solid #3b82f6;
+            border-radius: 0.5rem;
+            padding: 0.875rem 1rem; /* Tăng padding để thoáng hơn */
+            margin-bottom: 0.75rem;
+            color: #1f2937;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-size: 0.9rem; /* Tăng từ 0.75rem lên 0.9rem cho dễ đọc trên mobile */
+            line-height: 1.4rem; /* Giãn dòng ra một chút */
         }
+        
+        /* Media query cho Desktop */
+        @media (min-width: 768px) {
+            #huong-dan-cai-dat .instructions-list {
+                margin-top: 1.5rem;
+            }
+            #huong-dan-cai-dat .instructions-list li {
+                border-left: 5px solid #3b82f6;
+                border-radius: 0.75rem;
+                padding: 1rem 1.5rem;
+                margin-bottom: 1rem;
+                font-size: 1rem;
+                line-height: 1.5rem;
+            }
+        }
+
         #huong-dan-cai-dat .instructions-list li:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
         #huong-dan-cai-dat .note {
-            background-color: #fffbeb; /* Light yellow background for notes */
-            border-left: 5px solid #fbbf24; /* Yellow border */
-            border-radius: 0.75rem;
-            padding: 1rem 1.5rem;
-            margin-top: 2rem;
-            color: #78350f; /* Text color */
+            background-color: #fffbeb;
+            border-left: 4px solid #fbbf24;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-top: 1.5rem;
+            color: #78350f;
             text-align: left;
         }
         /* Responsive adjustments for mobile */
@@ -68,7 +86,6 @@
                 padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
                 width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
             }
-            /* .search-bar-container đã bị loại bỏ, không cần CSS này nữa */
             body {
                 padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
             }
@@ -76,17 +93,17 @@
 
         /* Custom style for the active/highlighted navigation link, matching "Công Cụ" */
         .nav-item-highlight {
-            background-color: #eef2ff; /* Light background color */
-            border-radius: 9999px; /* Fully rounded corners */
-            padding: 4px 12px; /* Adjusted padding */
-            color: #4f46e5; /* Text color */
-            font-weight: 500; /* Medium font weight */
+            background-color: #eef2ff;
+            border-radius: 9999px;
+            padding: 4px 12px;
+            color: #4f46e5;
+            font-weight: 500;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 text-base md:text-base"> <!-- Đã tăng base text size lên lại cho mobile -->
 
-    <!-- Header Section (combined navigation and search bar, fixed at top) -->
+    <!-- Header Section (GIỮ NGUYÊN HOÀN TOÀN) -->
     <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
         <!-- Main header content container, flex direction changes based on screen size -->
         <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
@@ -106,25 +123,26 @@
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
-
-            <!-- Search Bar (Removed) -->
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="gradient-bg text-white py-16 md:py-24 text-center rounded-b-xl shadow-lg">
+    <section class="gradient-bg text-white py-12 md:py-24 text-center rounded-b-xl shadow-lg">
         <div class="container mx-auto px-4">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 animate-pulse">
+            <!-- Tăng tiêu đề mobile từ text-2xl lên text-3xl -->
+            <h1 class="text-3xl md:text-6xl font-extrabold mb-5 md:mb-6 animate-pulse">
                 Công Cụ Tính Toán Y Học
             </h1>
-            <p class="text-base md:text-xl mb-10 max-w-3xl mx-auto opacity-90 leading-normal">
-                Cung cấp các công cụ tính toán và phân tích chuyên sâu, hỗ trợ quyết định lâm sàng nhanh chóng và hiệu quả.
+            <!-- Đã rút gọn mô tả theo yêu cầu -->
+            <p class="text-base md:text-xl mb-8 md:mb-10 max-w-3xl mx-auto opacity-90 leading-relaxed">
+                Hỗ trợ tính toán y khoa và quyết định lâm sàng nhanh chóng, hiệu quả.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="#cong-cu" class="bg-white text-indigo-700 hover:bg-indigo-100 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+            <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <!-- Tăng nút bấm mobile từ text-xs lên text-sm -->
+                <a href="#cong-cu" class="bg-white text-indigo-700 hover:bg-indigo-100 font-bold py-3 px-6 md:py-3 md:px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 text-sm md:text-base">
                     Khám Phá Các Công Cụ
                 </a>
-                <a href="#huong-dan-cai-dat" class="bg-indigo-600 text-white hover:bg-indigo-700 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                <a href="#huong-dan-cai-dat" class="bg-indigo-600 text-white hover:bg-indigo-700 font-bold py-3 px-6 md:py-3 md:px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 text-sm md:text-base">
                     Cài đặt
                 </a>
             </div>
@@ -132,49 +150,64 @@
     </section>
 
     <!-- Tools Section -->
-    <section id="cong-cu" class="py-16 md:py-24 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 max-w-5xl">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold text-gray-800 mb-8">Các Công Cụ Tính Toán Nổi Bật</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <section id="cong-cu" class="py-10 md:py-24 bg-white rounded-lg shadow-inner mx-2 md:mx-auto my-6 md:my-12 max-w-5xl">
+        <div class="container mx-auto px-2 md:px-4 text-center">
+            <!-- Tăng tiêu đề section -->
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8">Các Công Cụ Nổi Bật</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"> <!-- Tăng gap một chút -->
+                
+                <!-- NEW TOOL CARD 0: Antibiotics Lookup -->
+                <a href="khang-sinh.html" class="bg-gray-50 p-4 md:p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
+                    <div class="text-indigo-500 mb-3 md:mb-6">
+                        <!-- Icon tăng kích thước lên w-12 h-12 cho rõ hơn -->
+                        <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                        </svg>
+                    </div>
+                    <!-- Tăng tiêu đề card từ text-sm lên text-lg -->
+                    <h3 class="text-lg md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">Tra cứu liều kháng sinh</h3>
+                    <!-- Tăng mô tả từ text-[10px] lên text-sm -->
+                    <p class="text-gray-600 text-sm leading-tight">Tra cứu nhanh liều dùng kháng sinh, nấm & virus.</p>
+                </a>
+
                 <!-- Tool Card 1: ABG Analysis -->
-                <a href="phan-tich-khi-mau.html" class="bg-gray-50 p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
-                    <div class="text-5xl text-indigo-500 mb-6">
-                        <!-- New Icon for ABG Analysis (Test Tube) -->
-                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <a href="phan-tich-khi-mau.html" class="bg-gray-50 p-4 md:p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
+                    <div class="text-indigo-500 mb-3 md:mb-6">
+                        <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 13h10M7 17h10M17 4v16a2 2 0 01-2 2H9a2 2 0 01-2-2V4a2 2 0 012-2h6a2 2 0 012 2z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-semibold text-gray-900 mb-3">Phân Tích Khí Máu Động Mạch (ABG)</h3>
-                    <p class="text-gray-600 text-sm leading-tight">Đánh giá nhanh chóng và chính xác các rối loạn thăng bằng kiềm toan.</p>
+                    <h3 class="text-lg md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">Phân Tích Khí Máu (ABG)</h3>
+                    <p class="text-gray-600 text-sm leading-tight">Đánh giá nhanh chóng các rối loạn thăng bằng kiềm toan.</p>
                 </a>
+
                 <!-- Tool Card 2: GFR Calculator -->
-                <a href="do-loc-cau-than.html" class="bg-gray-50 p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
-                    <div class="text-5xl text-indigo-500 mb-6">
-                        <!-- New Icon for GFR Calculator (Kidney) -->
-                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <a href="do-loc-cau-than.html" class="bg-gray-50 p-4 md:p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
+                    <div class="text-indigo-500 mb-3 md:mb-6">
+                        <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-semibold text-gray-900 mb-3">Tính Toán Độ Lọc Cầu Thận (GFR)</h3>
-                    <p class="text-gray-600 text-sm leading-tight">Ước tính chức năng thận dựa trên các công thức chuẩn.</p>
+                    <h3 class="text-lg md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">Độ Lọc Cầu Thận (GFR)</h3>
+                    <p class="text-gray-600 text-sm leading-tight">Ước tính chức năng thận dựa trên công thức chuẩn.</p>
                 </a>
+
                 <!-- Tool Card 3: BMI Calculator -->
-                <a href="bmi.html" class="bg-gray-50 p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
-                    <div class="text-5xl text-indigo-500 mb-6">
-                        <!-- Updated Icon for BMI Calculator (Open Book) -->
-                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <a href="bmi.html" class="bg-gray-50 p-4 md:p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
+                    <div class="text-indigo-500 mb-3 md:mb-6">
+                        <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.25a.25.25 0 11-.5 0 .25.25 0 01.5 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 12a2 2 0 114 0c0 .9-.5 1.5-1 2.2V16h-2v-1.8c-.5-.7-1-1.3-1-2.2z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21v-2a2 2 0 00-2-2H7a2 2 0 00-2 2v2M5 10V5a2 2 0 012-2h10a2 2 0 012 2v5"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl md:text-2xl font-semibold text-gray-900 mb-3">Tính chỉ số khối cơ thể (BMI)</h3>
-                    <p class="text-gray-600 text-sm leading-tight">Xác định tình trạng cân nặng của cơ thể dựa trên chiều cao và cân nặng.</p>
+                    <h3 class="text-lg md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">Chỉ số khối (BMI)</h3>
+                    <p class="text-gray-600 text-sm leading-tight">Xác định tình trạng cân nặng cơ thể.</p>
                 </a>
             </div>
             <!-- "Xem thêm" Button -->
-            <div class="mt-12 text-center">
-                <a href="cong-cu.html" class="bg-indigo-600 text-white hover:bg-indigo-700 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+            <div class="mt-8 md:mt-12 text-center">
+                <a href="cong-cu.html" class="bg-indigo-600 text-white hover:bg-indigo-700 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 text-sm md:text-base">
                     Xem thêm
                 </a>
             </div>
@@ -182,40 +215,41 @@
     </section>
 
     <!-- Hướng dẫn cài đặt trên điện thoại -->
-    <section id="huong-dan-cai-dat" class="py-16 md:py-24 max-w-5xl mx-auto my-8 md:my-12 scroll-mt-48 bg-white rounded-lg shadow-inner mb-32">
-        <div class="px-4 py-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">Hướng dẫn cài đặt cho điện thoại</h1>
-            <p class="text-gray-700 mb-6 text-base leading-normal">Biến trang web này thành một ứng dụng trên điện thoại của bạn chỉ với vài bước đơn giản. Điều này giúp bạn truy cập nhanh chóng như một ứng dụng thông thường!</p>
+    <section id="huong-dan-cai-dat" class="py-10 md:py-24 max-w-5xl mx-2 md:mx-auto my-6 md:my-12 scroll-mt-48 bg-white rounded-lg shadow-inner mb-24 md:mb-32">
+        <div class="px-4 py-6 md:px-4 md:py-8">
+            <!-- Tăng tiêu đề -->
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">Hướng dẫn cài đặt</h1>
+            <!-- Tăng nội dung mô tả -->
+            <p class="text-gray-700 mb-6 text-sm md:text-base leading-normal">Biến trang web này thành ứng dụng trên điện thoại để truy cập nhanh chóng.</p>
 
             <!-- General instruction for unknown OS -->
             <div id="general-instructions">
-                <h2 class="text-xl md:text-2xl font-semibold section-title">Hướng dẫn chung</h2>
-                <p class="text-gray-600 mb-4 text-sm leading-normal">Để thêm trang web vào màn hình chính, bạn thường tìm biểu tượng "Chia sẻ" hoặc biểu tượng menu (thường là <strong>ba dấu chấm ⋮</strong> hoặc <strong>ba dấu gạch ngang ☰</strong>) trong trình duyệt của mình, sau đó tìm tùy chọn "Thêm vào màn hình chính" hoặc "Cài đặt ứng dụng".</p>
-                <p class="text-gray-600 text-sm leading-normal">Hệ thống của bạn không xác định hoặc không được hỗ trợ cụ thể. Vui lòng làm theo hướng dẫn chung hoặc kiểm tra cài đặt trình duyệt của bạn.</p>
+                <h2 class="text-lg md:text-2xl font-semibold section-title">Hướng dẫn chung</h2>
+                <p class="text-gray-600 mb-4 text-sm md:text-sm leading-relaxed">Tìm biểu tượng <strong>Chia sẻ</strong> hoặc menu <strong>(⋮ / ☰)</strong>, chọn "Thêm vào màn hình chính".</p>
             </div>
 
             <!-- iOS Instructions -->
             <div id="ios-instructions" class="hidden">
-                <h2 class="text-xl md:text-2xl font-semibold section-title">Dành cho iPhone/iPad (iOS)</h2>
-                <div class="flex flex-col md:flex-row gap-6 mt-6">
+                <h2 class="text-lg md:text-2xl font-semibold section-title">Dành cho iPhone/iPad (iOS)</h2>
+                <div class="flex flex-col md:flex-row gap-4 md:gap-6 mt-4 md:mt-6">
                     <!-- Safari -->
-                    <div class="flex-1 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Trên Safari</h3>
+                    <div class="flex-1 bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Trên Safari</h3>
                         <ol class="instructions-list">
-                            <li class="text-sm leading-normal">1. Mở trang web này trong trình duyệt <strong>Safari</strong> của bạn.</li>
-                            <li class="text-sm leading-normal">2. Nhấn vào biểu tượng <strong>Chia sẻ</strong> <span class="font-bold text-base text-blue-600">⬆️</span> ở cuối màn hình.</li>
-                            <li class="text-sm leading-normal">3. Cuộn xuống và chọn <strong>"Thêm vào Màn hình chính"</strong>.</li>
-                            <li class="text-sm leading-normal">4. Đặt tên cho ứng dụng (tùy chọn) và nhấn <strong>"Thêm"</strong>.</li>
+                            <li>1. Mở web bằng <strong>Safari</strong>.</li>
+                            <li>2. Nhấn nút <strong>Chia sẻ</strong> <span class="font-bold text-blue-600">⬆️</span>.</li>
+                            <li>3. Chọn <strong>"Thêm vào MH chính"</strong>.</li>
+                            <li>4. Nhấn <strong>"Thêm"</strong>.</li>
                         </ol>
                     </div>
                     <!-- Chrome for iOS -->
-                    <div class="flex-1 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Trên Chrome</h3>
+                    <div class="flex-1 bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Trên Chrome</h3>
                         <ol class="instructions-list">
-                            <li class="text-sm leading-normal">1. Mở trang web này trong trình duyệt <strong>Chrome</strong> của bạn.</li>
-                            <li class="text-sm leading-normal">2. Nhấn vào biểu tượng <strong>Chia sẻ</strong> <span class="font-bold text-base text-blue-600">⬆️</span> (thường ở góc dưới bên phải hoặc trên cùng bên phải tùy phiên bản).</li>
-                            <li class="text-sm leading-normal">3. Cuộn xuống và chọn <strong>"Thêm vào Màn hình chính"</strong>.</li>
-                            <li class="text-sm leading-normal">4. Đặt tên cho ứng dụng (tùy chọn) và nhấn <strong>"Thêm"</strong>.</li>
+                            <li>1. Mở web bằng <strong>Chrome</strong>.</li>
+                            <li>2. Nhấn nút <strong>Chia sẻ</strong> <span class="font-bold text-blue-600">⬆️</span>.</li>
+                            <li>3. Chọn <strong>"Thêm vào MH chính"</strong>.</li>
+                            <li>4. Nhấn <strong>"Thêm"</strong>.</li>
                         </ol>
                     </div>
                 </div>
@@ -223,25 +257,25 @@
 
             <!-- Android Instructions -->
             <div id="android-instructions" class="hidden">
-                <h2 class="text-xl md:text-2xl font-semibold section-title">Dành cho Điện thoại Android 🤖</h2>
-                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 mt-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Trên Chrome (hoặc hầu hết các trình duyệt)</h3>
+                <h2 class="text-lg md:text-2xl font-semibold section-title">Dành cho Android 🤖</h2>
+                <div class="bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-200 mt-4 md:mt-6">
+                    <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Trên Chrome</h3>
                     <ol class="instructions-list">
-                        <li class="text-sm leading-normal">1. Mở trang web này trong trình duyệt <strong>Chrome</strong> của bạn.</li>
-                        <li class="text-sm leading-normal">2. Nhấn vào biểu tượng <strong>Menu</strong> <span class="font-bold text-base text-blue-600">⋮</span> (ba dấu chấm) ở góc trên bên phải màn hình.</li>
-                        <li class="text-sm leading-normal">3. Chọn <strong>"Thêm vào Màn hình chính"</strong> hoặc <strong>"Cài đặt ứng dụng"</strong>.</li>
-                        <li class="text-sm leading-normal">4. Đặt tên cho ứng dụng (tùy chọn) và nhấn <strong>"Thêm"</strong> hoặc <strong>"Cài đặt"</strong>.</li>
+                        <li>1. Mở trang web bằng <strong>Chrome</strong>.</li>
+                        <li>2. Nhấn menu <strong>⋮</strong> (góc trên phải).</li>
+                        <li>3. Chọn <strong>"Thêm vào Màn hình chính"</strong>.</li>
+                        <li>4. Nhấn <strong>"Thêm"</strong>.</li>
                     </ol>
                 </div>
             </div>
 
-            <div class="note">
-                <p class="leading-normal text-sm"><strong>Lưu ý:</strong> Các bước có thể hơi khác nhau tùy thuộc vào phiên bản trình duyệt và hệ điều hành của bạn. Nếu bạn không tìm thấy tùy chọn này, hãy thử tìm kiếm "thêm trang web vào màn hình chính [tên trình duyệt của bạn]" để biết thêm chi tiết.</p>
+            <div class="note text-sm">
+                <p class="leading-relaxed"><strong>Lưu ý:</strong> Giao diện có thể khác nhau tùy phiên bản.</p>
             </div>
         </div>
     </section>
 
-    <!-- Footer Section -->
+    <!-- Footer Section (GIỮ NGUYÊN HOÀN TOÀN) -->
     <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
         <div class="container mx-auto px-4">
             <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
