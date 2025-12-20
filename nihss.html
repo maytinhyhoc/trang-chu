@@ -3,444 +3,488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công Cụ - Thang điểm NIHSS</title>
+    <title>Thang điểm NIHSS - Đánh giá Đột quỵ</title>
+    <!-- Thêm Favicon -->
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
+    <link rel="manifest" href="manifest.json">
     <!-- Tải Tailwind CSS từ CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
+        /* --- Styles Global --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Màu nền nhẹ */
-            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
+            background-color: #f8fafc;
+            padding-top: 80px; /* Mặc định cho Desktop */
         }
-        /* Tùy chỉnh nhỏ cho các phần tử */
-        .gradient-bg {
-            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
-        }
-        .active-link {
-            background-color: #e0e7ff; /* Màu nền khi active */
-            color: #4f46e5; /* Màu chữ khi active */
-            font-weight: 600;
-        }
-        /* Thêm cuộn ngang cho thanh nav trên mobile */
-        .nav-scrollable {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* Cho cuộn mượt mà trên iOS */
-            scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
-        }
-        .nav-scrollable::-webkit-scrollbar {
-            display: none; /* Ẩn scrollbar trên Chrome/Safari */
-        }
-        /* Responsive adjustments for mobile */
-        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
-            header .logo-text {
-                display: none; /* Ẩn logo trên mobile */
-            }
-            .header-content {
-                flex-direction: column; /* Sắp xếp theo cột trên mobile */
-                align-items: center; /* Căn giữa các mục trên mobile */
-                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
-            }
-            .nav-menu {
-                justify-content: center; /* Căn giữa menu trên mobile */
-                flex-wrap: nowrap; /* Không xuống dòng các link nav */
-                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
-                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
-            }
-            .search-bar-container {
-                width: calc(100% - 2rem); /* Chiều rộng full trừ padding ngang */
-                padding-left: 0; /* Bỏ padding ngang ở đây vì đã tính vào width */
-                padding-right: 0;
-                margin-top: 0.5rem; /* Khoảng cách với thanh nav */
-                margin-left: auto; /* Căn giữa */
-                margin-right: auto; /* Căn giữa */
-            }
-            body {
-                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
+        
+        /* Responsive tweaks */
+        @media (max-width: 767px) {
+            body { 
+                padding-top: 0px; /* Header ẩn trên mobile */
+                padding-bottom: 80px; /* Chừa chỗ cho Bottom Nav */
             }
         }
-        /* Sửa lỗi zoom khi bấm vào thanh tìm kiếm trên mobile */
-        #toolSearch {
-            font-size: 16px; /* Đảm bảo font size tối thiểu 16px để ngăn zoom tự động */
+
+        /* Custom style for the active/highlighted navigation link (Desktop) */
+        .nav-item-highlight {
+            background-color: #eef2ff;
+            border-radius: 9999px;
+            padding: 4px 12px;
+            color: #4f46e5;
+            font-weight: 500;
         }
-        .score-input {
-            width: 100%;
-            padding: 0.25rem 0.5rem; /* Giảm padding */
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            text-align: center;
-            font-weight: 600;
-            font-size: 1rem; /* Giảm kích thước chữ trong ô chọn về 16px */
-            color: #4f46e5; /* Màu chữ cho input điểm */
-        }
-        .score-item {
+
+        /* Styles cho Bottom Navigation */
+        .bottom-nav-item {
             display: flex;
             flex-direction: column;
-            gap: 0.25rem; /* Giảm khoảng cách giữa label, select và description */
-        }
-        .score-item label {
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 500;
-            color: #374151; /* gray-700 */
-        }
-        .description {
-            font-size: 0.6875rem; /* text-xs nhỏ hơn */
+            align-items: center;
+            justify-content: center;
+            padding: 8px 4px;
             color: #6b7280; /* gray-500 */
-            margin-top: 0.125rem; /* Giảm khoảng cách từ description đến input/select */
+            transition: color 0.2s;
+        }
+        .bottom-nav-item.active {
+            color: #4f46e5; /* indigo-600 */
+        }
+        .bottom-nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+        }
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .score-box {
+            background-color: #eef2ff;
+            color: #4f46e5;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 3rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #c7d2fe;
+        }
+        .result-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        /* Custom Select Styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 flex flex-col min-h-screen">
 
-    <!-- Header Section (combined navigation and search bar, fixed at top) -->
-    <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
-        <!-- Main header content container, flex direction changes based on screen size -->
-        <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
-            <!-- Logo/Tên trang web -->
-            <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
-                <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
+    <!-- === DESKTOP HEADER (Ẩn trên Mobile) === -->
+    <header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-50">
+        <div class="container mx-auto px-4 header-content flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center flex-shrink-0 w-auto">
+                <a href="index.html" class="logo-text text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">
                     Máy tính y học
                 </a>
             </div>
 
             <!-- Navigation Menu -->
-            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-3 md:flex-shrink-0">
+            <nav class="nav-menu flex space-x-4">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Công Cụ</a>
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
-
-            <!-- Search Bar -->
-            <div class="search-bar-container w-full max-w-sm md:max-w-xs md:mx-4 md:order-2 md:flex-grow">
-                <input type="text" id="toolSearch" placeholder="Tìm kiếm..." class="w-full p-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
-            </div>
         </div>
     </header>
 
-    <section class="py-2 md:py-4 bg-white rounded-lg shadow-inner mx-4 mt-2 md:mx-auto md:mt-4 md:max-w-3xl">
-        <div class="container mx-auto px-2 sm:px-4">
-            <!-- Back button -->
-            <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
+    <main class="flex-grow container mx-auto px-4 py-4 md:py-8">
+        
+        <!-- Back Button & Title -->
+        <div class="flex items-center justify-between mb-4 md:mb-6 pt-4 md:pt-0">
+            <!-- Nút quay lại (Chỉ hiện Icon) -->
+            <a href="cong-cu.html" class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-full text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition duration-300 shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
-            <!-- Title, centered -->
-            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 mb-4">
+
+            <!-- Tiêu đề (Căn giữa) -->
+            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 flex-grow px-2">
                 Thang điểm NIHSS
             </h1>
 
-            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
-                <p class="text-center text-sm md:text-base text-gray-600 mb-6">
-                    Điền điểm cho từng mục (0-4 điểm, trừ mục 1a, 9, 10, 11) để tính tổng điểm NIHSS.
+            <!-- Spacer ảo để cân bằng layout (Căn giữa hoàn hảo) -->
+            <div class="w-10 h-10 flex-shrink-0"></div>
+        </div>
+
+        <!-- Main Content Box -->
+        <div class="mt-2 md:mt-8 bg-white rounded-lg shadow-lg p-3 md:p-8 max-w-4xl mx-auto">
+            
+            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl border border-gray-100">
+                <p class="text-center text-sm text-gray-500 mb-6 bg-blue-50 p-3 rounded-lg border border-blue-100">
+                    <i class="fa-solid fa-circle-info mr-1"></i> Chọn điểm cho từng mục (0-4 điểm) để tính tổng.
                 </p>
 
-                <!-- Adjusted space-y from 6 to 4 for more compactness -->
-                <div class="space-y-4">
+                <div class="space-y-6">
                     <!-- 1a. Mức độ ý thức -->
-                    <div class="score-item">
-                        <label for="nihss1a">1a. Mức độ ý thức</label>
-                        <select id="nihss1a" class="score-input bg-white">
-                            <option value="0">0 = Tỉnh táo, đáp ứng tốt.</option>
-                            <option value="1">1 = Lơ mơ, kích thích tối thiểu để đáp ứng.</option>
-                            <option value="2">2 = Lơ mơ, cần kích thích lặp lại để đáp ứng.</option>
-                            <option value="3">3 = Đáp ứng chỉ với phản xạ vận động hoặc hoàn toàn không đáp ứng.</option>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss1a" class="block text-sm font-bold text-gray-800 mb-1">1a. Mức độ ý thức</label>
+                        <p class="text-xs text-gray-500 mb-2">Đánh giá mức độ tỉnh táo và phản ứng.</p>
+                        <select id="nihss1a" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Tỉnh táo, đáp ứng tốt</option>
+                            <option value="1">1 = Lơ mơ, kích thích tối thiểu</option>
+                            <option value="2">2 = Lơ mơ, cần kích thích mạnh</option>
+                            <option value="3">3 = Hôn mê / Không đáp ứng</option>
                         </select>
-                        <p class="description">Đánh giá mức độ phản ứng của bệnh nhân.</p>
                     </div>
 
                     <!-- 1b. Mức độ ý thức - Câu hỏi -->
-                    <div class="score-item">
-                        <label for="nihss1b">1b. Mức độ ý thức - Câu hỏi</label>
-                        <select id="nihss1b" class="score-input bg-white">
-                            <option value="0">0 = Trả lời đúng cả hai câu.</option>
-                            <option value="1">1 = Trả lời đúng một câu.</option>
-                            <option value="2">2 = Trả lời sai cả hai câu.</option>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss1b" class="block text-sm font-bold text-gray-800 mb-1">1b. Trả lời câu hỏi</label>
+                        <p class="text-xs text-gray-500 mb-2">Hỏi bệnh nhân tháng hiện tại và tuổi.</p>
+                        <select id="nihss1b" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Trả lời đúng cả hai</option>
+                            <option value="1">1 = Trả lời đúng một câu</option>
+                            <option value="2">2 = Trả lời sai cả hai / Không trả lời</option>
                         </select>
-                        <p class="description">Hỏi bệnh nhân tháng và tuổi.</p>
                     </div>
 
                     <!-- 1c. Mức độ ý thức - Làm theo lệnh -->
-                    <div class="score-item">
-                        <label for="nihss1c">1c. Mức độ ý thức - Làm theo lệnh</label>
-                        <select id="nihss1c" class="score-input bg-white">
-                            <option value="0">0 = Thực hiện đúng cả hai lệnh.</option>
-                            <option value="1">1 = Thực hiện đúng một lệnh.</option>
-                            <option value="2">2 = Thực hiện sai cả hai lệnh.</option>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss1c" class="block text-sm font-bold text-gray-800 mb-1">1c. Làm theo lệnh</label>
+                        <p class="text-xs text-gray-500 mb-2">Yêu cầu mở/nhắm mắt và nắm/mở tay.</p>
+                        <select id="nihss1c" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Thực hiện đúng cả hai</option>
+                            <option value="1">1 = Thực hiện đúng một lệnh</option>
+                            <option value="2">2 = Không thực hiện đúng lệnh nào</option>
                         </select>
-                        <p class="description">Yêu cầu bệnh nhân mở mắt và nắm/mở tay.</p>
                     </div>
 
                     <!-- 2. Vận động nhãn cầu -->
-                    <div class="score-item">
-                        <label for="nihss2">2. Vận động nhãn cầu</label>
-                        <select id="nihss2" class="score-input bg-white">
-                            <option value="0">0 = Bình thường.</option>
-                            <option value="1">1 = Liệt nhìn một phần.</option>
-                            <option value="2">2 = Liệt nhìn toàn bộ.</option>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss2" class="block text-sm font-bold text-gray-800 mb-1">2. Vận động nhãn cầu</label>
+                        <p class="text-xs text-gray-500 mb-2">Kiểm tra di chuyển mắt theo hướng ngang.</p>
+                        <select id="nihss2" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Bình thường</option>
+                            <option value="1">1 = Liệt nhìn một phần</option>
+                            <option value="2">2 = Liệt nhìn hoàn toàn (ngang)</option>
                         </select>
-                        <p class="description">Kiểm tra khả năng di chuyển mắt theo hướng ngang.</p>
                     </div>
 
                     <!-- 3. Thị trường -->
-                    <div class="score-item">
-                        <label for="nihss3">3. Thị trường</label>
-                        <select id="nihss3" class="score-input bg-white">
-                            <option value="0">0 = Bình thường.</option>
-                            <option value="1">1 = Bán manh một phần.</option>
-                            <option value="2">2 = Bán manh hoàn toàn.</option>
-                            <option value="3">3 = Mù hai mắt.</option>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss3" class="block text-sm font-bold text-gray-800 mb-1">3. Thị trường</label>
+                        <p class="text-xs text-gray-500 mb-2">Kiểm tra thị trường bằng cách đếm ngón tay.</p>
+                        <select id="nihss3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Bình thường</option>
+                            <option value="1">1 = Bán manh một phần</option>
+                            <option value="2">2 = Bán manh hoàn toàn</option>
+                            <option value="3">3 = Mù hai mắt</option>
                         </select>
-                        <p class="description">Kiểm tra thị trường bằng cách đếm ngón tay.</p>
                     </div>
 
                     <!-- 4. Liệt mặt -->
-                    <div class="score-item">
-                        <label for="nihss4">4. Liệt mặt</label>
-                        <select id="nihss4" class="score-input bg-white">
-                            <option value="0">0 = Bình thường.</option>
-                            <option value="1">1 = Liệt mặt nhẹ.</option>
-                            <option value="2">2 = Liệt mặt rõ rệt.</option>
-                            <option value="3">3 = Liệt mặt hoàn toàn.</option>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss4" class="block text-sm font-bold text-gray-800 mb-1">4. Liệt mặt</label>
+                        <p class="text-xs text-gray-500 mb-2">Yêu cầu cười, nhăn trán, nhắm mắt.</p>
+                        <select id="nihss4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Bình thường</option>
+                            <option value="1">1 = Liệt mặt nhẹ (mờ rãnh mũi má)</option>
+                            <option value="2">2 = Liệt mặt một phần (nửa dưới)</option>
+                            <option value="3">3 = Liệt mặt hoàn toàn (nửa trên và dưới)</option>
                         </select>
-                        <p class="description">Yêu cầu bệnh nhân cười, nhăn trán, nhắm mắt.</p>
                     </div>
 
-                    <!-- 5a. Vận động tay trái -->
-                    <div class="score-item">
-                        <label for="nihss5a">5a. Vận động tay trái</label>
-                        <select id="nihss5a" class="score-input bg-white">
-                            <option value="0">0 = Không có liệt.</option>
-                            <option value="1">1 = Duỗi tay giữ được 10 giây.</option>
-                            <option value="2">2 = Duỗi tay rớt trong 10 giây.</option>
-                            <option value="3">3 = Duỗi tay rớt ngay lập tức.</option>
-                            <option value="4">4 = Không cử động được.</option>
-                        </select>
-                        <p class="description">Giữ tay bệnh nhân duỗi thẳng 90 độ (ngồi) hoặc 45 độ (nằm) trong 10 giây.</p>
+                    <!-- 5. Vận động tay -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <label for="nihss5a" class="block text-sm font-bold text-gray-800 mb-1">5a. Tay Trái</label>
+                            <p class="text-xs text-gray-500 mb-2">Giữ tay 90° (ngồi) hoặc 45° (nằm) trong 10s.</p>
+                            <select id="nihss5a" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                                <option value="0">0 = Không liệt</option>
+                                <option value="1">1 = Rơi nhẹ (giữ được 10s)</option>
+                                <option value="2">2 = Rơi nhưng còn chống trọng lực (<10s)</option>
+                                <option value="3">3 = Rơi ngay (không chống trọng lực)</option>
+                                <option value="4">4 = Không cử động</option>
+                            </select>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <label for="nihss5b" class="block text-sm font-bold text-gray-800 mb-1">5b. Tay Phải</label>
+                            <p class="text-xs text-gray-500 mb-2">Giữ tay 90° (ngồi) hoặc 45° (nằm) trong 10s.</p>
+                            <select id="nihss5b" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                                <option value="0">0 = Không liệt</option>
+                                <option value="1">1 = Rơi nhẹ (giữ được 10s)</option>
+                                <option value="2">2 = Rơi nhưng còn chống trọng lực (<10s)</option>
+                                <option value="3">3 = Rơi ngay (không chống trọng lực)</option>
+                                <option value="4">4 = Không cử động</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <!-- 5b. Vận động tay phải -->
-                    <div class="score-item">
-                        <label for="nihss5b">5b. Vận động tay phải</label>
-                        <select id="nihss5b" class="score-input bg-white">
-                            <option value="0">0 = Không có liệt.</option>
-                            <option value="1">1 = Duỗi tay giữ được 10 giây.</option>
-                            <option value="2">2 = Duỗi tay rớt trong 10 giây.</option>
-                            <option value="3">3 = Duỗi tay rớt ngay lập tức.</option>
-                            <option value="4">4 = Không cử động được.</option>
-                        </select>
-                        <p class="description">Giữ tay bệnh nhân duỗi thẳng 90 độ (ngồi) hoặc 45 độ (nằm) trong 10 giây.</p>
+                    <!-- 6. Vận động chân -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <label for="nihss6a" class="block text-sm font-bold text-gray-800 mb-1">6a. Chân Trái</label>
+                            <p class="text-xs text-gray-500 mb-2">Giữ chân 30° trong 5 giây.</p>
+                            <select id="nihss6a" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                                <option value="0">0 = Không liệt</option>
+                                <option value="1">1 = Rơi nhẹ (giữ được 5s)</option>
+                                <option value="2">2 = Rơi nhưng còn chống trọng lực (<5s)</option>
+                                <option value="3">3 = Rơi ngay (không chống trọng lực)</option>
+                                <option value="4">4 = Không cử động</option>
+                            </select>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <label for="nihss6b" class="block text-sm font-bold text-gray-800 mb-1">6b. Chân Phải</label>
+                            <p class="text-xs text-gray-500 mb-2">Giữ chân 30° trong 5 giây.</p>
+                            <select id="nihss6b" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                                <option value="0">0 = Không liệt</option>
+                                <option value="1">1 = Rơi nhẹ (giữ được 5s)</option>
+                                <option value="2">2 = Rơi nhưng còn chống trọng lực (<5s)</option>
+                                <option value="3">3 = Rơi ngay (không chống trọng lực)</option>
+                                <option value="4">4 = Không cử động</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <!-- 6a. Vận động chân trái -->
-                    <div class="score-item">
-                        <label for="nihss6a">6a. Vận động chân trái</label>
-                        <select id="nihss6a" class="score-input bg-white">
-                            <option value="0">0 = Không có liệt.</option>
-                            <option value="1">1 = Duỗi chân giữ được 5 giây.</option>
-                            <option value="2">2 = Duỗi chân rớt trong 5 giây.</option>
-                            <option value="3">3 = Duỗi chân rớt ngay lập tức.</option>
-                            <option value="4">4 = Không cử động được.</option>
+                    <!-- 7. Mất điều hòa -->
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss7" class="block text-sm font-bold text-gray-800 mb-1">7. Mất điều hòa vận động</label>
+                        <p class="text-xs text-gray-500 mb-2">Nghiệm pháp ngón tay chỉ mũi, gót chân chỉ đầu gối.</p>
+                        <select id="nihss7" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Không có</option>
+                            <option value="1">1 = Mất điều hòa ở một chi</option>
+                            <option value="2">2 = Mất điều hòa ở hai chi</option>
                         </select>
-                        <p class="description">Giữ chân bệnh nhân duỗi thẳng 30 độ trong 5 giây.</p>
-                    </div>
-
-                    <!-- 6b. Vận động chân phải -->
-                    <div class="score-item">
-                        <label for="nihss6b">6b. Vận động chân phải</label>
-                        <select id="nihss6b" class="score-input bg-white">
-                            <option value="0">0 = Không có liệt.</option>
-                            <option value="1">1 = Duỗi chân giữ được 5 giây.</option>
-                            <option value="2">2 = Duỗi chân rớt trong 5 giây.</option>
-                            <option value="3">3 = Duỗi chân rớt ngay lập tức.</option>
-                            <option value="4">4 = Không cử động được.</option>
-                        </select>
-                        <p class="description">Giữ chân bệnh nhân duỗi thẳng 30 độ trong 5 giây.</p>
-                    </div>
-
-                    <!-- 7. Mất điều hòa vận động -->
-                    <div class="score-item">
-                        <label for="nihss7">7. Mất điều hòa vận động (Không áp dụng cho liệt hoàn toàn)</label>
-                        <select id="nihss7" class="score-input bg-white">
-                            <option value="0">0 = Không có mất điều hòa.</option>
-                            <option value="1">1 = Mất điều hòa ở một chi.</option>
-                            <option value="2">2 = Mất điều hòa ở hai chi.</option>
-                        </select>
-                        <p class="description">Kiểm tra ngón tay - mũi, gót chân - ống quyển.</p>
                     </div>
 
                     <!-- 8. Cảm giác -->
-                    <div class="score-item">
-                        <label for="nihss8">8. Cảm giác</label>
-                        <select id="nihss8" class="score-input bg-white">
-                            <option value="0">0 = Bình thường.</option>
-                            <option value="1">1 = Giảm cảm giác nhẹ đến trung bình.</option>
-                            <option value="2">2 = Mất cảm giác nặng hoặc toàn bộ.</option>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss8" class="block text-sm font-bold text-gray-800 mb-1">8. Cảm giác</label>
+                        <p class="text-xs text-gray-500 mb-2">Kiểm tra cảm giác đau/chạm bằng kim.</p>
+                        <select id="nihss8" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Bình thường</option>
+                            <option value="1">1 = Giảm cảm giác nhẹ/trung bình</option>
+                            <option value="2">2 = Mất cảm giác nặng/hoàn toàn</option>
                         </select>
-                        <p class="description">Kiểm tra cảm giác đau/chạm ở chi và thân mình.</p>
                     </div>
 
-                    <!-- 9. Bỏ sót (Neglect) -->
-                    <div class="score-item">
-                        <label for="nihss9">9. Bỏ sót (Neglect)</label>
-                        <select id="nihss9" class="score-input bg-white">
-                            <option value="0">0 = Không bỏ sót.</option>
-                            <option value="1">1 = Bỏ sót thị giác hoặc xúc giác một phần.</option>
-                            <option value="2">2 = Bỏ sót toàn bộ hoặc bỏ sót nặng nề.</option>
+                    <!-- 9. Ngôn ngữ -->
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss9" class="block text-sm font-bold text-gray-800 mb-1">9. Ngôn ngữ (Thất ngôn)</label>
+                        <p class="text-xs text-gray-500 mb-2">Mô tả tranh, đặt câu, gọi tên đồ vật.</p>
+                        <select id="nihss9" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Bình thường</option>
+                            <option value="1">1 = Thất ngôn nhẹ - trung bình</option>
+                            <option value="2">2 = Thất ngôn nặng</option>
+                            <option value="3">3 = Câm (Mute) / Thất ngôn toàn bộ</option>
                         </select>
-                        <p class="description">Kiểm tra khả năng nhận biết cả hai bên cơ thể và môi trường.</p>
                     </div>
 
-                    <!-- 10. Loạn vận ngôn -->
-                    <div class="score-item">
-                        <label for="nihss10">10. Loạn vận ngôn</label>
-                        <select id="nihss10" class="score-input bg-white">
-                            <option value="0">0 = Bình thường.</option>
-                            <option value="1">1 = Loạn vận ngôn nhẹ đến trung bình.</option>
-                            <option value="2">2 = Loạn vận ngôn nặng hoặc không nói được.</option>
+                    <!-- 10. Nói đớ -->
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss10" class="block text-sm font-bold text-gray-800 mb-1">10. Nói đớ (Dysarthria)</label>
+                        <p class="text-xs text-gray-500 mb-2">Đọc các từ/câu mẫu.</p>
+                        <select id="nihss10" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Bình thường</option>
+                            <option value="1">1 = Nói đớ nhẹ - trung bình</option>
+                            <option value="2">2 = Nói đớ nặng / Không nói được</option>
                         </select>
-                        <p class="description">Yêu cầu bệnh nhân lặp lại các từ hoặc cụm từ.</p>
                     </div>
 
-                    <!-- 11. Thất ngôn -->
-                    <div class="score-item">
-                        <label for="nihss11">11. Thất ngôn</label>
-                        <select id="nihss11" class="score-input bg-white">
-                            <option value="0">0 = Bình thường.</option>
-                            <option value="1">1 = Thất ngôn nhẹ đến trung bình.</option>
-                            <option value="2">2 = Thất ngôn nặng hoặc toàn bộ.</option>
-                            <option value="3">3 = Không kiểm tra được (do không hiểu hoặc không hợp tác).</option>
+                    <!-- 11. Sự chú ý -->
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label for="nihss11" class="block text-sm font-bold text-gray-800 mb-1">11. Sự chú ý (Extinction/Neglect)</label>
+                        <p class="text-xs text-gray-500 mb-2">Kiểm tra bỏ sót thị giác/xúc giác không gian.</p>
+                        <select id="nihss11" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-base bg-white">
+                            <option value="0">0 = Không bỏ sót</option>
+                            <option value="1">1 = Bỏ sót một phần (thị giác/xúc giác)</option>
+                            <option value="2">2 = Bỏ sót hoàn toàn (hemi-inattention)</option>
                         </select>
-                        <p class="description">Đánh giá khả năng hiểu và diễn đạt ngôn ngữ.</p>
                     </div>
                 </div>
 
-                <div class="mt-8 flex flex-col md:flex-row gap-4">
-                    <button id="calculateBtn" onclick="calculateNIHSS()" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-indigo-700">
-                        Tính Điểm NIHSS
+                <!-- Buttons -->
+                <div class="mt-8 flex flex-col sm:flex-row gap-4 pt-4">
+                    <button id="calculateBtn" onclick="calculateNIHSS()" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
+                        <i class="fa-solid fa-calculator mr-2"></i> Tính Điểm
                     </button>
-                    <button id="clearBtn" onclick="clearInputs()" class="flex-1 bg-red-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-red-600">
-                        Xóa Dữ Liệu
+                    <button id="clearBtn" onclick="clearInputs()" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
+                        <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
                     </button>
                 </div>
                 
-                <div id="results" class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
-                    <p class="text-center font-semibold text-gray-500">Tổng điểm NIHSS sẽ hiển thị ở đây.</p>
+                <!-- Results -->
+                <div id="results" class="mt-8 hidden animate-fade-in-up">
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center shadow-inner">
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Kết quả NIHSS</h3>
+                        
+                        <div id="nihss-score-display" class="score-box mb-4 bg-white text-indigo-700">0</div>
+
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm text-left">
+                            <p class="text-sm font-bold text-gray-500 mb-2">Đánh giá mức độ:</p>
+                            <p id="severity-text" class="result-text text-indigo-700 leading-relaxed font-bold text-center text-xl"></p>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-100 text-sm text-gray-600">
+                                <p class="font-bold mb-2 text-gray-800">Tham khảo phân loại:</p>
+                                <ul class="space-y-1 ml-1">
+                                    <li><span class="font-semibold text-green-600">0:</span> Không đột quỵ</li>
+                                    <li><span class="font-semibold text-green-600">1 - 4:</span> Đột quỵ nhẹ</li>
+                                    <li><span class="font-semibold text-yellow-600">5 - 15:</span> Đột quỵ trung bình</li>
+                                    <li><span class="font-semibold text-orange-600">16 - 20:</span> Đột quỵ trung bình - nặng</li>
+                                    <li><span class="font-semibold text-red-600">21 - 42:</span> Đột quỵ nặng</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
-    </section>
+    </main>
 
-    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
+    <!-- Footer -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner mt-auto">
         <div class="container mx-auto px-4">
             <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-            <p class="mt-2">
-                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
-            </p>
-            <p>
-                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-            </p>
+            <p class="mt-2">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
+            <p>Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a></p>
             <div class="flex justify-center space-x-4 mt-4">
                 <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
                 <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
             </div>
         </div>
     </footer>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
+        <!-- Trang chủ -->
+        <a href="index.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            <span>Trang Chủ</span>
+        </a>
+
+        <!-- Công cụ (Active) -->
+        <a href="cong-cu.html" class="bottom-nav-item active">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+            <span>Công Cụ</span>
+        </a>
+
+        <!-- Giới thiệu -->
+        <a href="gioi-thieu.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            <span>Giới thiệu</span>
+        </a>
+
+        <!-- Liên hệ -->
+        <a href="#lien-he" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+            </svg>
+            <span>Liên Hệ</span>
+        </a>
+    </nav>
     
     <script>
-        // Hàm tính toán tổng điểm NIHSS
-        function calculateNIHSS() {
-            let totalScore = 0;
-            const scores = {
-                'nihss1a': parseInt(document.getElementById('nihss1a').value) || 0,
-                'nihss1b': parseInt(document.getElementById('nihss1b').value) || 0,
-                'nihss1c': parseInt(document.getElementById('nihss1c').value) || 0,
-                'nihss2': parseInt(document.getElementById('nihss2').value) || 0,
-                'nihss3': parseInt(document.getElementById('nihss3').value) || 0,
-                'nihss4': parseInt(document.getElementById('nihss4').value) || 0,
-                'nihss5a': parseInt(document.getElementById('nihss5a').value) || 0, // Tay trái
-                'nihss5b': parseInt(document.getElementById('nihss5b').value) || 0, // Tay phải
-                'nihss6a': parseInt(document.getElementById('nihss6a').value) || 0, // Chân trái
-                'nihss6b': parseInt(document.getElementById('nihss6b').value) || 0, // Chân phải
-                'nihss7': parseInt(document.getElementById('nihss7').value) || 0,
-                'nihss8': parseInt(document.getElementById('nihss8').value) || 0,
-                'nihss9': parseInt(document.getElementById('nihss9').value) || 0,
-                'nihss10': parseInt(document.getElementById('nihss10').value) || 0,
-                'nihss11': parseInt(document.getElementById('nihss11').value) || 0
-            };
-
-            // Cộng tất cả các điểm lại
-            for (const key in scores) {
-                totalScore += scores[key];
-            }
-
-            let severity = '';
-            if (totalScore === 0) {
-                severity = 'Không đột quỵ';
-            } else if (totalScore >= 1 && totalScore <= 4) {
-                severity = 'Đột quỵ nhẹ';
-            } else if (totalScore >= 5 && totalScore <= 15) {
-                severity = 'Đột quỵ trung bình';
-            } else if (totalScore >= 16 && totalScore <= 20) {
-                severity = 'Đột quỵ trung bình đến nặng';
-            } else if (totalScore >= 21) {
-                severity = 'Đột quỵ nặng';
-            }
-
-            const resultsElement = document.getElementById('results');
-            resultsElement.innerHTML = `
-                <p class="text-center text-lg md:text-xl font-bold mb-2">Tổng điểm NIHSS: <span class="text-indigo-600">${totalScore}</span></p>
-                <p class="text-center text-base md:text-lg">Mức độ đột quỵ: <span class="font-semibold text-green-600">${severity}</span></p>
-                <p class="text-sm text-gray-500 mt-4">
-                    <ul class="list-disc list-inside">
-                        <li>0 điểm: Không đột quỵ</li>
-                        <li>1-4 điểm: Đột quỵ nhẹ</li>
-                        <li>5-15 điểm: Đột quỵ trung bình</li>
-                        <li>16-20 điểm: Đột quỵ trung bình đến nặng</li>
-                        <li>21-42 điểm: Đột quỵ nặng</li>
-                    </ul>
-                </p>
-            `;
-            
-            // Cuộn đến đầu phần kết quả, có tính đến chiều cao của header
-            const headerElement = document.querySelector('header');
-            if (resultsElement && headerElement) {
-                const headerHeight = headerElement.offsetHeight;
-                const targetPosition = resultsElement.offsetTop - headerHeight - 10; // Trừ thêm 10px để tạo một chút khoảng trống
-                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-            }
-        }
-
-        // Hàm xóa tất cả dữ liệu đã nhập và kết quả
-        function clearInputs() {
-            document.querySelectorAll('select').forEach(select => {
-                select.value = '0'; // Đặt lại về giá trị mặc định đầu tiên
-            });
-            document.getElementById('results').innerHTML = '<p class="text-center font-semibold text-gray-500">Tổng điểm NIHSS sẽ hiển thị ở đây.</p>';
-        }
-
-        // JavaScript để điều chỉnh padding-top của body động dựa trên chiều cao của header cố định
+        // --- Layout Adjustment ---
         document.addEventListener('DOMContentLoaded', function() {
             const header = document.querySelector('header');
             const body = document.body;
 
             function adjustBodyPadding() {
-                const headerHeight = header.offsetHeight;
-                body.style.paddingTop = `${headerHeight}px`;
+                if (header && getComputedStyle(header).display !== 'none') {
+                    const headerHeight = header.offsetHeight;
+                    body.style.paddingTop = `${headerHeight}px`;
+                } else {
+                    body.style.paddingTop = '0px';
+                }
             }
 
-            // Điều chỉnh padding khi tải trang và khi thay đổi kích thước cửa sổ
             adjustBodyPadding();
             window.addEventListener('resize', adjustBodyPadding);
         });
 
-        // Xử lý tìm kiếm (tương tự như trang cũ, có thể mở rộng sau này)
-        document.getElementById('toolSearch').addEventListener('keyup', function() {
-            // Logic tìm kiếm công cụ có thể được thêm vào đây nếu cần
-            console.log('Tìm kiếm:', this.value);
-        });
+        // --- Logic NIHSS ---
+        function calculateNIHSS() {
+            let totalScore = 0;
+            // IDs của các select
+            const ids = [
+                'nihss1a', 'nihss1b', 'nihss1c', 'nihss2', 'nihss3', 'nihss4', 
+                'nihss5a', 'nihss5b', 'nihss6a', 'nihss6b', 'nihss7', 'nihss8', 
+                'nihss9', 'nihss10', 'nihss11'
+            ];
+
+            // Cộng điểm
+            ids.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    totalScore += parseInt(element.value) || 0;
+                }
+            });
+
+            let severity = '';
+            let severityClass = '';
+
+            if (totalScore === 0) {
+                severity = 'Không đột quỵ';
+                severityClass = 'text-green-600';
+            } else if (totalScore <= 4) {
+                severity = 'Đột quỵ nhẹ';
+                severityClass = 'text-green-600';
+            } else if (totalScore <= 15) {
+                severity = 'Đột quỵ trung bình';
+                severityClass = 'text-yellow-600';
+            } else if (totalScore <= 20) {
+                severity = 'Đột quỵ trung bình - nặng';
+                severityClass = 'text-orange-600';
+            } else {
+                severity = 'Đột quỵ nặng';
+                severityClass = 'text-red-600';
+            }
+
+            // Hiển thị kết quả
+            document.getElementById('nihss-score-display').textContent = totalScore;
+            
+            const severityText = document.getElementById('severity-text');
+            severityText.textContent = severity;
+            severityText.className = `result-text font-bold text-center text-xl ${severityClass}`;
+
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.classList.remove('hidden');
+            
+            // Scroll xuống kết quả
+            const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+            const targetPos = resultsContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+            window.scrollTo({ top: targetPos, behavior: 'smooth' });
+        }
+
+        // Hàm xóa dữ liệu
+        function clearInputs() {
+            document.querySelectorAll('select').forEach(select => {
+                select.value = '0'; // Reset về giá trị 0
+            });
+            document.getElementById('nihss-score-display').textContent = '0';
+            document.getElementById('results').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     </script>
 </body>
 </html>

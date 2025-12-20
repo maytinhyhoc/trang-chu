@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giới thiệu - Máy tính y học</title>
+    <!-- Thêm Favicon cho đồng bộ với trang chủ -->
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
     <!-- Tải Tailwind CSS từ CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Màu nền nhẹ */
-            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
+            background-color: #f8fafc;
+            padding-top: 80px; /* Mặc định cho Desktop */
         }
         /* Tùy chỉnh nhỏ cho các phần tử */
         .gradient-bg {
-            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
+            background: linear-gradient(to right, #6366f1, #a855f7);
         }
         /* Style cho nút copy */
         button[data-copy] {
@@ -31,44 +34,55 @@
         }
 
         /* Responsive adjustments for mobile */
-        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
-            header .logo-text {
-                display: none; /* Ẩn logo trên mobile */
+        @media (max-width: 767px) { 
+            body {
+                padding-top: 0px; /* Header ẩn nên padding top là 0 */
+                padding-bottom: 80px; /* Padding dưới chuẩn 80px để khớp với menu */
             }
             .header-content {
-                flex-direction: column; /* Sắp xếp theo cột trên mobile */
-                align-items: center; /* Căn giữa các mục trên mobile */
-                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
-            }
-            .nav-menu {
-                justify-content: center; /* Căn giữa menu trên mobile */
-                flex-wrap: nowrap; /* Không xuống dòng các link nav */
-                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
-                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
-            }
-            body {
-                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
+                justify-content: center;
             }
         }
 
-        /* Custom style for the active/highlighted navigation link, matching "Công Cụ" */
+        /* Custom style for the active/highlighted navigation link */
         .nav-item-highlight {
-            background-color: #eef2ff; /* Light background color */
-            border-radius: 9999px; /* Fully rounded corners */
-            padding: 4px 12px; /* Adjusted padding */
-            color: #4f46e5; /* Text color */
-            font-weight: 500; /* Medium font weight */
+            background-color: #eef2ff;
+            border-radius: 9999px;
+            padding: 4px 12px;
+            color: #4f46e5;
+            font-weight: 500;
+        }
+
+        /* Styles cho Bottom Navigation - COPY CHÍNH XÁC TỪ INDEX.HTML */
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 4px;
+            color: #6b7280; /* gray-500 */
+            transition: color 0.2s;
+        }
+        .bottom-nav-item.active {
+            color: #4f46e5; /* indigo-600 */
+        }
+        .bottom-nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+        }
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Header Section (combined navigation and search bar, fixed at top) -->
-    <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
-        <!-- Main header content container, flex direction changes based on screen size -->
+    <!-- Header Section - ẨN TRÊN MOBILE (hidden md:block) -->
+    <header class="hidden md:block bg-white shadow-md py-3 fixed top-0 w-full z-20">
         <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
             <!-- Logo/Tên trang web -->
-            <!-- Order-1 on desktop to keep it left, hidden on mobile -->
             <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
                 <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
                     Máy tính y học
@@ -76,10 +90,9 @@
             </div>
 
             <!-- Navigation Menu -->
-            <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
             <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-2 md:flex-shrink-0">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Công Cụ</a>
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Giới thiệu</a>
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
@@ -98,70 +111,6 @@
         </div>
     </section>
 
-    <script>
-        // Nút "Sao chép"
-        document.querySelectorAll('button[data-copy]').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                try {
-                    // Check if clipboard API is available
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        await navigator.clipboard.writeText(btn.getAttribute('data-copy'));
-                    } else {
-                        // Fallback for older browsers or if running in an iframe with restrictions
-                        const textarea = document.createElement('textarea');
-                        textarea.value = btn.getAttribute('data-copy');
-                        textarea.style.position = 'fixed'; // Avoid scrolling to bottom
-                        textarea.style.opacity = '0'; // Hide textarea
-                        document.body.appendChild(textarea);
-                        textarea.focus();
-                        textarea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textarea);
-                    }
-
-                    const old = btn.textContent;
-                    btn.textContent = 'Đã sao chép ✓';
-                    setTimeout(() => btn.textContent = old, 1500);
-                } catch (e) {
-                    // Use a custom message box instead of alert
-                    const messageBox = document.createElement('div');
-                    messageBox.style.cssText = `
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        background-color: #fff;
-                        padding: 20px;
-                        border-radius: 8px;
-                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                        z-index: 1000;
-                        text-align: center;
-                    `;
-                    messageBox.innerHTML = `
-                        <p>Không thể sao chép, vui lòng copy thủ công.</p>
-                        <button onclick="this.parentNode.remove()" style="margin-top: 10px; padding: 8px 16px; background-color: #6366f1; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Đóng</button>
-                    `;
-                    document.body.appendChild(messageBox);
-                }
-            });
-        });
-
-        // JavaScript to dynamically adjust body padding based on fixed header height
-        document.addEventListener('DOMContentLoaded', function() {
-            const header = document.querySelector('header');
-            const body = document.body;
-
-            function adjustBodyPadding() {
-                const headerHeight = header.offsetHeight;
-                body.style.paddingTop = `${headerHeight}px`;
-            }
-
-            // Adjust padding on load and on window resize
-            adjustBodyPadding();
-            window.addEventListener('resize', adjustBodyPadding);
-        });
-    </script>
-
     <!-- Footer Section -->
     <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
         <div class="container mx-auto px-4">
@@ -178,6 +127,90 @@
             </div>
         </div>
     </footer>
+
+    <!-- MOBILE BOTTOM NAVIGATION (Only visible on mobile) - CẤU TRÚC GIỐNG 100% INDEX -->
+    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
+        <!-- Trang chủ -->
+        <a href="index.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            <span>Trang Chủ</span>
+        </a>
+
+        <!-- Công cụ -->
+        <a href="cong-cu.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+            <span>Công Cụ</span>
+        </a>
+
+        <!-- Giới thiệu (Active) -->
+        <a href="gioi-thieu.html" class="bottom-nav-item active">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            <span>Giới thiệu</span>
+        </a>
+
+        <!-- Liên hệ -->
+        <a href="#lien-he" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+            </svg>
+            <span>Liên Hệ</span>
+        </a>
+    </nav>
+
+    <script>
+        // Nút "Sao chép" (Giữ nguyên logic cũ)
+        document.querySelectorAll('button[data-copy]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(btn.getAttribute('data-copy'));
+                    } else {
+                        const textarea = document.createElement('textarea');
+                        textarea.value = btn.getAttribute('data-copy');
+                        textarea.style.position = 'fixed';
+                        textarea.style.opacity = '0';
+                        document.body.appendChild(textarea);
+                        textarea.focus();
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                    }
+                    const old = btn.textContent;
+                    btn.textContent = 'Đã sao chép ✓';
+                    setTimeout(() => btn.textContent = old, 1500);
+                } catch (e) {
+                    alert("Không thể sao chép, vui lòng copy thủ công.");
+                }
+            });
+        });
+
+        // JavaScript to dynamically adjust body padding based on fixed header height
+        // Đồng bộ logic với index.html
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('header');
+            const body = document.body;
+
+            function adjustBodyPadding() {
+                const headerHeight = header.offsetHeight;
+                // Nếu là mobile (màn hình < 768px), padding-top cố định = 0 do header ẩn
+                if (window.innerWidth < 768) {
+                    body.style.paddingTop = '0px'; 
+                } else {
+                    body.style.paddingTop = headerHeight + 'px';
+                }
+            }
+
+            // Adjust padding on load and on window resize
+            adjustBodyPadding();
+            window.addEventListener('resize', adjustBodyPadding);
+        });
+    </script>
 
 </body>
 </html>

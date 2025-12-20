@@ -2,213 +2,221 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công Cụ - Máy đếm giọt dịch truyền</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Máy Đếm Giọt Dịch Truyền</title>
+    <!-- Thêm Favicon -->
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
+    <link rel="manifest" href="manifest.json">
     <!-- Tải Tailwind CSS từ CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
+        /* --- Styles Global --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Màu nền nhẹ */
-            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
-            color: #1e293b; /* Darker text for better contrast */
+            background-color: #f8fafc;
+            padding-top: 80px; /* Mặc định cho Desktop */
+            -webkit-tap-highlight-color: transparent; /* Loại bỏ highlight khi tap trên mobile */
+            touch-action: manipulation; /* Tối ưu hóa cho touch */
         }
-        /* Tùy chỉnh nhỏ cho các phần tử */
-        .gradient-bg {
-            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
+        
+        /* Responsive tweaks */
+        @media (max-width: 767px) {
+            body { 
+                padding-top: 0px; /* Header ẩn trên mobile */
+                padding-bottom: 80px; /* Chừa chỗ cho Bottom Nav */
+            }
         }
-        .active-link {
-            background-color: #e0e7ff; /* Màu nền khi active */
-            color: #4f46e5; /* Màu chữ khi active */
-            font-weight: 600;
+
+        /* Custom style for the active/highlighted navigation link (Desktop) */
+        .nav-item-highlight {
+            background-color: #eef2ff;
+            border-radius: 9999px;
+            padding: 4px 12px;
+            color: #4f46e5;
+            font-weight: 500;
         }
-        /* Thêm cuộn ngang cho thanh nav trên mobile */
-        .nav-scrollable {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* Cho cuộn mượt mà trên iOS */
-            scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
+
+        /* Styles cho Bottom Navigation */
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 4px;
+            color: #6b7280; /* gray-500 */
+            transition: color 0.2s;
         }
-        .nav-scrollable::-webkit-scrollbar {
-            display: none; /* Ẩn scrollbar trên Chrome/Safari */
+        .bottom-nav-item.active {
+            color: #4f46e5; /* indigo-600 */
         }
+        .bottom-nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+        }
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
         .score-box {
-            background-color: #e0e7ff; /* Changed for synchronization */
-            color: #4f46e5; /* Changed for synchronization */
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            /* Flexbox to arrange number and unit vertically */
+            background-color: #eef2ff;
+            color: #4f46e5;
+            padding: 1rem;
+            border-radius: 1rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             text-align: center;
+            border: 1px solid #c7d2fe;
         }
         .drip-rate-number {
-            font-size: 2.5rem; /* Main result score font size */
-            font-weight: bold;
-            line-height: 1; /* Adjust line height to prevent extra space */
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
         }
         .drip-rate-unit {
-            font-size: 1rem; /* Smaller font size for unit */
-            font-weight: normal;
-            margin-top: 0.25rem; /* Small margin between number and unit */
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        .result-text {
-            font-size: 1.125rem; /* Adjusted for better consistency */
-            font-weight: 600;
-        }
-        .input-group label {
-            font-size: 0.95rem; /* Slightly larger for better readability */
-        }
-        input[type="number"] {
-            font-size: 1rem; /* Consistent input font size */
-        }
-        input[type="radio"] + span {
-            font-size: 0.95rem; /* Consistent radio label font size */
-        }
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-        /* Responsive adjustments for mobile */
-        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
-            header .logo-text {
-                display: none; /* Ẩn logo trên mobile */
-            }
-            .header-content {
-                flex-direction: column; /* Sắp xếp theo cột trên mobile */
-                align-items: center; /* Căn giữa các mục trên mobile */
-                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
-            }
-            .nav-menu {
-                justify-content: center; /* Căn giữa menu trên mobile */
-                flex-wrap: nowrap; /* Không xuống dòng các link nav */
-                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
-                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
-            }
-            .search-bar-container {
-                width: calc(100% - 2rem); /* Chiều rộng full trừ padding ngang */
-                padding-left: 0; /* Bỏ padding ngang ở đây vì đã tính vào width */
-                padding-right: 0;
-                margin-top: 0.5rem; /* Khoảng cách với thanh nav */
-                margin-left: auto; /* Căn giữa */
-                margin-right: auto; /* Căn giữa */
-            }
-            body {
-                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
-            }
-        }
-        /* Sửa lỗi zoom khi bấm vào thanh tìm kiếm trên mobile */
-        #toolSearch {
-            font-size: 16px; /* Đảm bảo font size tối thiểu 16px để ngăn zoom tự động */
-        }
+
+        /* Nút bấm lớn chuyên dụng cho app này */
         .plus-button {
-            background-color: #4f46e5; /* Changed for synchronization (indigo-600) */
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
             color: white;
-            padding: 2.5rem 0; /* Tăng padding để nút to hơn */
-            border-radius: 0.75rem;
-            font-size: 2rem; /* Cỡ chữ lớn hơn */
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.1s, background-color 0.2s;
+            padding: 3rem 0; /* Rất lớn để dễ bấm */
+            border-radius: 1rem;
+            font-size: 2rem;
+            font-weight: 800;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng có thể */
+            width: 100%;
+            cursor: pointer;
+            border: 2px solid #6366f1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .plus-button:active {
-            transform: scale(0.98);
-            background-color: #4338ca; /* Màu indigo đậm hơn khi bấm */
+            transform: scale(0.96);
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+            background: linear-gradient(135deg, #4338ca, #3730a3);
+        }
+        
+        /* Hiệu ứng gợn sóng khi bấm */
+        @keyframes ripple {
+            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+            100% { box-shadow: 0 0 0 20px rgba(79, 70, 229, 0); }
+        }
+        .plus-button.clicking {
+            animation: ripple 0.4s linear;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 flex flex-col min-h-screen">
 
-    <!-- Header Section (combined navigation and search bar, fixed at top) -->
-    <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
-        <!-- Main header content container, flex direction changes based on screen size -->
-        <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
-            <!-- Logo/Tên trang web -->
-            <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
-                <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
+    <!-- === DESKTOP HEADER (Ẩn trên Mobile) === -->
+    <header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-50">
+        <div class="container mx-auto px-4 header-content flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center flex-shrink-0 w-auto">
+                <a href="index.html" class="logo-text text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">
                     Máy tính y học
                 </a>
             </div>
 
             <!-- Navigation Menu -->
-            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-3 md:flex-shrink-0">
+            <nav class="nav-menu flex space-x-4">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Công Cụ</a>
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
-
-            <!-- Search Bar -->
-            <div class="search-bar-container w-full max-w-sm md:max-w-xs md:mx-4 md:order-2 md:flex-grow">
-                <input type="text" id="toolSearch" placeholder="Tìm kiếm..." class="w-full p-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
-            </div>
         </div>
     </header>
 
-    <section class="py-4 md:py-8 bg-white rounded-lg shadow-inner mx-4 mt-4 md:mx-auto md:mt-8 md:max-w-3xl"> <!-- Changed max-w-4xl to max-w-3xl -->
-        <div class="container mx-auto px-2 sm:px-4">
-            <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
+    <main class="flex-grow container mx-auto px-4 py-4 md:py-8">
+        
+        <!-- Back Button & Title -->
+        <div class="flex items-center justify-between mb-4 md:mb-6 pt-4 md:pt-0">
+            <!-- Nút quay lại (Chỉ hiện Icon) -->
+            <a href="cong-cu.html" class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-full text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition duration-300 shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
-            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 mb-4">
-                Máy đếm giọt dịch truyền
+
+            <!-- Tiêu đề (Căn giữa) -->
+            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 flex-grow px-2">
+                Máy Đếm Giọt
             </h1>
 
-            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl shadow-lg">
-                <div class="text-center mb-6">
-                    <p class="text-base md:text-lg font-medium text-gray-600 mb-2">Tốc độ dịch đang chảy</p>
-                    <div id="current-drip-rate-display" class="score-box bg-indigo-100 text-indigo-700">
-                        <span id="drip-rate-number" class="drip-rate-number">0</span>
-                        <span id="drip-rate-unit" class="drip-rate-unit">giọt/phút</span>
-                    </div> <!-- Changed background and text color -->
-                </div>
+            <!-- Spacer ảo để cân bằng layout (Căn giữa hoàn hảo) -->
+            <div class="w-10 h-10 flex-shrink-0"></div>
+        </div>
 
+        <!-- Main Content Box -->
+        <div class="mt-2 md:mt-8 bg-white rounded-lg shadow-lg p-3 md:p-8 max-w-2xl mx-auto">
+            
+            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl border border-gray-100">
+                
+                <!-- Display Section -->
                 <div class="text-center mb-8">
-                    <p class="text-4xl font-bold text-gray-800" id="drip-count">0</p>
+                    <p class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Tốc độ đang chảy</p>
+                    <div id="current-drip-rate-display" class="score-box bg-white">
+                        <span id="drip-rate-number" class="drip-rate-number text-indigo-600">--</span>
+                        <span id="drip-rate-unit" class="drip-rate-unit text-gray-500">giọt/phút</span>
+                    </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row gap-4">
+                <!-- Info Status -->
+                <div class="flex justify-between items-center mb-4 px-2">
+                    <div class="text-sm font-medium text-gray-500">
+                        Số giọt đã đếm: <span id="drip-count" class="text-indigo-700 font-bold text-lg ml-1">0</span>
+                    </div>
+                    <div id="status-indicator" class="text-xs font-semibold text-gray-400 bg-gray-200 px-2 py-1 rounded-full">
+                        Sẵn sàng
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-4">
                     <button type="button" id="add-drip-btn" class="plus-button">
-                        +1 giọt
+                        <i class="fa-solid fa-droplet mr-3 animate-bounce"></i> +1 GIỌT
                     </button>
-                    <button type="button" id="reset-btn" class="flex-1 bg-gray-300 text-gray-800 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 hover:bg-gray-400">
-                        Làm mới
+                    
+                    <button type="button" id="reset-btn" class="w-full bg-white text-gray-500 border border-gray-300 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-gray-50 hover:text-gray-700 flex items-center justify-center">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Làm mới / Đếm lại
                     </button>
                 </div>
 
-                <div class="mt-8 p-4 sm:p-6 bg-gray-100 border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-inner">
-                    <h3 class="text-base md:text-lg font-bold text-gray-800 mb-2">Thông tin</h3>
-                    <p class="text-sm md:text-base">
-                        1 giọt rơi xuống, bấm +1 giọt. Sau vài lần bấm, máy sẽ ước tính tốc độ truyền.
-                        <br>Công thức ước tính: 60 / (Thời gian giọt sau - Thời gian giọt trước đó) (phút)
-                    </p>
+                <!-- Instructions -->
+                <div class="mt-8 p-4 bg-indigo-50 border border-indigo-100 rounded-lg text-gray-600 text-sm leading-relaxed shadow-inner">
+                    <h3 class="font-bold text-indigo-800 mb-2"><i class="fa-solid fa-circle-info mr-1"></i> Hướng dẫn:</h3>
+                    <p>1. Quan sát bầu đếm giọt của dây truyền.</p>
+                    <p>2. Mỗi khi thấy <strong>1 giọt</strong> rơi xuống, hãy bấm nút <strong>"+1 GIỌT"</strong>.</p>
+                    <p>3. Bấm liên tục khoảng 3-5 giọt để máy tính toán tốc độ trung bình chính xác.</p>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
-    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
+    <!-- Footer -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner mt-auto">
         <div class="container mx-auto px-4">
             <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-            <p class="mt-2">
-                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
-            </p>
-            <p>
-                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-            </p>
+            <p class="mt-2">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
+            <p>Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a></p>
             <div class="flex justify-center space-x-4 mt-4">
                 <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
                 <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
@@ -216,74 +224,137 @@
         </div>
     </footer>
 
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
+        <!-- Trang chủ -->
+        <a href="index.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            <span>Trang Chủ</span>
+        </a>
+
+        <!-- Công cụ (Active) -->
+        <a href="cong-cu.html" class="bottom-nav-item active">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+            <span>Công Cụ</span>
+        </a>
+
+        <!-- Giới thiệu -->
+        <a href="gioi-thieu.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            <span>Giới thiệu</span>
+        </a>
+
+        <!-- Liên hệ -->
+        <a href="#lien-he" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+            </svg>
+            <span>Liên Hệ</span>
+        </a>
+    </nav>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Layout Adjustment ---
             const header = document.querySelector('header');
             const body = document.body;
 
             function adjustBodyPadding() {
-                const headerHeight = header.offsetHeight;
-                body.style.paddingTop = `${headerHeight}px`;
+                if (header && getComputedStyle(header).display !== 'none') {
+                    const headerHeight = header.offsetHeight;
+                    body.style.paddingTop = `${headerHeight}px`;
+                } else {
+                    body.style.paddingTop = '0px';
+                }
             }
 
             adjustBodyPadding();
             window.addEventListener('resize', adjustBodyPadding);
 
+            // --- Logic Drip Counter ---
             const addDripBtn = document.getElementById('add-drip-btn');
             const resetBtn = document.getElementById('reset-btn');
             const dripCountDisplay = document.getElementById('drip-count');
-            const dripRateNumberDisplay = document.getElementById('drip-rate-number'); // Get the new number span
-            const dripRateUnitDisplay = document.getElementById('drip-rate-unit');   // Get the new unit span
+            const dripRateNumberDisplay = document.getElementById('drip-rate-number'); 
+            const dripRateUnitDisplay = document.getElementById('drip-rate-unit');
+            const statusIndicator = document.getElementById('status-indicator');
 
-            let dripTimestamps = []; // Lưu trữ thời gian của từng giọt
-            let dripCount = 0; // Đếm số giọt đã bấm
+            let dripTimestamps = []; // Store timestamps
+            let dripCount = 0; 
 
-            // Hàm tính toán tốc độ giọt
+            // Calculate rate
             function calculateDripRate() {
                 if (dripTimestamps.length < 2) {
-                    dripRateNumberDisplay.textContent = '0';
-                    dripRateUnitDisplay.textContent = 'giọt/phút';
+                    dripRateNumberDisplay.textContent = '--';
+                    statusIndicator.textContent = 'Đang đo...';
+                    statusIndicator.className = 'text-xs font-semibold text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full';
                     return;
                 }
 
-                // Lấy 2 thời gian gần nhất để tính toán
-                const lastTwoTimestamps = dripTimestamps.slice(-2);
-                const timeDiffSeconds = (lastTwoTimestamps[1] - lastTwoTimestamps[0]) / 1000; // Chuyển đổi ms sang giây
-
-                if (timeDiffSeconds === 0) {
-                    dripRateNumberDisplay.textContent = 'Không xác định';
-                    dripRateUnitDisplay.textContent = ''; // Clear unit if rate is undefined
-                    return;
+                // Use the last 3 drops (if available) for a rolling average, or just last 2
+                // To make it responsive but smooth
+                const countToUse = Math.min(dripTimestamps.length, 5); 
+                let totalTimeDiff = 0;
+                
+                for(let i = 1; i < countToUse; i++) {
+                    const newer = dripTimestamps[dripTimestamps.length - i];
+                    const older = dripTimestamps[dripTimestamps.length - i - 1];
+                    totalTimeDiff += (newer - older);
                 }
+                
+                const avgTimeDiffSeconds = (totalTimeDiff / (countToUse - 1)) / 1000;
 
-                // Công thức: 60 giây / (thời gian giữa 2 giọt gần nhất (giây))
-                const dripsPerMinute = 60 / timeDiffSeconds;
-                dripRateNumberDisplay.textContent = `${Math.round(dripsPerMinute)}`; // Làm tròn đến số tự nhiên
-                dripRateUnitDisplay.textContent = 'giọt/phút';
+                if (avgTimeDiffSeconds <= 0) return;
+
+                const dripsPerMinute = 60 / avgTimeDiffSeconds;
+                dripRateNumberDisplay.textContent = `${Math.round(dripsPerMinute)}`;
+                statusIndicator.textContent = 'Đã tính toán';
+                statusIndicator.className = 'text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded-full';
             }
 
-            // Xử lý khi bấm nút "+1 giọt"
-            addDripBtn.addEventListener('click', function() {
-                const currentTime = Date.now(); // Lấy thời gian hiện tại (miligiây)
-                dripTimestamps.push(currentTime);
-                dripCount++;
-                dripCountDisplay.textContent = dripCount; // Cập nhật số giọt hiển thị
+            // Button Tap Handler
+            addDripBtn.addEventListener('click', function(e) {
+                // Button animation
+                const btn = this;
+                btn.classList.remove('clicking');
+                void btn.offsetWidth; // trigger reflow
+                btn.classList.add('clicking');
 
-                // Giữ cho mảng dripTimestamps không quá lớn, chỉ cần 2 mốc thời gian gần nhất
-                if (dripTimestamps.length > 2) {
-                    dripTimestamps.shift(); // Xóa phần tử đầu tiên nếu có nhiều hơn 2
+                const currentTime = Date.now();
+                
+                // Reset if too much time passed (>10s) since last click, probably a new session
+                if (dripTimestamps.length > 0 && (currentTime - dripTimestamps[dripTimestamps.length - 1] > 10000)) {
+                    dripTimestamps = [];
+                    dripCount = 0;
                 }
 
-                calculateDripRate(); // Cập nhật tốc độ giọt
+                dripTimestamps.push(currentTime);
+                dripCount++;
+                dripCountDisplay.textContent = dripCount;
+
+                // Keep array manageable
+                if (dripTimestamps.length > 10) {
+                    dripTimestamps.shift();
+                }
+
+                calculateDripRate();
             });
 
-            // Xử lý khi bấm nút "Làm mới"
+            // Reset Handler
             resetBtn.addEventListener('click', function() {
                 dripTimestamps = [];
                 dripCount = 0;
                 dripCountDisplay.textContent = '0';
-                dripRateNumberDisplay.textContent = '0';
-                dripRateUnitDisplay.textContent = 'giọt/phút';
+                dripRateNumberDisplay.textContent = '--';
+                statusIndicator.textContent = 'Sẵn sàng';
+                statusIndicator.className = 'text-xs font-semibold text-gray-400 bg-gray-200 px-2 py-1 rounded-full';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
     </script>

@@ -3,176 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công Cụ - Máy tính y học</title>
+    <title>Tra cứu Chế độ ăn - Máy tính y học</title>
+    <!-- Thêm Favicon -->
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
+    <link rel="manifest" href="manifest.json">
     <!-- Tải Tailwind CSS từ CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
+        /* --- Styles Global --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Màu nền nhẹ */
-            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
+            background-color: #f8fafc;
+            padding-top: 80px; /* Mặc định cho Desktop */
         }
-        /* Tùy chỉnh nhỏ cho các phần tử */
-        .gradient-bg {
-            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
-        }
-        .active-link {
-            background-color: #e0e7ff; /* Màu nền khi active */
-            color: #4f46e5; /* Màu chữ khi active */
-            font-weight: 600;
-        }
-        /* Thêm cuộn ngang cho thanh nav trên mobile */
-        .nav-scrollable {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* Cho cuộn mượt mà trên iOS */
-            scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
-        }
-        .nav-scrollable::-webkit-scrollbar {
-            display: none; /* Ẩn scrollbar trên Chrome/Safari */
-        }
-        /* Responsive adjustments for mobile */
-        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
-            header .logo-text {
-                display: none; /* Ẩn logo trên mobile */
-            }
-            .header-content {
-                flex-direction: column; /* Sắp xếp theo cột trên mobile */
-                align-items: center; /* Căn giữa các mục trên mobile */
-                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
-            }
-            .nav-menu {
-                justify-content: center; /* Căn giữa menu trên mobile */
-                flex-wrap: nowrap; /* Không xuống dòng các link nav */
-                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
-                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
-            }
-            .search-bar-container {
-                width: calc(100% - 2rem); /* Chiều rộng full trừ padding ngang */
-                padding-left: 0; /* Bỏ padding ngang ở đây vì đã tính vào width */
-                padding-right: 0;
-                margin-top: 0.5rem; /* Khoảng cách với thanh nav */
-                margin-left: auto; /* Căn giữa */
-                margin-right: auto; /* Căn giữa */
-            }
-            body {
-                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
+        
+        /* Responsive tweaks */
+        @media (max-width: 767px) {
+            body { 
+                padding-top: 0px; /* Header ẩn trên mobile */
+                padding-bottom: 80px; /* Chừa chỗ cho Bottom Nav */
             }
         }
-        /* Sửa lỗi zoom khi bấm vào thanh tìm kiếm trên mobile */
-        #toolSearch {
-            font-size: 16px; /* Đảm bảo font size tối thiểu 16px để ngăn zoom tự động */
+
+        /* Custom style for the active/highlighted navigation link (Desktop) */
+        .nav-item-highlight {
+            background-color: #eef2ff;
+            border-radius: 9999px;
+            padding: 4px 12px;
+            color: #4f46e5;
+            font-weight: 500;
+        }
+
+        /* Styles cho Bottom Navigation */
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 4px;
+            color: #6b7280; /* gray-500 */
+            transition: color 0.2s;
+        }
+        .bottom-nav-item.active {
+            color: #4f46e5; /* indigo-600 */
+        }
+        .bottom-nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+        }
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* Custom Select Styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 flex flex-col min-h-screen">
 
-    <!-- Header Section (combined navigation and search bar, fixed at top) -->
-    <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
-        <!-- Main header content container, flex direction changes based on screen size -->
-        <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
-            <!-- Logo/Tên trang web -->
-            <!-- Order-1 on desktop to keep it left, hidden on mobile -->
-            <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
-                <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
+    <!-- === DESKTOP HEADER (Ẩn trên Mobile) === -->
+    <header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-50">
+        <div class="container mx-auto px-4 header-content flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center flex-shrink-0 w-auto">
+                <a href="index.html" class="logo-text text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">
                     Máy tính y học
                 </a>
             </div>
 
             <!-- Navigation Menu -->
-            <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
-            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-3 md:flex-shrink-0">
+            <nav class="nav-menu flex space-x-4">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Công Cụ</a>
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
-
-            <!-- Search Bar -->
-            <!-- Order-3 on mobile (below nav), order-2 on desktop (center) -->
-            <div class="search-bar-container w-full max-w-sm md:max-w-xs md:mx-4 md:order-2 md:flex-grow">
-                <input type="text" id="toolSearch" placeholder="Tìm kiếm..." class="w-full p-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
-            </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8">
-        <!-- Nút Quay lại và Tiêu đề mới -->
-        <div class="mb-6">
-            <a href="cong-cu.html" class="block w-max mb-2 bg-indigo-100 p-1 rounded-full text-indigo-700 hover:bg-indigo-200 transition duration-300">
+    <main class="flex-grow container mx-auto px-4 py-4 md:py-8">
+        
+        <!-- Back Button & Title -->
+        <div class="flex items-center justify-between mb-4 md:mb-6 pt-4 md:pt-0">
+            <!-- Nút quay lại (Chỉ hiện Icon) -->
+            <a href="cong-cu.html" class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-full text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition duration-300 shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
-            <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-4">
-                Chế độ ăn trong Bệnh viện
-            </h1>
-        </div>
-        <!-- Phần Tra cứu Chế độ ăn trong bệnh viện -->
-        <div class="mt-12 bg-white rounded-lg shadow-lg p-6 md:p-8">
-            <p class="text-center text-gray-600 mb-8">
-                Dựa theo Quyết định số 2879/QĐ-BYT ngày 10 tháng 8 năm 2006 của Bộ Y tế.
-            </p>
 
-            <!-- Hai ô dropdown mới thay thế cho danh sách thẻ cuộn -->
-            <div class="space-y-4 md:space-y-0 md:flex md:space-x-4 mb-6">
-                <div class="flex-1">
-                    <label for="mainDietSelect" class="block text-sm font-medium text-gray-700">Chọn nhóm chế độ ăn:</label>
-                    <select id="mainDietSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="">-- Chọn nhóm --</option>
-                    </select>
-                </div>
-                <div class="flex-1">
-                    <label for="subDietSelect" class="block text-sm font-medium text-gray-700">Chọn chi tiết chế độ ăn:</label>
-                    <select id="subDietSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" disabled>
-                        <option value="">-- Chọn chi tiết --</option>
-                    </select>
-                </div>
-            </div>
+            <!-- Tiêu đề (Căn giữa) -->
+            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 flex-grow px-2">
+                Chế độ ăn Bệnh viện
+            </h1>
+
+            <!-- Spacer ảo để cân bằng layout (Căn giữa hoàn hảo) -->
+            <div class="w-10 h-10 flex-shrink-0"></div>
+        </div>
+
+        <!-- Main Content Box -->
+        <div class="mt-2 md:mt-8 bg-white rounded-lg shadow-lg p-3 md:p-8 max-w-4xl mx-auto">
             
-            <!-- Phần hiển thị chi tiết của chế độ ăn được chọn -->
-            <div id="dietDetailsDisplay" class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-6 hidden">
-                <div class="text-center mb-6">
-                    <h3 id="detailsTitle" class="text-2xl font-bold text-indigo-700"></h3>
-                    <p id="detailsSymbol" class="text-lg font-semibold text-gray-500"></p>
+            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl border border-gray-100">
+                <p class="text-center text-sm text-gray-500 mb-6 italic">
+                    Dựa theo Quyết định số 2879/QĐ-BYT ngày 10/08/2006 của Bộ Y tế.
+                </p>
+
+                <!-- Hai ô dropdown -->
+                <div class="space-y-4 md:space-y-0 md:flex md:space-x-4 mb-6">
+                    <div class="flex-1">
+                        <label for="mainDietSelect" class="block text-sm font-bold text-gray-700 mb-2">
+                            <i class="fa-solid fa-layer-group mr-2 text-indigo-500"></i>Chọn nhóm bệnh:
+                        </label>
+                        <select id="mainDietSelect" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-base">
+                            <option value="">-- Chọn nhóm --</option>
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <label for="subDietSelect" class="block text-sm font-bold text-gray-700 mb-2">
+                            <i class="fa-solid fa-list-ul mr-2 text-indigo-500"></i>Chọn chế độ ăn cụ thể:
+                        </label>
+                        <select id="subDietSelect" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-base disabled:bg-gray-100 disabled:text-gray-400" disabled>
+                            <option value="">-- Vui lòng chọn nhóm trước --</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <div class="space-y-6 text-gray-700">
-                    <div>
-                        <h4 class="text-xl font-bold text-gray-800 mb-2">Nguyên tắc</h4>
-                        <pre id="detailsPrinciple" class="pl-4 border-l-4 border-indigo-400 italic text-wrap break-words"></pre>
+                <!-- Phần hiển thị chi tiết -->
+                <div id="dietDetailsDisplay" class="bg-white p-4 sm:p-6 rounded-lg border border-indigo-100 mt-6 hidden shadow-sm animate-fade-in-up">
+                    <div class="text-center mb-6 pb-4 border-b border-gray-100">
+                        <h3 id="detailsTitle" class="text-xl md:text-2xl font-bold text-indigo-700 mb-1"></h3>
+                        <p id="detailsSymbol" class="text-lg font-semibold text-gray-500 bg-gray-100 inline-block px-3 py-1 rounded-full"></p>
                     </div>
-                    <div>
-                        <h4 class="text-xl font-bold text-gray-800 mb-2">Cơ cấu khẩu phần</h4>
-                        <pre id="detailsComposition" class="pl-4 border-l-4 border-indigo-400 text-wrap break-words"></pre>
+                    
+                    <div class="space-y-6 text-gray-700">
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center">
+                                <i class="fa-solid fa-scale-balanced mr-2 text-indigo-500"></i>Nguyên tắc
+                            </h4>
+                            <div class="bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-500 text-sm md:text-base">
+                                <pre id="detailsPrinciple" class="whitespace-pre-line font-sans"></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center">
+                                <i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i>Cơ cấu khẩu phần
+                            </h4>
+                            <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500 text-sm md:text-base">
+                                <pre id="detailsComposition" class="whitespace-pre-line font-sans font-medium text-gray-800"></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ghi chú -->
+                    <div class="mt-8 p-4 bg-yellow-50 text-yellow-800 rounded-lg border border-yellow-200">
+                        <h5 class="text-sm font-bold mb-2 flex items-center">
+                            <i class="fa-solid fa-circle-exclamation mr-2"></i>Ghi chú ký hiệu
+                        </h5>
+                        <ul class="list-disc list-inside space-y-1 text-xs md:text-sm ml-2">
+                            <li>Ký hiệu <b>X</b> trong mã đại diện cho dạng chế biến:</li>
+                            <li class="pl-4"><b>C:</b> Cơm</li>
+                            <li class="pl-4"><b>M:</b> Mềm (Cháo)</li>
+                            <li class="pl-4"><b>L:</b> Lỏng (Súp/Sữa/Qua sonde)</li>
+                        </ul>
                     </div>
                 </div>
-
-                <!-- Ghi chú đã thêm -->
-                <div class="mt-8 p-4 bg-yellow-50 text-yellow-800 rounded-lg border border-yellow-200">
-                    <h5 class="text-lg font-bold mb-2">Ghi chú</h5>
-                    <ul class="list-disc list-inside space-y-1 text-sm">
-                        <li>Ký hiệu <b>X</b> trong các mã chế độ ăn bao gồm: <b>C, M, L, S</b></li>
-                        <li><b>C:</b> Cơm</li>
-                        <li><b>M:</b> Mềm (Cháo)</li>
-                        <li><b>L:</b> Lỏng (Thức ăn qua sonde)</li>
-                        <li><b>S:</b> Sữa</li>
-                    </ul>
-                </div>
-
             </div>
         </div>
     </main>
 
-    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
+    <!-- Footer -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner mt-auto">
         <div class="container mx-auto px-4">
             <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-            <p class="mt-2">
-                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
-            </p>
-            <p>
-                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-            </p>
+            <p class="mt-2">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
+            <p>Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a></p>
             <div class="flex justify-center space-x-4 mt-4">
                 <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
                 <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
@@ -180,19 +197,60 @@
         </div>
     </footer>
 
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
+        <!-- Trang chủ -->
+        <a href="index.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            <span>Trang Chủ</span>
+        </a>
+
+        <!-- Công cụ (Active) -->
+        <a href="cong-cu.html" class="bottom-nav-item active">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+            <span>Công Cụ</span>
+        </a>
+
+        <!-- Giới thiệu -->
+        <a href="gioi-thieu.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            <span>Giới thiệu</span>
+        </a>
+
+        <!-- Liên hệ -->
+        <a href="#lien-he" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+            </svg>
+            <span>Liên Hệ</span>
+        </a>
+    </nav>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Layout Adjustment ---
             const header = document.querySelector('header');
             const body = document.body;
 
             function adjustBodyPadding() {
-                const headerHeight = header.offsetHeight;
-                body.style.paddingTop = `${headerHeight}px`;
+                if (header && getComputedStyle(header).display !== 'none') {
+                    const headerHeight = header.offsetHeight;
+                    body.style.paddingTop = `${headerHeight}px`;
+                } else {
+                    body.style.paddingTop = '0px';
+                }
             }
 
             adjustBodyPadding();
             window.addEventListener('resize', adjustBodyPadding);
 
+            // --- Diet Data ---
             const diets = [
                 {
                     groupTitle: "Chế độ ăn Thông thường",
@@ -203,7 +261,7 @@
                     ]
                 },
                 {
-                    groupTitle: "Chế độ ăn cho các bệnh Thận- Tiết niệu",
+                    groupTitle: "Chế độ ăn cho các bệnh Thận - Tiết niệu",
                     groupSymbol: "TN",
                     subDiets: [
                         { title: "Viêm cầu thận cấp, thể urê máu cao", symbol: "TN01-X", principle: "Hạn chế protein, hạn chế natri, hạn chế nước, hạn chế kali, đủ vitamin.\n- Không dùng: rượu, bia, chè, cafe, gia vị, hạt tiêu, ớt...; Các loại thức ăn nhiều mỡ, khó tiêu.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1500 - 1700 Kcal\nProtid: 20 - 30 g\nLipid: 40 - 50 g\nGlucid: 260 - 290 g\nNatri: < 1000 mg\nKali: < 2000 mg\nNước: V nước tiểu + 300 - 500 ml" },
@@ -211,96 +269,24 @@
                         { title: "Viêm cầu thận cấp giai đoạn hồi phục", symbol: "TN03-X", principle: "Cung cấp đầy đủ năng lượng, protid, vitamin, khoáng chất. Tăng dần lượng natri và nước.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 70 - 80 g\nLipid: 50 - 60 g\nGlucid: 350 - 380 g\nNatri: < 2000 mg\nKali: 4000 - 5000 mg\nNước: 2,0 - 2,5 l" },
                         { title: "Viêm cầu thận mạn", symbol: "TN04-X", principle: "Kiểm soát lâu dài protein, natri và photpho, tùy thuộc vào mức độ suy giảm chức năng thận.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 70 - 80 g\nLipid: 50 - 60 g\nGlucid: 350 - 380 g\nNatri: < 2000 mg\nKali: 4000 - 5000 mg" },
                         { title: "Suy thận cấp, giai đoạn trước lọc thận", symbol: "TN05-X", principle: "Hạn chế protid, hạn chế natri, hạn chế kali, hạn chế photpho, kiểm soát nước. Chia nhiều bữa nhỏ.\n- Không dùng: rượu, bia, chè, cafe, thức ăn nhiều mỡ, khó tiêu, nội tạng động vật.", composition: "Năng lượng: 1500 - 1700 Kcal\nProtid: 20 - 30 g\nLipid: 40 - 50 g\nGlucid: 260 - 290 g\nNatri: < 1000 mg\nKali: < 2000 mg\nNước: V nước tiểu + 300 - 500 ml" },
-                        { title: "Suy thận cấp, giai đoạn lọc máu (ngoài thận và màng bụng)", symbol: "TN06-X", principle: "Tăng protid và năng lượng, hạn chế natri và kali.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 50 - 55 g\nGlucid: 280 - 320 g\nNatri: < 2000 mg\nKali: < 2000 mg" },
-                        { title: "Suy thận mạn, giai đoạn 1-2", symbol: "TN07-X", principle: "Đảm bảo đủ năng lượng, hạn chế protid, hạn chế natri và photpho.\n- Số bữa ăn: 4-5 bữa/ngày.\n- Không dùng: thịt quay, rán, xào; thức ăn nhanh; nội tạng động vật; các loại nước ngọt có ga, trà, cà phê, rượu, bia...", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 30 - 40 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nNatri: < 2000 mg\nKali: < 3000 mg\nPhotpho: < 800 mg" },
-                        { title: "Suy thận mạn, giai đoạn 3- 4 không lọc máu, không tăng kali máu", symbol: "TN08-X", principle: "Hạn chế protid, natri, photpho, kiểm soát kali và nước. Chia nhiều bữa nhỏ.\n- Không dùng: thức ăn nhiều mỡ, nội tạng động vật, các loại hạt khô.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 40 - 50 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nNatri: < 1500 mg\nKali: < 3500 mg\nPhotpho: < 1000 mg\nNước: V nước tiểu + 300 - 500 ml" },
-                        { title: "Suy thận mạn giai đoạn 3- 4 không lọc máu, tăng kali máu", symbol: "TN09-X", principle: "Hạn chế protein, hạn chế natri, hạn chế kali nghiêm ngặt, hạn chế photpho, kiểm soát nước.\n- Không dùng: thực phẩm giàu kali như chuối, cam, nho, sầu riêng, các loại rau lá xanh đậm, khoai tây, khoai lang...", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 40 - 50 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nNatri: < 1500 mg\nKali: < 2000 mg\nPhotpho: < 1000 mg\nNước: V nước tiểu + 300 - 500 ml" },
-                        { title: "Suy thận mạn có lọc máu ngoài thận hoặc thẩm phân phúc mạc 3 lần/tuần", symbol: "TN10-X", principle: "Tăng protid và năng lượng, hạn chế natri, kiểm soát kali và photpho.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 50 - 55 g\nGlucid: 280 - 320 g\nNatri: < 2000 mg\nKali: < 2500 mg\nPhotpho: < 1200 mg" },
-                        { title: "Suy thận mạn có lọc máu ngoài thận hoặc thẩm phân phúc mạc 2 lần/tuần", symbol: "TN11-X", principle: "Tương tự TN10-X, nhưng điều chỉnh lượng protid phù hợp với tần suất lọc máu ít hơn.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 50 - 55 g\nGlucid: 280 - 320 g\nNatri: < 2000 mg\nKali: < 2500 mg\nPhotpho: < 1200 mg" },
-                        { title: "Suy thận mạn có lọc máu ngoài thận hoặc thẩm phân phúc mạc 1 lần/tuần", symbol: "TN12-X", principle: "Điều chỉnh lượng protid và khoáng chất để phù hợp với tần suất lọc máu ít hơn.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 50 - 55 g\nGlucid: 280 - 320 g\nNatri: < 2000 mg\nKali: < 2500 mg\nPhotpho: < 1200 mg" },
-                        { title: "Hội chứng thận hư không có tổn thương cầu thận tối thiểu", symbol: "TN13-X", principle: "Tăng protid, hạn chế natri.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 80 - 100 g\nLipid: 60 - 70 g\nGlucid: 350 - 380 g\nNatri: < 2000 mg" },
-                        { title: "Hội chứng thận hư có tổn thương cầu thận tối thiểu hoặc mức lọc cầu thận < 60 ml/phút", symbol: "TN14-X", principle: "Kiểm soát lượng protid và natri, đặc biệt chú ý đến chức năng lọc của thận.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 70 - 80 g\nLipid: 50 - 60 g\nGlucid: 350 - 380 g\nNatri: < 2000 mg" },
+                        { title: "Suy thận cấp, giai đoạn lọc máu", symbol: "TN06-X", principle: "Tăng protid và năng lượng, hạn chế natri và kali.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 50 - 55 g\nGlucid: 280 - 320 g\nNatri: < 2000 mg\nKali: < 2000 mg" },
+                        { title: "Suy thận mạn, GĐ 1-2", symbol: "TN07-X", principle: "Đảm bảo đủ năng lượng, hạn chế protid, hạn chế natri và photpho.\n- Số bữa ăn: 4-5 bữa/ngày.\n- Không dùng: thịt quay, rán, xào; thức ăn nhanh; nội tạng động vật.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 30 - 40 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nNatri: < 2000 mg\nKali: < 3000 mg\nPhotpho: < 800 mg" },
+                        { title: "Suy thận mạn, GĐ 3-4 (Không lọc, không tăng Kali)", symbol: "TN08-X", principle: "Hạn chế protid, natri, photpho, kiểm soát kali và nước. Chia nhiều bữa nhỏ.\n- Không dùng: thức ăn nhiều mỡ, nội tạng động vật, các loại hạt khô.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 40 - 50 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nNatri: < 1500 mg\nKali: < 3500 mg\nPhotpho: < 1000 mg\nNước: V nước tiểu + 300 - 500 ml" },
+                        { title: "Suy thận mạn, GĐ 3-4 (Không lọc, có tăng Kali)", symbol: "TN09-X", principle: "Hạn chế protein, hạn chế natri, hạn chế kali nghiêm ngặt, hạn chế photpho, kiểm soát nước.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 40 - 50 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nNatri: < 1500 mg\nKali: < 2000 mg\nPhotpho: < 1000 mg\nNước: V nước tiểu + 300 - 500 ml" },
+                        { title: "Suy thận mạn có lọc máu (3 lần/tuần)", symbol: "TN10-X", principle: "Tăng protid và năng lượng, hạn chế natri, kiểm soát kali và photpho.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 50 - 55 g\nGlucid: 280 - 320 g\nNatri: < 2000 mg\nKali: < 2500 mg\nPhotpho: < 1200 mg" },
+                        { title: "Hội chứng thận hư (Không tổn thương tối thiểu)", symbol: "TN13-X", principle: "Tăng protid, hạn chế natri.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 80 - 100 g\nLipid: 60 - 70 g\nGlucid: 350 - 380 g\nNatri: < 2000 mg" },
+                        { title: "Hội chứng thận hư (Tổn thương tối thiểu / GFR < 60)", symbol: "TN14-X", principle: "Kiểm soát lượng protid và natri, đặc biệt chú ý đến chức năng lọc của thận.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 70 - 80 g\nLipid: 50 - 60 g\nGlucid: 350 - 380 g\nNatri: < 2000 mg" },
                     ]
                 },
                 {
                     groupTitle: "Chế độ ăn cho bệnh Đái tháo đường",
                     groupSymbol: "DD",
                     subDiets: [
-                        { title: "Đái đường đơn thuần", symbol: "DD01-X", principle: "Kiểm soát đường huyết, đủ năng lượng, protein, chất béo, glucid, vitamin và khoáng chất.\n- Protid: 15% tổng năng lượng.\n- Lipid: < 25%. Acid béo chưa no một nối đôi chiếm 1/3, nhiều nối đôi chiếm 1/3 và acid béo no chiếm 1/3 trong tổng số lipid.\n- Glucid: 60 - 65% tổng năng lượng. Ưu tiên đường phức hợp, thực phẩm có chỉ số đường huyết thấp.\n- Tăng chất xơ hòa tan.\n- Số bữa ăn: 3 bữa chính và 2-3 bữa phụ.", composition: "Năng lượng: 1500 - 1800 Kcal\nProtid: 56 - 68 g\nLipid: 35 - 50 g\nGlucid: 225 - 292 g" },
-                        { title: "Đái tháo đường BMI > 25, rối loạn chuyển hóa lipid máu", symbol: "DD02-X", principle: "Giảm năng lượng, kiểm soát lipid và đường huyết. Giảm chất béo bão hòa, cholesterol. Tăng chất xơ hòa tan.\n- Số bữa ăn: 3 bữa chính và 2-3 bữa phụ.", composition: "Năng lượng: 1200 - 1500 Kcal\nProtid: 50 - 65 g\nLipid: 25 - 40 g\nGlucid: 180 - 240 g" },
-                        { title: "Đái tháo đường kết hợp viêm cầu thận, thể urê máu cao", symbol: "DD03-X", principle: "Hạn chế protid, natri, kali, hạn chế nước, kiểm soát đường huyết.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1500 - 1700 Kcal\nProtid: 30 - 40 g\nLipid: 40 - 50 g\nGlucid: 260 - 290 g\nNatri: < 1000 mg\nKali: < 2000 mg\nNước: V nước tiểu + 300 - 500 ml" },
-                        { title: "Đái tháo đường kết hợp viêm cầu thận, thể cao huyết áp", symbol: "DD04-X", principle: "Kiểm soát đường huyết, hạn chế natri và nước.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 45 - 50 g\nGlucid: 300 - 340 g\nNatri: < 1500 mg\nNước: V nước tiểu + 300 - 500 ml" },
-                        { title: "Đái tháo đường kết hợp viêm cầu thận, giai đoạn phục hồi", symbol: "DD05-X", principle: "Cung cấp đủ năng lượng, protid, vitamin, khoáng chất. Tăng dần lượng natri và nước. Kiểm soát đường huyết.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 70 - 80 g\nLipid: 50 - 60 g\nGlucid: 350 - 380 g\nNatri: < 2000 mg\nKali: 4000 - 5000 mg" },
-                        { title: "Đái tháo đường kết hợp suy thận mạn độ 1-2", symbol: "DD06-X", principle: "Kiểm soát đường huyết và protein, giúp làm chậm tiến trình suy thận. Hạn chế photpho, natri, kali.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 30 - 40 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nNatri: < 2000 mg\nKali: < 3000 mg\nPhotpho: < 800 mg" },
-                        { title: "Đái tháo đường kết hợp suy thận mạn độ 3- 4", symbol: "DD07-X", principle: "Hạn chế protid, natri, kali, photpho nghiêm ngặt. Kiểm soát đường huyết và nước.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 40 - 50 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nNatri: < 1500 mg\nKali: < 3000 mg\nPhotpho: < 1000 mg\nNước: V nước tiểu + 300 - 500 ml" },
-                        { title: "Đái tháo đường kết hợp với suy tim 3-4", symbol: "DD08-X", principle: "Hạn chế natri và chất lỏng, kiểm soát đường huyết.\n- Số bữa ăn: 5-6 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 65 - 70 g\nLipid: 45 - 50 g\nGlucid: 300 - 340 g\nNatri: ≤ 1500 mg\nNước: 1 - 1,5 l" },
-                        { title: "Đái tháo đường kết hợp với gút", symbol: "DD09-X", principle: "Kiểm soát đường huyết và hạn chế purin.\n- Số bữa ăn: 3 bữa chính và 2-3 bữa phụ.", composition: "Năng lượng: 1500 - 1800 Kcal\nProtid: 56 - 68 g\nLipid: 35 - 50 g\nGlucid: 225 - 292 g" },
-                    ]
-                },
-                {
-                    groupTitle: "Chế độ ăn cho bệnh gút",
-                    groupSymbol: "GU",
-                    subDiets: [
-                        { title: "Bệnh gút đơn thuần", symbol: "GU01-X", principle: "Giảm tổng năng lượng, hạn chế protid, hạn chế purin, hạn chế lipid.\n- Uống nhiều nước > 2.5 lít/ngày.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 65 - 75 g\nLipid: 40 - 50 g\nGlucid: 300 - 350 g\nPurin: < 150 mg" },
-                        { title: "Bệnh gút có kết hợp với suy thận mạn độ 1, 2", symbol: "GU02-X", principle: "Kiểm soát purin, hạn chế protid, lipid, natri và photpho.\n- Uống nhiều nước > 2.5 lít/ngày.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 30 - 40 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nPurin: < 150 mg\nNatri: < 2000 mg\nPhotpho: < 800 mg" },
-                        { title: "Bệnh gút có kết hợp với suy thận mạn độ 3, 4", symbol: "GU03-X", principle: "Kiểm soát purin và protid nghiêm ngặt, hạn chế lipid, natri, kali, photpho, kiểm soát nước.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 40 - 50 g\nLipid: 50 - 60 g\nGlucid: 280 - 320 g\nPurin: < 150 mg\nNatri: < 1500 mg\nKali: < 3000 mg\nPhotpho: < 1000 mg\nNước: V nước tiểu + 300 - 500 ml" },
-                    ]
-                },
-                {
-                    groupTitle: "Chế độ ăn cho các bệnh tim mạch",
-                    groupSymbol: "TM",
-                    subDiets: [
-                        { title: "Tăng huyết áp", symbol: "TM01-X", principle: "Giảm natri, đủ kali, magie, canxi. Đảm bảo cân nặng hợp lý. Tăng cường chất xơ.\n- Không dùng: rượu, bia, cà phê, chè đặc, thuốc lá...; thức ăn nhiều mỡ, muối; thực phẩm chế biến sẵn.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 45 - 50 g\nGlucid: 300 - 340 g\nNatri: < 2000 mg\nKali: 4000 - 5000 mg\nChất xơ: 25 - 30g" },
-                        { title: "Rối loạn lipid máu", symbol: "TM02-X", principle: "Giảm năng lượng, giảm cholesterol, giảm lipid bão hòa, tăng acid béo chưa no.\n- Không dùng: mỡ động vật, nội tạng, da động vật, đồ chiên, xào, rán, đồ hộp...; rượu, bia, thuốc lá.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 65 - 75 g\nLipid: 40 - 50 g\nGlucid: 300 - 350 g\nCholesterol: < 300 mg" },
-                        { title: "Suy tim giai đoạn 1- 2, nhồi máu cơ tim ổn định", symbol: "TM03-X", principle: "Đủ năng lượng, protid, vitamin và khoáng chất. Giảm natri, hạn chế chất lỏng.\n- Số bữa ăn: 3-4 bữa/ngày.\n- Không dùng: thức ăn nhiều mỡ, đồ hộp, thực phẩm chế biến sẵn, rượu, bia, thuốc lá.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 45 - 50 g\nGlucid: 300 - 340 g\nNatri: < 2000 mg\nNước: 1 - 1,5 l" },
-                        { title: "Suy tim giai đoạn 3, nhồi máu cơ tim sau 7 ngày", symbol: "TM04-X", principle: "Hạn chế natri và chất lỏng nghiêm ngặt, chia nhỏ bữa ăn. Đủ năng lượng, protid, vitamin.\n- Số bữa ăn: 5-6 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 65 - 70 g\nLipid: 45 - 50 g\nGlucid: 300 - 340 g\nNatri: < 1500 mg\nNước: 1 - 1,5 l" },
-                        { title: "Suy tim giai đoạn 4 (suy tim mất bù)", symbol: "TM05-X", principle: "Hạn chế natri và chất lỏng tối đa. Chia nhiều bữa nhỏ, ăn nhẹ nhàng.\n- Số bữa ăn: 6-8 bữa/ngày.", composition: "Năng lượng: 1500 - 1700 Kcal\nProtid: 60 - 65 g\nLipid: 40 - 45 g\nGlucid: 220 - 250 g\nNatri: < 1000 mg\nNước: < 1 l" },
-                        { title: "Nhồi máu cơ tim, giai đoạn cấp 1-3 ngày đầu", symbol: "TM06-X", principle: "Thức ăn lỏng, không gây gánh nặng cho tiêu hóa, giúp cơ tim được nghỉ ngơi.\n- Số bữa ăn: 6-8 bữa/ngày.", composition: "Năng lượng: 800 - 1000 Kcal\nProtid: 30 - 40 g\nLipid: 15 - 20 g\nGlucid: 150 - 180 g" },
-                        { title: "Nhồi máu cơ tim, giai đoạn tiếp theo", symbol: "TM07-X", principle: "Tăng dần năng lượng và chất dinh dưỡng, chuyển từ lỏng sang mềm để hỗ trợ phục hồi cơ tim.\n- Số bữa ăn: 5-6 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 60 - 70 g\nLipid: 45 - 50 g\nGlucid: 300 - 340 g" },
-                    ]
-                },
-                {
-                    groupTitle: "Chế độ ăn cho các bệnh đường tiêu hóa",
-                    groupSymbol: "TH",
-                    subDiets: [
-                        { title: "Viêm loét dạ dày tá tràng, chảy máu dạ dày- tá tràng giai đoạn ổn định", symbol: "TH01-X", principle: "Cung cấp đủ năng lượng, protid, vitamin và khoáng chất. Hạn chế những thức ăn kích thích niêm mạc dạ dày (cay, nóng, chua, cứng).\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 65 - 70 g\nLipid: 50 - 55 g\nGlucid: 280 - 320 g" },
-                        { title: "Chảy máu dạ dày- tá tràng", symbol: "TH02-X", principle: "Ngừng ăn uống bằng đường miệng. Bồi phụ nước và điện giải qua đường tĩnh mạch hoặc sonde.", composition: "Không có khẩu phần ăn bằng đường miệng." },
-                        { title: "Chảy máu dạ dày- tá tràng, giai đoạn đã cầm máu", symbol: "TH03-X", principle: "Bắt đầu ăn lại bằng thức ăn lỏng, loãng, dễ tiêu, sau đó chuyển sang mềm dần.\n- Số bữa ăn: 5-6 bữa/ngày.", composition: "Năng lượng: 1000 - 1200 Kcal\nProtid: 40 - 50 g\nLipid: 25 - 30 g\nGlucid: 150 - 180 g" },
-                        { title: "Viêm đại tràng, rối loạn tiêu hóa", symbol: "TH04-X", principle: "Cung cấp đủ năng lượng, protid, lipid, vitamin và khoáng chất. Hạn chế chất xơ không hòa tan, thức ăn sống, lạnh, gây đầy hơi.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 65 - 70 g\nLipid: 50 - 55 g\nGlucid: 280 - 320 g" },
-                    ]
-                },
-                {
-                    groupTitle: "Chế độ ăn cho bệnh tụy",
-                    groupSymbol: "VT",
-                    subDiets: [
-                        { title: "Viêm tụy cấp khi có chỉ định ăn, giai đoạn khởi động", symbol: "VT01-X", principle: "Không ăn, chỉ uống các chất lỏng không có chất béo như nước, nước ép trái cây.\n- Số bữa ăn: nhiều bữa nhỏ.", composition: "Chủ yếu là nước và nước điện giải, khoảng 1-1.5L/ngày. Không có năng lượng." },
-                        { title: "Viêm tụy cấp khi có chỉ định ăn, giai đoạn chuyển tiếp 1", symbol: "VT02-X", principle: "Sử dụng thức ăn lỏng, ít chất béo. Bổ sung vitamin nhóm B, C.\n- Số bữa ăn: 5-6 bữa/ngày.", composition: "Năng lượng: 1000 - 1200 Kcal\nProtid: 40 - 50 g\nLipid: 15 - 20 g\nGlucid: 150 - 180 g" },
-                        { title: "Viêm tụy cấp khi có chỉ định ăn, giai đoạn chuyển tiếp 2", symbol: "VT03-X", principle: "Tăng dần năng lượng, protein. Ăn thức ăn mềm, dễ tiêu, ít chất béo.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 1500 - 1700 Kcal\nProtid: 50 - 60 g\nLipid: 25 - 30 g\nGlucid: 250 - 280 g" },
-                        { title: "Viêm tụy cấp khi có chỉ định ăn, giai đoạn hồi phục", symbol: "VT04-X", principle: "Chế độ ăn tương tự chế độ ăn thông thường, nhưng vẫn hạn chế chất béo, rượu, bia, chất kích thích.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 70 - 80 g\nLipid: 40 - 50 g\nGlucid: 350 - 380 g" },
-                        { title: "Viêm tụy mạn", symbol: "VT05-X", principle: "Kiểm soát chất béo, đảm bảo đủ năng lượng và protein. Chia nhiều bữa nhỏ.\n- Số bữa ăn: 5-6 bữa/ngày.\n- Bổ sung men tụy.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 70 - 80 g\nLipid: 40 - 50 g\nGlucid: 350 - 380 g" },
-                    ]
-                },
-                {
-                    groupTitle: "Chế độ ăn cho các bệnh gan mật",
-                    groupSymbol: "GM",
-                    subDiets: [
-                        { title: "Viêm gan cấp, giai đoạn đầu", symbol: "GM01-X", principle: "Đủ năng lượng, vitamin (nhất là B, C), khoáng chất. Hạn chế lipid bão hòa, cholesterol. Không dùng rượu, bia.\n- Số bữa ăn: 5-6 bữa/ngày.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 60 - 70 g\nLipid: 25 - 30 g\nGlucid: 350 - 400 g" },
-                        { title: "Viêm gan cấp, giai đoạn tiếp theo", symbol: "GM02-X", principle: "Tăng dần lượng protid, lipid. Đảm bảo năng lượng, vitamin, khoáng chất. Không dùng rượu, bia.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 2200 - 2400 Kcal\nProtid: 70 - 80 g\nLipid: 50 - 60 g\nGlucid: 380 - 420 g" },
-                        { title: "Viêm gan mạn tính", symbol: "GM03-X", principle: "Cung cấp đầy đủ dinh dưỡng, đặc biệt là protid để tái tạo tế bào gan. Hạn chế chất béo, rượu, bia.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 2200 - 2400 Kcal\nProtid: 70 - 80 g\nLipid: 50 - 60 g\nGlucid: 380 - 420 g" },
-                        { title: "Xơ gan", symbol: "GM04-X", principle: "Tùy mức độ bệnh: Hạn chế protid, natri. Kiểm soát chất lỏng.\n- Không dùng: rượu, bia, chất kích thích.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 2200 - 2400 Kcal\nProtid: 50 - 60 g\nLipid: 50 - 60 g\nGlucid: 380 - 420 g\nNatri: < 1500 mg" },
-                        { title: "Hôn mê gan", symbol: "GM05-X", principle: "Hạn chế protid nghiêm ngặt, chỉ ăn glucid.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 1500 - 1700 Kcal\nProtid: 20 - 30 g\nLipid: 15 - 20 g\nGlucid: 280 - 320 g" },
-                    ]
-                },
-                {
-                    groupTitle: "Chế độ ăn cho phẫu thuật",
-                    groupSymbol: "PT",
-                    subDiets: [
-                        { title: "Phẫu thuật đường tiêu hoá và ngoài đường tiêu hoá, giai đoạn khởi động ruột", symbol: "PT01-X", principle: "Ăn lỏng, không để lại cặn bã trong ruột.\n- Số bữa ăn: 5-6 bữa/ngày.", composition: "Năng lượng: 800 - 1000 Kcal\nProtid: 30 - 40 g\nLipid: 15 - 20 g\nGlucid: 150 - 180 g" },
-                        { title: "Phẫu thuật đường tiêu hoá và ngoài đường tiêu hoá, giai đoạn chuyển tiếp 1", symbol: "PT02-X", principle: "Chuyển dần sang thức ăn mềm, ít chất xơ. Bổ sung vitamin nhóm B, C.\n- Số bữa ăn: 4-5 bữa/ngày.", composition: "Năng lượng: 1500 - 1700 Kcal\nProtid: 50 - 60 g\nLipid: 25 - 30 g\nGlucid: 250 - 280 g" },
-                        { title: "Phẫu thuật đường tiêu hoá và ngoài đường tiêu hoá, giai đoạn chuyển tiếp 2", symbol: "PT03-X", principle: "Tăng dần chất xơ, protid, bắt đầu ăn cơm nát.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 1800 - 2000 Kcal\nProtid: 65 - 70 g\nLipid: 45 - 50 g\nGlucid: 280 - 320 g" },
-                        { title: "Phẫu thuật đường tiêu hoá và ngoài đường tiêu hoá, giai đoạn hồi phục", symbol: "PT04-X", principle: "Chế độ ăn tương tự chế độ ăn thông thường, nhưng vẫn hạn chế những thức ăn khó tiêu.\n- Số bữa ăn: 3-4 bữa/ngày.", composition: "Năng lượng: 2000 - 2200 Kcal\nProtid: 70 - 80 g\nLipid: 50 - 60 g\nGlucid: 350 - 380 g" },
+                        { title: "Đái đường đơn thuần", symbol: "DD01-X", principle: "Kiểm soát đường huyết, đủ năng lượng, protein, chất béo, glucid, vitamin và khoáng chất.\n- Protid: 15% tổng năng lượng.\n- Lipid: < 25%.\n- Glucid: 60 - 65% tổng năng lượng.\n- Tăng chất xơ hòa tan.\n- Số bữa ăn: 3 bữa chính và 2-3 bữa phụ.", composition: "Năng lượng: 1500 - 1800 Kcal\nProtid: 56 - 68 g\nLipid: 35 - 50 g\nGlucid: 225 - 292 g" },
+                        { title: "Đái tháo đường BMI > 25, rối loạn lipid", symbol: "DD02-X", principle: "Giảm năng lượng, kiểm soát lipid và đường huyết. Giảm chất béo bão hòa, cholesterol. Tăng chất xơ hòa tan.", composition: "Năng lượng: 1200 - 1400 Kcal\nProtid: 60 - 70 g\nLipid: 25 - 35 g\nGlucid: 180 - 210 g" }
                     ]
                 }
+                // Có thể thêm các nhóm khác ở đây nếu cần
             ];
 
             const mainDietSelect = document.getElementById('mainDietSelect');
@@ -311,34 +297,35 @@
             const detailsPrinciple = document.getElementById('detailsPrinciple');
             const detailsComposition = document.getElementById('detailsComposition');
 
-            // Populate main diet groups
+            // Populate Main Groups
             diets.forEach((group, index) => {
                 const option = document.createElement('option');
                 option.value = index;
-                option.textContent = group.groupTitle;
+                option.textContent = `${group.groupSymbol} - ${group.groupTitle}`;
                 mainDietSelect.appendChild(option);
             });
 
-            // Handle main diet selection
+            // Handle Main Group Change
             mainDietSelect.addEventListener('change', function() {
-                const selectedIndex = this.value;
                 subDietSelect.innerHTML = '<option value="">-- Chọn chi tiết --</option>';
                 subDietSelect.disabled = true;
                 dietDetailsDisplay.classList.add('hidden');
 
-                if (selectedIndex !== "") {
-                    const selectedGroup = diets[selectedIndex];
-                    selectedGroup.subDiets.forEach((subDiet, subIndex) => {
+                if (this.value !== "") {
+                    const groupIndex = this.value;
+                    const group = diets[groupIndex];
+                    
+                    group.subDiets.forEach((subDiet, subIndex) => {
                         const option = document.createElement('option');
-                        option.value = `${selectedIndex}-${subIndex}`;
-                        option.textContent = subDiet.title;
+                        option.value = `${groupIndex}-${subIndex}`;
+                        option.textContent = `${subDiet.symbol}: ${subDiet.title}`;
                         subDietSelect.appendChild(option);
                     });
                     subDietSelect.disabled = false;
                 }
             });
 
-            // Handle sub diet selection
+            // Handle Sub Diet Change
             subDietSelect.addEventListener('change', function() {
                 const selectedValue = this.value;
                 if (selectedValue !== "") {
@@ -351,24 +338,17 @@
                     detailsComposition.textContent = selectedSubDiet.composition;
                     
                     dietDetailsDisplay.classList.remove('hidden');
+                    
+                    // Scroll to result on mobile
+                    setTimeout(() => {
+                        const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+                        const targetPos = dietDetailsDisplay.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+                        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+                    }, 100);
                 } else {
                     dietDetailsDisplay.classList.add('hidden');
                 }
             });
-            
-            // Search functionality
-            const toolSearch = document.getElementById('toolSearch');
-            toolSearch.addEventListener('input', function() {
-                const query = this.value.toLowerCase().trim();
-                const allOptions = Array.from(subDietSelect.options).slice(1); // Exclude the placeholder
-
-                allOptions.forEach(option => {
-                    const optionText = option.textContent.toLowerCase();
-                    const isMatch = optionText.includes(query);
-                    option.style.display = isMatch ? '' : 'none';
-                });
-            });
-
         });
     </script>
 </body>

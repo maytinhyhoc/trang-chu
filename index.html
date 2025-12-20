@@ -17,7 +17,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* Light background color */
-            padding-top: 130px; /* Điều chỉnh padding-top ban đầu, sẽ được JS tính toán lại */
+            padding-top: 80px; /* Mặc định cho Desktop */
         }
         /* Small customizations for elements */
         .gradient-bg {
@@ -28,18 +28,18 @@
             list-style: none;
             padding: 0;
             text-align: left;
-            margin-top: 1.25rem; /* Tăng khoảng cách một chút */
+            margin-top: 1.25rem;
         }
         #huong-dan-cai-dat .instructions-list li {
             background-color: #e0f2fe;
             border-left: 4px solid #3b82f6;
             border-radius: 0.5rem;
-            padding: 0.875rem 1rem; /* Tăng padding để thoáng hơn */
+            padding: 0.875rem 1rem;
             margin-bottom: 0.75rem;
             color: #1f2937;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            font-size: 0.9rem; /* Tăng từ 0.75rem lên 0.9rem cho dễ đọc trên mobile */
-            line-height: 1.4rem; /* Giãn dòng ra một chút */
+            font-size: 0.9rem;
+            line-height: 1.4rem;
         }
         
         /* Media query cho Desktop */
@@ -70,28 +70,19 @@
             color: #78350f;
             text-align: left;
         }
+        
         /* Responsive adjustments for mobile */
-        @media (max-width: 767px) { /* Tailwind's 'md' breakpoint is 768px */
-            header .logo-text {
-                display: none; /* Ẩn logo trên mobile */
+        @media (max-width: 767px) { 
+            body {
+                padding-top: 0px; /* Header ẩn nên padding top là 0 */
+                padding-bottom: 80px; /* Thêm padding dưới chuẩn 80px để khớp với menu */
             }
             .header-content {
-                flex-direction: column; /* Sắp xếp theo cột trên mobile */
-                align-items: center; /* Căn giữa các mục trên mobile */
-                gap: 0.5rem; /* Giảm khoảng cách giữa các phần */
-            }
-            .nav-menu {
-                justify-content: center; /* Căn giữa menu trên mobile */
-                flex-wrap: nowrap; /* Không xuống dòng các link nav */
-                padding-bottom: 0.5rem; /* Khoảng cách với thanh tìm kiếm */
-                width: 100%; /* Đảm bảo menu chiếm đủ chiều rộng để cuộn */
-            }
-            body {
-                padding-top: 100px; /* Adjusted padding for mobile, will be set precisely by JS */
+                justify-content: center;
             }
         }
 
-        /* Custom style for the active/highlighted navigation link, matching "Công Cụ" */
+        /* Custom style for the active/highlighted navigation link */
         .nav-item-highlight {
             background-color: #eef2ff;
             border-radius: 9999px;
@@ -99,27 +90,47 @@
             color: #4f46e5;
             font-weight: 500;
         }
+
+        /* Styles cho Bottom Navigation - ĐỒNG BỘ 100% VỚI GIỚI THIỆU */
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 4px;
+            color: #6b7280; /* gray-500 */
+            transition: color 0.2s;
+        }
+        .bottom-nav-item.active {
+            color: #4f46e5; /* indigo-600 */
+        }
+        .bottom-nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+        }
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 500;
+        }
     </style>
 </head>
-<body class="text-gray-800 text-base md:text-base"> <!-- Đã tăng base text size lên lại cho mobile -->
+<body class="text-gray-800">
 
-    <!-- Header Section (GIỮ NGUYÊN HOÀN TOÀN) -->
-    <header class="bg-white shadow-md py-3 fixed top-0 w-full z-20">
-        <!-- Main header content container, flex direction changes based on screen size -->
-        <div class="container mx-auto px-4 header-content flex flex-col md:flex-row md:justify-between md:items-center">
+    <!-- Header Section (Top Bar) - ẨN TRÊN MOBILE (hidden md:block) -->
+    <header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-20">
+        <div class="container mx-auto px-4 header-content flex items-center justify-between">
             <!-- Logo/Tên trang web -->
-            <!-- Order-1 on desktop to keep it left, hidden on mobile -->
-            <div class="flex items-center mb-0 md:flex-shrink-0 md:order-1">
-                <a href="#" class="logo-text text-2xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900 md:text-3xl">
+            <div class="flex items-center flex-shrink-0 w-full md:w-auto justify-center md:justify-start">
+                <a href="#" class="logo-text text-xl md:text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">
                     Máy tính y học
                 </a>
             </div>
 
-            <!-- Navigation Menu -->
-            <!-- Order-2 on mobile (after logo if visible, otherwise first), order-3 on desktop (right) -->
-            <nav class="nav-menu flex space-x-2 md:space-x-4 w-full md:w-auto nav-scrollable md:order-2 md:flex-shrink-0">
+            <!-- Desktop Navigation Menu -->
+            <nav class="nav-menu nav-menu-desktop hidden md:flex space-x-4">
                 <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100 active-link">Công Cụ</a>
+                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Công Cụ</a>
                 <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
                 <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
             </nav>
@@ -129,16 +140,13 @@
     <!-- Hero Section -->
     <section class="gradient-bg text-white py-12 md:py-24 text-center rounded-b-xl shadow-lg">
         <div class="container mx-auto px-4">
-            <!-- Tăng tiêu đề mobile từ text-2xl lên text-3xl -->
             <h1 class="text-3xl md:text-6xl font-extrabold mb-5 md:mb-6 animate-pulse">
                 Công Cụ Tính Toán Y Học
             </h1>
-            <!-- Đã rút gọn mô tả theo yêu cầu -->
             <p class="text-base md:text-xl mb-8 md:mb-10 max-w-3xl mx-auto opacity-90 leading-relaxed">
                 Hỗ trợ tính toán y khoa và quyết định lâm sàng nhanh chóng, hiệu quả.
             </p>
             <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
-                <!-- Tăng nút bấm mobile từ text-xs lên text-sm -->
                 <a href="#cong-cu" class="bg-white text-indigo-700 hover:bg-indigo-100 font-bold py-3 px-6 md:py-3 md:px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 text-sm md:text-base">
                     Khám Phá Các Công Cụ
                 </a>
@@ -152,28 +160,23 @@
     <!-- Tools Section -->
     <section id="cong-cu" class="py-10 md:py-24 bg-white rounded-lg shadow-inner mx-2 md:mx-auto my-6 md:my-12 max-w-5xl">
         <div class="container mx-auto px-2 md:px-4 text-center">
-            <!-- Tăng tiêu đề section -->
             <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8">Các Công Cụ Nổi Bật</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"> <!-- Tăng gap một chút -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 
-                <!-- NEW TOOL CARD 0: Antibiotics Lookup -->
+                <!-- Tool Card 0 -->
                 <a href="khang-sinh.html" class="bg-gray-50 p-4 md:p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
                     <div class="text-indigo-500 mb-3 md:mb-6">
-                        <!-- Icon tăng kích thước lên w-12 h-12 cho rõ hơn -->
                         <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
                         </svg>
                     </div>
-                    <!-- Tăng tiêu đề card từ text-sm lên text-lg -->
                     <h3 class="text-lg md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">Tra cứu liều kháng sinh</h3>
-                    <!-- Tăng mô tả từ text-[10px] lên text-sm -->
                     <p class="text-gray-600 text-sm leading-tight">Tra cứu nhanh liều dùng kháng sinh, nấm & virus.</p>
                 </a>
 
-                <!-- Tool Card 2 (Was BMI, now Drug Lookup) -->
+                <!-- Tool Card 2 -->
                 <a href="danh-muc-thuoc.html" class="bg-gray-50 p-4 md:p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
                     <div class="text-indigo-500 mb-3 md:mb-6">
-                        <!-- Icon: List/Search/Document -->
                         <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                         </svg>
@@ -182,7 +185,7 @@
                     <p class="text-gray-600 text-sm leading-tight">Tra cứu nhanh mã, tên thuốc và vật tư y tế trong bệnh viện.</p>
                 </a>
 
-                <!-- Tool Card 3: GFR Calculator -->
+                <!-- Tool Card 3 -->
                 <a href="do-loc-cau-than.html" class="bg-gray-50 p-4 md:p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
                     <div class="text-indigo-500 mb-3 md:mb-6">
                         <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -193,7 +196,7 @@
                     <p class="text-gray-600 text-sm leading-tight">Ước tính chức năng thận dựa trên công thức chuẩn.</p>
                 </a>
 
-                <!-- Tool Card 4: ABG Analysis -->
+                <!-- Tool Card 4 -->
                 <a href="phan-tich-khi-mau.html" class="bg-gray-50 p-4 md:p-5 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
                     <div class="text-indigo-500 mb-3 md:mb-6">
                         <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -216,27 +219,21 @@
     <!-- Hướng dẫn cài đặt trên điện thoại -->
     <section id="huong-dan-cai-dat" class="py-10 md:py-24 max-w-5xl mx-2 md:mx-auto my-6 md:my-12 scroll-mt-48 bg-white rounded-lg shadow-inner mb-24 md:mb-32">
         <div class="px-4 py-6 md:px-4 md:py-8">
-            <!-- Tăng tiêu đề -->
             <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-6">Hướng dẫn cài đặt</h1>
-            <!-- Tăng nội dung mô tả -->
             <p class="text-gray-700 mb-4 text-sm md:text-base leading-normal">Biến trang web này thành ứng dụng trên điện thoại để truy cập nhanh chóng.</p>
             
-            <!-- Chèn ảnh GIF -->
             <div class="flex justify-center mb-6">
                 <img src="app.gif" alt="Minh họa ứng dụng" class="mx-auto rounded-lg shadow-md max-w-[250px] w-full border border-gray-200">
             </div>
 
-            <!-- General instruction for unknown OS -->
             <div id="general-instructions">
                 <h2 class="text-lg md:text-2xl font-semibold section-title">Hướng dẫn chung</h2>
                 <p class="text-gray-600 mb-4 text-sm md:text-sm leading-relaxed">Tìm biểu tượng <strong>Chia sẻ</strong> hoặc menu <strong>(⋮ / ☰)</strong>, chọn "Thêm vào màn hình chính".</p>
             </div>
 
-            <!-- iOS Instructions -->
             <div id="ios-instructions" class="hidden">
                 <h2 class="text-lg md:text-2xl font-semibold section-title">Dành cho iPhone/iPad (iOS)</h2>
                 <div class="flex flex-col md:flex-row gap-4 md:gap-6 mt-4 md:mt-6">
-                    <!-- Safari -->
                     <div class="flex-1 bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-200">
                         <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Trên Safari</h3>
                         <ol class="instructions-list">
@@ -246,7 +243,6 @@
                             <li>4. Nhấn <strong>"Thêm"</strong>.</li>
                         </ol>
                     </div>
-                    <!-- Chrome for iOS -->
                     <div class="flex-1 bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-200">
                         <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Trên Chrome</h3>
                         <ol class="instructions-list">
@@ -259,7 +255,6 @@
                 </div>
             </div>
 
-            <!-- Android Instructions -->
             <div id="android-instructions" class="hidden">
                 <h2 class="text-lg md:text-2xl font-semibold section-title">Dành cho Android 🤖</h2>
                 <div class="bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-200 mt-4 md:mt-6">
@@ -279,7 +274,7 @@
         </div>
     </section>
 
-    <!-- Footer Section (GIỮ NGUYÊN HOÀN TOÀN) -->
+    <!-- Footer Section -->
     <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
         <div class="container mx-auto px-4">
             <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
@@ -296,6 +291,41 @@
         </div>
     </footer>
 
+    <!-- MOBILE BOTTOM NAVIGATION (Only visible on mobile) -->
+    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
+        <!-- Trang chủ (Active) -->
+        <a href="index.html" class="bottom-nav-item active">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            <span>Trang Chủ</span>
+        </a>
+
+        <!-- Công cụ -->
+        <a href="cong-cu.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+            <span>Công Cụ</span>
+        </a>
+
+        <!-- Giới thiệu -->
+        <a href="gioi-thieu.html" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            <span>Giới thiệu</span>
+        </a>
+
+        <!-- Liên hệ -->
+        <a href="#lien-he" class="bottom-nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+            </svg>
+            <span>Liên Hệ</span>
+        </a>
+    </nav>
+
     <script>
         // JavaScript to dynamically adjust body padding based on fixed header height
         document.addEventListener('DOMContentLoaded', function() {
@@ -304,7 +334,13 @@
 
             function adjustBodyPadding() {
                 const headerHeight = header.offsetHeight;
-                body.style.paddingTop = `${headerHeight}px`;
+                // Nếu là mobile (màn hình < 768px), padding-top cố định nhỏ hơn hoặc theo header
+                // Đồng thời phải chừa chỗ cho bottom nav
+                if (window.innerWidth < 768) {
+                    body.style.paddingTop = '0px'; // Header ẩn -> Padding 0
+                } else {
+                    body.style.paddingTop = headerHeight + 'px';
+                }
             }
 
             // Adjust padding on load and on window resize
@@ -318,19 +354,16 @@
             const generalInstructions = document.getElementById('general-instructions');
 
             // Hide all instructions initially
-            iosInstructions.classList.add('hidden');
-            androidInstructions.classList.add('hidden');
-            generalInstructions.classList.add('hidden');
+            if(iosInstructions) iosInstructions.classList.add('hidden');
+            if(androidInstructions) androidInstructions.classList.add('hidden');
+            if(generalInstructions) generalInstructions.classList.add('hidden');
 
             if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                // This is an iOS device
-                iosInstructions.classList.remove('hidden');
+                if(iosInstructions) iosInstructions.classList.remove('hidden');
             } else if (/android/i.test(userAgent)) {
-                // This is an Android device
-                androidInstructions.classList.remove('hidden');
+                if(androidInstructions) androidInstructions.classList.remove('hidden');
             } else {
-                // General or unknown OS
-                generalInstructions.classList.remove('hidden');
+                if(generalInstructions) generalInstructions.classList.remove('hidden');
             }
         });
     </script>
