@@ -115,9 +115,14 @@
             </a>
 
             <!-- Tiêu đề (Căn giữa) -->
-            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 flex-grow px-2">
-                Liều Kháng Sinh, Kháng Nấm & Virus
-            </h1>
+            <div class="flex-grow px-2 text-center">
+                <h1 class="text-xl md:text-3xl font-bold text-gray-800">
+                    Tra cứu liều
+                </h1>
+                <p class="text-xs md:text-sm text-gray-500 font-medium mt-1">
+                    Kháng sinh, kháng nấm, kháng virus, kháng lao & ký sinh trùng
+                </p>
+            </div>
 
             <!-- Spacer ảo để cân bằng layout (Căn giữa hoàn hảo) -->
             <div class="w-10 h-10 flex-shrink-0"></div>
@@ -517,8 +522,17 @@
                 const group = getVal(colMap.group);
 
                 // --- LOGIC LỌC DÒNG TIÊU ĐỀ/DANH MỤC ---
+                const nameUp = name.toUpperCase().trim();
                 const isHeader = (name.toLowerCase().includes('thuốc') && name.toLowerCase().includes('liều')) || name.toLowerCase() === 'thuốc';
-                const isCategory = /^\d+\.\s*KHÁNG/i.test(name) || name.toUpperCase() === 'KHÁNG NẤM';
+                
+                // Cập nhật bộ lọc: Loại bỏ header Kháng Virus, Kháng Lao & Ký Sinh Trùng
+                const isCategory = /^\d+\.\s*KHÁNG/.test(nameUp) || 
+                                   nameUp === 'KHÁNG NẤM' || 
+                                   nameUp.includes('KHÁNG VIRUS') ||
+                                   nameUp.includes('KHÁNG LAO') ||
+                                   nameUp.includes('KÝ SINH TRÙNG') ||
+                                   nameUp === 'KHÁNG SINH';
+
                 const hasData = isContentValid(adult) || isContentValid(renal) || isContentValid(pediatric);
 
                 if (isHeader || isCategory || (!hasData && !name)) {
