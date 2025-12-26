@@ -2,7 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Đã thêm user-scalable=no và maximum-scale=1.0 để ngăn zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thang điểm HAS-BLED (Đánh giá nguy cơ chảy máu)</title>
     <!-- Thêm Favicon -->
     <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
@@ -19,6 +20,8 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             padding-top: 80px; /* Mặc định cho Desktop */
+            /* Ngăn chặn hành vi touch delay trên một số thiết bị */
+            touch-action: manipulation; 
         }
         
         /* Responsive tweaks */
