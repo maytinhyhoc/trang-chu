@@ -2,7 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Đã thêm user-scalable=no và maximum-scale=1.0 để ngăn phóng to/thu nhỏ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thang điểm CHA2DS2-VASc (ESC 2024)</title>
     <!-- Thêm Favicon -->
     <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
@@ -19,6 +20,8 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             padding-top: 80px; /* Mặc định cho Desktop */
+            /* Ngăn chặn hành vi cuộn nảy (elastic scrolling) trên iOS nếu muốn cảm giác app hơn */
+            overscroll-behavior-y: none;
         }
         
         /* Responsive tweaks */
@@ -47,6 +50,8 @@
             padding: 8px 4px;
             color: #6b7280; /* gray-500 */
             transition: color 0.2s;
+            /* Tắt highlight màu xanh mặc định khi tap trên mobile */
+            -webkit-tap-highlight-color: transparent;
         }
         .bottom-nav-item.active {
             color: #4f46e5; /* indigo-600 */
@@ -82,6 +87,27 @@
             accent-color: #4f46e5;
             width: 1.25rem;
             height: 1.25rem;
+            cursor: pointer;
+        }
+        
+        /* Cải thiện vùng bấm cho label trên mobile */
+        label {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Animation đơn giản */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
         }
     </style>
 </head>
@@ -139,11 +165,11 @@
                             <i class="fa-solid fa-list-check mr-2"></i>Chọn loại thang điểm:
                         </label>
                         <div class="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0">
-                            <label class="flex items-center cursor-pointer">
+                            <label class="flex items-center cursor-pointer p-2 hover:bg-indigo-50 rounded transition-colors">
                                 <input type="radio" name="scoreType" value="CHA2DS2-VA" checked>
                                 <span class="ml-2 text-gray-700 font-medium">CHA₂DS₂-VA (ESC 2024)</span>
                             </label>
-                            <label class="flex items-center cursor-pointer">
+                            <label class="flex items-center cursor-pointer p-2 hover:bg-indigo-50 rounded transition-colors">
                                 <input type="radio" name="scoreType" value="CHA2DS2-VASc">
                                 <span class="ml-2 text-gray-700 font-medium">CHA₂DS₂-VASc (Cũ)</span>
                             </label>
@@ -152,36 +178,36 @@
 
                     <div class="space-y-4">
                         <!-- C -->
-                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200">
-                            <label class="text-sm font-medium text-gray-700">1. Suy tim sung huyết (C)</label>
-                            <div class="flex space-x-4">
-                                <label class="inline-flex items-center"><input type="radio" name="C" value="1"><span class="ml-1 text-sm">Có</span></label>
-                                <label class="inline-flex items-center"><input type="radio" name="C" value="0"><span class="ml-1 text-sm">Không</span></label>
+                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200 hover:bg-gray-50 transition-colors rounded px-2">
+                            <label class="text-sm font-medium text-gray-700 cursor-pointer w-full" for="C-yes">1. Suy tim sung huyết (C)</label>
+                            <div class="flex space-x-4 flex-shrink-0">
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="C" value="1" id="C-yes"><span class="ml-1 text-sm">Có</span></label>
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="C" value="0" id="C-no"><span class="ml-1 text-sm">Không</span></label>
                             </div>
                         </div>
 
                         <!-- H -->
-                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200">
-                            <label class="text-sm font-medium text-gray-700">2. Tăng huyết áp (H)</label>
-                            <div class="flex space-x-4">
-                                <label class="inline-flex items-center"><input type="radio" name="H" value="1"><span class="ml-1 text-sm">Có</span></label>
-                                <label class="inline-flex items-center"><input type="radio" name="H" value="0"><span class="ml-1 text-sm">Không</span></label>
+                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200 hover:bg-gray-50 transition-colors rounded px-2">
+                            <label class="text-sm font-medium text-gray-700 cursor-pointer w-full" for="H-yes">2. Tăng huyết áp (H)</label>
+                            <div class="flex space-x-4 flex-shrink-0">
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="H" value="1" id="H-yes"><span class="ml-1 text-sm">Có</span></label>
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="H" value="0" id="H-no"><span class="ml-1 text-sm">Không</span></label>
                             </div>
                         </div>
 
                         <!-- A -->
-                        <div class="input-group py-2 border-b border-gray-200">
+                        <div class="input-group py-2 border-b border-gray-200 hover:bg-gray-50 transition-colors rounded px-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">3. Tuổi (A)</label>
                             <div class="flex flex-wrap gap-3">
-                                <label class="inline-flex items-center bg-white px-3 py-1 rounded border border-gray-200 cursor-pointer hover:bg-gray-50">
+                                <label class="inline-flex items-center bg-white px-3 py-2 rounded border border-gray-200 cursor-pointer hover:bg-indigo-50 hover:border-indigo-200 transition-all flex-grow justify-center sm:flex-grow-0">
                                     <input type="radio" name="A" value="0">
                                     <span class="ml-2 text-sm">&lt; 65</span>
                                 </label>
-                                <label class="inline-flex items-center bg-white px-3 py-1 rounded border border-gray-200 cursor-pointer hover:bg-gray-50">
+                                <label class="inline-flex items-center bg-white px-3 py-2 rounded border border-gray-200 cursor-pointer hover:bg-indigo-50 hover:border-indigo-200 transition-all flex-grow justify-center sm:flex-grow-0">
                                     <input type="radio" name="A" value="1">
                                     <span class="ml-2 text-sm">65 - 74</span>
                                 </label>
-                                <label class="inline-flex items-center bg-white px-3 py-1 rounded border border-gray-200 cursor-pointer hover:bg-gray-50">
+                                <label class="inline-flex items-center bg-white px-3 py-2 rounded border border-gray-200 cursor-pointer hover:bg-indigo-50 hover:border-indigo-200 transition-all flex-grow justify-center sm:flex-grow-0">
                                     <input type="radio" name="A" value="2">
                                     <span class="ml-2 text-sm">≥ 75</span>
                                 </label>
@@ -189,47 +215,47 @@
                         </div>
 
                         <!-- D -->
-                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200">
-                            <label class="text-sm font-medium text-gray-700">4. Đái tháo đường (D)</label>
-                            <div class="flex space-x-4">
-                                <label class="inline-flex items-center"><input type="radio" name="D" value="1"><span class="ml-1 text-sm">Có</span></label>
-                                <label class="inline-flex items-center"><input type="radio" name="D" value="0"><span class="ml-1 text-sm">Không</span></label>
+                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200 hover:bg-gray-50 transition-colors rounded px-2">
+                            <label class="text-sm font-medium text-gray-700 cursor-pointer w-full" for="D-yes">4. Đái tháo đường (D)</label>
+                            <div class="flex space-x-4 flex-shrink-0">
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="D" value="1" id="D-yes"><span class="ml-1 text-sm">Có</span></label>
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="D" value="0" id="D-no"><span class="ml-1 text-sm">Không</span></label>
                             </div>
                         </div>
 
                         <!-- S -->
-                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200">
-                            <label class="text-sm font-medium text-gray-700 max-w-[70%]">5. Đột quỵ/TIA/Thuyên tắc (S)</label>
-                            <div class="flex space-x-4">
-                                <label class="inline-flex items-center"><input type="radio" name="S" value="2"><span class="ml-1 text-sm">Có</span></label>
-                                <label class="inline-flex items-center"><input type="radio" name="S" value="0"><span class="ml-1 text-sm">Không</span></label>
+                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200 hover:bg-gray-50 transition-colors rounded px-2">
+                            <label class="text-sm font-medium text-gray-700 max-w-[70%] cursor-pointer" for="S-yes">5. Đột quỵ/TIA/Thuyên tắc (S)</label>
+                            <div class="flex space-x-4 flex-shrink-0">
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="S" value="2" id="S-yes"><span class="ml-1 text-sm">Có</span></label>
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="S" value="0" id="S-no"><span class="ml-1 text-sm">Không</span></label>
                             </div>
                         </div>
 
                         <!-- V -->
-                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200">
-                            <label class="text-sm font-medium text-gray-700 max-w-[70%]">6. Bệnh mạch máu (V)</label>
-                            <div class="flex space-x-4">
-                                <label class="inline-flex items-center"><input type="radio" name="V" value="1"><span class="ml-1 text-sm">Có</span></label>
-                                <label class="inline-flex items-center"><input type="radio" name="V" value="0"><span class="ml-1 text-sm">Không</span></label>
+                        <div class="input-group flex justify-between items-center py-2 border-b border-gray-200 hover:bg-gray-50 transition-colors rounded px-2">
+                            <label class="text-sm font-medium text-gray-700 max-w-[70%] cursor-pointer" for="V-yes">6. Bệnh mạch máu (V)</label>
+                            <div class="flex space-x-4 flex-shrink-0">
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="V" value="1" id="V-yes"><span class="ml-1 text-sm">Có</span></label>
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="V" value="0" id="V-no"><span class="ml-1 text-sm">Không</span></label>
                             </div>
                         </div>
 
                         <!-- Sex (Hidden by default) -->
-                        <div id="sex-input-group" class="input-group hidden flex justify-between items-center py-2 border-b border-gray-200">
-                            <label class="text-sm font-medium text-gray-700">7. Giới tính (Sc)</label>
-                            <div class="flex space-x-4">
-                                <label class="inline-flex items-center"><input type="radio" name="Sex" value="0"><span class="ml-1 text-sm">Nam</span></label>
-                                <label class="inline-flex items-center"><input type="radio" name="Sex" value="1"><span class="ml-1 text-sm">Nữ</span></label>
+                        <div id="sex-input-group" class="input-group hidden flex justify-between items-center py-2 border-b border-gray-200 hover:bg-gray-50 transition-colors rounded px-2">
+                            <label class="text-sm font-medium text-gray-700 cursor-pointer w-full" for="Sex-male">7. Giới tính (Sc)</label>
+                            <div class="flex space-x-4 flex-shrink-0">
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="Sex" value="0" id="Sex-male"><span class="ml-1 text-sm">Nam</span></label>
+                                <label class="inline-flex items-center cursor-pointer p-1"><input type="radio" name="Sex" value="1" id="Sex-female"><span class="ml-1 text-sm">Nữ</span></label>
                             </div>
                         </div>
                     </div>
                 
                     <div class="mt-8 flex flex-col sm:flex-row gap-4 pt-4">
-                        <button type="submit" id="calculateBtn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
+                        <button type="submit" id="calculateBtn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform active:scale-95 flex items-center justify-center">
                             <i class="fa-solid fa-calculator mr-2"></i> Tính điểm
                         </button>
-                        <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
+                        <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 active:bg-red-50 flex items-center justify-center">
                             <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
                         </button>
                     </div>
