@@ -2,7 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Đã thêm user-scalable=no và maximum-scale=1.0 để ngăn phóng to/thu nhỏ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Phân Tích Khí Máu Động Mạch</title>
     <!-- Thêm Favicon -->
     <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
@@ -19,6 +20,8 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             padding-top: 80px; /* Mặc định cho Desktop */
+            /* Ngăn chặn hành vi kéo để refresh trên mobile nếu muốn giống app hơn */
+            overscroll-behavior-y: none;
         }
         
         /* Responsive tweaks */
@@ -47,6 +50,9 @@
             padding: 8px 4px;
             color: #6b7280; /* gray-500 */
             transition: color 0.2s;
+            /* Ngăn chọn text trên nút điều hướng */
+            user-select: none;
+            -webkit-user-select: none;
         }
         .bottom-nav-item.active {
             color: #4f46e5; /* indigo-600 */
