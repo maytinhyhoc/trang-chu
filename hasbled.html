@@ -20,8 +20,23 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             padding-top: 80px; /* Mặc định cho Desktop */
+            
             /* Ngăn chặn hành vi touch delay trên một số thiết bị */
             touch-action: manipulation; 
+            
+            /* Ngăn select text tạo cảm giác app (New) */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+        }
+
+        /* Cho phép select text trong input để nhập liệu (Quan trọng) */
+        input, textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
         
         /* Responsive tweaks */
@@ -315,15 +330,29 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner mt-auto">
+    <!-- Footer Mới: Đã thay thế theo yêu cầu -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner mt-auto">
         <div class="container mx-auto px-4">
-            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-            <p class="mt-2">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-            <p>Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a></p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
-                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+            <!-- Dòng bản quyền: Ẩn bớt text thừa trên mobile -->
+            <p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
+            
+            <!-- Thông tin liên hệ: Chữ nhỏ hơn, rút gọn nội dung trên mobile -->
+            <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
+                <!-- Hiện trên Mobile -->
+                <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
+                <!-- Hiện trên Desktop -->
+                <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
+                
+                <p class="mt-0.5 md:mt-1">
+                    <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+                </p>
+            </div>
+
+            <!-- Links: Rút gọn tên và thêm dấu gạch phân cách -->
+            <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
+                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
+                <span class="text-gray-600 md:hidden">|</span>
+                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
             </div>
         </div>
     </footer>

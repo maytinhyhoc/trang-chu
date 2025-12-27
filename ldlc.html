@@ -20,13 +20,31 @@
             background-color: #f8fafc;
             padding-top: 80px; /* Mặc định cho Desktop */
             -webkit-tap-highlight-color: transparent;
+            
+            /* --- TỐI ƯU APP FEEL --- */
+            /* Ngăn select text toàn trang để giống app native */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            
+            /* Ngăn touch delay & double-tap zoom */
+            touch-action: manipulation;
+        }
+
+        /* QUAN TRỌNG: Cho phép select text trong input để người dùng sửa số */
+        input, select, textarea {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
         }
         
         /* Responsive tweaks */
         @media (max-width: 767px) {
             body { 
                 padding-top: 0px; /* Header ẩn trên mobile */
-                padding-bottom: 80px; /* Chừa chỗ cho Bottom Nav */
+                padding-bottom: 90px; /* Chừa chỗ cho Bottom Nav + khoảng thở */
             }
         }
 
@@ -93,6 +111,16 @@
             accent-color: #4f46e5;
             width: 1.1rem;
             height: 1.1rem;
+            margin-top: 0.1rem;
+        }
+        
+        /* Animation cho kết quả */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.4s ease-out forwards;
         }
     </style>
 </head>
@@ -145,10 +173,10 @@
                 
                 <!-- Toggle Buttons -->
                 <div class="flex justify-center space-x-2 md:space-x-4 mb-6 bg-white p-1 rounded-full shadow-sm border border-gray-200 w-full md:w-auto mx-auto max-w-md">
-                    <button id="direct-input-btn" type="button" class="flex-1 px-4 py-2 rounded-full font-semibold transition-all duration-300 text-sm md:text-base">
+                    <button id="direct-input-btn" type="button" class="flex-1 px-4 py-2 rounded-full font-semibold transition-all duration-300 text-sm md:text-base select-none">
                         Nhập LDLc
                     </button>
-                    <button id="calculate-ldlc-btn" type="button" class="flex-1 px-4 py-2 rounded-full font-semibold transition-all duration-300 text-sm md:text-base">
+                    <button id="calculate-ldlc-btn" type="button" class="flex-1 px-4 py-2 rounded-full font-semibold transition-all duration-300 text-sm md:text-base select-none">
                         Tính LDLc
                     </button>
                 </div>
@@ -220,10 +248,10 @@
                     </div>
 
                     <div class="flex flex-col md:flex-row gap-4 pt-2">
-                        <button type="submit" id="calculate-direct-btn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
+                        <button type="submit" id="calculate-direct-btn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center select-none active:scale-95">
                             <i class="fa-solid fa-stethoscope mr-2"></i> Phân tích
                         </button>
-                        <button type="button" id="clear-direct-btn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
+                        <button type="button" id="clear-direct-btn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center select-none active:scale-95">
                             <i class="fa-solid fa-trash-can mr-2"></i> Xóa
                         </button>
                     </div>
@@ -237,7 +265,7 @@
                         <div class="input-group">
                             <label for="tc-value" class="block text-sm font-medium text-gray-700 mb-1">Toàn phần (Total Cholesterol)</label>
                             <div class="flex items-center gap-2">
-                                <input type="number" id="tc-value" name="tc-value" min="0" step="0.01" required
+                                <input type="number" id="tc-value" name="tc-value" min="0" step="0.01" required placeholder="Nhập TC"
                                        class="flex-1 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
                                        inputmode="decimal">
                                 <select id="tc-unit" name="tc-unit" class="w-24 px-2 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-white text-sm">
@@ -251,7 +279,7 @@
                         <div class="input-group">
                             <label for="hdlc-value" class="block text-sm font-medium text-gray-700 mb-1">HDL Cholesterol (HDLc)</label>
                             <div class="flex items-center gap-2">
-                                <input type="number" id="hdlc-value" name="hdlc-value" min="0" step="0.01" required
+                                <input type="number" id="hdlc-value" name="hdlc-value" min="0" step="0.01" required placeholder="Nhập HDLc"
                                        class="flex-1 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
                                        inputmode="decimal">
                                 <select id="hdlc-unit" name="hdlc-unit" class="w-24 px-2 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-white text-sm">
@@ -265,7 +293,7 @@
                         <div class="input-group">
                             <label for="tg-value" class="block text-sm font-medium text-gray-700 mb-1">Triglyceride (TG)</label>
                             <div class="flex items-center gap-2">
-                                <input type="number" id="tg-value" name="tg-value" min="0" step="0.01" required
+                                <input type="number" id="tg-value" name="tg-value" min="0" step="0.01" required placeholder="Nhập TG"
                                        class="flex-1 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
                                        inputmode="decimal">
                                 <select id="tg-unit" name="tg-unit" class="w-24 px-2 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-white text-sm">
@@ -277,7 +305,7 @@
                     </div>
                     
                     <p class="text-xs text-gray-500 italic bg-blue-50 p-2 rounded border border-blue-100">
-                        <i class="fa-solid fa-lightbulb mr-1"></i> Sử dụng công thức Friedewald. Không chính xác khi TG > 4.5 mmol/L (400 mg/dL).
+                        <i class="fa-solid fa-lightbulb mr-1"></i> Sử dụng công thức Friedewald. Kết quả không chính xác nếu TG tăng quá cao (> 4.5 mmol/L).
                     </p>
                     
                     <!-- Risk Stratification (Repeated for Calc Form) -->
@@ -323,10 +351,10 @@
                     </div>
 
                     <div class="flex flex-col md:flex-row gap-4 pt-2">
-                        <button type="submit" id="calculate-ldlc-full-btn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
+                        <button type="submit" id="calculate-ldlc-full-btn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center select-none active:scale-95">
                             <i class="fa-solid fa-calculator mr-2"></i> Tính & Phân loại
                         </button>
-                        <button type="button" id="clear-calculate-ldlc-btn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
+                        <button type="button" id="clear-calculate-ldlc-btn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center select-none active:scale-95">
                             <i class="fa-solid fa-trash-can mr-2"></i> Xóa
                         </button>
                     </div>
@@ -344,7 +372,9 @@
                             <div id="recommendation-text" class="result-text text-indigo-700 leading-relaxed text-sm md:text-base">
                                 Vui lòng điền đầy đủ các thông tin để tính toán.
                             </div>
-                            <p id="warning-text" class="text-red-500 text-sm italic mt-2 hidden border-t border-gray-100 pt-2"></p>
+                            <div id="warning-box" class="hidden mt-3 bg-red-50 border-l-4 border-red-500 p-3">
+                                <p id="warning-text" class="text-red-600 text-sm italic"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -353,14 +383,28 @@
     </main>
 
     <!-- Footer -->
-    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner mt-auto">
+    <footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner mt-auto">
         <div class="container mx-auto px-4">
-            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-            <p class="mt-2">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-            <p>Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a></p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
-                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+            <!-- Dòng bản quyền: Ẩn bớt text thừa trên mobile -->
+            <p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
+            
+            <!-- Thông tin liên hệ: Chữ nhỏ hơn, rút gọn nội dung trên mobile -->
+            <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
+                <!-- Hiện trên Mobile -->
+                <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
+                <!-- Hiện trên Desktop -->
+                <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
+                
+                <p class="mt-0.5 md:mt-1">
+                    <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+                </p>
+            </div>
+    
+            <!-- Links: Rút gọn tên và thêm dấu gạch phân cách -->
+            <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
+                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
+                <span class="text-gray-600 md:hidden">|</span>
+                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
             </div>
         </div>
     </footer>
@@ -426,6 +470,7 @@
             const resultContainer = document.getElementById('result-container');
             const ldlcDisplay = document.getElementById('ldlc-display');
             const recommendationText = document.getElementById('recommendation-text');
+            const warningBox = document.getElementById('warning-box');
             const warningText = document.getElementById('warning-text');
 
             const ldlcDirectInput = document.getElementById('ldlc-direct');
@@ -442,33 +487,54 @@
             const riskCategoryCalcRadios = document.querySelectorAll('input[name="risk-category-calc"]');
             const clearCalculateLdlcBtn = document.getElementById('clear-calculate-ldlc-btn');
 
+            // --- FEATURE: SMART UNIT SYNC ---
+            // Tự động đồng bộ các đơn vị. Khi đổi TC -> HDL và TG đổi theo.
+            function syncUnits(sourceSelect) {
+                const newValue = sourceSelect.value;
+                if (tcUnitSelect.value !== newValue) tcUnitSelect.value = newValue;
+                if (hdlcUnitSelect.value !== newValue) hdlcUnitSelect.value = newValue;
+                if (tgUnitSelect.value !== newValue) tgUnitSelect.value = newValue;
+            }
+
+            tcUnitSelect.addEventListener('change', () => syncUnits(tcUnitSelect));
+            hdlcUnitSelect.addEventListener('change', () => syncUnits(hdlcUnitSelect));
+            tgUnitSelect.addEventListener('change', () => syncUnits(tgUnitSelect));
+
+            // --- UX: Auto Hide Results on Input Change ---
+            // Nếu người dùng sửa số liệu sau khi đã tính, ẩn kết quả cũ để tránh nhầm lẫn
+            const calcInputs = [tcValueInput, hdlcValueInput, tgValueInput];
+            calcInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                   if (!resultContainer.classList.contains('hidden')) {
+                       resultContainer.classList.add('opacity-50'); // Làm mờ thay vì ẩn hẳn
+                   }
+                });
+            });
+
 
             // Function to reset results display
             function resetResults() {
                 ldlcDisplay.textContent = '0.00 mmol/L';
                 recommendationText.textContent = 'Vui lòng điền đầy đủ các thông tin để tính toán.';
                 recommendationText.className = "result-text text-indigo-700 leading-relaxed text-sm md:text-base";
-                warningText.classList.add('hidden');
+                warningBox.classList.add('hidden');
                 resultContainer.classList.add('hidden');
+                resultContainer.classList.remove('opacity-50');
             }
 
             // Function to switch between forms
             function showForm(formToShow) {
-                // Common classes for active state
                 const activeClasses = ['bg-indigo-600', 'text-white', 'shadow-md'];
-                // Common classes for inactive state (using shadow-sm for a subtle shadow)
                 const inactiveClasses = ['bg-white', 'text-gray-600', 'shadow-sm', 'hover:bg-gray-50']; 
 
                 if (formToShow === 'direct') {
                     directLdlcForm.classList.remove('hidden');
                     calculateLdlcForm.classList.add('hidden');
 
-                    // Apply active styles to directInputBtn
                     if (directInputBtn) {
                         directInputBtn.classList.add(...activeClasses);
                         directInputBtn.classList.remove(...inactiveClasses);
                     }
-                    // Apply inactive styles to calculateLdlcBtn
                     if (calculateLdlcBtn) {
                         calculateLdlcBtn.classList.add(...inactiveClasses);
                         calculateLdlcBtn.classList.remove(...activeClasses);
@@ -477,12 +543,10 @@
                     directLdlcForm.classList.add('hidden');
                     calculateLdlcForm.classList.remove('hidden');
 
-                    // Apply inactive styles to directInputBtn
                     if (directInputBtn) {
                         directInputBtn.classList.add(...inactiveClasses);
                         directInputBtn.classList.remove(...activeClasses);
                     }
-                    // Apply active styles to calculateLdlcBtn
                     if (calculateLdlcBtn) {
                         calculateLdlcBtn.classList.add(...activeClasses);
                         calculateLdlcBtn.classList.remove(...inactiveClasses);
@@ -499,17 +563,13 @@
                 'low': { target: 3.0 }
             };
 
-            // Function to get selected risk category
             function getSelectedRiskCategory(radioGroup) {
                 for (const radio of radioGroup) {
-                    if (radio.checked) {
-                        return radio.value;
-                    }
+                    if (radio.checked) return radio.value;
                 }
                 return null;
             }
 
-            // Function to determine recommendation
             function getRecommendation(ldlcValue, riskCategory, unit) {
                 let ldlcMmolL = ldlcValue;
                 if (unit === 'mg/dL') {
@@ -557,6 +617,7 @@
             // Handle Direct LDLc Input Form submission
             directLdlcForm.addEventListener('submit', function(event) {
                 event.preventDefault();
+                resultContainer.classList.remove('opacity-50');
 
                 const ldlcValue = parseFloat(ldlcDirectInput.value);
                 const ldlcUnit = ldlcUnitDirectSelect.value;
@@ -565,21 +626,20 @@
                 if (isNaN(ldlcValue) || ldlcValue < 0 || !riskCategory) {
                     recommendationText.textContent = 'Vui lòng nhập giá trị LDLc hợp lệ và chọn phân tầng nguy cơ.';
                     recommendationText.className = "result-text text-red-500";
-                    warningText.classList.add('hidden');
-                    ldlcDisplay.textContent = '0.00 ' + ldlcUnit; // Display original unit
+                    warningBox.classList.add('hidden');
+                    ldlcDisplay.textContent = '0.00 ' + ldlcUnit;
                     resultContainer.classList.remove('hidden');
                     return;
                 }
 
                 ldlcDisplay.textContent = `${ldlcValue.toFixed(2)} ${ldlcUnit}`;
                 const result = getRecommendation(ldlcValue, riskCategory, ldlcUnit);
-                recommendationText.innerHTML = result.text; // Use innerHTML to allow bold tags
+                recommendationText.innerHTML = result.text;
                 recommendationText.className = `result-text ${result.color} leading-relaxed text-sm md:text-base`;
-                warningText.classList.add('hidden'); // Hide any previous warnings
+                warningBox.classList.add('hidden');
 
                 resultContainer.classList.remove('hidden');
                 
-                // Scroll to result on mobile
                 const headerHeight = document.querySelector('header')?.offsetHeight || 0;
                 const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
                 window.scrollTo({ top: targetPos, behavior: 'smooth' });
@@ -588,71 +648,58 @@
             // Handle Calculate LDLc Form submission
             calculateLdlcForm.addEventListener('submit', function(event) {
                 event.preventDefault();
+                resultContainer.classList.remove('opacity-50');
 
                 const tcValue = parseFloat(tcValueInput.value);
                 const hdlcValue = parseFloat(hdlcValueInput.value);
                 const tgValue = parseFloat(tgValueInput.value);
                 
-                const tcUnit = tcUnitSelect.value;
-                const hdlcUnit = hdlcUnitSelect.value;
-                const tgUnit = tgUnitSelect.value;
-
-                // Validate that all units are the same for calculation
-                if (tcUnit !== hdlcUnit || hdlcUnit !== tgUnit) {
-                    recommendationText.textContent = 'Vui lòng chọn cùng một đơn vị cho tất cả các chỉ số lipid (TC, HDLc, TG).';
-                    recommendationText.className = "result-text text-red-500";
-                    warningText.classList.add('hidden');
-                    ldlcDisplay.textContent = '0.00 mmol/L'; // Default display
-                    resultContainer.classList.remove('hidden');
-                    return;
-                }
-
-                const lipidUnit = tcUnit; // Use any of them as they are guaranteed to be same
+                const lipidUnit = tcUnitSelect.value; // Use TC unit as master (since checked sync)
                 const riskCategory = getSelectedRiskCategory(riskCategoryCalcRadios);
 
                 if (isNaN(tcValue) || isNaN(hdlcValue) || isNaN(tgValue) || tcValue < 0 || hdlcValue < 0 || tgValue < 0 || !riskCategory) {
                     recommendationText.textContent = 'Vui lòng nhập các giá trị lipid hợp lệ và chọn phân tầng nguy cơ.';
                     recommendationText.className = "result-text text-red-500";
-                    warningText.classList.add('hidden');
-                    ldlcDisplay.textContent = '0.00 ' + lipidUnit; // Display original unit
+                    warningBox.classList.add('hidden');
+                    ldlcDisplay.textContent = '0.00 ' + lipidUnit;
                     resultContainer.classList.remove('hidden');
                     return;
                 }
 
                 let calculatedLdlc;
-                let tgThresholdExceeded = false;
-                warningText.classList.add('hidden'); // Hide previous warnings
+                let tgWarning = "";
+                warningBox.classList.add('hidden');
 
                 if (lipidUnit === 'mmol/L') {
                     if (tgValue > 4.5) {
-                        tgThresholdExceeded = true;
-                        warningText.textContent = '⚠️ Triglyceride > 4.5 mmol/L. Công thức Friedewald không đáng tin cậy. LDLc có thể không chính xác.';
-                        warningText.classList.remove('hidden');
+                        tgWarning = '<strong>Lưu ý:</strong> Triglyceride > 4.5 mmol/L. Công thức tính toán (Friedewald) bị ảnh hưởng đáng kể. Nên cân nhắc định lượng LDLc trực tiếp.';
                     }
                     calculatedLdlc = tcValue - hdlcValue - (tgValue / 2.2);
                 } else { // mg/dL
                     if (tgValue > 400) {
-                        tgThresholdExceeded = true;
-                        warningText.textContent = '⚠️ Triglyceride > 400 mg/dL. Công thức Friedewald không đáng tin cậy. LDLc có thể không chính xác.';
-                        warningText.classList.remove('hidden');
+                        tgWarning = '<strong>Lưu ý:</strong> Triglyceride > 400 mg/dL. Công thức tính toán (Friedewald) bị ảnh hưởng đáng kể. Nên cân nhắc định lượng LDLc trực tiếp.';
                     }
                     calculatedLdlc = tcValue - hdlcValue - (tgValue / 5);
                 }
 
+                // Logic xử lý số âm
                 if (calculatedLdlc < 0) {
-                    calculatedLdlc = 0; // LDLc cannot be negative
-                    warningText.textContent = 'Giá trị LDLc tính toán ra âm. Vui lòng kiểm tra lại các chỉ số nhập vào.';
-                    warningText.classList.remove('hidden');
+                    calculatedLdlc = 0;
+                    tgWarning += (tgWarning ? "<br>" : "") + '<strong>Cảnh báo:</strong> Kết quả LDLc tính toán ra số âm. Điều này thường do Triglyceride quá cao hoặc sai số xét nghiệm.';
+                }
+
+                if (tgWarning) {
+                    warningText.innerHTML = tgWarning;
+                    warningBox.classList.remove('hidden');
                 }
 
                 ldlcDisplay.textContent = `${calculatedLdlc.toFixed(2)} ${lipidUnit}`;
                 const result = getRecommendation(calculatedLdlc, riskCategory, lipidUnit);
-                recommendationText.innerHTML = result.text; // Use innerHTML to allow bold tags
+                recommendationText.innerHTML = result.text;
                 recommendationText.className = `result-text ${result.color} leading-relaxed text-sm md:text-base`;
 
                 resultContainer.classList.remove('hidden');
                 
-                // Scroll to result on mobile
                 const headerHeight = document.querySelector('header')?.offsetHeight || 0;
                 const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
                 window.scrollTo({ top: targetPos, behavior: 'smooth' });
@@ -662,18 +709,20 @@
             clearDirectBtn.addEventListener('click', function() {
                 directLdlcForm.reset();
                 resetResults();
-                ldlcUnitDirectSelect.value = 'mmol/L'; // Reset unit to default
-                riskCategoryDirectRadios[0].checked = true; // Default to Very High
+                ldlcUnitDirectSelect.value = 'mmol/L';
+                riskCategoryDirectRadios[0].checked = true;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
             clearCalculateLdlcBtn.addEventListener('click', function() {
                 calculateLdlcForm.reset();
                 resetResults();
-                tcUnitSelect.value = 'mmol/L'; // Reset unit to default
+                // Reset units and sync
+                tcUnitSelect.value = 'mmol/L';
                 hdlcUnitSelect.value = 'mmol/L';
                 tgUnitSelect.value = 'mmol/L';
-                riskCategoryCalcRadios[0].checked = true; // Default to Very High
+                
+                riskCategoryCalcRadios[0].checked = true;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 

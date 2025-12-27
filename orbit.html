@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<!-- Đã thêm user-scalable=no để chặn zoom trên mobile -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Thang điểm ORBIT - Máy tính Y học</title>
 <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
@@ -12,7 +11,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 <style>
-body { font-family: 'Inter', sans-serif; background-color: #f8fafc; padding-top: 80px; }
+/* --- CẤU HÌNH APP-LIKE --- */
+body { 
+    font-family: 'Inter', sans-serif; 
+    background-color: #f8fafc; 
+    padding-top: 80px;
+    
+    /* Ngăn select text (tạo cảm giác app) */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* Ngăn touch delay & highlight khi tap */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Cho phép select text trong ô nhập liệu để người dùng gõ được */
+input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
 @media (max-width: 767px) { body { padding-top: 0px; padding-bottom: 80px; } }
 .nav-item-highlight { background-color: #eef2ff; border-radius: 9999px; padding: 4px 12px; color: #4f46e5; font-weight: 500; }
 .bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; color: #6b7280; transition: color 0.2s; }
@@ -41,7 +62,6 @@ input[type="number"] { -moz-appearance: textfield; }
 </style>
 </head>
 <body class="text-gray-800 flex flex-col min-h-screen">
-<!-- HEADER DESKTOP -->
 <header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-50">
     <div class="container mx-auto px-4 header-content flex items-center justify-between">
         <div class="flex items-center flex-shrink-0 w-auto">
@@ -74,10 +94,8 @@ input[type="number"] { -moz-appearance: textfield; }
                 Đánh giá nguy cơ xuất huyết ở bệnh nhân rung nhĩ đang điều trị kháng đông đường uống.
             </p>
 
-            <!-- Form có novalidate để tắt bong bóng mặc định -->
             <form id="tool-form" class="space-y-6" novalidate>
                 
-                <!-- Question 1: O - Older Age -->
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <label class="block text-gray-700 font-bold mb-2 flex items-center">
                         <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center mr-2 text-sm">O</span>
@@ -99,7 +117,6 @@ input[type="number"] { -moz-appearance: textfield; }
                     </div>
                 </div>
 
-                <!-- Question 2: R - Reduced Hb/Hct/Anemia -->
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <label class="block text-gray-700 font-bold mb-2 flex items-center">
                         <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center mr-2 text-sm">R</span>
@@ -122,7 +139,6 @@ input[type="number"] { -moz-appearance: textfield; }
                     </div>
                 </div>
 
-                <!-- Question 3: B - Bleeding History -->
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <label class="block text-gray-700 font-bold mb-2 flex items-center">
                         <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center mr-2 text-sm">B</span>
@@ -145,7 +161,6 @@ input[type="number"] { -moz-appearance: textfield; }
                     </div>
                 </div>
 
-                <!-- Question 4: I - Insufficient Kidney Function -->
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <label class="block text-gray-700 font-bold mb-2 flex items-center">
                         <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center mr-2 text-sm">I</span>
@@ -168,7 +183,6 @@ input[type="number"] { -moz-appearance: textfield; }
                     </div>
                 </div>
 
-                <!-- Question 5: T - Treatment with Antiplatelet -->
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <label class="block text-gray-700 font-bold mb-2 flex items-center">
                         <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center mr-2 text-sm">T</span>
@@ -213,7 +227,6 @@ input[type="number"] { -moz-appearance: textfield; }
     </div>
 </main>
 
-<!-- CUSTOM MODAL -->
 <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
     <div class="absolute inset-0 bg-black opacity-50 transition-opacity"></div>
     <div class="bg-white rounded-lg shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100">
@@ -230,14 +243,23 @@ input[type="number"] { -moz-appearance: textfield; }
     </div>
 </div>
 
-<footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner mt-auto">
+<footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner mt-auto">
     <div class="container mx-auto px-4">
-        <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-        <p class="mt-2">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-        <p>Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a></p>
-        <div class="flex justify-center space-x-4 mt-4">
-            <a href="#" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
-            <a href="#" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+        <p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
+        
+        <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
+            <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
+            <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
+            
+            <p class="mt-0.5 md:mt-1">
+                <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+            </p>
+        </div>
+
+        <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
+            <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
+            <span class="text-gray-600 md:hidden">|</span>
+            <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
         </div>
     </div>
 </footer>

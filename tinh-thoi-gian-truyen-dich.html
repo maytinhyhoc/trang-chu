@@ -1,386 +1,355 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tính Thời Gian Truyền Dịch</title>
-    <!-- Thêm Favicon -->
-    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
-    <link rel="manifest" href="manifest.json">
-    <!-- Tải Tailwind CSS từ CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <style>
-        /* --- Styles Global --- */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            padding-top: 80px; /* Mặc định cho Desktop */
-        }
-        
-        /* Responsive tweaks */
-        @media (max-width: 767px) {
-            body { 
-                padding-top: 0px; /* Header ẩn trên mobile */
-                padding-bottom: 80px; /* Chừa chỗ cho Bottom Nav */
-            }
-        }
+<meta charset="UTF-8">
+<!-- Đã thêm user-scalable=no để chặn zoom trên mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Công Cụ Y Học - Tính Thời Gian Truyền Dịch</title>
+<link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
+<link rel="manifest" href="manifest.json">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<style>
+/* --- Mobile Optimization & Base Styles --- */
+body {
+font-family: 'Inter', sans-serif;
+background-color: #f8fafc;
+padding-top: 80px;
+/* Ngăn bôi đen văn bản (App-like feel) */
+-webkit-user-select: none;
+user-select: none;
 
-        /* Custom style for the active/highlighted navigation link (Desktop) */
-        .nav-item-highlight {
-            background-color: #eef2ff;
-            border-radius: 9999px;
-            padding: 4px 12px;
-            color: #4f46e5;
-            font-weight: 500;
-        }
-
-        /* Styles cho Bottom Navigation */
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 4px;
-            color: #6b7280; /* gray-500 */
-            transition: color 0.2s;
-        }
-        .bottom-nav-item.active {
-            color: #4f46e5; /* indigo-600 */
-        }
-        .bottom-nav-item svg {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 2px;
-        }
-        .bottom-nav-item span {
-            font-size: 10px;
-            font-weight: 500;
-        }
-
-        .score-box {
-            background-color: #eef2ff;
-            color: #4f46e5;
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            font-size: 2.5rem;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            border: 1px solid #c7d2fe;
-        }
-        .result-text {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-        
-        /* Ẩn mũi tên input number */
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-    </style>
+/* Loại bỏ độ trễ và màu highlight khi tap trên mobile */
+touch-action: manipulation;
+-webkit-tap-highlight-color: transparent;
+}
+/* Khôi phục khả năng select text cho input để nhập liệu */
+input, textarea, select {
+-webkit-user-select: text;
+user-select: text;
+}
+@media (max-width: 767px) { body { padding-top: 0px; padding-bottom: 80px; } }
+.nav-item-highlight { background-color: #eef2ff; border-radius: 9999px; padding: 4px 12px; color: #4f46e5; font-weight: 500; }
+.bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; color: #6b7280; transition: color 0.2s; }
+.bottom-nav-item.active { color: #4f46e5; }
+.bottom-nav-item svg { width: 24px; height: 24px; margin-bottom: 2px; }
+.bottom-nav-item span { font-size: 10px; font-weight: 500; }
+.score-box { background-color: #eef2ff; color: #4f46e5; padding: 1rem 2rem; border-radius: 0.75rem; font-size: 2.5rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid #c7d2fe; }
+.result-text { font-size: 1.125rem; font-weight: 600; }
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+/* Animation cho Modal */
+.modal-enter { opacity: 0; transform: scale(0.9); }
+.modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 0.3s, transform 0.3s; }
+.modal-exit { opacity: 1; transform: scale(1); }
+.modal-exit-active { opacity: 0; transform: scale(0.9); transition: opacity 0.3s, transform 0.3s; }
+/* Custom Input Group Styles */
+.input-group-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-right: none;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    padding: 0 1rem;
+    color: #4b5563;
+}
+</style>
 </head>
 <body class="text-gray-800 flex flex-col min-h-screen">
-
-    <!-- === DESKTOP HEADER (Ẩn trên Mobile) === -->
-    <header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-50">
-        <div class="container mx-auto px-4 header-content flex items-center justify-between">
-            <!-- Logo -->
-            <div class="flex items-center flex-shrink-0 w-auto">
-                <a href="index.html" class="logo-text text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">
-                    Máy tính y học
-                </a>
-            </div>
-
-            <!-- Navigation Menu -->
-            <nav class="nav-menu flex space-x-4">
-                <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Công Cụ</a>
-                <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
-                <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="flex-grow container mx-auto px-4 py-4 md:py-8">
+<!-- HEADER DESKTOP -->
+<header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-50">
+<div class="container mx-auto px-4 header-content flex items-center justify-between">
+<div class="flex items-center flex-shrink-0 w-auto">
+<a href="index.html" class="logo-text text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">Máy tính y học</a>
+</div>
+<nav class="nav-menu flex space-x-4">
+<a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
+<a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Công Cụ</a>
+<a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
+<a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
+</nav>
+</div>
+</header>
+<main class="flex-grow container mx-auto px-4 py-4 md:py-8">
+<div class="flex items-center justify-between mb-4 md:mb-6 pt-4 md:pt-0">
+<a href="cong-cu.html" class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-full text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition duration-300 shadow-sm">
+<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+</a>
+<h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 flex-grow px-2">
+Tính Thời Gian Truyền Dịch
+</h1>
+<div class="w-10 h-10 flex-shrink-0"></div>
+</div>
+<div class="mt-2 md:mt-8 bg-white rounded-lg shadow-lg p-3 md:p-8 max-w-4xl mx-auto">
+    <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl border border-gray-100">
         
-        <!-- Back Button & Title -->
-        <div class="flex items-center justify-between mb-4 md:mb-6 pt-4 md:pt-0">
-            <!-- Nút quay lại (Chỉ hiện Icon) -->
-            <a href="cong-cu.html" class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-full text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition duration-300 shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </a>
-
-            <!-- Tiêu đề (Căn giữa) -->
-            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 flex-grow px-2">
-                Tính Thời Gian Truyền Dịch
-            </h1>
-
-            <!-- Spacer ảo để cân bằng layout (Căn giữa hoàn hảo) -->
-            <div class="w-10 h-10 flex-shrink-0"></div>
-        </div>
-
-        <!-- Main Content Box -->
-        <div class="mt-2 md:mt-8 bg-white rounded-lg shadow-lg p-3 md:p-8 max-w-4xl mx-auto">
-            
-            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl border border-gray-100">
-                <form id="infusion-time-form" class="space-y-6">
-                    
-                    <!-- Volume -->
-                    <div class="input-group">
-                        <label for="volume" class="block text-sm font-bold text-gray-700 mb-2">
-                            <i class="fa-solid fa-bottle-droplet mr-2 text-indigo-500"></i>Thể tích dịch truyền (mL)
-                        </label>
-                        <input type="number" id="volume" name="volume" min="1" placeholder="Ví dụ: 500" required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-lg"
-                               inputmode="numeric" pattern="[0-9]*">
-                    </div>
-
-                    <!-- Drip Factor -->
-                    <div class="input-group bg-white p-3 rounded-lg border border-gray-200">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">
-                            <i class="fa-solid fa-list-ol mr-2 text-indigo-500"></i>Hệ số dây truyền (Giọt/mL)
-                        </label>
-                        <div class="flex flex-col space-y-3">
-                            <label class="flex items-center cursor-pointer p-2 hover:bg-gray-50 rounded transition">
-                                <input type="radio" name="drip-factor" value="20" class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500" checked required>
-                                <span class="ml-3 text-base text-gray-700 font-medium">20 giọt/mL (Dây thường)</span>
-                            </label>
-                            <label class="flex items-center cursor-pointer p-2 hover:bg-gray-50 rounded transition">
-                                <input type="radio" name="drip-factor" value="15" class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500" required>
-                                <span class="ml-3 text-base text-gray-700">15 giọt/mL (Dây to)</span>
-                            </label>
-                            <label class="flex items-center cursor-pointer p-2 hover:bg-gray-50 rounded transition">
-                                <input type="radio" name="drip-factor" value="60" class="h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500" required>
-                                <span class="ml-3 text-base text-gray-700">60 giọt/mL (Dây vi giọt - Microdrip)</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Flow Rate -->
-                    <div class="input-group">
-                        <label for="flow-rate" class="block text-sm font-bold text-gray-700 mb-2">
-                            <i class="fa-solid fa-stopwatch mr-2 text-indigo-500"></i>Tốc độ truyền (giọt/phút)
-                        </label>
-                        <input type="number" id="flow-rate" name="flow-rate" min="1" placeholder="Ví dụ: 60" required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-lg"
-                               inputmode="numeric" pattern="[0-9]*">
-                    </div>
-
-                    <!-- Start Time -->
-                    <div class="input-group">
-                        <label for="start-time" class="block text-sm font-bold text-gray-700 mb-2">
-                            <i class="fa-regular fa-clock mr-2 text-indigo-500"></i>Thời điểm bắt đầu (Tùy chọn)
-                        </label>
-                        <input type="time" id="start-time" name="start-time"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-lg bg-white">
-                    </div>
-                    
-                    <!-- Buttons -->
-                    <div class="mt-8 flex flex-col sm:flex-row gap-4 pt-4">
-                        <button type="submit" id="calculateBtn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
-                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
-                        </button>
-                        <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
-                            <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Results -->
-                <div id="result-container" class="mt-8 hidden animate-fade-in-up">
-                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center shadow-inner">
-                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Thời gian truyền dự kiến</h3>
-                        
-                        <div id="infusion-time-display" class="score-box mb-4 bg-white text-indigo-700 text-2xl md:text-4xl">0 phút</div>
-
-                        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm text-left">
-                            <p id="detail-text" class="result-text text-indigo-700 leading-relaxed text-center font-medium">
-                                Vui lòng điền đầy đủ thông tin.
-                            </p>
-                            <p id="end-time-display" class="result-text text-gray-600 mt-2 text-center border-t border-gray-100 pt-2 hidden">
-                                <!-- Kết thúc lúc... -->
-                            </p>
-                        </div>
-                    </div>
+        <!-- Form có novalidate để tắt bong bóng mặc định -->
+        <form id="tool-form" class="space-y-6" novalidate>
+            <!-- 1. Thể tích dịch (mL) -->
+            <div>
+                <label for="volume" class="block text-sm font-medium text-gray-700 mb-1">Thể tích dịch (mL)</label>
+                <div class="flex rounded-md shadow-sm">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-flask text-indigo-500"></i>
+                    </span>
+                    <input type="number" id="volume" name="volume" placeholder="Ví dụ: 500" min="1" step="1" 
+                        class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3">
                 </div>
             </div>
-        </div>
-    </main>
 
-    <!-- Footer -->
-    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner mt-auto">
-        <div class="container mx-auto px-4">
-            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-            <p class="mt-2">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-            <p>Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a></p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
-                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+            <!-- 2. Tốc độ truyền (giọt/phút) -->
+            <div>
+                <label for="rate" class="block text-sm font-medium text-gray-700 mb-1">Tốc độ truyền (giọt/phút)</label>
+                <div class="flex rounded-md shadow-sm">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-tint text-indigo-500"></i>
+                    </span>
+                    <input type="number" id="rate" name="rate" placeholder="Ví dụ: 30" min="1" step="1"
+                        class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3">
+                </div>
+            </div>
+
+            <!-- 3. Hệ số dây (Select) -->
+            <div>
+                <label for="factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số dây truyền</label>
+                <div class="flex rounded-md shadow-sm">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-ruler-vertical text-indigo-500"></i>
+                    </span>
+                    <select id="factor" name="factor" class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3 bg-white">
+                        <option value="20" selected>20 giọt/mL (Dây thường)</option>
+                        <option value="15">15 giọt/mL (Dây máu/dây to)</option>
+                        <option value="60">60 giọt/mL (Dây micro/trẻ em)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 4. Giờ bắt đầu (Optional) -->
+            <div>
+                <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">Giờ bắt đầu truyền (Tùy chọn)</label>
+                <div class="flex rounded-md shadow-sm">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-clock text-indigo-500"></i>
+                    </span>
+                    <input type="time" id="startTime" name="startTime"
+                        class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3">
+                </div>
+            </div>
+            
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
+                    <i class="fa-solid fa-calculator mr-2"></i> Tính toán
+                </button>
+                <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
+                    <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
+                </button>
+            </div>
+        </form>
+
+        <div id="result-container" class="mt-8 hidden animate-fade-in-up">
+            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center shadow-inner">
+                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Thời gian truyền dự kiến</h3>
+                <div id="main-result" class="score-box mb-4 bg-white text-3xl sm:text-4xl md:text-5xl text-indigo-700 break-words">--</div>
+                <p id="sub-result" class="result-text text-indigo-700 leading-relaxed text-sm md:text-base">...</p>
             </div>
         </div>
-    </footer>
+    </div>
+</div>
+</main>
+<!-- CUSTOM MODAL -->
+<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+<div class="absolute inset-0 bg-black opacity-50 transition-opacity"></div>
+<div class="bg-white rounded-lg shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100">
+<div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+<svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+</svg>
+</div>
+<h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">Thông báo</h3>
+<p id="modal-message" class="text-sm text-gray-500 mb-6">Vui lòng chọn đủ mục.</p>
+<button id="close-modal-btn" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+Đóng
+</button>
+</div>
+</div>
+<footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner">
+<div class="container mx-auto px-4">
+<!-- Dòng bản quyền: Ẩn bớt text thừa trên mobile -->
+<p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
+    <!-- Thông tin liên hệ: Chữ nhỏ hơn, rút gọn nội dung trên mobile -->
+    <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
+        <!-- Hiện trên Mobile -->
+        <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
+        <!-- Hiện trên Desktop -->
+        <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
+        
+        <p class="mt-0.5 md:mt-1">
+            <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+        </p>
+    </div>
 
-    <!-- MOBILE BOTTOM NAVIGATION -->
-    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
-        <!-- Trang chủ -->
-        <a href="index.html" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-            </svg>
-            <span>Trang Chủ</span>
-        </a>
+    <!-- Links: Rút gọn tên và thêm dấu gạch phân cách -->
+    <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
+        <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
+        <span class="text-gray-600 md:hidden">|</span>
+        <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
+    </div>
+</div>
+</footer>
+<nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
+<a href="index.html" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span>Trang Chủ</span></a>
+<a href="cong-cu.html" class="bottom-nav-item active"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg><span>Công Cụ</span></a>
+<a href="gioi-thieu.html" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg><span>Giới thiệu</span></a>
+<a href="#lien-he" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg><span>Liên Hệ</span></a>
+</nav>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+// --- LAYOUT ADJUSTMENT (KHÔNG ĐƯỢC XOÁ) ---
+const header = document.querySelector('header');
+const body = document.body;
+function adjustBodyPadding() {
+if (header && getComputedStyle(header).display !== 'none') {
+body.style.paddingTop = header.offsetHeight + 'px';
+} else { body.style.paddingTop = '0px'; }
+}
+adjustBodyPadding();
+window.addEventListener('resize', adjustBodyPadding);
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('dblclick', () => { input.value = ''; });
+    });
 
-        <!-- Công cụ (Active) -->
-        <a href="cong-cu.html" class="bottom-nav-item active">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-            </svg>
-            <span>Công Cụ</span>
-        </a>
+    // --- MODAL LOGIC (GIỮ NGUYÊN) ---
+    const modal = document.getElementById('notification-modal');
+    const modalMessage = document.getElementById('modal-message');
+    const closeModalBtn = document.getElementById('close-modal-btn');
 
-        <!-- Giới thiệu -->
-        <a href="gioi-thieu.html" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-            </svg>
-            <span>Giới thiệu</span>
-        </a>
+    window.showModal = function(message) {
+        modalMessage.textContent = message;
+        modal.classList.remove('hidden');
+    }
 
-        <!-- Liên hệ -->
-        <a href="#lien-he" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-            </svg>
-            <span>Liên Hệ</span>
-        </a>
-    </nav>
+    function hideModal() {
+        modal.classList.add('hidden');
+    }
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- Layout Adjustment ---
-            const header = document.querySelector('header');
-            const body = document.body;
+    closeModalBtn.addEventListener('click', hideModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal.querySelector('.absolute')) {
+            hideModal();
+        }
+    });
 
-            function adjustBodyPadding() {
-                if (header && getComputedStyle(header).display !== 'none') {
-                    const headerHeight = header.offsetHeight;
-                    body.style.paddingTop = `${headerHeight}px`;
-                } else {
-                    body.style.paddingTop = '0px';
-                }
-            }
+    // --- LOGIC TÍNH TOÁN ---
+    const form = document.getElementById('tool-form');
+    const resultContainer = document.getElementById('result-container');
+    const mainResult = document.getElementById('main-result');
+    const subResult = document.getElementById('sub-result');
+    const clearBtn = document.getElementById('clearBtn');
 
-            adjustBodyPadding();
-            window.addEventListener('resize', adjustBodyPadding);
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 1. Lấy dữ liệu
+        const volume = parseFloat(document.getElementById('volume').value);
+        const rate = parseFloat(document.getElementById('rate').value);
+        const factor = parseFloat(document.getElementById('factor').value);
+        const startTimeInput = document.getElementById('startTime').value;
 
-            document.querySelectorAll('input').forEach(input => {
-                input.addEventListener('dblclick', () => {
-                    input.value = '';
-                });
-            });
+        // 2. Validation
+        if (!volume || isNaN(volume) || volume <= 0) {
+            showModal("Vui lòng nhập thể tích dịch hợp lệ (mL).");
+            return;
+        }
 
-            // --- Logic Infusion Time ---
-            const infusionTimeForm = document.getElementById('infusion-time-form');
-            const infusionTimeDisplay = document.getElementById('infusion-time-display');
-            const detailText = document.getElementById('detail-text');
-            const endTimeDisplay = document.getElementById('end-time-display');
-            const resultContainer = document.getElementById('result-container');
-            const clearBtn = document.getElementById('clearBtn');
-            const startTimeInput = document.getElementById('start-time');
+        if (!rate || isNaN(rate) || rate <= 0) {
+            showModal("Vui lòng nhập tốc độ truyền hợp lệ (giọt/phút).");
+            return;
+        }
+
+        // 3. Tính toán
+        // Công thức: Thời gian (phút) = (Thể tích * Hệ số dây) / Tốc độ
+        const totalMinutes = Math.round((volume * factor) / rate);
+
+        // Quy đổi ra giờ phút
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        let durationText = "";
+        if (hours > 0) {
+            durationText += `${hours} giờ `;
+        }
+        durationText += `${minutes} phút`;
+
+        // 4. Hiển thị kết quả chính
+        mainResult.textContent = durationText;
+
+        // 5. Xử lý thời gian kết thúc (nếu có nhập giờ bắt đầu)
+        let additionalInfo = `<span class="text-gray-500 text-sm block mb-1">Tổng thời gian: ${totalMinutes} phút</span>`;
+
+        if (startTimeInput) {
+            // Tạo đối tượng Date cho thời gian bắt đầu
+            const [startHour, startMinute] = startTimeInput.split(':').map(Number);
+            const now = new Date(); // Dùng ngày hiện tại làm gốc
+            now.setHours(startHour, startMinute, 0, 0);
+
+            // Cộng thời gian truyền vào
+            // totalMinutes * 60000 (đổi phút ra mili giây)
+            const endDate = new Date(now.getTime() + totalMinutes * 60000);
+
+            const endHour = endDate.getHours().toString().padStart(2, '0');
+            const endMinute = endDate.getMinutes().toString().padStart(2, '0');
+
+            // Kiểm tra xem có qua ngày mới không
+            // So sánh ngày của endDate và now
+            // Lưu ý: Nếu totalMinutes quá lớn, có thể qua nhiều ngày.
+            // Ở đây ta so sánh chênh lệch ngày đơn giản.
+            const dayDiff = Math.floor((endDate - now) / (1000 * 60 * 60 * 24)); // Cách này chưa chuẩn nếu qua đêm
             
-            function resetResults() {
-                infusionTimeDisplay.textContent = '0 phút';
-                detailText.textContent = 'Vui lòng điền đầy đủ các thông tin trên để tính toán.';
-                detailText.className = "result-text text-gray-500";
-                endTimeDisplay.textContent = '';
-                endTimeDisplay.classList.add('hidden');
-                resultContainer.classList.add('hidden');
+            // Cách chuẩn hơn để check qua đêm:
+            // Reset giờ về 0 để so sánh ngày
+            const date1 = new Date(now); date1.setHours(0,0,0,0);
+            const date2 = new Date(endDate); date2.setHours(0,0,0,0);
+            const diffTime = Math.abs(date2 - date1);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+            let dayText = "";
+            if (diffDays === 1) {
+                dayText = " (Hôm sau)";
+            } else if (diffDays > 1) {
+                dayText = ` (+${diffDays} ngày)`;
             }
 
-            infusionTimeForm.addEventListener('submit', function(event) {
-                event.preventDefault(); 
+            additionalInfo += `
+                <div class="mt-4 pt-4 border-t border-indigo-100">
+                    <span class="text-gray-600 font-medium">Dự kiến kết thúc lúc:</span>
+                    <div class="text-2xl font-bold text-indigo-600 mt-1">
+                        ${endHour}:${endMinute} <span class="text-sm font-normal text-gray-500">${dayText}</span>
+                    </div>
+                </div>
+            `;
+        }
 
-                const volume = parseFloat(document.getElementById('volume').value);
-                const dripFactor = parseFloat(document.querySelector('input[name="drip-factor"]:checked').value);
-                const flowRate = parseFloat(document.getElementById('flow-rate').value);
-                const startTimeValue = startTimeInput.value; 
+        subResult.innerHTML = additionalInfo;
 
-                if (isNaN(volume) || isNaN(dripFactor) || isNaN(flowRate) || volume <= 0 || flowRate <= 0) {
-                    infusionTimeDisplay.textContent = '0 phút';
-                    detailText.textContent = 'Vui lòng nhập các giá trị hợp lệ (> 0).';
-                    detailText.className = "result-text text-red-500 font-bold";
-                    endTimeDisplay.textContent = '';
-                    endTimeDisplay.classList.add('hidden');
-                    resultContainer.classList.remove('hidden');
-                    return;
-                } 
+        // Show Result & Scroll
+        resultContainer.classList.remove('hidden');
+        const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+        const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+    });
 
-                // Calculate
-                const totalDrops = volume * dripFactor;
-                const totalMinutes = totalDrops / flowRate;
-                
-                const hours = Math.floor(totalMinutes / 60);
-                const minutes = Math.round(totalMinutes % 60);
-
-                let durationString = '';
-                if (hours > 0) durationString += `${hours} giờ `;
-                if (minutes > 0 || hours === 0) durationString += `${minutes} phút`;
-                
-                infusionTimeDisplay.textContent = durationString.trim();
-                detailText.textContent = `Tổng thời gian truyền: ${durationString.trim()}.`;
-                detailText.className = "result-text text-indigo-700 font-medium";
-
-                // End Time
-                if (startTimeValue) {
-                    const today = new Date(); 
-                    const [startHour, startMinute] = startTimeValue.split(':').map(Number);
-                    const startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), startHour, startMinute, 0, 0);
-                    const endTime = new Date(startTime.getTime() + totalMinutes * 60 * 1000); 
-
-                    const formattedHour = endTime.getHours().toString().padStart(2, '0');
-                    const formattedMinute = endTime.getMinutes().toString().padStart(2, '0');
-                    
-                    let endTimeText = `Dự kiến kết thúc: ${formattedHour}:${formattedMinute}`;
-                    
-                    if (endTime.getDate() !== startTime.getDate()) {
-                        const daysDiff = Math.floor((endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60 * 24));
-                        if (daysDiff === 1) endTimeText += ' (Hôm sau)';
-                        else if (daysDiff > 1) endTimeText += ` (+${daysDiff} ngày)`;
-                    }
-
-                    endTimeDisplay.innerHTML = `<i class="fa-regular fa-clock mr-1 text-indigo-500"></i> ${endTimeText}`;
-                    endTimeDisplay.classList.remove('hidden');
-                } else {
-                    endTimeDisplay.textContent = '';
-                    endTimeDisplay.classList.add('hidden');
-                }
-
-                resultContainer.classList.remove('hidden');
-                
-                // Scroll to result on mobile
-                const headerHeight = document.querySelector('header')?.offsetHeight || 0;
-                const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-                window.scrollTo({ top: targetPos, behavior: 'smooth' });
-            });
-
-            clearBtn.addEventListener('click', function() {
-                infusionTimeForm.reset(); 
-                document.querySelector('input[name="drip-factor"][value="20"]').checked = true; // Reset radio to default
-                resetResults(); 
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
-    </script>
+    clearBtn.addEventListener('click', function() {
+        form.reset();
+        resultContainer.classList.add('hidden');
+        mainResult.textContent = "--";
+        subResult.textContent = "...";
+    });
+});
+</script>
 </body>
 </html>

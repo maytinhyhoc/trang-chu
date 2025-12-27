@@ -2,7 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Đã thêm user-scalable=no và maximum-scale=1.0 để chặn zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Danh Mục Thuốc & Vật Tư Y Tế</title>
     <!-- Thêm Favicon -->
     <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
@@ -14,6 +15,32 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
+        /* --- NATIVE APP FEEL CSS --- */
+        
+        /* Ngăn chặn select text toàn trang */
+        body {
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10 and IE 11 */
+            user-select: none; /* Standard syntax */
+            -webkit-touch-callout: none; /* iOS Safari: ngăn menu context khi giữ lâu */
+        }
+
+        /* Cho phép select text và thao tác trong ô input/textarea */
+        input, textarea {
+            -webkit-user-select: text !important;
+            user-select: text !important;
+        }
+
+        /* Loại bỏ màu highlight mặc định khi tap trên mobile */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Tối ưu thao tác chạm, ngăn delay */
+        a, button, input, .cursor-pointer {
+            touch-action: manipulation;
+        }
+
         /* --- Styles Global --- */
         body {
             font-family: 'Inter', sans-serif;
@@ -203,19 +230,29 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner mt-auto pb-24 md:pb-8">
+    <!-- Footer MỚI (Đã thay thế theo yêu cầu) -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner mt-auto pb-24 md:pb-8">
         <div class="container mx-auto px-4">
-            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
-            <p class="mt-2">
-                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
-            </p>
-            <p>
-                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-            </p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
-                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
+            <!-- Dòng bản quyền: Ẩn bớt text thừa trên mobile -->
+            <p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
+            
+            <!-- Thông tin liên hệ: Chữ nhỏ hơn, rút gọn nội dung trên mobile -->
+            <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
+                <!-- Hiện trên Mobile -->
+                <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
+                <!-- Hiện trên Desktop -->
+                <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
+                
+                <p class="mt-0.5 md:mt-1">
+                    <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+                </p>
+            </div>
+
+            <!-- Links: Rút gọn tên và thêm dấu gạch phân cách -->
+            <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
+                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
+                <span class="text-gray-600 md:hidden">|</span>
+                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
             </div>
         </div>
     </footer>
