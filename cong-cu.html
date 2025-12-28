@@ -2,7 +2,6 @@
 <html lang="vi" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
-    <!-- Đã có user-scalable=no để ngăn phóng to/thu nhỏ -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Công Cụ - Máy tính y học</title>
     <!-- Thêm Favicon -->
@@ -13,31 +12,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* === CẤU HÌNH GIAO DIỆN NATIVE APP === */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             padding-top: 80px; /* Sẽ được JS điều chỉnh lại */
-
-            /* 1. Ngăn chặn touch delay (300ms) trên một số thiết bị */
-            touch-action: manipulation;
-
-            /* 2. Ngăn select text (tạo cảm giác app) */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* IE10+/Edge */
-            user-select: none;         /* Standard */
-
-            /* 3. Loại bỏ màu highlight (thường là xanh/xám) khi tap vào link/nút trên mobile */
-            -webkit-tap-highlight-color: transparent;
         }
-
-        /* Khôi phục khả năng select text cho các ô nhập liệu để người dùng có thể gõ/sửa chữ */
-        input, textarea, [contenteditable] {
-            -webkit-user-select: text;
-            user-select: text;
-        }
-
         /* Styles chung */
         .gradient-bg {
             background: linear-gradient(to right, #6366f1, #a855f7);
@@ -48,7 +27,7 @@
             body {
                 padding-bottom: 80px; /* Chừa chỗ cho Bottom Nav */
             }
-            /* Đảm bảo font size input đủ lớn (16px) để tránh iOS tự động zoom khi focus */
+            /* Đảm bảo font size input đủ lớn để tránh zoom trên iOS */
             input[type="text"] {
                 font-size: 16px;
             }
@@ -72,7 +51,6 @@
             padding: 8px 4px;
             color: #6b7280; /* gray-500 */
             transition: color 0.2s;
-            cursor: pointer; /* Thêm con trỏ tay */
         }
         .bottom-nav-item.active {
             color: #4f46e5; /* indigo-600 */
@@ -321,6 +299,19 @@
                         </div>
                     </a>
 
+                    <!-- Card: SOFA (New) -->
+                    <a href="sofa.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="thang diem sofa suy da co quan sepsis nhiem khuan huyet">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm SOFA</h3>
+                                <p class="text-sm text-gray-600 mt-1">Đánh giá mức độ suy đa cơ quan.</p>
+                            </div>
+                        </div>
+                    </a>
+
                     <!-- Card: TPE (T) -->
                     <a href="tpe.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group">
                         <div class="flex items-start space-x-4">
@@ -391,29 +382,19 @@
         </section>
     </main>
 
-    <!-- Footer Section MỚI -->
-    <footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner">
+    <!-- Footer Section -->
+    <footer id="lien-he" class="bg-gray-800 text-white py-8 text-center rounded-t-lg shadow-inner">
         <div class="container mx-auto px-4">
-            <!-- Dòng bản quyền: Ẩn bớt text thừa trên mobile -->
-            <p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
-            
-            <!-- Thông tin liên hệ: Chữ nhỏ hơn, rút gọn nội dung trên mobile -->
-            <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
-                <!-- Hiện trên Mobile -->
-                <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
-                <!-- Hiện trên Desktop -->
-                <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-                
-                <p class="mt-0.5 md:mt-1">
-                    <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-                </p>
-            </div>
-
-            <!-- Links: Rút gọn tên và thêm dấu gạch phân cách -->
-            <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
-                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
-                <span class="text-gray-600 md:hidden">|</span>
-                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
+            <p>&copy; 2025 Máy tính y học. Mọi quyền được bảo lưu.</p>
+            <p class="mt-2">
+                Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng
+            </p>
+            <p>
+                Email: <a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+            </p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Chính sách bảo mật</a>
+                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản dịch vụ</a>
             </div>
         </div>
     </footer>
