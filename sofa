@@ -11,39 +11,54 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 <style>
-/* --- Mobile Optimization & Base Styles --- */
-body {
-font-family: 'Inter', sans-serif;
-background-color: #f8fafc;
-padding-top: 80px;
-/* Ngăn bôi đen văn bản (App-like feel) */
--webkit-user-select: none;
-user-select: none;
+    /* --- Mobile Optimization & Base Styles --- */
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+        padding-top: 80px;
+        /* Prevent text selection (App-like feel) */
+        -webkit-user-select: none;
+        user-select: none;
+        /* Remove tap delay and highlight */
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
 
-/* Loại bỏ độ trễ và màu highlight khi tap trên mobile */
-touch-action: manipulation;
--webkit-tap-highlight-color: transparent;
-}
-/* Khôi phục khả năng select text cho input để nhập liệu */
-input, textarea {
--webkit-user-select: text;
-user-select: text;
-}
-@media (max-width: 767px) { body { padding-top: 0px; padding-bottom: 80px; } }
-.nav-item-highlight { background-color: #eef2ff; border-radius: 9999px; padding: 4px 12px; color: #4f46e5; font-weight: 500; }
-.bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; color: #6b7280; transition: color 0.2s; }
-.bottom-nav-item.active { color: #4f46e5; }
-.bottom-nav-item svg { width: 24px; height: 24px; margin-bottom: 2px; }
-.bottom-nav-item span { font-size: 10px; font-weight: 500; }
-.score-box { background-color: #eef2ff; color: #4f46e5; padding: 1rem 2rem; border-radius: 0.75rem; font-size: 2.5rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid #c7d2fe; }
-.result-text { font-size: 1.125rem; font-weight: 600; }
-input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-input[type="number"] { -moz-appearance: textfield; }
-/* Animation cho Modal */
-.modal-enter { opacity: 0; transform: scale(0.9); }
-.modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 0.3s, transform 0.3s; }
-.modal-exit { opacity: 1; transform: scale(1); }
-.modal-exit-active { opacity: 0; transform: scale(0.9); transition: opacity 0.3s, transform 0.3s; }
+    /* Restore text selection for inputs and selects */
+    input, textarea, select {
+        -webkit-user-select: text;
+        user-select: text;
+    }
+
+    /* Safe Area for iPhone X+ */
+    .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    @media (max-width: 767px) {
+        body {
+            padding-top: 0px;
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+    }
+
+    .nav-item-highlight { background-color: #eef2ff; border-radius: 9999px; padding: 4px 12px; color: #4f46e5; font-weight: 500; }
+    .bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; color: #6b7280; transition: color 0.2s; }
+    .bottom-nav-item.active { color: #4f46e5; }
+    .bottom-nav-item svg { width: 24px; height: 24px; margin-bottom: 2px; }
+    .bottom-nav-item span { font-size: 10px; font-weight: 500; }
+    
+    .score-box { background-color: #eef2ff; color: #4f46e5; padding: 1rem 2rem; border-radius: 0.75rem; font-size: 2.5rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid #c7d2fe; }
+    .result-text { font-size: 1.125rem; font-weight: 600; }
+    
+    input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type="number"] { -moz-appearance: textfield; }
+    
+    /* Animation for Modal */
+    .modal-enter { opacity: 0; transform: scale(0.9); }
+    .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 0.3s, transform 0.3s; }
+    .modal-exit { opacity: 1; transform: scale(1); }
+    .modal-exit-active { opacity: 0; transform: scale(0.9); transition: opacity 0.3s, transform 0.3s; }
 </style>
 </head>
 <body class="text-gray-800 flex flex-col min-h-screen">
@@ -82,10 +97,10 @@ Thang điểm SOFA
                     <select id="respiration" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                         <option value="" disabled selected>Chọn chỉ số PaO2/FiO2</option>
                         <option value="0">≥ 400 mmHg</option>
-                        <option value="1">< 400 mmHg</option>
-                        <option value="2">< 300 mmHg</option>
-                        <option value="3">< 200 mmHg (và có hỗ trợ hô hấp)</option>
-                        <option value="4">< 100 mmHg (và có hỗ trợ hô hấp)</option>
+                        <option value="1">&lt; 400 mmHg</option>
+                        <option value="2">&lt; 300 mmHg</option>
+                        <option value="3">&lt; 200 mmHg (và có hỗ trợ hô hấp)</option>
+                        <option value="4">&lt; 100 mmHg (và có hỗ trợ hô hấp)</option>
                     </select>
                 </div>
 
@@ -96,10 +111,10 @@ Thang điểm SOFA
                     <select id="coagulation" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                         <option value="" disabled selected>Chọn số lượng tiểu cầu</option>
                         <option value="0">≥ 150 (×10³/µL)</option>
-                        <option value="1">< 150 (×10³/µL)</option>
-                        <option value="2">< 100 (×10³/µL)</option>
-                        <option value="3">< 50 (×10³/µL)</option>
-                        <option value="4">< 20 (×10³/µL)</option>
+                        <option value="1">&lt; 150 (×10³/µL)</option>
+                        <option value="2">&lt; 100 (×10³/µL)</option>
+                        <option value="3">&lt; 50 (×10³/µL)</option>
+                        <option value="4">&lt; 20 (×10³/µL)</option>
                     </select>
                 </div>
 
@@ -109,11 +124,11 @@ Thang điểm SOFA
                     </label>
                     <select id="liver" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                         <option value="" disabled selected>Chọn mức Bilirubin</option>
-                        <option value="0">< 1.2 mg/dL (< 20 µmol/L)</option>
+                        <option value="0">&lt; 1.2 mg/dL (&lt; 20 µmol/L)</option>
                         <option value="1">1.2 - 1.9 mg/dL (20-32 µmol/L)</option>
                         <option value="2">2.0 - 5.9 mg/dL (33-101 µmol/L)</option>
                         <option value="3">6.0 - 11.9 mg/dL (102-204 µmol/L)</option>
-                        <option value="4">> 12.0 mg/dL (> 204 µmol/L)</option>
+                        <option value="4">&gt; 12.0 mg/dL (&gt; 204 µmol/L)</option>
                     </select>
                 </div>
 
@@ -124,10 +139,10 @@ Thang điểm SOFA
                     <select id="cardiovascular" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                         <option value="" disabled selected>Chọn tình trạng huyết áp/vận mạch</option>
                         <option value="0">Không tụt huyết áp</option>
-                        <option value="1">MAP < 70 mmHg</option>
+                        <option value="1">MAP &lt; 70 mmHg</option>
                         <option value="2">Dopamine ≤ 5 hoặc Dobutamine (bất kỳ)</option>
-                        <option value="3">Dopamine > 5 hoặc Epi/Norepi ≤ 0.1</option>
-                        <option value="4">Dopamine > 15 hoặc Epi/Norepi > 0.1</option>
+                        <option value="3">Dopamine &gt; 5 hoặc Epi/Norepi ≤ 0.1</option>
+                        <option value="4">Dopamine &gt; 15 hoặc Epi/Norepi &gt; 0.1</option>
                     </select>
                     <p class="text-xs text-gray-500 mt-1 italic">*Liều vận mạch tính theo µg/kg/phút</p>
                 </div>
@@ -142,7 +157,7 @@ Thang điểm SOFA
                         <option value="1">13 - 14 điểm</option>
                         <option value="2">10 - 12 điểm</option>
                         <option value="3">6 - 9 điểm</option>
-                        <option value="4">< 6 điểm</option>
+                        <option value="4">&lt; 6 điểm</option>
                     </select>
                 </div>
 
@@ -152,11 +167,11 @@ Thang điểm SOFA
                     </label>
                     <select id="renal" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                         <option value="" disabled selected>Chọn Creatinine hoặc V nước tiểu</option>
-                        <option value="0">Cr < 1.2 mg/dL (< 110 µmol/L)</option>
+                        <option value="0">Cr &lt; 1.2 mg/dL (&lt; 110 µmol/L)</option>
                         <option value="1">Cr 1.2 - 1.9 mg/dL (110-170 µmol/L)</option>
                         <option value="2">Cr 2.0 - 3.4 mg/dL (171-299 µmol/L)</option>
-                        <option value="3">Cr 3.5 - 4.9 mg/dL hoặc UO < 500ml/ngày</option>
-                        <option value="4">Cr > 5.0 mg/dL hoặc UO < 200ml/ngày</option>
+                        <option value="3">Cr 3.5 - 4.9 mg/dL hoặc UO &lt; 500ml/ngày</option>
+                        <option value="4">Cr &gt; 5.0 mg/dL hoặc UO &lt; 200ml/ngày</option>
                     </select>
                 </div>
             </div>
@@ -188,7 +203,8 @@ Thang điểm SOFA
     </div>
 </div>
 </main>
-<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+<!-- Increased Z-Index to 60 to be above header (z-50) -->
+<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[60] hidden">
 <div class="absolute inset-0 bg-black opacity-50 transition-opacity"></div>
 <div class="bg-white rounded-lg shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100">
 <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
@@ -222,6 +238,7 @@ Thang điểm SOFA
     </div>
 </div>
 </footer>
+<!-- Added pb-safe class to handle iPhone Home Indicator area -->
 <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
 <a href="index.html" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span>Trang Chủ</span></a>
 <a href="cong-cu.html" class="bottom-nav-item active"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg><span>Công Cụ</span></a>
@@ -230,7 +247,7 @@ Thang điểm SOFA
 </nav>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-// --- LAYOUT ADJUSTMENT (KHÔNG ĐƯỢC XOÁ) ---
+// --- LAYOUT ADJUSTMENT ---
 const header = document.querySelector('header');
 const body = document.body;
 function adjustBodyPadding() {
@@ -240,11 +257,12 @@ body.style.paddingTop = header.offsetHeight + 'px';
 }
 adjustBodyPadding();
 window.addEventListener('resize', adjustBodyPadding);
+
     document.querySelectorAll('input').forEach(input => {
         input.addEventListener('dblclick', () => { input.value = ''; });
     });
 
-    // --- MODAL LOGIC (GIỮ NGUYÊN) ---
+    // --- MODAL LOGIC ---
     const modal = document.getElementById('notification-modal');
     const modalMessage = document.getElementById('modal-message');
     const closeModalBtn = document.getElementById('close-modal-btn');
@@ -265,7 +283,7 @@ window.addEventListener('resize', adjustBodyPadding);
         }
     });
 
-    // --- LOGIC TÍNH TOÁN SOFA ---
+    // --- SOFA CALCULATION LOGIC ---
     const form = document.getElementById('tool-form');
     const resultContainer = document.getElementById('result-container');
     const mainResult = document.getElementById('main-result');
@@ -283,7 +301,7 @@ window.addEventListener('resize', adjustBodyPadding);
         for (const id of ids) {
             const el = document.getElementById(id);
             if (!el.value || el.value === "") {
-                showModal(`Vui lòng chọn thông tin cho mục: ${el.parentElement.querySelector('label').innerText}`);
+                showModal(`Vui lòng chọn thông tin cho mục: ${el.parentElement.querySelector('label').innerText.trim()}`);
                 return;
             }
             values[id] = parseInt(el.value);
@@ -292,7 +310,7 @@ window.addEventListener('resize', adjustBodyPadding);
         // 2. Calculation
         const totalScore = Object.values(values).reduce((a, b) => a + b, 0);
 
-        // 3. Interpretation (Ước tính tỷ lệ tử vong - Tham khảo y văn)
+        // 3. Interpretation
         let interpretation = "";
         let mortality = "";
 
@@ -330,8 +348,9 @@ window.addEventListener('resize', adjustBodyPadding);
         form.reset();
         resultContainer.classList.add('hidden');
         mainResult.textContent = "--";
-        // Reset select colors
+        // Reset select colors or classes if any were added
         document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });
 </script>
