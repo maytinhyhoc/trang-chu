@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <!-- Đã thêm user-scalable=no để chặn zoom trên mobile -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Công Cụ Y Học - Tính Thời Gian Truyền Dịch</title>
+<title>Công Cụ Y Học - Tính Dịch Truyền</title>
 <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
 <link rel="manifest" href="manifest.json">
@@ -14,21 +14,18 @@
 <style>
 /* --- Mobile Optimization & Base Styles --- */
 body {
-font-family: 'Inter', sans-serif;
-background-color: #f8fafc;
-padding-top: 80px;
-/* Ngăn bôi đen văn bản (App-like feel) */
--webkit-user-select: none;
-user-select: none;
-
-/* Loại bỏ độ trễ và màu highlight khi tap trên mobile */
-touch-action: manipulation;
--webkit-tap-highlight-color: transparent;
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    padding-top: 80px;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 /* Khôi phục khả năng select text cho input để nhập liệu */
 input, textarea, select {
--webkit-user-select: text;
-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
 }
 @media (max-width: 767px) { body { padding-top: 0px; padding-bottom: 80px; } }
 .nav-item-highlight { background-color: #eef2ff; border-radius: 9999px; padding: 4px 12px; color: #4f46e5; font-weight: 500; }
@@ -36,16 +33,14 @@ user-select: text;
 .bottom-nav-item.active { color: #4f46e5; }
 .bottom-nav-item svg { width: 24px; height: 24px; margin-bottom: 2px; }
 .bottom-nav-item span { font-size: 10px; font-weight: 500; }
-.score-box { background-color: #eef2ff; color: #4f46e5; padding: 1rem 2rem; border-radius: 0.75rem; font-size: 2.5rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid #c7d2fe; }
-.result-text { font-size: 1.125rem; font-weight: 600; }
+.score-box { background-color: #eef2ff; color: #4f46e5; padding: 1rem; border-radius: 0.75rem; font-size: 2rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid #c7d2fe; }
+.result-text { font-size: 1rem; font-weight: 600; }
 input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 input[type="number"] { -moz-appearance: textfield; }
-/* Animation cho Modal */
-.modal-enter { opacity: 0; transform: scale(0.9); }
-.modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 0.3s, transform 0.3s; }
-.modal-exit { opacity: 1; transform: scale(1); }
-.modal-exit-active { opacity: 0; transform: scale(0.9); transition: opacity 0.3s, transform 0.3s; }
-/* Custom Input Group Styles */
+/* Animation cho Modal & Tabs */
+.animate-fade-in-up { animation: fadeInUp 0.3s ease-out forwards; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
 .input-group-text {
     display: flex;
     align-items: center;
@@ -57,6 +52,17 @@ input[type="number"] { -moz-appearance: textfield; }
     border-bottom-left-radius: 0.5rem;
     padding: 0 1rem;
     color: #4b5563;
+}
+
+/* Tab Styles */
+.tab-btn {
+    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
+}
+.tab-btn.active {
+    color: #4f46e5;
+    border-bottom-color: #4f46e5;
+    background-color: #eef2ff;
 }
 </style>
 </head>
@@ -85,79 +91,164 @@ Tính Thời Gian Truyền Dịch
 </h1>
 <div class="w-10 h-10 flex-shrink-0"></div>
 </div>
+
 <div class="mt-2 md:mt-8 bg-white rounded-lg shadow-lg p-3 md:p-8 max-w-4xl mx-auto">
+    <!-- TABS -->
+    <div class="flex mb-6 border-b border-gray-200">
+        <button id="tab-btn-time" class="tab-btn active w-1/2 py-3 text-center font-medium text-sm sm:text-base rounded-t-lg focus:outline-none" onclick="switchTab('time')">
+            <i class="fa-solid fa-clock mr-2"></i>Tính Thời Gian
+        </button>
+        <button id="tab-btn-remain" class="tab-btn w-1/2 py-3 text-center font-medium text-sm sm:text-base rounded-t-lg text-gray-500 hover:text-indigo-500 focus:outline-none" onclick="switchTab('remain')">
+            <i class="fa-solid fa-flask-half-stroke mr-2"></i>Tính Dịch Còn Lại
+        </button>
+    </div>
+
+    <!-- CONTENT WRAPPER -->
     <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl border border-gray-100">
         
-        <!-- Form có novalidate để tắt bong bóng mặc định -->
-        <form id="tool-form" class="space-y-6" novalidate>
-            <!-- 1. Thể tích dịch (mL) -->
-            <div>
-                <label for="volume" class="block text-sm font-medium text-gray-700 mb-1">Thể tích dịch (mL)</label>
-                <div class="flex rounded-md shadow-sm">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-flask text-indigo-500"></i>
-                    </span>
-                    <input type="number" id="volume" name="volume" placeholder="Ví dụ: 500" min="1" step="1" 
-                        class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3">
+        <!-- TAB 1: TÍNH THỜI GIAN (CŨ) -->
+        <div id="tab-content-time">
+            <form id="tool-form-time" class="space-y-6" novalidate>
+                <!-- 1. Thể tích dịch (mL) -->
+                <div>
+                    <label for="volume" class="block text-sm font-medium text-gray-700 mb-1">Thể tích dịch (mL)</label>
+                    <div class="flex rounded-md shadow-sm">
+                        <span class="input-group-text"><i class="fa-solid fa-flask text-indigo-500"></i></span>
+                        <input type="number" id="volume" placeholder="Ví dụ: 500" min="1" step="1" 
+                            class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3">
+                    </div>
                 </div>
-            </div>
 
-            <!-- 2. Tốc độ truyền (giọt/phút) -->
-            <div>
-                <label for="rate" class="block text-sm font-medium text-gray-700 mb-1">Tốc độ truyền (giọt/phút)</label>
-                <div class="flex rounded-md shadow-sm">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-tint text-indigo-500"></i>
-                    </span>
-                    <input type="number" id="rate" name="rate" placeholder="Ví dụ: 30" min="1" step="1"
-                        class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3">
+                <!-- 2. Tốc độ truyền (giọt/phút) -->
+                <div>
+                    <label for="rate" class="block text-sm font-medium text-gray-700 mb-1">Tốc độ truyền (giọt/phút)</label>
+                    <div class="flex rounded-md shadow-sm">
+                        <span class="input-group-text"><i class="fa-solid fa-tint text-indigo-500"></i></span>
+                        <input type="number" id="rate" placeholder="Ví dụ: 30" min="1" step="1"
+                            class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3">
+                    </div>
                 </div>
-            </div>
 
-            <!-- 3. Hệ số dây (Select) -->
-            <div>
-                <label for="factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số dây truyền</label>
-                <div class="flex rounded-md shadow-sm">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-ruler-vertical text-indigo-500"></i>
-                    </span>
-                    <select id="factor" name="factor" class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3 bg-white">
-                        <option value="20" selected>20 giọt/mL (Dây thường)</option>
-                        <option value="15">15 giọt/mL (Dây máu/dây to)</option>
-                        <option value="60">60 giọt/mL (Dây micro/trẻ em)</option>
-                    </select>
+                <!-- 3. Hệ số dây -->
+                <div>
+                    <label for="factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số dây truyền</label>
+                    <div class="flex rounded-md shadow-sm">
+                        <span class="input-group-text"><i class="fa-solid fa-ruler-vertical text-indigo-500"></i></span>
+                        <select id="factor" class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3 bg-white">
+                            <option value="20" selected>20 giọt/mL (Dây thường)</option>
+                            <option value="15">15 giọt/mL (Dây máu)</option>
+                            <option value="60">60 giọt/mL (Dây micro)</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <!-- 4. Giờ bắt đầu (Optional) -->
-            <div>
-                <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">Giờ bắt đầu truyền (Tùy chọn)</label>
-                <div class="flex rounded-md shadow-sm">
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-clock text-indigo-500"></i>
-                    </span>
-                    <input type="time" id="startTime" name="startTime"
-                        class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3">
+                <!-- 4. Giờ bắt đầu -->
+                <div>
+                    <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">Giờ bắt đầu truyền (Tùy chọn)</label>
+                    <div class="flex rounded-md shadow-sm">
+                        <span class="input-group-text"><i class="fa-solid fa-clock text-indigo-500"></i></span>
+                        <input type="time" id="startTime" class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg border p-3">
+                    </div>
                 </div>
-            </div>
-            
-            <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
-                    <i class="fa-solid fa-calculator mr-2"></i> Tính toán
-                </button>
-                <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
-                    <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
 
-        <div id="result-container" class="mt-8 hidden animate-fade-in-up">
+        <!-- TAB 2: TÍNH DỊCH CÒN LẠI (MỚI) -->
+        <div id="tab-content-remain" class="hidden">
+            <form id="tool-form-remain" class="space-y-6" novalidate>
+                 <!-- 1. Tổng Thể tích -->
+                 <div>
+                    <label for="r_volume" class="block text-sm font-medium text-gray-700 mb-1">Tổng thể tích chai dịch (mL)</label>
+                    <div class="flex rounded-md shadow-sm">
+                        <span class="input-group-text"><i class="fa-solid fa-flask text-green-600"></i></span>
+                        <input type="number" id="r_volume" placeholder="Ví dụ: 1000" min="1" step="1" 
+                            class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-green-500 focus:ring-green-500 sm:text-lg border p-3">
+                    </div>
+                </div>
+
+                 <!-- 2. Tốc độ -->
+                 <div>
+                    <label for="r_rate" class="block text-sm font-medium text-gray-700 mb-1">Tốc độ đang truyền (giọt/phút)</label>
+                    <div class="flex rounded-md shadow-sm">
+                        <span class="input-group-text"><i class="fa-solid fa-tint text-green-600"></i></span>
+                        <input type="number" id="r_rate" placeholder="Ví dụ: 40" min="1" step="1"
+                            class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-green-500 focus:ring-green-500 sm:text-lg border p-3">
+                    </div>
+                </div>
+
+                <!-- 3. Hệ số dây -->
+                <div>
+                    <label for="r_factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số dây truyền</label>
+                    <div class="flex rounded-md shadow-sm">
+                        <span class="input-group-text"><i class="fa-solid fa-ruler-vertical text-green-600"></i></span>
+                        <select id="r_factor" class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-green-500 focus:ring-green-500 sm:text-lg border p-3 bg-white">
+                            <option value="20" selected>20 giọt/mL (Dây thường)</option>
+                            <option value="15">15 giọt/mL (Dây máu)</option>
+                            <option value="60">60 giọt/mL (Dây micro)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 4. Thời gian bắt đầu và kết thúc -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="r_startTime" class="block text-sm font-medium text-gray-700 mb-1">Giờ bắt đầu</label>
+                        <div class="flex rounded-md shadow-sm">
+                            <span class="input-group-text"><i class="fa-regular fa-clock text-green-600"></i></span>
+                            <input type="time" id="r_startTime" required class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-green-500 focus:ring-green-500 sm:text-lg border p-3">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="r_endTime" class="block text-sm font-medium text-gray-700 mb-1">Giờ kiểm tra/kết thúc</label>
+                        <div class="flex rounded-md shadow-sm">
+                            <span class="input-group-text"><i class="fa-solid fa-stopwatch text-green-600"></i></span>
+                            <input type="time" id="r_endTime" required class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:border-green-500 focus:ring-green-500 sm:text-lg border p-3">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- BUTTONS ACTION -->
+        <div class="mt-8 flex flex-col sm:flex-row gap-4">
+            <button id="calculateBtn" type="button" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
+                <i class="fa-solid fa-calculator mr-2"></i> Tính toán
+            </button>
+            <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
+                <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
+            </button>
+        </div>
+
+        <!-- KẾT QUẢ TAB 1 -->
+        <div id="result-container-time" class="mt-8 hidden animate-fade-in-up">
             <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center shadow-inner">
                 <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Thời gian truyền dự kiến</h3>
-                <div id="main-result" class="score-box mb-4 bg-white text-3xl sm:text-4xl md:text-5xl text-indigo-700 break-words">--</div>
-                <p id="sub-result" class="result-text text-indigo-700 leading-relaxed text-sm md:text-base">...</p>
+                <div id="main-result-time" class="score-box mb-4 bg-white text-3xl sm:text-4xl md:text-5xl text-indigo-700 break-words">--</div>
+                <div id="sub-result-time" class="result-text text-indigo-700 leading-relaxed text-sm md:text-base">...</div>
             </div>
         </div>
+
+        <!-- KẾT QUẢ TAB 2 -->
+        <div id="result-container-remain" class="mt-8 hidden animate-fade-in-up">
+            <div class="bg-green-50 border border-green-100 rounded-xl p-6 text-center shadow-inner">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Đã vào -->
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                        <div class="text-xs font-bold text-gray-400 uppercase mb-1">Đã vào cơ thể</div>
+                        <div id="result-infused" class="text-2xl font-bold text-gray-700">-- mL</div>
+                    </div>
+                    <!-- Còn lại -->
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 ring-2 ring-green-400">
+                        <div class="text-xs font-bold text-green-600 uppercase mb-1">Lượng dịch còn lại</div>
+                        <div id="result-remaining" class="text-3xl font-bold text-green-600">-- mL</div>
+                    </div>
+                </div>
+                <div id="sub-result-remain" class="mt-4 pt-4 border-t border-green-200 text-sm text-gray-600">
+                    ...
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 </main>
@@ -179,21 +270,14 @@ Tính Thời Gian Truyền Dịch
 </div>
 <footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner">
 <div class="container mx-auto px-4">
-<!-- Dòng bản quyền: Ẩn bớt text thừa trên mobile -->
 <p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
-    <!-- Thông tin liên hệ: Chữ nhỏ hơn, rút gọn nội dung trên mobile -->
     <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
-        <!-- Hiện trên Mobile -->
         <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
-        <!-- Hiện trên Desktop -->
         <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-        
         <p class="mt-0.5 md:mt-1">
             <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
         </p>
     </div>
-
-    <!-- Links: Rút gọn tên và thêm dấu gạch phân cách -->
     <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
         <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
         <span class="text-gray-600 md:hidden">|</span>
@@ -209,120 +293,100 @@ Tính Thời Gian Truyền Dịch
 </nav>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-// --- LAYOUT ADJUSTMENT (KHÔNG ĐƯỢC XOÁ) ---
-const header = document.querySelector('header');
-const body = document.body;
-function adjustBodyPadding() {
-if (header && getComputedStyle(header).display !== 'none') {
-body.style.paddingTop = header.offsetHeight + 'px';
-} else { body.style.paddingTop = '0px'; }
-}
-adjustBodyPadding();
-window.addEventListener('resize', adjustBodyPadding);
+    // --- LAYOUT ADJUSTMENT ---
+    const header = document.querySelector('header');
+    const body = document.body;
+    function adjustBodyPadding() {
+        if (header && getComputedStyle(header).display !== 'none') {
+            body.style.paddingTop = header.offsetHeight + 'px';
+        } else { body.style.paddingTop = '0px'; }
+    }
+    adjustBodyPadding();
+    window.addEventListener('resize', adjustBodyPadding);
     document.querySelectorAll('input').forEach(input => {
         input.addEventListener('dblclick', () => { input.value = ''; });
     });
 
-    // --- MODAL LOGIC (GIỮ NGUYÊN) ---
+    // --- MODAL LOGIC ---
     const modal = document.getElementById('notification-modal');
     const modalMessage = document.getElementById('modal-message');
     const closeModalBtn = document.getElementById('close-modal-btn');
-
     window.showModal = function(message) {
         modalMessage.textContent = message;
         modal.classList.remove('hidden');
     }
+    function hideModal() { modal.classList.add('hidden'); }
+    closeModalBtn.addEventListener('click', hideModal);
+    modal.addEventListener('click', function(e) { if (e.target === modal.querySelector('.absolute')) hideModal(); });
 
-    function hideModal() {
-        modal.classList.add('hidden');
+    // --- TAB LOGIC ---
+    let currentTab = 'time'; // 'time' or 'remain'
+    window.switchTab = function(tabName) {
+        currentTab = tabName;
+        // Buttons
+        document.getElementById('tab-btn-time').className = tabName === 'time' 
+            ? 'tab-btn active w-1/2 py-3 text-center font-medium text-sm sm:text-base rounded-t-lg focus:outline-none'
+            : 'tab-btn w-1/2 py-3 text-center font-medium text-sm sm:text-base rounded-t-lg text-gray-500 hover:text-indigo-500 focus:outline-none';
+        
+        document.getElementById('tab-btn-remain').className = tabName === 'remain'
+            ? 'tab-btn active w-1/2 py-3 text-center font-medium text-sm sm:text-base rounded-t-lg focus:outline-none'
+            : 'tab-btn w-1/2 py-3 text-center font-medium text-sm sm:text-base rounded-t-lg text-gray-500 hover:text-indigo-500 focus:outline-none';
+
+        // Content
+        if(tabName === 'time') {
+            document.getElementById('tab-content-time').classList.remove('hidden');
+            document.getElementById('tab-content-remain').classList.add('hidden');
+            // Hide result of other tab
+            document.getElementById('result-container-remain').classList.add('hidden');
+        } else {
+            document.getElementById('tab-content-time').classList.add('hidden');
+            document.getElementById('tab-content-remain').classList.remove('hidden');
+             // Hide result of other tab
+             document.getElementById('result-container-time').classList.add('hidden');
+        }
     }
 
-    closeModalBtn.addEventListener('click', hideModal);
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal.querySelector('.absolute')) {
-            hideModal();
-        }
-    });
-
     // --- LOGIC TÍNH TOÁN ---
-    const form = document.getElementById('tool-form');
-    const resultContainer = document.getElementById('result-container');
-    const mainResult = document.getElementById('main-result');
-    const subResult = document.getElementById('sub-result');
+    const calculateBtn = document.getElementById('calculateBtn');
     const clearBtn = document.getElementById('clearBtn');
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // 1. Lấy dữ liệu
+    // 1. Logic Tính Thời Gian (Tab 1)
+    function calculateTime() {
         const volume = parseFloat(document.getElementById('volume').value);
         const rate = parseFloat(document.getElementById('rate').value);
         const factor = parseFloat(document.getElementById('factor').value);
         const startTimeInput = document.getElementById('startTime').value;
 
-        // 2. Validation
-        if (!volume || isNaN(volume) || volume <= 0) {
-            showModal("Vui lòng nhập thể tích dịch hợp lệ (mL).");
-            return;
-        }
+        if (!volume || isNaN(volume) || volume <= 0) { showModal("Vui lòng nhập thể tích dịch hợp lệ (mL)."); return; }
+        if (!rate || isNaN(rate) || rate <= 0) { showModal("Vui lòng nhập tốc độ truyền hợp lệ (giọt/phút)."); return; }
 
-        if (!rate || isNaN(rate) || rate <= 0) {
-            showModal("Vui lòng nhập tốc độ truyền hợp lệ (giọt/phút).");
-            return;
-        }
-
-        // 3. Tính toán
-        // Công thức: Thời gian (phút) = (Thể tích * Hệ số dây) / Tốc độ
         const totalMinutes = Math.round((volume * factor) / rate);
-
-        // Quy đổi ra giờ phút
         const hours = Math.floor(totalMinutes / 60);
         const minutes = totalMinutes % 60;
 
         let durationText = "";
-        if (hours > 0) {
-            durationText += `${hours} giờ `;
-        }
+        if (hours > 0) durationText += `${hours} giờ `;
         durationText += `${minutes} phút`;
 
-        // 4. Hiển thị kết quả chính
-        mainResult.textContent = durationText;
-
-        // 5. Xử lý thời gian kết thúc (nếu có nhập giờ bắt đầu)
+        document.getElementById('main-result-time').textContent = durationText;
+        
         let additionalInfo = `<span class="text-gray-500 text-sm block mb-1">Tổng thời gian: ${totalMinutes} phút</span>`;
-
         if (startTimeInput) {
-            // Tạo đối tượng Date cho thời gian bắt đầu
             const [startHour, startMinute] = startTimeInput.split(':').map(Number);
-            const now = new Date(); // Dùng ngày hiện tại làm gốc
+            const now = new Date();
             now.setHours(startHour, startMinute, 0, 0);
-
-            // Cộng thời gian truyền vào
-            // totalMinutes * 60000 (đổi phút ra mili giây)
             const endDate = new Date(now.getTime() + totalMinutes * 60000);
-
             const endHour = endDate.getHours().toString().padStart(2, '0');
             const endMinute = endDate.getMinutes().toString().padStart(2, '0');
-
-            // Kiểm tra xem có qua ngày mới không
-            // So sánh ngày của endDate và now
-            // Lưu ý: Nếu totalMinutes quá lớn, có thể qua nhiều ngày.
-            // Ở đây ta so sánh chênh lệch ngày đơn giản.
-            const dayDiff = Math.floor((endDate - now) / (1000 * 60 * 60 * 24)); // Cách này chưa chuẩn nếu qua đêm
             
-            // Cách chuẩn hơn để check qua đêm:
-            // Reset giờ về 0 để so sánh ngày
+            // Check day diff
             const date1 = new Date(now); date1.setHours(0,0,0,0);
             const date2 = new Date(endDate); date2.setHours(0,0,0,0);
-            const diffTime = Math.abs(date2 - date1);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-
+            const diffDays = Math.ceil(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24)); 
+            
             let dayText = "";
-            if (diffDays === 1) {
-                dayText = " (Hôm sau)";
-            } else if (diffDays > 1) {
-                dayText = ` (+${diffDays} ngày)`;
-            }
+            if (diffDays === 1) dayText = " (Hôm sau)";
+            else if (diffDays > 1) dayText = ` (+${diffDays} ngày)`;
 
             additionalInfo += `
                 <div class="mt-4 pt-4 border-t border-indigo-100">
@@ -333,21 +397,84 @@ window.addEventListener('resize', adjustBodyPadding);
                 </div>
             `;
         }
+        document.getElementById('sub-result-time').innerHTML = additionalInfo;
+        
+        const resultDiv = document.getElementById('result-container-time');
+        resultDiv.classList.remove('hidden');
+        scrollToResult(resultDiv);
+    }
 
-        subResult.innerHTML = additionalInfo;
+    // 2. Logic Tính Dịch Còn Lại (Tab 2)
+    function calculateRemaining() {
+        const volume = parseFloat(document.getElementById('r_volume').value);
+        const rate = parseFloat(document.getElementById('r_rate').value);
+        const factor = parseFloat(document.getElementById('r_factor').value);
+        const startStr = document.getElementById('r_startTime').value;
+        const endStr = document.getElementById('r_endTime').value;
 
-        // Show Result & Scroll
-        resultContainer.classList.remove('hidden');
+        if (!volume || volume <= 0) { showModal("Vui lòng nhập tổng thể tích (mL)."); return; }
+        if (!rate || rate <= 0) { showModal("Vui lòng nhập tốc độ (giọt/phút)."); return; }
+        if (!startStr) { showModal("Vui lòng chọn giờ bắt đầu."); return; }
+        if (!endStr) { showModal("Vui lòng chọn giờ kết thúc/kiểm tra."); return; }
+
+        // Tính số phút đã trôi qua
+        const [h1, m1] = startStr.split(':').map(Number);
+        const [h2, m2] = endStr.split(':').map(Number);
+        
+        let minutesPassed = (h2 * 60 + m2) - (h1 * 60 + m1);
+        // Xử lý qua đêm (VD: bắt đầu 23:00, kết thúc 01:00)
+        if (minutesPassed < 0) {
+            minutesPassed += 24 * 60;
+        }
+
+        // Tính lượng dịch đã vào: (Số phút * Tốc độ) / Hệ số dây
+        // Làm tròn 1 chữ số thập phân
+        const infused = Math.round(((minutesPassed * rate) / factor) * 10) / 10;
+        const remaining = Math.round((volume - infused) * 10) / 10;
+
+        document.getElementById('result-infused').textContent = `${infused} mL`;
+        document.getElementById('result-remaining').textContent = `${remaining} mL`;
+
+        let msg = "";
+        let colorClass = "text-gray-600";
+        if (remaining <= 0) {
+            document.getElementById('result-remaining').textContent = "0 mL";
+            msg = `<i class="fa-solid fa-triangle-exclamation text-red-500"></i> Cảnh báo: Dịch đã hết (Dư thời gian ${Math.abs(Math.round(remaining / (rate/factor)))} phút).`;
+            colorClass = "text-red-600 font-bold";
+        } else {
+            msg = `Đã truyền trong: <b>${Math.floor(minutesPassed/60)} giờ ${minutesPassed%60} phút</b>.`;
+        }
+
+        const subRes = document.getElementById('sub-result-remain');
+        subRes.innerHTML = msg;
+        subRes.className = `mt-4 pt-4 border-t border-green-200 text-sm ${colorClass}`;
+
+        const resultDiv = document.getElementById('result-container-remain');
+        resultDiv.classList.remove('hidden');
+        scrollToResult(resultDiv);
+    }
+
+    function scrollToResult(element) {
         const headerHeight = document.querySelector('header')?.offsetHeight || 0;
-        const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+        const targetPos = element.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
         window.scrollTo({ top: targetPos, behavior: 'smooth' });
+    }
+
+    // --- MAIN HANDLERS ---
+    calculateBtn.addEventListener('click', function() {
+        if (currentTab === 'time') calculateTime();
+        else calculateRemaining();
     });
 
     clearBtn.addEventListener('click', function() {
-        form.reset();
-        resultContainer.classList.add('hidden');
-        mainResult.textContent = "--";
-        subResult.textContent = "...";
+        document.getElementById('tool-form-time').reset();
+        document.getElementById('tool-form-remain').reset();
+        document.getElementById('result-container-time').classList.add('hidden');
+        document.getElementById('result-container-remain').classList.add('hidden');
+        
+        // Reset defaults
+        document.getElementById('main-result-time').textContent = "--";
+        document.getElementById('sub-result-time').textContent = "...";
     });
 });
 </script>
