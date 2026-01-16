@@ -1,544 +1,401 @@
 <!DOCTYPE html>
-<html lang="vi" style="scroll-behavior: smooth;">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Công Cụ - Máy tính y học</title>
+    <title>Danh sách công cụ - Máy tính Y học</title>
     
-    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
-    <link rel="manifest" href="manifest.json">
-    
+    <!-- TAILWIND CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- ICONS & PWA -->
+    <meta name="theme-color" content="#0d9488">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="manifest" href="/manifest.json">
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            padding-top: 80px; /* JS sẽ điều chỉnh lại */
-            
-            /* === CẤU HÌNH GIAO DIỆN GIỐNG APP (APP FEEL) === */
-            
-            /* Ngăn chọn văn bản (Select text) toàn trang */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* IE10+/Edge */
-            user-select: none;         /* Standard */
-
-            /* Loại bỏ màu nền xám khi tap vào link/button trên Mobile */
+            background-color: #f3f4f6;
             -webkit-tap-highlight-color: transparent;
-
-            /* Tối ưu hóa thao tác chạm, ngăn delay */
-            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: pan-x pan-y;
         }
-
-        /* Cho phép chọn văn bản và nhập liệu trong ô Input */
-        input, textarea {
+        input {
             -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
             user-select: text;
-        }
-
-        /* Styles chung */
-        .gradient-bg {
-            background: linear-gradient(to right, #6366f1, #a855f7);
-        }
-
-        /* Responsive adjustments for mobile */
-        @media (max-width: 767px) { 
-            body {
-                padding-bottom: 80px; /* Chừa chỗ cho Bottom Nav */
-            }
-            /* Đảm bảo font size input đủ lớn để tránh tự động zoom trên iOS */
-            input[type="text"] {
-                font-size: 16px;
-            }
-        }
-
-        /* Custom style for the active/highlighted navigation link (Desktop) */
-        .nav-item-highlight {
-            background-color: #eef2ff;
-            border-radius: 9999px;
-            padding: 4px 12px;
-            color: #4f46e5;
-            font-weight: 500;
-        }
-
-        /* Styles cho Bottom Navigation - ĐỒNG BỘ */
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 4px;
-            color: #6b7280; /* gray-500 */
-            transition: color 0.2s;
-        }
-        .bottom-nav-item.active {
-            color: #4f46e5; /* indigo-600 */
-        }
-        .bottom-nav-item svg {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 2px;
-        }
-        .bottom-nav-item span {
-            font-size: 10px;
-            font-weight: 500;
         }
     </style>
 </head>
-<body class="text-gray-800 flex flex-col min-h-screen">
+<body class="text-gray-800 pb-20 md:pb-0 overflow-x-hidden">
 
-    <header id="desktop-header" class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-30">
-        <div class="container mx-auto px-4 header-content flex items-center justify-between">
-            <div class="flex items-center flex-shrink-0 w-auto">
-                <a href="index.html" class="logo-text text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">
-                    Máy tính y học
-                </a>
-            </div>
-
-            <div class="flex-grow mx-8 max-w-md">
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </span>
-                    <input type="text" id="toolSearchDesktop" placeholder="Tìm kiếm công cụ..." class="w-full py-2 pl-10 pr-4 text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm">
-                </div>
-            </div>
-
-            <nav class="nav-menu flex space-x-4">
-                <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Công Cụ</a>
-                <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
-                <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
-            </nav>
+    <!-- ============================================ -->
+    <!-- DESKTOP HEADER -->
+    <!-- ============================================ -->
+    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
+        <div class="flex items-center gap-3">
+            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
+            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
         </div>
+        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
+            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
+            <!-- Đã bỏ gạch chân (border-b-2) -->
+            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
+            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
+        </nav>
     </header>
 
-    <header id="mobile-header" class="md:hidden bg-white shadow-sm py-3 px-4 fixed top-0 w-full z-30">
-        <div class="relative w-full">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </span>
-            <input type="text" id="toolSearchMobile" placeholder="Tìm kiếm nhanh..." class="w-full py-2.5 pl-10 pr-4 text-base text-gray-700 bg-gray-50 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+    <!-- ============================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================ -->
+    <main class="md:pt-24 p-4 max-w-5xl mx-auto min-h-screen">
+        
+        <!-- Mobile Header (Simplified) -->
+        <div class="md:hidden pt-2 pb-4 flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-blue-600">Tất cả công cụ</h1>
+            <a href="index.html" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
         </div>
-    </header>
+        
+        <!-- Search Bar -->
+        <div class="relative mb-6 sticky top-0 md:top-20 z-40">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+            </div>
+            <input type="text" id="search-input" onkeyup="filterTools()" placeholder="Tìm nhanh (VD: gcs, bmi, liều...)" 
+                class="w-full pl-11 pr-4 py-3 rounded-xl border-none shadow-md bg-white focus:ring-2 focus:ring-teal-500 focus:outline-none text-gray-700 text-sm md:text-base">
+        </div>
 
-    <main class="flex-grow w-full">
-        <section id="danh-muc-cong-cu" class="py-6 md:py-12 bg-white rounded-lg shadow-inner mx-2 md:mx-auto md:my-12 max-w-5xl">
-            <div class="container mx-auto px-2 md:px-4">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Danh sách công cụ</h2>
+        <!-- ==================== CẤP CỨU & HỒI SỨC ==================== -->
+        <div class="mb-8 tool-category">
+            <h3 class="font-bold text-gray-800 text-lg md:text-xl mb-4 flex items-center border-l-4 border-red-500 pl-3">
+                Cấp cứu & Hồi sức
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 
-                <div id="toolList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                    
-                    <!-- C -->
-                    <a href="bmi.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Chỉ số khối (BMI)</h3>
-                                <p class="text-sm text-gray-600 mt-1">Đánh giá thể trạng cơ thể.</p>
-                            </div>
-                        </div>
-                    </a>
+                <div onclick="useTool('glasgow', 'Thang điểm Glasgow (GCS)', 'fa-brain', 'red', 'glasgow.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-brain"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm Glasgow (GCS)</h4><p class="text-xs text-gray-500">Đánh giá tri giác</p></div>
+                </div>
 
-                    <!-- Đ -->
-                    <a href="dem-giot-dich-truyen.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="may dem giot dich truyen droplet counter">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Đếm giọt dịch truyền</h3>
-                                <p class="text-sm text-gray-600 mt-1">Công cụ đếm nhịp giọt hỗ trợ điều dưỡng.</p>
-                            </div>
-                        </div>
-                    </a>
+                <div onclick="useTool('sofa', 'Thang điểm SOFA', 'fa-bed-pulse', 'red', 'sofa.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-bed-pulse"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm SOFA</h4><p class="text-xs text-gray-500">Đánh giá suy tạng (Sepsis)</p></div>
+                </div>
 
-                    <a href="do-loc-cau-than.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Độ lọc cầu thận (eGFR)</h3>
-                                <p class="text-sm text-gray-600 mt-1">Ước tính chức năng thận (CKD-EPI, MDRD).</p>
-                            </div>
-                        </div>
-                    </a>
+                <div onclick="useTool('news2', 'Thang điểm NEWS2', 'fa-tower-broadcast', 'red', 'news2.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-tower-broadcast"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm NEWS2</h4><p class="text-xs text-gray-500">Cảnh báo sớm bệnh nặng</p></div>
+                </div>
 
-                    <!-- K -->
-                    <a href="khang-sinh.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="tra cuu lieu khang sinh khang nam virus antibiotic antifungal antiviral">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Kháng sinh & Virus</h3>
-                                <p class="text-sm text-gray-600 mt-1">Tra cứu liều dùng, chỉnh liều suy thận.</p>
-                            </div>
-                        </div>
-                    </a>
+                <div onclick="useTool('abg', 'Phân tích Khí máu (ABG)', 'fa-lungs', 'rose', 'phan-tich-khi-mau.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-xl"><i class="fa-solid fa-lungs"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Phân tích Khí máu (ABG)</h4><p class="text-xs text-gray-500">Toan kiềm & Oxy hóa máu</p></div>
+                </div>
 
-                    <!-- P -->
-                    <a href="ldlc.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="ldlc esc eas cholesterol">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Phân loại LDLc (ESC/EAS)</h3>
-                                <p class="text-sm text-gray-600 mt-1">Đánh giá & phân tầng nguy cơ tim mạch.</p>
-                            </div>
-                        </div>
-                    </a>
+                <div onclick="useTool('atropin', 'Thang điểm Atropin', 'fa-biohazard', 'rose', 'bang-diem-atropin.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-xl"><i class="fa-solid fa-biohazard"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm Atropin</h4><p class="text-xs text-gray-500">Theo dõi ngộ độc lân hữu cơ</p></div>
+                </div>
 
-                    <a href="phan-tich-khi-mau.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Phân tích Khí máu (ABG)</h3>
-                                <p class="text-sm text-gray-600 mt-1">Đánh giá rối loạn thăng bằng kiềm toan.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- T - Thang điểm... -->
-                    <a href="4tscore.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="thang diem 4t hit heparin giam tieu cau thrombocytopenia">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm 4T</h3>
-                                <p class="text-sm text-gray-600 mt-1">Ước tính xác suất giảm tiểu cầu do Heparin.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="bang-diem-atropin.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm Atropin</h3>
-                                <p class="text-sm text-gray-600 mt-1">Theo dõi ngộ độc Phospho hữu cơ.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="chads-vasc.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="chads-vasc chadsvasc thang diem CHA2DS2-VASc">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm CHA₂DS₂-VASc</h3>
-                                <p class="text-sm text-gray-600 mt-1">Nguy cơ đột quỵ ở bệnh nhân rung nhĩ.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="thang-dau-bps.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="thang diem dau bps behavioral pain scale danh gia dau tho may">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm đau BPS</h3>
-                                <p class="text-sm text-gray-600 mt-1">Đánh giá đau cho bệnh nhân thở máy.</p>
-                            </div>
-                        </div>
-                    </a>
-                    
-                    <a href="glasgow.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="glasgow coma scale gcs thang diem hon me">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm Glasgow (GCS)</h3>
-                                <p class="text-sm text-gray-600 mt-1">Đánh giá mức độ tri giác.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="hasbled.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="has-bled hasbled thang diem HAS-BLED">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm HAS-BLED</h3>
-                                <p class="text-sm text-gray-600 mt-1">Nguy cơ chảy máu ở bệnh nhân rung nhĩ.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="isth-dic.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="isth dic dong mau noi mach lan toa roi loan dong mau">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm ISTH DIC</h3>
-                                <p class="text-sm text-gray-600 mt-1">Chẩn đoán đông máu nội mạch lan tỏa.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                     <a href="news2.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="thang diem news2 national early warning score canh bao som">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm NEWS2</h3>
-                                <p class="text-sm text-gray-600 mt-1">Đánh giá cảnh báo sớm mức độ bệnh nặng.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="nihss.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="thang diem dot quy nihss national institutes of health stroke scale">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm NIHSS</h3>
-                                <p class="text-sm text-gray-600 mt-1">Đánh giá độ nặng đột quỵ não cấp.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="orbit.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="thang diem orbit xuat huyet rung nhi bleeding risk">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm ORBIT</h3>
-                                <p class="text-sm text-gray-600 mt-1">Tiên lượng nguy cơ xuất huyết ở bệnh nhân rung nhĩ.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="sofa.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="thang diem sofa suy da co quan sepsis nhiem khuan huyet">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm SOFA</h3>
-                                <p class="text-sm text-gray-600 mt-1">Đánh giá mức độ suy đa cơ quan.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- NEW ADDITION: TIMI Score -->
-                    <a href="timi.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="timi score hoi chung vanh cap nhoi mau co tim acs chest pain">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thang điểm TIMI</h3>
-                                <p class="text-sm text-gray-600 mt-1">Đánh giá nguy cơ biến cố tim mạch ở bệnh nhân đau ngực/ACS.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- T - Other -->
-                    <a href="tpe.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Thay huyết tương (TPE)</h3>
-                                <p class="text-sm text-gray-600 mt-1">Tính thể tích Plasma/Albumin cần thay.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                     <a href="tinh-thoi-gian-truyen-dich.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="tinh thoi gian truyen dich infusion time">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Tính thời gian truyền dịch</h3>
-                                <p class="text-sm text-gray-600 mt-1">Thời gian hoàn thành dịch truyền.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="tinh-toc-do-truyen.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="tinh toc do truyen thuoc bom tiem dien may truyen dich infusion rate pump">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Tính tốc độ truyền thuốc</h3>
-                                <p class="text-sm text-gray-600 mt-1">Bơm tiêm điện & Máy truyền dịch.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                     <a href="tra-cuu-che-do-an.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="tra cuu che do an diet lookup dinh duong">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Tra cứu chế độ ăn</h3>
-                                <p class="text-sm text-gray-600 mt-1">Mã chế độ ăn bệnh lý tại bệnh viện.</p>
-                            </div>
-                        </div>
-                    </a>
-
-                     <a href="danh-muc-thuoc.html" class="tool-card bg-white border border-gray-100 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 block text-left group" data-search-keywords="tra cuu thuoc vat tu y te drug lookup danh muc">
-                        <div class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition">Tra cứu thuốc & VTYT</h3>
-                                <p class="text-sm text-gray-600 mt-1">Mã thuốc, hoạt chất và vật tư y tế.</p>
-                            </div>
-                        </div>
-                    </a>
-
+                <div onclick="useTool('bps', 'Thang điểm đau BPS', 'fa-face-grimace', 'rose', 'thang-dau-bps.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-xl"><i class="fa-solid fa-face-grimace"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm đau BPS</h4><p class="text-xs text-gray-500">Đánh giá đau (Bệnh nhân thở máy)</p></div>
                 </div>
             </div>
-        </section>
+        </div>
+
+        <!-- ==================== TIM MẠCH & HUYẾT HỌC ==================== -->
+        <div class="mb-8 tool-category">
+            <h3 class="font-bold text-gray-800 text-lg md:text-xl mb-4 flex items-center border-l-4 border-pink-500 pl-3">
+                Tim mạch & Huyết học
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <div onclick="useTool('chads', 'Thang điểm CHA₂DS₂-VASc', 'fa-heart-crack', 'pink', 'chads-vasc.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-heart-crack"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm CHA₂DS₂-VASc</h4><p class="text-xs text-gray-500">Nguy cơ đột quỵ rung nhĩ</p></div>
+                </div>
+
+                <div onclick="useTool('hasbled', 'Thang điểm HAS-BLED', 'fa-droplet-slash', 'pink', 'hasbled.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-droplet-slash"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm HAS-BLED</h4><p class="text-xs text-gray-500">Nguy cơ chảy máu</p></div>
+                </div>
+
+                <div onclick="useTool('timi', 'Thang điểm TIMI', 'fa-heart-pulse', 'pink', 'timi.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm TIMI</h4><p class="text-xs text-gray-500">Tiên lượng NMCT cấp</p></div>
+                </div>
+
+                <div onclick="useTool('ldlc', 'Phân loại LDLc (ESC/EAS)', 'fa-chart-line', 'pink', 'ldlc.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-chart-line"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Phân loại LDLc (ESC/EAS)</h4><p class="text-xs text-gray-500">Mục tiêu điều trị mỡ máu</p></div>
+                </div>
+
+                <div onclick="useTool('orbit', 'Thang điểm ORBIT', 'fa-circle-notch', 'pink', 'orbit.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-circle-notch"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm ORBIT</h4><p class="text-xs text-gray-500">Nguy cơ chảy máu (Rung nhĩ)</p></div>
+                </div>
+
+                <div onclick="useTool('nihss', 'Thang điểm NIHSS', 'fa-user-injured', 'purple', 'nihss.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-xl"><i class="fa-solid fa-user-injured"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm NIHSS</h4><p class="text-xs text-gray-500">Đánh giá mức độ đột quỵ não</p></div>
+                </div>
+
+                <div onclick="useTool('4t', 'Thang điểm 4T', 'fa-syringe', 'purple', '4tscore.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-xl"><i class="fa-solid fa-syringe"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm 4T</h4><p class="text-xs text-gray-500">Sàng lọc HIT (Giảm tiểu cầu do Heparin)</p></div>
+                </div>
+
+                <div onclick="useTool('isth', 'Thang điểm ISTH DIC', 'fa-vial', 'purple', 'isth-dic.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-xl"><i class="fa-solid fa-vial"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm ISTH DIC</h4><p class="text-xs text-gray-500">Chẩn đoán đông máu nội mạch rải rác</p></div>
+                </div>
+
+                <div onclick="useTool('tpe', 'Thay huyết tương (TPE)', 'fa-hand-holding-droplet', 'purple', 'tpe.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-xl"><i class="fa-solid fa-hand-holding-droplet"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thay huyết tương (TPE)</h4><p class="text-xs text-gray-500">Tính thể tích huyết tương cần thay</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== DƯỢC & ĐIỀU DƯỠNG ==================== -->
+        <div class="mb-8 tool-category">
+            <h3 class="font-bold text-gray-800 text-lg md:text-xl mb-4 flex items-center border-l-4 border-blue-500 pl-3">
+                Dược & Điều dưỡng
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <div onclick="useTool('antibiotic', 'Kháng sinh & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-xl"><i class="fa-solid fa-capsules"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Kháng sinh & Virus</h4><p class="text-xs text-gray-500">Tra cứu liều dùng</p></div>
+                </div>
+
+                <div onclick="useTool('drug-lookup', 'Tra cứu thuốc & VTYT', 'fa-book-medical', 'blue', 'danh-muc-thuoc.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-xl"><i class="fa-solid fa-book-medical"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Tra cứu thuốc & VTYT</h4><p class="text-xs text-gray-500">Danh mục thuốc & Vật tư</p></div>
+                </div>
+
+                <div onclick="useTool('drip-rate', 'Đếm giọt dịch truyền', 'fa-droplet', 'cyan', 'dem-giot-dich-truyen.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600 text-xl"><i class="fa-solid fa-droplet"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Đếm giọt dịch truyền</h4><p class="text-xs text-gray-500">Tính số giọt/phút</p></div>
+                </div>
+
+                <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-clock', 'cyan', 'tinh-thoi-gian-truyen-dich.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600 text-xl"><i class="fa-regular fa-clock"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Tính thời gian truyền dịch</h4><p class="text-xs text-gray-500">Dự báo thời gian hết dịch</p></div>
+                </div>
+
+                <div onclick="useTool('infusion-rate', 'Tính tốc độ truyền thuốc', 'fa-gauge-high', 'cyan', 'tinh-toc-do-truyen.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600 text-xl"><i class="fa-solid fa-gauge-high"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Tính tốc độ truyền thuốc</h4><p class="text-xs text-gray-500">ml/h hoặc mcg/kg/phút</p></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ==================== TỔNG QUÁT & DINH DƯỠNG ==================== -->
+        <div class="mb-8 tool-category">
+            <h3 class="font-bold text-gray-800 text-lg md:text-xl mb-4 flex items-center border-l-4 border-green-500 pl-3">
+                Tổng quát & Dinh dưỡng
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                <div onclick="useTool('bmi', 'Chỉ số khối (BMI)', 'fa-weight-scale', 'green', 'bmi.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-xl"><i class="fa-solid fa-weight-scale"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Chỉ số khối (BMI)</h4><p class="text-xs text-gray-500">Đánh giá thể trạng cơ thể</p></div>
+                </div>
+
+                <div onclick="useTool('egfr', 'Độ lọc cầu thận (eGFR)', 'fa-filter', 'green', 'do-loc-cau-than.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-xl"><i class="fa-solid fa-filter"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Độ lọc cầu thận (eGFR)</h4><p class="text-xs text-gray-500">Đánh giá chức năng thận</p></div>
+                </div>
+
+                <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-apple-whole', 'green', 'tra-cuu-che-do-an.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-xl"><i class="fa-solid fa-apple-whole"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Tra cứu chế độ ăn</h4><p class="text-xs text-gray-500">Dinh dưỡng cho bệnh lý</p></div>
+                </div>
+
+            </div>
+        </div>
+
     </main>
 
-    <footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner">
-        <div class="container mx-auto px-4">
-            <p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
-            
-            <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
-                <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
-                <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-                
-                <p class="mt-0.5 md:mt-1">
-                    <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-                </p>
-            </div>
-    
-            <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
-                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
-                <span class="text-gray-600 md:hidden">|</span>
-                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
-            </div>
+    <!-- ============================================ -->
+    <!-- SIDE DRAWER (Menu Khác - Copy từ Index) -->
+    <!-- ============================================ -->
+    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
+        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
+            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
+            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
-    </footer>
+        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
+            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
+                <span class="font-medium">Giới thiệu</span>
+            </a>
+            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
+                <span class="font-medium">Liên hệ</span>
+            </a>
+            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
+                <span class="font-medium">Điều khoản</span>
+            </a>
+            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
+                <span class="font-medium">Chính sách</span>
+            </a>
+            <div class="my-2 border-t border-gray-100"></div>
+            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
+                <span class="font-medium">Ủng hộ</span>
+            </a>
+        </div>
+    </div>
 
-    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
-        <a href="index.html" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-            </svg>
-            <span>Trang Chủ</span>
-        </a>
-
-        <a href="cong-cu.html" class="bottom-nav-item active">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-            </svg>
-            <span>Công Cụ</span>
-        </a>
-
-        <a href="gioi-thieu.html" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-            </svg>
-            <span>Giới thiệu</span>
-        </a>
-
-        <a href="#lien-he" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-            </svg>
-            <span>Liên Hệ</span>
-        </a>
+    <!-- ============================================ -->
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <!-- ============================================ -->
+    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
+                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
+            </a>
+            
+            <a href="#" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
+                <i class="fa-solid fa-calculator text-xl mb-1"></i>
+                <span class="text-[10px]">Công cụ</span>
+            </a>
+            
+            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
+                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
+            </button>
+        </div>
     </nav>
 
+    <!-- ============================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================ -->
     <script>
-        // Function to remove Vietnamese diacritics
-        function removeDiacritics(str) {
-            return str
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .replace(/đ/g, "d")
-                .replace(/Đ/g, "D");
-        }
-
-        // Search Functionality (Works for both Desktop and Mobile inputs)
-        const inputs = [document.getElementById('toolSearchDesktop'), document.getElementById('toolSearchMobile')];
-        
-        inputs.forEach(input => {
-            if(!input) return;
-            input.addEventListener('keyup', function() {
-                // Sync values
-                const searchTermVal = this.value;
-                inputs.forEach(otherInput => {
-                    if (otherInput && otherInput !== this) otherInput.value = searchTermVal;
-                });
-
-                const searchTerm = removeDiacritics(searchTermVal.toLowerCase());
-                const toolCards = document.querySelectorAll('.tool-card');
-
-                toolCards.forEach(card => {
-                    const title = removeDiacritics(card.querySelector('h3').textContent.toLowerCase());
-                    const description = removeDiacritics(card.querySelector('p').textContent.toLowerCase());
-                    const searchKeywords = card.dataset.searchKeywords ? removeDiacritics(card.dataset.searchKeywords.toLowerCase()) : '';
-
-                    if (title.includes(searchTerm) || description.includes(searchTerm) || searchKeywords.includes(searchTerm)) {
-                        card.parentElement.style.display = 'block'; 
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+        // --- LOGIC LƯU LỊCH SỬ (Đồng bộ với Index) ---
+        function useTool(id, name, icon, color, url) {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            
+            // Xóa nếu trùng để đưa lên đầu
+            recentTools = recentTools.filter(tool => tool.id !== id);
+            
+            // Thêm mới lên đầu
+            recentTools.unshift({
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+                url: url,
+                timestamp: new Date().getTime()
             });
-        });
 
-        // Dynamic Body Padding
-        document.addEventListener('DOMContentLoaded', function() {
-            const desktopHeader = document.getElementById('desktop-header');
-            const mobileHeader = document.getElementById('mobile-header');
-            const body = document.body;
-
-            function adjustBodyPadding() {
-                if (window.innerWidth >= 768) {
-                    // Desktop
-                    if(desktopHeader) {
-                        body.style.paddingTop = desktopHeader.offsetHeight + 'px';
-                    }
-                } else {
-                    // Mobile
-                    if(mobileHeader) {
-                        body.style.paddingTop = mobileHeader.offsetHeight + 'px';
-                    } else {
-                         body.style.paddingTop = '0px';
-                    }
-                }
+            // Giới hạn 5 công cụ
+            if (recentTools.length > 5) {
+                recentTools.pop();
             }
 
-            adjustBodyPadding();
-            window.addEventListener('resize', adjustBodyPadding);
-        });
-    </script>
+            // Lưu vào localStorage
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
 
+            // Chuyển trang
+            if (url) {
+                window.location.href = url;
+            } else {
+                alert('Trang này chưa sẵn sàng!');
+            }
+        }
+
+        // --- HÀM LOẠI BỎ DẤU TIẾNG VIỆT ---
+        function removeVietnameseTones(str) {
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
+            str = str.replace(/đ/g,"d");
+            str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+            str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+            str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+            str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+            str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+            str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+            str = str.replace(/Đ/g, "D");
+            // Một số bộ gõ kết hợp
+            str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); 
+            str = str.replace(/\u02C6|\u0306|\u031B/g, ""); 
+            return str;
+        }
+
+        // --- TÌM KIẾM CÔNG CỤ (KHÔNG DẤU) ---
+        function filterTools() {
+            const input = document.getElementById('search-input');
+            const filter = removeVietnameseTones(input.value.toLowerCase());
+            const items = document.querySelectorAll('.tool-item');
+            const categories = document.querySelectorAll('.tool-category');
+
+            items.forEach(item => {
+                const text = item.textContent || item.innerText;
+                const normalizedText = removeVietnameseTones(text.toLowerCase());
+                
+                // Tìm kiếm không dấu
+                if (normalizedText.includes(filter)) {
+                    item.style.display = "flex";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+
+            // Ẩn tiêu đề nhóm nếu không còn công cụ nào bên trong
+            categories.forEach(cat => {
+                const visibleItems = cat.querySelectorAll('.tool-item[style="display: flex;"]');
+                if (visibleItems.length === 0 && filter !== "") {
+                    cat.style.display = "none";
+                } else {
+                    cat.style.display = "block";
+                }
+            });
+        }
+
+        // --- DRAWER MENU LOGIC ---
+        function openDrawer(e) {
+            if(e) e.preventDefault();
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            drawer.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+    </script>
 </body>
 </html>
