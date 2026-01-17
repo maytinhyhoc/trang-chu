@@ -1,212 +1,254 @@
 <!DOCTYPE html>
-<html lang="vi" style="scroll-behavior: smooth;">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Điều khoản dịch vụ - Máy tính y học</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
-    <link rel="manifest" href="manifest.json">
+    <title>Điều Khoản Dịch Vụ - Công Cụ Y Học</title>
+    
+    <!-- TAILWIND CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FONTS & ICONS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ICONS & PWA -->
+    <meta name="theme-color" content="#4f46e5">
+    <!-- Placeholder images for preview -->
+    <link rel="icon" type="image/png" href="https://placehold.co/32x32/4f46e5/ffffff?text=L">
+
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Màu nền nhẹ */
-            padding-top: 80px; /* Mặc định cho Desktop */
+        /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f3f4f6; 
+            padding-bottom: 80px; 
+            -webkit-tap-highlight-color: transparent;
             
-            /* Ngăn chặn hành vi touch delay trên mobile */
-            touch-action: manipulation;
-            
-            /* MỚI: Ngăn select text để tạo cảm giác App */
+            /* --- CHẶN BÔI ĐEN TOÀN TRANG --- */
             -webkit-user-select: none; /* Safari */
-            -ms-user-select: none; /* IE 10 and IE 11 */
-            user-select: none; /* Standard syntax */
-            -webkit-tap-highlight-color: transparent; /* Loại bỏ highlight màu xanh khi tap trên Android/iOS */
-        }
-        
-        /* Cho phép select text ở các thẻ input hoặc textarea nếu sau này có dùng */
-        input, textarea {
-            -webkit-user-select: text;
-            user-select: text;
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE10+/Edge */
+            user-select: none;         /* Standard */
+            touch-action: pan-x pan-y;
         }
 
-        /* Tùy chỉnh nhỏ cho các phần tử */
-        .gradient-bg {
-            background: linear-gradient(to right, #6366f1, #a855f7); /* Màu tím xanh */
-        }
-        
-        /* Media query cho Desktop */
-        @media (min-width: 768px) {
-            /* Styles desktop specific if needed */
-        }
-        
-        /* Responsive adjustments for mobile */
-        @media (max-width: 767px) { 
-            body {
-                padding-top: 0px; /* Header ẩn nên padding top là 0 */
-                padding-bottom: 80px; /* Thêm padding dưới chuẩn 80px để khớp với menu */
-            }
-            .header-content {
-                justify-content: center;
-            }
+        /* Đảm bảo nội dung chính cũng không thể bôi đen */
+        .content-text {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: default; /* Con trỏ chuột không đổi thành dạng text */
         }
 
-        /* Custom style for the active/highlighted navigation link */
-        .nav-item-highlight {
-            background-color: #eef2ff;
-            border-radius: 9999px;
-            padding: 4px 12px;
-            color: #4f46e5;
-            font-weight: 500;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
-
-        /* Styles cho Bottom Navigation - ĐỒNG BỘ 100% VỚI INDEX */
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 4px;
-            color: #6b7280; /* gray-500 */
-            transition: color 0.2s;
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
         }
-        .bottom-nav-item.active {
-            color: #4f46e5; /* indigo-600 */
-        }
-        .bottom-nav-item svg {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 2px;
-        }
-        .bottom-nav-item span {
-            font-size: 10px;
-            font-weight: 500;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     </style>
 </head>
-<body class="text-gray-800">
+<!-- Thêm oncontextmenu="return false" để chặn chuột phải ngay từ body -->
+<body oncontextmenu="return false">
 
-    <header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-20">
-        <div class="container mx-auto px-4 header-content flex items-center justify-between">
-            <div class="flex items-center flex-shrink-0 w-full md:w-auto justify-center md:justify-start">
-                <a href="#" class="logo-text text-xl md:text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">
-                    Máy tính y học
-                </a>
-            </div>
+<!-- HEADER DESKTOP -->
+<header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between select-none">
+    <div class="flex items-center gap-3">
+        <!-- Sử dụng placeholder nếu ảnh lỗi -->
+        <img src="logo.png" onerror="this.src='https://placehold.co/40x40/4f46e5/ffffff?text=LOGO'" alt="Logo" class="w-10 h-10 object-contain">
+        <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
+    </div>
+    <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
+        <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
+        <a href="cong-cu.html" class="hover:text-teal-600 transition">Công cụ</a>
+        <a href="#" onclick="openDrawer(event)" class="text-teal-600 font-bold">Khác</a>
+    </nav>
+</header>
 
-            <nav class="nav-menu nav-menu-desktop hidden md:flex space-x-4">
-                <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Công Cụ</a>
-                <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
-                <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
-            </nav>
+<!-- HEADER MOBILE -->
+<header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4 select-none">
+    <a href="index.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
+        <i class="fa-solid fa-chevron-left text-lg"></i>
+    </a>
+    <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+        Điều Khoản Dịch Vụ
+    </h1>
+    <div class="w-8"></div>
+</header>
+
+<!-- MAIN CONTENT WRAPPER -->
+<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl select-none">
+    
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up content-text">
+        <!-- Banner Title -->
+        <div class="bg-blue-50 p-6 md:p-8 border-b border-blue-100">
+            <h1 class="text-2xl md:text-3xl font-bold text-blue-900 mb-2">Điều khoản sử dụng</h1>
         </div>
-    </header>
 
-    <section class="py-10 md:py-24 bg-white rounded-lg shadow-inner mx-4 my-8 md:mx-auto md:my-12 max-w-4xl">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 md:mb-12">Điều khoản dịch vụ</h1>
-            <div class="text-left text-gray-700 space-y-6 md:space-y-8 px-2 md:px-8">
-                <div>
-                    <h3 class="text-xl md:text-2xl font-semibold text-gray-900 mb-3 md:mb-4">1. Mục đích sử dụng</h3>
-                    <p class="text-base md:text-lg leading-relaxed">
-                        Trang web được cung cấp miễn phí nhằm hỗ trợ tính toán và tra cứu các thông số y khoa. Các công cụ chỉ mang tính chất tham khảo và không thay thế chẩn đoán hay điều trị y khoa từ bác sĩ.
-                    </p>
-                </div>
-                <div>
-                    <h3 class="text-xl md:text-2xl font-semibold text-gray-900 mb-3 md:mb-4">2. Giới hạn trách nhiệm</h3>
-                    <p class="text-base md:text-lg leading-relaxed">
-                        Chúng tôi không chịu trách nhiệm đối với bất kỳ sai sót, chậm trễ hoặc thiệt hại nào phát sinh từ việc sử dụng thông tin hoặc công cụ trên trang web. Người dùng chịu trách nhiệm xác minh tính chính xác trước khi áp dụng vào thực tế lâm sàng.
-                    </p>
-                </div>
-                <div>
-                    <h3 class="text-xl md:text-2xl font-semibold text-gray-900 mb-3 md:mb-4">3. Sử dụng hợp pháp</h3>
-                    <p class="text-base md:text-lg leading-relaxed">
-                        Người dùng cam kết không sử dụng trang web vào mục đích vi phạm pháp luật hoặc xâm phạm quyền của bên thứ ba.
-                    </p>
-                </div>
-                <div>
-                    <h3 class="text-xl md:text-2xl font-semibold text-gray-900 mb-3 md:mb-4">4. Thay đổi nội dung</h3>
-                    <p class="text-base md:text-lg leading-relaxed">
-                        Chúng tôi có quyền thay đổi, cập nhật hoặc ngừng cung cấp bất kỳ tính năng hoặc nội dung nào trên trang web mà không cần thông báo trước.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner">
-        <div class="container mx-auto px-4">
-            <p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
+        <!-- Content Body -->
+        <div class="p-6 md:p-8 space-y-8 text-gray-700 leading-relaxed">
             
-            <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
-                <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
-                <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-                
-                <p class="mt-0.5 md:mt-1">
-                    <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
+            <!-- Section 1 -->
+            <section>
+                <h2 class="flex items-center text-xl font-bold text-gray-900 mb-3">
+                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm mr-3">1</span>
+                    Giới thiệu chung
+                </h2>
+                <p class="pl-11 text-sm md:text-base">
+                    Chào mừng bạn đến với <strong>Máy Tính Y Học</strong>. Bằng việc truy cập và sử dụng các công cụ tính toán trên website này, bạn đồng ý tuân thủ các điều khoản và điều kiện được nêu dưới đây. Nếu bạn không đồng ý với bất kỳ phần nào, vui lòng ngừng sử dụng dịch vụ.
+                </p>
+            </section>
+
+            <!-- Section 2: QUAN TRỌNG NHẤT -->
+            <section class="bg-red-50 p-5 rounded-xl border border-red-100">
+                <h2 class="flex items-center text-xl font-bold text-red-700 mb-3">
+                    <i class="fa-solid fa-triangle-exclamation mr-3 text-red-600"></i>
+                    2. Miễn trừ trách nhiệm y khoa
+                </h2>
+                <div class="space-y-3 text-sm md:text-base text-red-900/80">
+                    <p><strong>2.1. Mục đích tham khảo:</strong> Tất cả các công cụ, thuật toán và thông tin trên website này chỉ mang tính chất tham khảo và hỗ trợ tính toán nhanh. Chúng <strong>KHÔNG</strong> thay thế cho chẩn đoán, tư vấn hoặc phác đồ điều trị của bác sĩ chuyên khoa.</p>
+                    <p><strong>2.2. Không chịu trách nhiệm:</strong> Đội ngũ phát triển không chịu trách nhiệm pháp lý cho bất kỳ sai sót nào trong quá trình tính toán, hoặc các hậu quả phát sinh từ việc áp dụng kết quả tính toán vào thực tế lâm sàng. Người sử dụng (nhân viên y tế) phải tự kiểm tra lại kết quả và chịu hoàn toàn trách nhiệm về quyết định y khoa của mình.</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section>
+                <h2 class="flex items-center text-xl font-bold text-gray-900 mb-3">
+                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm mr-3">3</span>
+                    Quyền sở hữu trí tuệ
+                </h2>
+                <p class="pl-11 text-sm md:text-base">
+                    Mã nguồn, giao diện và các thuật toán được phát triển trên website này thuộc quyền sở hữu của Ban quản trị. Bạn được phép sử dụng miễn phí cho mục đích cá nhân và công việc, nhưng không được sao chép, bán lại hoặc sử dụng cho mục đích thương mại mà không có sự đồng ý bằng văn bản.
+                </p>
+            </section>
+
+            <!-- Section 4 -->
+            <section>
+                <h2 class="flex items-center text-xl font-bold text-gray-900 mb-3">
+                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm mr-3">4</span>
+                    Thay đổi điều khoản
+                </h2>
+                <p class="pl-11 text-sm md:text-base">
+                    Chúng tôi có quyền thay đổi, chỉnh sửa hoặc bổ sung nội dung của Điều khoản dịch vụ này bất cứ lúc nào. Các thay đổi sẽ có hiệu lực ngay khi được đăng tải trên website. Việc bạn tiếp tục sử dụng dịch vụ sau khi có các thay đổi đồng nghĩa với việc bạn chấp nhận và đồng ý tuân thủ các quy định mới.
+                </p>
+            </section>
+
+            <div class="border-t border-gray-100 pt-6 mt-8">
+                <p class="text-center text-gray-500 text-sm">
+                    Mọi thắc mắc vui lòng liên hệ: <a href="mailto:toannguyen284@gmail.com" class="text-blue-600 hover:underline">toannguyen284@gmail.com</a>
                 </p>
             </div>
-    
-            <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
-                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
-                <span class="text-gray-600 md:hidden">|</span>
-                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
-            </div>
         </div>
-    </footer>
+    </div>
+</main>
 
-    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
-        <a href="index.html" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-            </svg>
-            <span>Trang Chủ</span>
+<!-- DRAWER MENU & BOTTOM NAV -->
+<div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+<div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col select-none">
+    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
+        <h2 class="font-bold text-xl text-gray-800">Menu</h2>
+        <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
+        <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
+            <span class="font-medium">Giới thiệu</span>
         </a>
-
-        <a href="cong-cu.html" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-            </svg>
-            <span>Công Cụ</span>
+        <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
+            <span class="font-medium">Liên hệ</span>
         </a>
-
-        <a href="gioi-thieu.html" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-            </svg>
-            <span>Giới thiệu</span>
+        <!-- ACTIVE STATE CHO TRANG NÀY -->
+        <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 bg-blue-50 text-blue-600 rounded-xl transition group font-bold">
+            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><i class="fa-solid fa-file-contract"></i></div>
+            <span class="font-medium">Điều khoản</span>
         </a>
-
-        <a href="#lien-he" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-            </svg>
-            <span>Liên Hệ</span>
+        <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
+            <span class="font-medium">Chính sách</span>
         </a>
-    </nav>
+        <div class="my-2 border-t border-gray-100"></div>
+        <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
+            <span class="font-medium">Ủng hộ</span>
+        </a>
+    </div>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const header = document.querySelector('header');
-            const body = document.body;
+<!-- MOBILE BOTTOM NAV -->
+<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] select-none">
+    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+        <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+            <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
+            <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
+        </a>
+        <a href="cong-cu.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+            <i class="fa-solid fa-calculator text-xl mb-1 group-hover:text-teal-600"></i>
+            <span class="text-[10px] group-hover:text-teal-600">Công cụ</span>
+        </a>
+        <button type="button" onclick="openDrawer(event)" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
+            <i class="fa-solid fa-bars text-xl mb-1"></i>
+            <span class="text-[10px]">Khác</span>
+        </button>
+    </div>
+</nav>
 
-            function adjustBodyPadding() {
-                const headerHeight = header.offsetHeight;
-                // Nếu là mobile (màn hình < 768px), padding-top cố định = 0 do header ẩn
-                if (window.innerWidth < 768) {
-                    body.style.paddingTop = '0px'; 
-                } else {
-                    body.style.paddingTop = headerHeight + 'px';
-                }
-            }
+<script>
+// --- LOGIC DRAWER MENU ---
+function openDrawer(e) {
+    if(e) e.preventDefault();
+    const drawer = document.getElementById('drawer-menu');
+    const overlay = document.getElementById('drawer-overlay');
+    overlay.classList.remove('hidden');
+    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+    drawer.classList.remove('translate-x-full');
+    document.body.style.overflow = 'hidden';
+}
 
-            // Adjust padding on load and on window resize
-            adjustBodyPadding();
-            window.addEventListener('resize', adjustBodyPadding);
-        });
-    </script>
+function closeDrawer() {
+    const drawer = document.getElementById('drawer-menu');
+    const overlay = document.getElementById('drawer-overlay');
+    drawer.classList.add('translate-x-full');
+    overlay.classList.add('opacity-0');
+    setTimeout(() => {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    }, 300);
+}
 
+// --- LOGIC CHẶN COPY & BÔI ĐEN (NÂNG CAO) ---
+
+// 1. Chặn menu chuột phải
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// 2. Chặn các phím tắt Copy (Ctrl+C), Select All (Ctrl+A), View Source (Ctrl+U), F12
+document.onkeydown = function(e) {
+    if (e.ctrlKey && 
+       (e.keyCode === 67 || // C (Copy)
+        e.keyCode === 86 || // V (Paste)
+        e.keyCode === 85 || // U (View Source)
+        e.keyCode === 65 || // A (Select All)
+        e.keyCode === 117)) { // F6 (tuỳ trình duyệt)
+        return false;
+    } 
+    // Chặn F12 (Developer Tools)
+    if(e.keyCode === 123) {
+        return false;
+    }
+};
+
+// 3. Chặn sự kiện copy trực tiếp
+document.addEventListener('copy', (e) => {
+    e.preventDefault();
+    // Tuỳ chọn: Thông báo cho người dùng
+    // alert("Nội dung này được bảo vệ bản quyền."); 
+});
+</script>
 </body>
 </html>

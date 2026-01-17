@@ -25,12 +25,18 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
             -webkit-tap-highlight-color: transparent;
+            /* Ngăn bôi đen văn bản bằng CSS */
             -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
             user-select: none;
             touch-action: pan-x pan-y;
         }
+        /* Cho phép nhập liệu trong ô input */
         input {
             -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
             user-select: text;
         }
     </style>
@@ -42,7 +48,7 @@
     <!-- ============================================ -->
     <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
         <div class="flex items-center gap-3">
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
+            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://placehold.co/40x40?text=Logo'">
             <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
         </div>
         <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
@@ -396,6 +402,42 @@
                 document.body.style.overflow = '';
             }, 300);
         }
+
+        // ============================================
+        // TÍNH NĂNG BẢO MẬT (CHẶN SAO CHÉP)
+        // ============================================
+
+        // 1. Chặn menu chuột phải (Context Menu)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            // Bạn có thể hiển thị thông báo ở đây nếu muốn, ví dụ:
+            // alert("Chức năng này đã bị vô hiệu hóa.");
+        });
+
+        // 2. Chặn các phím tắt (Ctrl+C, Ctrl+A, Ctrl+U, F12)
+        document.addEventListener('keydown', function(e) {
+            // Danh sách các phím cần chặn
+            // e.ctrlKey: Kiểm tra xem phím Ctrl có đang được nhấn không
+            // e.key: Kiểm tra phím được nhấn
+            
+            // Chặn Ctrl+C (Sao chép), Ctrl+A (Chọn tất cả), Ctrl+U (Xem nguồn), Ctrl+S (Lưu)
+            if (e.ctrlKey && (
+                e.key === 'c' || e.key === 'C' || 
+                e.key === 'a' || e.key === 'A' || 
+                e.key === 'u' || e.key === 'U' ||
+                e.key === 's' || e.key === 'S'
+            )) {
+                e.preventDefault();
+                return false;
+            }
+
+            // Chặn F12 (Developer Tools)
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
     </script>
 </body>
 </html>

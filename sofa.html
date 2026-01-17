@@ -1,358 +1,439 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Thang điểm SOFA</title>
-<link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
-<link rel="manifest" href="manifest.json">
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-<style>
-    /* --- Mobile Optimization & Base Styles --- */
-    body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f8fafc;
-        padding-top: 80px;
-        /* Prevent text selection (App-like feel) */
-        -webkit-user-select: none;
-        user-select: none;
-        /* Remove tap delay and highlight */
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thang điểm SOFA</title>
+    
+    <!-- TAILWIND CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FONTS & ICONS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ICONS & PWA -->
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
 
-    /* Restore text selection for inputs and selects */
-    input, textarea, select {
-        -webkit-user-select: text;
-        user-select: text;
-    }
-
-    /* Safe Area for iPhone X+ */
-    .pb-safe {
-        padding-bottom: env(safe-area-inset-bottom, 20px);
-    }
-
-    @media (max-width: 767px) {
-        body {
-            padding-top: 0px;
-            padding-bottom: 80px; /* Space for bottom nav */
+    <style>
+        /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f3f4f6; 
+            padding-bottom: 80px; /* Space for Bottom Nav */
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            user-select: none;
+            touch-action: pan-x pan-y;
         }
-    }
 
-    .nav-item-highlight { background-color: #eef2ff; border-radius: 9999px; padding: 4px 12px; color: #4f46e5; font-weight: 500; }
-    .bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; color: #6b7280; transition: color 0.2s; }
-    .bottom-nav-item.active { color: #4f46e5; }
-    .bottom-nav-item svg { width: 24px; height: 24px; margin-bottom: 2px; }
-    .bottom-nav-item span { font-size: 10px; font-weight: 500; }
-    
-    .score-box { background-color: #eef2ff; color: #4f46e5; padding: 1rem 2rem; border-radius: 0.75rem; font-size: 2.5rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid #c7d2fe; }
-    .result-text { font-size: 1.125rem; font-weight: 600; }
-    
-    input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    input[type="number"] { -moz-appearance: textfield; }
-    
-    /* Animation for Modal */
-    .modal-enter { opacity: 0; transform: scale(0.9); }
-    .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 0.3s, transform 0.3s; }
-    .modal-exit { opacity: 1; transform: scale(1); }
-    .modal-exit-active { opacity: 0; transform: scale(0.9); transition: opacity 0.3s, transform 0.3s; }
-</style>
-</head>
-<body class="text-gray-800 flex flex-col min-h-screen">
-<header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-50">
-<div class="container mx-auto px-4 header-content flex items-center justify-between">
-<div class="flex items-center flex-shrink-0 w-auto">
-<a href="index.html" class="logo-text text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">Máy tính y học</a>
-</div>
-<nav class="nav-menu flex space-x-4">
-<a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-<a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Công Cụ</a>
-<a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
-<a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
-</nav>
-</div>
-</header>
-<main class="flex-grow container mx-auto px-4 py-4 md:py-8">
-<div class="flex items-center justify-between mb-4 md:mb-6 pt-4 md:pt-0">
-<a href="cong-cu.html" class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-full text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition duration-300 shadow-sm">
-<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-</a>
-<h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 flex-grow px-2">
-Thang điểm SOFA
-</h1>
-<div class="w-10 h-10 flex-shrink-0"></div>
-</div>
-<div class="mt-2 md:mt-8 bg-white rounded-lg shadow-lg p-3 md:p-8 max-w-4xl mx-auto">
-    <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl border border-gray-100">
+        /* Cho phép chọn text ở input và kết quả */
+        .result-text, input, textarea, select {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
         
-        <form id="tool-form" class="space-y-6" novalidate>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                        <i class="fa-solid fa-lungs text-indigo-500 mr-2 w-6 text-center"></i> Hô hấp (PaO2/FiO2)
-                    </label>
-                    <select id="respiration" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
-                        <option value="" disabled selected>Chọn chỉ số PaO2/FiO2</option>
-                        <option value="0">≥ 400 mmHg</option>
-                        <option value="1">&lt; 400 mmHg</option>
-                        <option value="2">&lt; 300 mmHg</option>
-                        <option value="3">&lt; 200 mmHg (và có hỗ trợ hô hấp)</option>
-                        <option value="4">&lt; 100 mmHg (và có hỗ trợ hô hấp)</option>
-                    </select>
-                </div>
+        /* Tùy chỉnh thanh cuộn nếu cần */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    </style>
+</head>
+<body>
 
-                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                        <i class="fa-solid fa-droplet text-red-500 mr-2 w-6 text-center"></i> Đông máu (Tiểu cầu)
-                    </label>
-                    <select id="coagulation" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
-                        <option value="" disabled selected>Chọn số lượng tiểu cầu</option>
-                        <option value="0">≥ 150 (×10³/µL)</option>
-                        <option value="1">&lt; 150 (×10³/µL)</option>
-                        <option value="2">&lt; 100 (×10³/µL)</option>
-                        <option value="3">&lt; 50 (×10³/µL)</option>
-                        <option value="4">&lt; 20 (×10³/µL)</option>
-                    </select>
-                </div>
+    <!-- 2. HEADER & NAVIGATION -->
+    <!-- A. Desktop Header -->
+    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
+        <div class="flex items-center gap-3">
+            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://via.placeholder.com/40'">
+            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
+        </div>
+        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
+            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
+            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
+            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
+        </nav>
+    </header>
 
-                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                        <i class="fa-solid fa-flask text-yellow-500 mr-2 w-6 text-center"></i> Gan (Bilirubin)
-                    </label>
-                    <select id="liver" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
-                        <option value="" disabled selected>Chọn mức Bilirubin</option>
-                        <option value="0">&lt; 1.2 mg/dL (&lt; 20 µmol/L)</option>
-                        <option value="1">1.2 - 1.9 mg/dL (20-32 µmol/L)</option>
-                        <option value="2">2.0 - 5.9 mg/dL (33-101 µmol/L)</option>
-                        <option value="3">6.0 - 11.9 mg/dL (102-204 µmol/L)</option>
-                        <option value="4">&gt; 12.0 mg/dL (&gt; 204 µmol/L)</option>
-                    </select>
-                </div>
+    <!-- B. Mobile Header (App Style) -->
+    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
+        <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
+            <i class="fa-solid fa-chevron-left text-lg"></i>
+        </a>
+        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+            Thang điểm SOFA
+        </h1>
+        <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
+    </header>
 
-                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                        <i class="fa-solid fa-heart-pulse text-pink-500 mr-2 w-6 text-center"></i> Tim mạch (Vận mạch)
-                    </label>
-                    <select id="cardiovascular" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
-                        <option value="" disabled selected>Chọn tình trạng huyết áp/vận mạch</option>
-                        <option value="0">Không tụt huyết áp</option>
-                        <option value="1">MAP &lt; 70 mmHg</option>
-                        <option value="2">Dopamine ≤ 5 hoặc Dobutamine (bất kỳ)</option>
-                        <option value="3">Dopamine &gt; 5 hoặc Epi/Norepi ≤ 0.1</option>
-                        <option value="4">Dopamine &gt; 15 hoặc Epi/Norepi &gt; 0.1</option>
-                    </select>
-                    <p class="text-xs text-gray-500 mt-1 italic">*Liều vận mạch tính theo µg/kg/phút</p>
-                </div>
-
-                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                        <i class="fa-solid fa-brain text-purple-500 mr-2 w-6 text-center"></i> Thần kinh (GCS)
-                    </label>
-                    <select id="cns" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
-                        <option value="" disabled selected>Chọn điểm Glasgow</option>
-                        <option value="0">15 điểm</option>
-                        <option value="1">13 - 14 điểm</option>
-                        <option value="2">10 - 12 điểm</option>
-                        <option value="3">6 - 9 điểm</option>
-                        <option value="4">&lt; 6 điểm</option>
-                    </select>
-                </div>
-
-                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                        <i class="fa-solid fa-prescription-bottle text-blue-500 mr-2 w-6 text-center"></i> Thận (Creatinine/Niệu)
-                    </label>
-                    <select id="renal" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
-                        <option value="" disabled selected>Chọn Creatinine hoặc V nước tiểu</option>
-                        <option value="0">Cr &lt; 1.2 mg/dL (&lt; 110 µmol/L)</option>
-                        <option value="1">Cr 1.2 - 1.9 mg/dL (110-170 µmol/L)</option>
-                        <option value="2">Cr 2.0 - 3.4 mg/dL (171-299 µmol/L)</option>
-                        <option value="3">Cr 3.5 - 4.9 mg/dL hoặc UO &lt; 500ml/ngày</option>
-                        <option value="4">Cr &gt; 5.0 mg/dL hoặc UO &lt; 200ml/ngày</option>
-                    </select>
-                </div>
-            </div>
+    <!-- 3. CẤU TRÚC MAIN CONTENT (Wrapper) -->
+    <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
+        <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
             
-            <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
-                    <i class="fa-solid fa-calculator mr-2"></i> Tính điểm SOFA
-                </button>
-                <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
-                    <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
-                </button>
+            <!-- HEADER CỦA CARD (DESKTOP) -->
+            <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
+                <div class="flex items-center">
+                    <!-- Nút Back Desktop -->
+                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-2xl font-bold">Thang điểm SOFA</h1>
+                        <p class="text-indigo-100 mt-1 text-sm">Đánh giá suy đa tạng liên quan đến nhiễm trùng</p>
+                    </div>
+                </div>
+                <!-- Icon đại diện mờ -->
+                <i class="fa-solid fa-lungs-virus text-4xl text-indigo-300 opacity-50"></i>
             </div>
-        </form>
 
-        <div id="result-container" class="mt-8 hidden animate-fade-in-up">
-            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center shadow-inner">
-                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Tổng điểm SOFA</h3>
-                <div id="main-result" class="score-box mb-4 bg-white text-5xl text-indigo-700">--</div>
-                <div class="bg-white rounded-lg p-4 border border-indigo-100 text-left md:text-center">
-                    <p id="sub-result" class="result-text text-indigo-700 leading-relaxed mb-2">...</p>
-                    <p id="mortality-result" class="text-gray-600 text-sm">...</p>
+            <!-- FORM TÍNH TOÁN -->
+            <div class="p-4 md:p-8">
+                <form id="tool-form" class="space-y-6" novalidate>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Hô hấp -->
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <label class="block text-gray-700 font-bold mb-2 flex items-center">
+                                <i class="fa-solid fa-lungs text-indigo-500 mr-2 w-6 text-center"></i> Hô hấp (PaO2/FiO2)
+                            </label>
+                            <select id="respiration" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                                <option value="" disabled selected>Chọn chỉ số PaO2/FiO2</option>
+                                <option value="0">≥ 400 mmHg</option>
+                                <option value="1">&lt; 400 mmHg</option>
+                                <option value="2">&lt; 300 mmHg</option>
+                                <option value="3">&lt; 200 mmHg (và có hỗ trợ hô hấp)</option>
+                                <option value="4">&lt; 100 mmHg (và có hỗ trợ hô hấp)</option>
+                            </select>
+                        </div>
+
+                        <!-- Đông máu -->
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <label class="block text-gray-700 font-bold mb-2 flex items-center">
+                                <i class="fa-solid fa-droplet text-red-500 mr-2 w-6 text-center"></i> Đông máu (Tiểu cầu)
+                            </label>
+                            <select id="coagulation" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                                <option value="" disabled selected>Chọn số lượng tiểu cầu</option>
+                                <option value="0">≥ 150 (×10³/µL)</option>
+                                <option value="1">&lt; 150 (×10³/µL)</option>
+                                <option value="2">&lt; 100 (×10³/µL)</option>
+                                <option value="3">&lt; 50 (×10³/µL)</option>
+                                <option value="4">&lt; 20 (×10³/µL)</option>
+                            </select>
+                        </div>
+
+                        <!-- Gan -->
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <label class="block text-gray-700 font-bold mb-2 flex items-center">
+                                <i class="fa-solid fa-flask text-yellow-500 mr-2 w-6 text-center"></i> Gan (Bilirubin)
+                            </label>
+                            <select id="liver" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                                <option value="" disabled selected>Chọn mức Bilirubin</option>
+                                <option value="0">&lt; 1.2 mg/dL (&lt; 20 µmol/L)</option>
+                                <option value="1">1.2 - 1.9 mg/dL (20-32 µmol/L)</option>
+                                <option value="2">2.0 - 5.9 mg/dL (33-101 µmol/L)</option>
+                                <option value="3">6.0 - 11.9 mg/dL (102-204 µmol/L)</option>
+                                <option value="4">&gt; 12.0 mg/dL (&gt; 204 µmol/L)</option>
+                            </select>
+                        </div>
+
+                        <!-- Tim mạch -->
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <label class="block text-gray-700 font-bold mb-2 flex items-center">
+                                <i class="fa-solid fa-heart-pulse text-pink-500 mr-2 w-6 text-center"></i> Tim mạch (Vận mạch)
+                            </label>
+                            <select id="cardiovascular" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                                <option value="" disabled selected>Chọn tình trạng huyết áp/vận mạch</option>
+                                <option value="0">Không tụt huyết áp</option>
+                                <option value="1">MAP &lt; 70 mmHg</option>
+                                <option value="2">Dopamine ≤ 5 hoặc Dobutamine (bất kỳ)</option>
+                                <option value="3">Dopamine &gt; 5 hoặc Epi/Norepi ≤ 0.1</option>
+                                <option value="4">Dopamine &gt; 15 hoặc Epi/Norepi &gt; 0.1</option>
+                            </select>
+                            <p class="text-xs text-gray-500 mt-1 italic pl-1">*Liều vận mạch tính theo µg/kg/phút</p>
+                        </div>
+
+                        <!-- Thần kinh -->
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <label class="block text-gray-700 font-bold mb-2 flex items-center">
+                                <i class="fa-solid fa-brain text-purple-500 mr-2 w-6 text-center"></i> Thần kinh (GCS)
+                            </label>
+                            <select id="cns" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                                <option value="" disabled selected>Chọn điểm Glasgow</option>
+                                <option value="0">15 điểm</option>
+                                <option value="1">13 - 14 điểm</option>
+                                <option value="2">10 - 12 điểm</option>
+                                <option value="3">6 - 9 điểm</option>
+                                <option value="4">&lt; 6 điểm</option>
+                            </select>
+                        </div>
+
+                        <!-- Thận -->
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <label class="block text-gray-700 font-bold mb-2 flex items-center">
+                                <i class="fa-solid fa-prescription-bottle text-blue-500 mr-2 w-6 text-center"></i> Thận (Creatinine/Niệu)
+                            </label>
+                            <select id="renal" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                                <option value="" disabled selected>Chọn Creatinine hoặc V nước tiểu</option>
+                                <option value="0">Cr &lt; 1.2 mg/dL (&lt; 110 µmol/L)</option>
+                                <option value="1">Cr 1.2 - 1.9 mg/dL (110-170 µmol/L)</option>
+                                <option value="2">Cr 2.0 - 3.4 mg/dL (171-299 µmol/L)</option>
+                                <option value="3">Cr 3.5 - 4.9 mg/dL hoặc UO &lt; 500ml/ngày</option>
+                                <option value="4">Cr &gt; 5.0 mg/dL hoặc UO &lt; 200ml/ngày</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                        <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính điểm SOFA
+                        </button>
+                        <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
+                            <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
+                        </button>
+                    </div>
+                </form>
+
+                <!-- KẾT QUẢ -->
+                <div id="result-container" class="mt-8 hidden animate-fade-in-up">
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center shadow-inner">
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Tổng điểm SOFA</h3>
+                        <div id="main-result" class="text-5xl font-extrabold text-indigo-700 mb-4 drop-shadow-sm">--</div>
+                        <div class="bg-white rounded-lg p-4 border border-indigo-100 text-left md:text-center">
+                            <p id="sub-result" class="result-text text-indigo-700 text-lg font-semibold leading-relaxed mb-2">...</p>
+                            <p id="mortality-result" class="text-gray-600 text-sm">...</p>
+                        </div>
+                        <div class="mt-4 text-xs text-gray-500 text-left bg-yellow-50 p-3 rounded border border-yellow-200">
+                            <i class="fa-solid fa-triangle-exclamation text-yellow-500 mr-1"></i>
+                            <strong>Lưu ý:</strong> Sự gia tăng điểm SOFA (ΔSOFA) ≥ 2 điểm so với mức nền gợi ý tình trạng rối loạn chức năng cơ quan hoặc nhiễm khuẩn huyết (Sepsis).
+                        </div>
+                    </div>
                 </div>
-                <div class="mt-4 text-xs text-gray-500 text-left bg-yellow-50 p-3 rounded border border-yellow-200">
-                    <i class="fa-solid fa-triangle-exclamation text-yellow-500 mr-1"></i>
-                    <strong>Lưu ý:</strong> Sự gia tăng điểm SOFA (ΔSOFA) ≥ 2 điểm so với mức nền gợi ý tình trạng rối loạn chức năng cơ quan hoặc nhiễm khuẩn huyết (Sepsis).
-                </div>
+            </div>
+
+            <!-- MÔ TẢ NGẮN GỌN (Mới thêm) -->
+            <div class="bg-gray-50 border-t border-gray-100 p-5 text-sm text-gray-500">
+                <h4 class="font-bold text-gray-700 mb-2"><i class="fa-solid fa-circle-info mr-2 text-indigo-500"></i>Thông tin thang điểm</h4>
+                <p class="leading-relaxed text-justify">
+                    Thang điểm SOFA (Sequential Organ Failure Assessment) được sử dụng để theo dõi tình trạng suy đa tạng và tiên lượng nguy cơ tử vong ở bệnh nhân hồi sức tích cực (ICU). Điểm SOFA đánh giá chức năng của 6 hệ cơ quan: Hô hấp, Đông máu, Gan, Tim mạch, Thần kinh và Thận.
+                </p>
             </div>
         </div>
+    </main>
+
+    <!-- 4. DRAWER, NAV & MODAL -->
+    <!-- DRAWER MENU -->
+    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
+        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
+            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
+            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
+            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
+                <span class="font-medium">Giới thiệu</span>
+            </a>
+            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
+                <span class="font-medium">Liên hệ</span>
+            </a>
+            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
+                <span class="font-medium">Điều khoản</span>
+            </a>
+            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
+                <span class="font-medium">Chính sách</span>
+            </a>
+            <div class="my-2 border-t border-gray-100"></div>
+            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
+                <span class="font-medium">Ủng hộ</span>
+            </a>
+        </div>
     </div>
-</div>
-</main>
-<!-- Increased Z-Index to 60 to be above header (z-50) -->
-<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[60] hidden">
-<div class="absolute inset-0 bg-black opacity-50 transition-opacity"></div>
-<div class="bg-white rounded-lg shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100">
-<div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-<svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-</svg>
-</div>
-<h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">Thông báo</h3>
-<p id="modal-message" class="text-sm text-gray-500 mb-6">Vui lòng chọn đủ mục.</p>
-<button id="close-modal-btn" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
-Đóng
-</button>
-</div>
-</div>
-<footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner">
-<div class="container mx-auto px-4">
-<p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
-    <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
-        <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
-        <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-        
-        <p class="mt-0.5 md:mt-1">
-            <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-        </p>
+
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
+                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
+            </a>
+            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
+                <i class="fa-solid fa-calculator text-xl mb-1"></i>
+                <span class="text-[10px]">Công cụ</span>
+            </a>
+            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
+                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- NOTIFICATION MODAL -->
+    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
+            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+                Đóng
+            </button>
+        </div>
     </div>
 
-    <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
-        <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
-        <span class="text-gray-600 md:hidden">|</span>
-        <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
-    </div>
-</div>
-</footer>
-<!-- Added pb-safe class to handle iPhone Home Indicator area -->
-<nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
-<a href="index.html" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span>Trang Chủ</span></a>
-<a href="cong-cu.html" class="bottom-nav-item active"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg><span>Công Cụ</span></a>
-<a href="gioi-thieu.html" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg><span>Giới thiệu</span></a>
-<a href="#lien-he" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg><span>Liên Hệ</span></a>
-</nav>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-// --- LAYOUT ADJUSTMENT ---
-const header = document.querySelector('header');
-const body = document.body;
-function adjustBodyPadding() {
-if (header && getComputedStyle(header).display !== 'none') {
-body.style.paddingTop = header.offsetHeight + 'px';
-} else { body.style.paddingTop = '0px'; }
-}
-adjustBodyPadding();
-window.addEventListener('resize', adjustBodyPadding);
-
-    document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('dblclick', () => { input.value = ''; });
-    });
-
-    // --- MODAL LOGIC ---
-    const modal = document.getElementById('notification-modal');
-    const modalMessage = document.getElementById('modal-message');
-    const closeModalBtn = document.getElementById('close-modal-btn');
-
-    window.showModal = function(message) {
-        modalMessage.textContent = message;
-        modal.classList.remove('hidden');
-    }
-
-    function hideModal() {
-        modal.classList.add('hidden');
-    }
-
-    closeModalBtn.addEventListener('click', hideModal);
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal.querySelector('.absolute')) {
-            hideModal();
-        }
-    });
-
-    // --- SOFA CALCULATION LOGIC ---
-    const form = document.getElementById('tool-form');
-    const resultContainer = document.getElementById('result-container');
-    const mainResult = document.getElementById('main-result');
-    const subResult = document.getElementById('sub-result');
-    const mortalityResult = document.getElementById('mortality-result');
-    const clearBtn = document.getElementById('clearBtn');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // 1. VALIDATION
-        const ids = ['respiration', 'coagulation', 'liver', 'cardiovascular', 'cns', 'renal'];
-        const values = {};
-        
-        for (const id of ids) {
-            const el = document.getElementById(id);
-            if (!el.value || el.value === "") {
-                showModal(`Vui lòng chọn thông tin cho mục: ${el.parentElement.querySelector('label').innerText.trim()}`);
-                return;
+    <!-- 5. JAVASCRIPT LOGIC -->
+    <script>
+        // --- SECURITY: PREVENT RIGHT CLICK & COPY ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A')) {
+                event.preventDefault();
             }
-            values[id] = parseInt(el.value);
+        });
+
+        // --- 1. LOGIC LƯU LỊCH SỬ ---
+        function useTool(id, name, icon, color, url) {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            recentTools = recentTools.filter(tool => tool.id !== id); // Xóa cũ nếu trùng
+            recentTools.unshift({
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+                url: url,
+                timestamp: new Date().getTime()
+            });
+            if (recentTools.length > 5) recentTools.pop(); // Giới hạn 5
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
 
-        // 2. Calculation
-        const totalScore = Object.values(values).reduce((a, b) => a + b, 0);
-
-        // 3. Interpretation
-        let interpretation = "";
-        let mortality = "";
-
-        if (totalScore >= 0 && totalScore <= 6) {
-            interpretation = "Tiên lượng: Nguy cơ tử vong thấp";
-            mortality = "Tỷ lệ tử vong ước tính: < 10%";
-        } else if (totalScore >= 7 && totalScore <= 9) {
-            interpretation = "Tiên lượng: Nguy cơ tử vong trung bình";
-            mortality = "Tỷ lệ tử vong ước tính: ~ 15-20%";
-        } else if (totalScore >= 10 && totalScore <= 12) {
-            interpretation = "Tiên lượng: Nguy cơ tử vong cao";
-            mortality = "Tỷ lệ tử vong ước tính: ~ 40-50%";
-        } else if (totalScore >= 13 && totalScore <= 14) {
-            interpretation = "Tiên lượng: Nguy cơ tử vong rất cao";
-            mortality = "Tỷ lệ tử vong ước tính: ~ 50-60%";
-        } else if (totalScore >= 15) {
-            interpretation = "Tiên lượng: Cực kỳ nguy kịch";
-            mortality = "Tỷ lệ tử vong ước tính: > 80%";
+        // --- 2. LOGIC DRAWER MENU ---
+        function openDrawer(e) {
+            if(e) e.preventDefault();
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            drawer.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
         }
 
-        // 4. Show Result
-        mainResult.textContent = totalScore;
-        subResult.textContent = interpretation;
-        mortalityResult.textContent = mortality;
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
 
-        resultContainer.classList.remove('hidden');
-        
-        // Auto Scroll
-        const headerHeight = document.querySelector('header')?.offsetHeight || 0;
-        const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-        window.scrollTo({ top: targetPos, behavior: 'smooth' });
-    });
+        // --- 3. LOGIC MODAL ---
+        const modal = document.getElementById('notification-modal');
+        const modalMessage = document.getElementById('modal-message');
 
-    clearBtn.addEventListener('click', function() {
-        form.reset();
-        resultContainer.classList.add('hidden');
-        mainResult.textContent = "--";
-        // Reset select colors or classes if any were added
-        document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-});
-</script>
+        window.showModal = function(message) {
+            if(modal && modalMessage) {
+                modalMessage.textContent = message;
+                modal.classList.remove('hidden');
+            }
+        }
+
+        window.hideModal = function() {
+            if(modal) modal.classList.add('hidden');
+        }
+
+        // --- 4. KHỞI TẠO CÔNG CỤ (Logic riêng của trang) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const mainResult = document.getElementById('main-result');
+            const subResult = document.getElementById('sub-result');
+            const mortalityResult = document.getElementById('mortality-result');
+            const clearBtn = document.getElementById('clearBtn');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 1. VALIDATION
+                const ids = ['respiration', 'coagulation', 'liver', 'cardiovascular', 'cns', 'renal'];
+                const values = {};
+                
+                for (const id of ids) {
+                    const el = document.getElementById(id);
+                    if (!el.value || el.value === "") {
+                        showModal(`Vui lòng chọn thông tin cho mục: ${el.parentElement.querySelector('label').innerText.trim()}`);
+                        return;
+                    }
+                    values[id] = parseInt(el.value);
+                }
+
+                // 2. Calculation
+                const totalScore = Object.values(values).reduce((a, b) => a + b, 0);
+
+                // 3. Interpretation
+                let interpretation = "";
+                let mortality = "";
+
+                if (totalScore >= 0 && totalScore <= 6) {
+                    interpretation = "Tiên lượng: Nguy cơ tử vong thấp";
+                    mortality = "Tỷ lệ tử vong ước tính: < 10%";
+                } else if (totalScore >= 7 && totalScore <= 9) {
+                    interpretation = "Tiên lượng: Nguy cơ tử vong trung bình";
+                    mortality = "Tỷ lệ tử vong ước tính: ~ 15-20%";
+                } else if (totalScore >= 10 && totalScore <= 12) {
+                    interpretation = "Tiên lượng: Nguy cơ tử vong cao";
+                    mortality = "Tỷ lệ tử vong ước tính: ~ 40-50%";
+                } else if (totalScore >= 13 && totalScore <= 14) {
+                    interpretation = "Tiên lượng: Nguy cơ tử vong rất cao";
+                    mortality = "Tỷ lệ tử vong ước tính: ~ 50-60%";
+                } else if (totalScore >= 15) {
+                    interpretation = "Tiên lượng: Cực kỳ nguy kịch";
+                    mortality = "Tỷ lệ tử vong ước tính: > 80%";
+                }
+
+                // 4. Show Result
+                mainResult.textContent = totalScore;
+                subResult.textContent = interpretation;
+                mortalityResult.textContent = mortality;
+
+                resultContainer.classList.remove('hidden');
+                
+                // Lưu lịch sử
+                useTool('sofa-score', 'Thang điểm SOFA', 'fa-lungs-virus', 'text-indigo-600', window.location.href);
+
+                // Auto Scroll
+                const headerHeight = document.querySelector('header')?.offsetHeight || 60;
+                const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+                window.scrollTo({ top: targetPos, behavior: 'smooth' });
+            });
+
+            clearBtn.addEventListener('click', function() {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                mainResult.textContent = "--";
+                document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
 </body>
 </html>

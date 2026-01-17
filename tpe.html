@@ -4,103 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tính Thể Tích Thay Huyết Tương (TPE)</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
-    <link rel="manifest" href="manifest.json">
+    
+    <!-- TAILWIND CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    
+    <!-- FONTS & ICONS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ICONS & PWA -->
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+
     <style>
-        /* --- Styles Global --- */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            padding-top: 80px; /* Mặc định cho Desktop */
-            
-            /* --- CẤU HÌNH GIỐNG NATIVE APP --- */
-            /* Ngăn chọn văn bản */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* IE10+/Edge */
-            user-select: none;         /* Standard */
-            
-            /* Tối ưu chạm: Ngăn delay và highlight mặc định */
-            touch-action: manipulation;
+        /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f3f4f6; 
+            padding-bottom: 80px; /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            user-select: none;
+            touch-action: pan-x pan-y;
         }
 
-        /* Cho phép chọn/nhập liệu trong các ô input và select */
-        input, select, textarea {
+        /* Cho phép chọn text ở input và kết quả */
+        .result-text, input, textarea, .selectable-text {
             -webkit-user-select: text;
             user-select: text;
         }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
         
-        /* Responsive tweaks */
-        @media (max-width: 767px) {
-            body { 
-                padding-top: 0px; /* Header ẩn trên mobile */
-                padding-bottom: 80px; /* Chừa chỗ cho Bottom Nav */
-            }
-        }
+        /* Tùy chỉnh thanh cuộn nếu cần */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-        /* Custom style for the active/highlighted navigation link (Desktop) */
-        .nav-item-highlight {
-            background-color: #eef2ff;
-            border-radius: 9999px;
-            padding: 4px 12px;
-            color: #4f46e5;
-            font-weight: 500;
-        }
-
-        /* Styles cho Bottom Navigation */
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 4px;
-            color: #6b7280; /* gray-500 */
-            transition: color 0.2s;
-        }
-        .bottom-nav-item.active {
-            color: #4f46e5; /* indigo-600 */
-        }
-        .bottom-nav-item svg {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 2px;
-        }
-        .bottom-nav-item span {
-            font-size: 10px;
-            font-weight: 500;
-        }
-
+        /* TPE Specific Styles */
         .score-box {
             background-color: #eef2ff;
             color: #4f46e5;
             padding: 0.75rem;
             border-radius: 0.75rem;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             text-align: center;
             border: 1px solid #c7d2fe;
             min-width: 80px;
             word-wrap: break-word;
-            /* Cho phép chọn kết quả để copy nếu cần */
-            user-select: text; 
-            -webkit-user-select: text;
         }
         @media (min-width: 768px) {
             .score-box {
-                padding: 1rem 1.5rem;
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
-        }
-
-        .result-text {
-            font-size: 1.125rem;
-            font-weight: 600;
         }
         
         /* Ẩn mũi tên input number */
@@ -116,222 +82,259 @@
 </head>
 <body class="text-gray-800 flex flex-col min-h-screen">
 
-    <header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-50">
-        <div class="container mx-auto px-4 header-content flex items-center justify-between">
-            <div class="flex items-center flex-shrink-0 w-auto">
-                <a href="index.html" class="logo-text text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">
-                    Máy tính y học
-                </a>
-            </div>
-
-            <nav class="nav-menu flex space-x-4">
-                <a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-                <a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Công Cụ</a>
-                <a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
-                <a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
-            </nav>
+    <!-- DESKTOP HEADER -->
+    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
+        <div class="flex items-center gap-3">
+            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://via.placeholder.com/40?text=Logo'">
+            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
         </div>
+        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
+            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
+            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
+            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
+        </nav>
     </header>
 
-    <main class="flex-grow container mx-auto px-4 py-4 md:py-8">
-        
-        <div class="flex items-center justify-between mb-4 md:mb-6 pt-4 md:pt-0">
-            <a href="cong-cu.html" class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-full text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition duration-300 shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </a>
+    <!-- MOBILE HEADER -->
+    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
+        <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
+            <i class="fa-solid fa-chevron-left text-lg"></i>
+        </a>
+        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+            Tính Thể Tích TPE
+        </h1>
+        <div class="w-8"></div> <!-- Spacer -->
+    </header>
 
-            <h1 class="text-xl md:text-3xl font-bold text-center text-gray-800 flex-grow px-2">
-                Thể Tích Thay Huyết Tương (TPE)
-            </h1>
-
-            <div class="w-10 h-10 flex-shrink-0"></div>
-        </div>
-
-        <div class="mt-2 md:mt-8 bg-white rounded-lg shadow-lg p-3 md:p-8 max-w-4xl mx-auto">
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
+        <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
             
-            <div class="bg-gray-50 p-4 sm:p-6 md:p-8 rounded-xl border border-gray-100">
-                <form id="plasma-albumin-form" class="space-y-4">
+            <!-- HEADER CỦA CARD (DESKTOP) -->
+            <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
+                <div class="flex items-center">
+                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-2xl font-bold">Tính Thể Tích Thay Huyết Tương (TPE)</h1>
+                        <p class="text-indigo-100 mt-1 text-sm">Tính toán thể tích dịch thay thế (Albumin/FFP) dựa trên cân nặng và HCT</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-calculator text-4xl text-indigo-300 opacity-50"></i>
+            </div>
+
+            <!-- FORM TÍNH TOÁN -->
+            <div class="p-4 md:p-8">
+                <form id="plasma-albumin-form" class="space-y-6">
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="input-group">
-                            <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Cân nặng (kg)</label>
-                            <input type="number" id="weight" name="weight" min="1" step="0.1" placeholder="> 0" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm" inputmode="numeric">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label for="weight" class="block text-sm font-semibold text-gray-700">Cân nặng (kg)</label>
+                            <div class="relative">
+                                <input type="number" id="weight" name="weight" min="1" step="0.1" placeholder="Nhập cân nặng" class="w-full pl-4 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" inputmode="decimal">
+                            </div>
                         </div>
 
-                        <div class="input-group">
-                            <label for="hct" class="block text-sm font-medium text-gray-700 mb-1">HCT (%)</label>
-                            <input type="number" id="hct" name="hct" min="0" max="100" step="1" placeholder="0 - 100" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm" inputmode="numeric">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="input-group">
-                            <label for="replacement-fluid" class="block text-sm font-medium text-gray-700 mb-1">Dịch thay thế</label>
-                            <select id="replacement-fluid" name="replacement-fluid" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-white">
-                                <option value="FFP">Huyết tương (FFP)</option>
-                                <option value="Albumin">Albumin 5%</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="k-factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số K</label>
-                            <select id="k-factor" name="k-factor" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-white">
-                                <option value="0.65">0.65 (Nữ)</option>
-                                <option value="0.7">0.7 (Nam)</option>
-                            </select>
+                        <div class="space-y-2">
+                            <label for="hct" class="block text-sm font-semibold text-gray-700">HCT (%)</label>
+                            <div class="relative">
+                                <input type="number" id="hct" name="hct" min="0" max="100" step="1" placeholder="Nhập HCT" class="w-full pl-4 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" inputmode="decimal">
+                            </div>
                         </div>
                     </div>
 
-                    <div id="plasma-bag-volume-group" class="input-group">
-                        <label for="plasma-bag-volume" class="block text-sm font-medium text-gray-700 mb-1">Thể tích túi huyết tương (ml)</label>
-                        <input type="number" id="plasma-bag-volume" name="plasma-bag-volume" min="1" step="0.1" value="150" placeholder="Thể tích túi huyết tương (ml)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm" inputmode="numeric">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label for="replacement-fluid" class="block text-sm font-semibold text-gray-700">Dịch thay thế</label>
+                            <div class="relative">
+                                <select id="replacement-fluid" name="replacement-fluid" class="w-full pl-4 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition appearance-none">
+                                    <option value="FFP">Huyết tương (FFP)</option>
+                                    <option value="Albumin">Albumin 5%</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="k-factor" class="block text-sm font-semibold text-gray-700">Hệ số K</label>
+                            <div class="relative">
+                                <select id="k-factor" name="k-factor" class="w-full pl-4 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition appearance-none">
+                                    <option value="0.65">0.65 (Nữ)</option>
+                                    <option value="0.7">0.7 (Nam)</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mt-8 flex flex-col sm:flex-row gap-4 pt-4">
-                        <button type="submit" id="calculateBtn" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
-                            <i class="fa-solid fa-calculator mr-2"></i> Tính thể tích
+                    <div id="plasma-bag-volume-group" class="space-y-2 animate-fade-in-up">
+                        <label for="plasma-bag-volume" class="block text-sm font-semibold text-gray-700">Thể tích túi huyết tương (ml)</label>
+                        <div class="relative">
+                            <input type="number" id="plasma-bag-volume" name="plasma-bag-volume" min="1" step="0.1" value="150" placeholder="VD: 150" class="w-full pl-4 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" inputmode="decimal">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex flex-col sm:flex-row gap-3">
+                        <button type="submit" id="calculateBtn" class="flex-1 bg-indigo-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:bg-indigo-700 transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
                         </button>
-                        <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
-                            <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
+                        <button type="button" id="clearBtn" class="flex-1 bg-white text-gray-600 border border-gray-200 font-bold py-3.5 px-6 rounded-xl shadow-sm hover:shadow-md hover:bg-gray-50 transition flex items-center justify-center">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Làm mới
                         </button>
                     </div>
                 </form>
 
+                <!-- RESULTS SECTION -->
                 <div id="result-container" class="mt-8 hidden animate-fade-in-up">
-                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 sm:p-6 text-center shadow-inner">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center justify-center">
-                            <i class="fa-solid fa-square-poll-vertical mr-2 text-indigo-500"></i> Kết quả
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 md:p-6 text-center shadow-inner">
+                        <h3 class="text-lg font-bold text-gray-800 mb-6 flex items-center justify-center uppercase tracking-wide">
+                            <i class="fa-solid fa-square-poll-vertical mr-2 text-indigo-600"></i> Kết quả
                         </h3>
                         
-                        <div class="flex flex-col justify-center items-center mb-6 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                            <p class="text-base font-medium text-gray-600 mb-2">Thể tích huyết tương ước tính (EPV)</p>
-                            <div id="epv-display" class="text-3xl font-bold text-indigo-700" style="user-select: text; -webkit-user-select: text;">0</div>
-                            <p class="text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                        <div class="flex flex-col justify-center items-center mb-6 bg-white p-5 rounded-xl border border-indigo-100 shadow-sm">
+                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Thể tích huyết tương ước tính (EPV)</p>
+                            <div class="flex items-baseline gap-1">
+                                <span id="epv-display" class="text-4xl font-bold text-indigo-600 selectable-text">0</span>
+                                <span class="text-lg font-medium text-gray-400">ml</span>
+                            </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4 mt-6">
-                            <div class="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
-                                <p class="text-sm sm:text-base font-medium text-gray-600 mb-2">Thay thế 1.0 lần EPV</p>
-                                <div id="one-x-epv-display" class="score-box mx-auto">0</div>
-                                <p class="text-xs sm:text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                                <p class="text-sm font-medium text-gray-600 mb-2">Thay thế 1.0 lần</p>
+                                <div id="one-x-epv-display" class="text-2xl font-bold text-indigo-600 selectable-text">0</div>
+                                <p class="text-xs font-medium text-gray-400 mt-1">ml</p>
                             </div>
-                            <div class="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
-                                <p class="text-sm sm:text-base font-medium text-gray-600 mb-2">Thay thế 1.5 lần EPV</p>
-                                <div id="one-point-five-x-epv-display" class="score-box mx-auto">0</div>
-                                <p class="text-xs sm:text-sm font-medium text-gray-500 mt-1">(ml)</p>
+                            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                                <p class="text-sm font-medium text-gray-600 mb-2">Thay thế 1.5 lần</p>
+                                <div id="one-point-five-x-epv-display" class="text-2xl font-bold text-indigo-600 selectable-text">0</div>
+                                <p class="text-xs font-medium text-gray-400 mt-1">ml</p>
                             </div>
-                        </div>
-
-                        <div class="mt-4 text-center">
-                            <p id="explanation-text" class="result-text"></p>
                         </div>
                     </div>
                 </div>
 
-                <div id="ffp-bag-results" class="hidden mt-6 p-4 sm:p-6 bg-white border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-sm">
-                    <h3 class="text-lg font-bold text-indigo-700 text-center mb-4 uppercase">
-                        <i class="fa-solid fa-droplet mr-2"></i> Số túi FFP cần dùng
-                    </h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center bg-gray-50 p-3 rounded-lg">
-                            <p class="text-sm font-medium text-gray-600 mb-2">Cho 1.0 lần EPV</p>
-                            <div id="ffp-bags-display-1x" class="text-2xl font-bold text-indigo-600">0</div>
-                            <p class="text-xs text-gray-500 mt-1">(túi)</p>
-                        </div>
-                        <div class="text-center bg-gray-50 p-3 rounded-lg">
-                            <p class="text-sm font-medium text-gray-600 mb-2">Cho 1.5 lần EPV</p>
-                            <div id="ffp-bags-display-1_5x" class="text-2xl font-bold text-indigo-600">0</div>
-                            <p class="text-xs text-gray-500 mt-1">(túi)</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="albumin-results-section" class="hidden mt-6 p-4 sm:p-6 bg-white border border-gray-200 rounded-xl text-gray-700 leading-relaxed shadow-sm space-y-6">
-                    <h3 class="text-lg font-bold text-indigo-700 text-center uppercase">
-                        <i class="fa-solid fa-flask-vial mr-2"></i> Thông tin chi tiết Albumin
-                    </h3>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center bg-indigo-50 p-3 rounded-lg">
-                            <p class="text-sm font-medium text-gray-600 mb-1">Albumin (g) - 1.0 EPV</p>
-                            <div id="albumin-grams-1x" class="text-xl font-bold text-indigo-700">0</div>
-                            <p class="text-xs text-gray-500">gram</p>
-                        </div>
-                        <div class="text-center bg-indigo-50 p-3 rounded-lg">
-                            <p class="text-sm font-medium text-gray-600 mb-1">Albumin (g) - 1.5 EPV</p>
-                            <div id="albumin-grams-1_5x" class="text-xl font-bold text-indigo-700">0</div>
-                            <p class="text-xs text-gray-500">gram</p>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h4 class="text-sm font-bold text-gray-800 text-center mb-3 bg-gray-100 py-1 rounded">Pha loãng Albumin 20% thành 5%</h4>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-600">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                    <tr>
-                                        <th class="px-2 py-2">Mục tiêu</th>
-                                        <th class="px-2 py-2 text-center">Thể tích Alb 20%</th>
-                                        <th class="px-2 py-2 text-center">Thể tích NaCl 0.9%</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="bg-white border-b">
-                                        <td class="px-2 py-2 font-medium">1.0 lần EPV</td>
-                                        <td class="px-2 py-2 text-center text-indigo-600 font-bold"><span id="volume-alb20-1x">0</span> ml</td>
-                                        <td class="px-2 py-2 text-center text-green-600 font-bold"><span id="volume-nacl-1x">0</span> ml</td>
-                                    </tr>
-                                    <tr class="bg-white">
-                                        <td class="px-2 py-2 font-medium">1.5 lần EPV</td>
-                                        <td class="px-2 py-2 text-center text-indigo-600 font-bold"><span id="volume-alb20-1_5x">0</span> ml</td>
-                                        <td class="px-2 py-2 text-center text-green-600 font-bold"><span id="volume-nacl-1_5x">0</span> ml</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         <div>
-                            <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Quy đổi chai 50ml</h4>
-                            <div class="grid grid-cols-2 gap-2 text-center">
-                                <div class="bg-gray-50 p-2 rounded border">
-                                    <span class="block text-xs text-gray-500">1.0 EPV</span>
-                                    <span id="albumin-bottles-50ml-1x" class="font-bold text-gray-800">0</span>
-                                </div>
-                                <div class="bg-gray-50 p-2 rounded border">
-                                    <span class="block text-xs text-gray-500">1.5 EPV</span>
-                                    <span id="albumin-bottles-50ml-1_5x" class="font-bold text-gray-800">0</span>
+                <!-- FFP BAGS RESULT -->
+                <div id="ffp-bag-results" class="hidden mt-6 animate-fade-in-up">
+                    <div class="p-5 md:p-6 bg-white border border-gray-200 rounded-2xl shadow-sm">
+                        <h3 class="text-md font-bold text-indigo-700 text-center mb-4 uppercase flex items-center justify-center">
+                            <i class="fa-solid fa-droplet mr-2"></i> Số túi FFP cần dùng
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="text-center bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                <p class="text-sm font-medium text-gray-500 mb-2">Cho 1.0 lần EPV</p>
+                                <div class="flex items-center justify-center gap-1">
+                                    <span id="ffp-bags-display-1x" class="text-2xl font-bold text-gray-800 selectable-text">0</span>
+                                    <span class="text-xs text-gray-400">túi</span>
                                 </div>
                             </div>
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Quy đổi chai 100ml</h4>
-                            <div class="grid grid-cols-2 gap-2 text-center">
-                                <div class="bg-gray-50 p-2 rounded border">
-                                    <span class="block text-xs text-gray-500">1.0 EPV</span>
-                                    <span id="albumin-bottles-100ml-1x" class="font-bold text-gray-800">0</span>
-                                </div>
-                                <div class="bg-gray-50 p-2 rounded border">
-                                    <span class="block text-xs text-gray-500">1.5 EPV</span>
-                                    <span id="albumin-bottles-100ml-1_5x" class="font-bold text-gray-800">0</span>
+                            <div class="text-center bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                <p class="text-sm font-medium text-gray-500 mb-2">Cho 1.5 lần EPV</p>
+                                <div class="flex items-center justify-center gap-1">
+                                    <span id="ffp-bags-display-1_5x" class="text-2xl font-bold text-gray-800 selectable-text">0</span>
+                                    <span class="text-xs text-gray-400">túi</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-8 p-4 bg-gray-100 border border-gray-200 rounded-xl text-gray-600 text-sm leading-relaxed shadow-inner">
-                    <h4 class="text-base font-bold text-gray-800 mb-2"><i class="fa-solid fa-circle-info mr-1 text-indigo-500"></i> Công thức tính toán</h4>
-                    <p class="italic mb-2">EPV [ml] = K × Cân nặng (kg) × (100 - HCT[%]) / 100</p>
-                    <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm pl-2 mb-2">
+                <!-- ALBUMIN RESULT -->
+                <div id="albumin-results-section" class="hidden mt-6 space-y-4 animate-fade-in-up">
+                    <div class="p-5 md:p-6 bg-white border border-gray-200 rounded-2xl shadow-sm">
+                        <h3 class="text-md font-bold text-indigo-700 text-center uppercase mb-4 flex items-center justify-center">
+                            <i class="fa-solid fa-flask-vial mr-2"></i> Chi tiết Albumin
+                        </h3>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="text-center bg-indigo-50 p-3 rounded-xl">
+                                <p class="text-xs font-medium text-indigo-600 mb-1">Khối lượng (1.0 EPV)</p>
+                                <div id="albumin-grams-1x" class="text-xl font-bold text-indigo-700 selectable-text">0</div>
+                                <p class="text-xs text-indigo-400">gram</p>
+                            </div>
+                            <div class="text-center bg-indigo-50 p-3 rounded-xl">
+                                <p class="text-xs font-medium text-indigo-600 mb-1">Khối lượng (1.5 EPV)</p>
+                                <div id="albumin-grams-1_5x" class="text-xl font-bold text-indigo-700 selectable-text">0</div>
+                                <p class="text-xs text-indigo-400">gram</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-100">
+                            <h4 class="text-sm font-bold text-gray-800 text-center mb-3">Pha loãng Albumin 20% thành 5%</h4>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-gray-600">
+                                    <thead class="text-xs text-gray-500 uppercase bg-gray-100">
+                                        <tr>
+                                            <th class="px-2 py-2 rounded-l-lg">Mục tiêu</th>
+                                            <th class="px-2 py-2 text-center">Alb 20%</th>
+                                            <th class="px-2 py-2 text-center rounded-r-lg">NaCl 0.9%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100">
+                                        <tr class="bg-white">
+                                            <td class="px-2 py-3 font-medium">1.0 EPV</td>
+                                            <td class="px-2 py-3 text-center text-indigo-600 font-bold"><span id="volume-alb20-1x" class="selectable-text">0</span> ml</td>
+                                            <td class="px-2 py-3 text-center text-green-600 font-bold"><span id="volume-nacl-1x" class="selectable-text">0</span> ml</td>
+                                        </tr>
+                                        <tr class="bg-white">
+                                            <td class="px-2 py-3 font-medium">1.5 EPV</td>
+                                            <td class="px-2 py-3 text-center text-indigo-600 font-bold"><span id="volume-alb20-1_5x" class="selectable-text">0</span> ml</td>
+                                            <td class="px-2 py-3 text-center text-green-600 font-bold"><span id="volume-nacl-1_5x" class="selectable-text">0</span> ml</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                             <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Quy đổi chai 50ml</h4>
+                                <div class="grid grid-cols-2 gap-2 text-center">
+                                    <div class="bg-white p-2 rounded-lg border border-gray-100">
+                                        <span class="block text-[10px] text-gray-400 uppercase">1.0 EPV</span>
+                                        <span id="albumin-bottles-50ml-1x" class="font-bold text-gray-800 selectable-text">0</span>
+                                    </div>
+                                    <div class="bg-white p-2 rounded-lg border border-gray-100">
+                                        <span class="block text-[10px] text-gray-400 uppercase">1.5 EPV</span>
+                                        <span id="albumin-bottles-50ml-1_5x" class="font-bold text-gray-800 selectable-text">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Quy đổi chai 100ml</h4>
+                                <div class="grid grid-cols-2 gap-2 text-center">
+                                    <div class="bg-white p-2 rounded-lg border border-gray-100">
+                                        <span class="block text-[10px] text-gray-400 uppercase">1.0 EPV</span>
+                                        <span id="albumin-bottles-100ml-1x" class="font-bold text-gray-800 selectable-text">0</span>
+                                    </div>
+                                    <div class="bg-white p-2 rounded-lg border border-gray-100">
+                                        <span class="block text-[10px] text-gray-400 uppercase">1.5 EPV</span>
+                                        <span id="albumin-bottles-100ml-1_5x" class="font-bold text-gray-800 selectable-text">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INFO BOX -->
+                <div class="mt-8 p-5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-600 text-sm leading-relaxed">
+                    <h4 class="text-sm font-bold text-gray-800 mb-2 flex items-center">
+                        <i class="fa-solid fa-circle-info mr-2 text-indigo-500"></i> Công thức
+                    </h4>
+                    <p class="italic mb-2 text-gray-500">EPV [ml] = K × Cân nặng (kg) × (100 - HCT[%]) / 100</p>
+                    <ul class="list-disc list-inside space-y-1 text-xs pl-1 mb-2 text-gray-500">
                         <li>K = 65 (Nữ), 70 (Nam)</li>
                         <li>Albumin (g) = Thể tích Alb 5% × 0.05</li>
                     </ul>
-                    <p class="text-xs sm:text-sm"><strong>Pha Albumin 5% từ 20%:</strong></p>
-                     <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm pl-2">
+                    <p class="text-xs mt-2"><strong>Pha Albumin 5% từ 20%:</strong></p>
+                     <ul class="list-disc list-inside space-y-1 text-xs pl-1 text-gray-500">
                         <li>V(Alb 20%) = V(Alb 5% cần dùng) × 0.25</li>
                         <li>V(NaCl 0.9%) = V(Alb 5% cần dùng) - V(Alb 20%)</li>
                     </ul>
@@ -340,98 +343,148 @@
         </div>
     </main>
 
-    <footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner mt-auto">
-        <div class="container mx-auto px-4">
-            <p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
-            
-            <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
-                <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
-                <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-                
-                <p class="mt-0.5 md:mt-1">
-                    <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-                </p>
-            </div>
-    
-            <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
-                <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
-                <span class="text-gray-600 md:hidden">|</span>
-                <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
-            </div>
+    <!-- DRAWER MENU -->
+    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
+        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
+            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
+            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
-    </footer>
+        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
+            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
+                <span class="font-medium">Giới thiệu</span>
+            </a>
+            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
+                <span class="font-medium">Liên hệ</span>
+            </a>
+            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
+                <span class="font-medium">Điều khoản</span>
+            </a>
+            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
+                <span class="font-medium">Chính sách</span>
+            </a>
+            <div class="my-2 border-t border-gray-100"></div>
+            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
+                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
+                <span class="font-medium">Ủng hộ</span>
+            </a>
+        </div>
+    </div>
 
-    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
-        <a href="index.html" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-            </svg>
-            <span>Trang Chủ</span>
-        </a>
-
-        <a href="cong-cu.html" class="bottom-nav-item active">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-            </svg>
-            <span>Công Cụ</span>
-        </a>
-
-        <a href="gioi-thieu.html" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-            </svg>
-            <span>Giới thiệu</span>
-        </a>
-
-        <a href="#lien-he" class="bottom-nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-            </svg>
-            <span>Liên Hệ</span>
-        </a>
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
+                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
+            </a>
+            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
+                <i class="fa-solid fa-calculator text-xl mb-1"></i>
+                <span class="text-[10px]">Công cụ</span>
+            </a>
+            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
+                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
+            </button>
+        </div>
     </nav>
 
+    <!-- NOTIFICATION MODAL -->
+    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
+            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+                Đóng
+            </button>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- Layout Adjustment ---
-            const header = document.querySelector('header');
-            const body = document.body;
+        // --- 1. LOGIC LƯU LỊCH SỬ ---
+        function useTool(id, name, icon, color, url) {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            recentTools = recentTools.filter(tool => tool.id !== id); // Xóa cũ nếu trùng
+            recentTools.unshift({
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+                url: url,
+                timestamp: new Date().getTime()
+            });
+            if (recentTools.length > 5) recentTools.pop(); // Giới hạn 5
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
+        }
 
-            function adjustBodyPadding() {
-                if (header && getComputedStyle(header).display !== 'none') {
-                    const headerHeight = header.offsetHeight;
-                    body.style.paddingTop = `${headerHeight}px`;
-                } else {
-                    body.style.paddingTop = '0px';
-                }
+        // --- 2. LOGIC DRAWER MENU ---
+        function openDrawer(e) {
+            if(e) e.preventDefault();
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            drawer.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        // --- 3. LOGIC MODAL ---
+        const modal = document.getElementById('notification-modal');
+        const modalMessage = document.getElementById('modal-message');
+
+        window.showModal = function(message) {
+            if(modal && modalMessage) {
+                modalMessage.textContent = message;
+                modal.classList.remove('hidden');
             }
+        }
 
-            adjustBodyPadding();
-            window.addEventListener('resize', adjustBodyPadding);
+        window.hideModal = function() {
+            if(modal) modal.classList.add('hidden');
+        }
 
+        // --- 4. KHỞI TẠO VÀ LOGIC TPE ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup input reset on double click
             document.querySelectorAll('input').forEach(input => {
                 input.addEventListener('dblclick', () => {
                     input.value = '';
                 });
             });
 
-            // --- Logic TPE ---
-            // Function to clear results and hide containers
+            // --- Logic TPE Functions ---
             function clearAndHideResults() {
                 ['epv-display', 'one-x-epv-display', 'one-point-five-x-epv-display',
                  'albumin-grams-1x', 'albumin-grams-1_5x', 'volume-alb20-1x', 'volume-nacl-1x',
                  'volume-alb20-1_5x', 'volume-nacl-1_5x', 'albumin-bottles-50ml-1x',
                  'albumin-bottles-50ml-1_5x', 'albumin-bottles-100ml-1x', 'albumin-bottles-100ml-1_5x',
                  'ffp-bags-display-1x', 'ffp-bags-display-1_5x'].forEach(id => {
-                    document.getElementById(id).textContent = '0';
+                    const el = document.getElementById(id);
+                    if(el) el.textContent = '0';
                 });
 
                 document.getElementById('result-container').classList.add('hidden');
                 document.getElementById('ffp-bag-results').classList.add('hidden');
                 document.getElementById('albumin-results-section').classList.add('hidden');
-
-                document.getElementById('explanation-text').textContent = '';
-                document.getElementById('explanation-text').className = "result-text";
             }
 
             function toggleInputFieldsAndClearResults() {
@@ -448,6 +501,7 @@
                 }
             }
 
+            // --- Event Listeners ---
             document.getElementById('replacement-fluid').addEventListener('change', toggleInputFieldsAndClearResults);
 
             document.getElementById('plasma-albumin-form').addEventListener('submit', function(event) {
@@ -459,37 +513,29 @@
                 const replacementFluid = document.getElementById('replacement-fluid').value;
                 const plasmaBagVolume = parseFloat(document.getElementById('plasma-bag-volume').value);
 
-                const resultContainer = document.getElementById('result-container');
-                const explanationText = document.getElementById('explanation-text');
-                const ffpBagResults = document.getElementById('ffp-bag-results');
-                const albuminResultsSection = document.getElementById('albumin-results-section');
-
                 clearAndHideResults();
 
                 if (isNaN(weight) || isNaN(hct) || isNaN(kFactor) || weight <= 0 || hct < 0 || hct > 100) {
-                    explanationText.textContent = 'Vui lòng nhập các giá trị hợp lệ cho Cân nặng, HCT và Hệ số K.';
-                    explanationText.className = "result-text text-red-500 font-bold";
-                    resultContainer.classList.remove('hidden');
+                    showModal('Vui lòng nhập các giá trị hợp lệ cho Cân nặng, HCT (0-100).');
                     return;
                 }
 
                 if (replacementFluid === 'FFP' && (isNaN(plasmaBagVolume) || plasmaBagVolume <= 0)) {
-                    explanationText.textContent = 'Vui lòng nhập giá trị hợp lệ cho Thể tích túi huyết tương.';
-                    explanationText.className = "result-text text-red-500 font-bold";
-                    resultContainer.classList.remove('hidden');
+                    showModal('Vui lòng nhập giá trị hợp lệ cho Thể tích túi huyết tương.');
                     return;
                 }
 
-                // Calculate EPV
+                // --- CALCULATION ---
                 const epv = kFactor * weight * (100 - hct);
                 const epvOneX = epv * 1.0;
                 const epvOnePointFiveX = epv * 1.5;
 
-                document.getElementById('epv-display').textContent = epv.toFixed(0);
-                document.getElementById('one-x-epv-display').textContent = epvOneX.toFixed(0);
-                document.getElementById('one-point-five-x-epv-display').textContent = epvOnePointFiveX.toFixed(0);
+                // Update UI
+                document.getElementById('epv-display').textContent = Math.round(epv).toLocaleString();
+                document.getElementById('one-x-epv-display').textContent = Math.round(epvOneX).toLocaleString();
+                document.getElementById('one-point-five-x-epv-display').textContent = Math.round(epvOnePointFiveX).toLocaleString();
                 
-                resultContainer.classList.remove('hidden');
+                document.getElementById('result-container').classList.remove('hidden');
 
                 if (replacementFluid === 'Albumin') {
                     const albuminGrams_1x = epvOneX * 0.05;
@@ -499,21 +545,21 @@
 
                     const volumeAlb20Percent1x = epvOneX * 0.25;
                     const volumeNaCl1x = epvOneX - volumeAlb20Percent1x;
-                    document.getElementById('volume-alb20-1x').textContent = volumeAlb20Percent1x.toFixed(0);
-                    document.getElementById('volume-nacl-1x').textContent = volumeNaCl1x.toFixed(0);
+                    document.getElementById('volume-alb20-1x').textContent = Math.round(volumeAlb20Percent1x).toLocaleString();
+                    document.getElementById('volume-nacl-1x').textContent = Math.round(volumeNaCl1x).toLocaleString();
 
                     document.getElementById('albumin-bottles-50ml-1x').textContent = (volumeAlb20Percent1x / 50).toFixed(1);
                     document.getElementById('albumin-bottles-100ml-1x').textContent = (volumeAlb20Percent1x / 100).toFixed(1);
 
                     const volumeAlb20Percent1_5x = epvOnePointFiveX * 0.25;
                     const volumeNaCl1_5x = epvOnePointFiveX - volumeAlb20Percent1_5x;
-                    document.getElementById('volume-alb20-1_5x').textContent = volumeAlb20Percent1_5x.toFixed(0);
-                    document.getElementById('volume-nacl-1_5x').textContent = volumeNaCl1_5x.toFixed(0);
+                    document.getElementById('volume-alb20-1_5x').textContent = Math.round(volumeAlb20Percent1_5x).toLocaleString();
+                    document.getElementById('volume-nacl-1_5x').textContent = Math.round(volumeNaCl1_5x).toLocaleString();
 
                     document.getElementById('albumin-bottles-50ml-1_5x').textContent = (volumeAlb20Percent1_5x / 50).toFixed(1);
                     document.getElementById('albumin-bottles-100ml-1_5x').textContent = (volumeAlb20Percent1_5x / 100).toFixed(1);
 
-                    albuminResultsSection.classList.remove('hidden');
+                    document.getElementById('albumin-results-section').classList.remove('hidden');
                 } else { // FFP
                     const numFfpBags1x = Math.ceil(epvOneX / plasmaBagVolume);
                     const numFfpBags1_5x = Math.ceil(epvOnePointFiveX / plasmaBagVolume);
@@ -521,13 +567,26 @@
                     document.getElementById('ffp-bags-display-1x').textContent = numFfpBags1x;
                     document.getElementById('ffp-bags-display-1_5x').textContent = numFfpBags1_5x;
 
-                    ffpBagResults.classList.remove('hidden');
+                    document.getElementById('ffp-bag-results').classList.remove('hidden');
                 }
-                
+
+                // Lưu lịch sử dùng tool
+                useTool('tpe-calc', 'Thể Tích TPE', 'fa-calculator', 'bg-indigo-500', window.location.href);
+
                 // Scroll to results
-                const headerHeight = document.querySelector('header')?.offsetHeight || 0;
-                const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-                window.scrollTo({ top: targetPos, behavior: 'smooth' });
+                setTimeout(() => {
+                    const resultContainer = document.getElementById('result-container');
+                    const offset = 80; // Header height + padding
+                    const bodyRect = document.body.getBoundingClientRect().top;
+                    const elementRect = resultContainer.getBoundingClientRect().top;
+                    const elementPosition = elementRect - bodyRect;
+                    const offsetPosition = elementPosition - offset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }, 100);
             });
 
             document.getElementById('clearBtn').addEventListener('click', function() {
@@ -535,10 +594,22 @@
                 document.getElementById('k-factor').value = "0.65";
                 document.getElementById('plasma-bag-volume').value = "150"; 
                 toggleInputFieldsAndClearResults();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
             // Initial call
             toggleInputFieldsAndClearResults();
+        });
+
+        // --- SECURITY SCRIPTS ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A' || event.key === 's' || event.key === 'S')) {
+                event.preventDefault();
+            }
+            if (event.keyCode === 123) { // F12
+                event.preventDefault();
+            }
         });
     </script>
 </body>

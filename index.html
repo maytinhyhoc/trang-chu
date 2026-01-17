@@ -42,7 +42,8 @@
     <link rel="manifest" href="/manifest.json">
 
     <style>
-        body {
+        /* --- CẬP NHẬT: Áp dụng cho body và class .content-text --- */
+        body, .content-text {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
             -webkit-tap-highlight-color: transparent; /* Loại bỏ highlight xanh khi tap trên mobile */
@@ -91,7 +92,7 @@
     <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
         <div class="flex items-center gap-3">
             <!-- Logo hiển thị trên PC -->
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
+            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://placehold.co/40x40?text=Logo'">
             <!-- Tăng cỡ chữ tiêu đề trên PC -->
             <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
         </div>
@@ -116,7 +117,7 @@
                 <h1 class="text-2xl font-bold text-blue-600">Máy tính Y học</h1>
             </div>
             <!-- Logo hiển thị trên Mobile -->
-            <img src="logo.png" alt="Logo" class="w-12 h-12 object-contain bg-white rounded-lg shadow-sm p-1">
+            <img src="logo.png" alt="Logo" class="w-12 h-12 object-contain bg-white rounded-lg shadow-sm p-1" onerror="this.src='https://placehold.co/48x48?text=Logo'">
         </div>
 
         <!-- ============================================ -->
@@ -336,6 +337,24 @@
     <!-- SCRIPT XỬ LÝ -->
     <!-- ============================================ -->
     <script>
+        // --- CONTENT PROTECTION (CHỐNG COPY/RIGHT CLICK) ---
+        // 1. Chặn Menu chuột phải (Right Click)
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
+
+        // 2. Chặn phím tắt (Ctrl+C, Ctrl+A, Ctrl+U)
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey) {
+                const key = event.key.toLowerCase();
+                if (key === 'c' || key === 'a' || key === 'u') {
+                    event.preventDefault();
+                    // Optional: Có thể thêm alert để báo người dùng
+                    // alert('Chức năng này đã bị vô hiệu hóa.');
+                }
+            }
+        });
+
         // --- DRAWER LOGIC ---
         function openDrawer(e) {
             if(e) e.preventDefault();

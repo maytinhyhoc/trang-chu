@@ -1,239 +1,316 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<!-- Đã thêm user-scalable=no để chặn zoom trên mobile -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Công Cụ Y Học - Máy Đếm Giọt</title>
-<link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
-<link rel="manifest" href="manifest.json">
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-<style>
-/* --- Mobile Optimization & Base Styles --- */
-body {
-font-family: 'Inter', sans-serif;
-background-color: #f8fafc;
-padding-top: 80px;
-/* Ngăn bôi đen văn bản (App-like feel) */
--webkit-user-select: none;
-user-select: none;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Máy Đếm Giọt - Công Cụ Y Học</title>
+    
+    <!-- TAILWIND CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FONTS & ICONS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ICONS & PWA -->
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
 
-/* Loại bỏ độ trễ và màu highlight khi tap trên mobile */
-touch-action: manipulation;
--webkit-tap-highlight-color: transparent;
-}
-/* Khôi phục khả năng select text cho input để nhập liệu */
-input, textarea {
--webkit-user-select: text;
-user-select: text;
-}
-@media (max-width: 767px) { body { padding-top: 0px; padding-bottom: 80px; } }
-.nav-item-highlight { background-color: #eef2ff; border-radius: 9999px; padding: 4px 12px; color: #4f46e5; font-weight: 500; }
-.bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; color: #6b7280; transition: color 0.2s; }
-.bottom-nav-item.active { color: #4f46e5; }
-.bottom-nav-item svg { width: 24px; height: 24px; margin-bottom: 2px; }
-.bottom-nav-item span { font-size: 10px; font-weight: 500; }
-.score-box { background-color: #eef2ff; color: #4f46e5; padding: 1rem 2rem; border-radius: 0.75rem; font-size: 2.5rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid #c7d2fe; }
-.result-text { font-size: 1.125rem; font-weight: 600; }
-input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-input[type="number"] { -moz-appearance: textfield; }
-/* Animation cho Modal */
-.modal-enter { opacity: 0; transform: scale(0.9); }
-.modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 0.3s, transform 0.3s; }
-.modal-exit { opacity: 1; transform: scale(1); }
-.modal-exit-active { opacity: 0; transform: scale(0.9); transition: opacity 0.3s, transform 0.3s; }
+    <style>
+        /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f3f4f6; 
+            padding-bottom: 80px; /* Space for Bottom Nav */
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            user-select: none;
+            touch-action: pan-x pan-y;
+        }
 
-/* Custom animation cho nút bấm */
-@keyframes ripple {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
-    70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(79, 70, 229, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
-}
-.animate-ripple {
-    animation: ripple 0.3s linear;
-}
-</style>
-</head>
-<body class="text-gray-800 flex flex-col min-h-screen">
-<!-- HEADER DESKTOP -->
-<header class="hidden md:block bg-white shadow-sm py-3 fixed top-0 w-full z-50">
-<div class="container mx-auto px-4 header-content flex items-center justify-between">
-<div class="flex items-center flex-shrink-0 w-auto">
-<a href="index.html" class="logo-text text-3xl font-bold text-indigo-700 rounded-lg transition duration-300 hover:text-indigo-900">Máy tính y học</a>
-</div>
-<nav class="nav-menu flex space-x-4">
-<a href="index.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Trang Chủ</a>
-<a href="cong-cu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 nav-item-highlight">Công Cụ</a>
-<a href="gioi-thieu.html" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Giới thiệu</a>
-<a href="#lien-he" class="flex-shrink-0 text-base font-medium text-gray-700 hover:text-indigo-600 transition duration-300 px-3 py-1 rounded-full hover:bg-gray-100">Liên Hệ</a>
-</nav>
-</div>
-</header>
-<main class="flex-grow container mx-auto px-4 py-4 md:py-8">
-<div class="flex items-center justify-between mb-2 md:mb-6 pt-2 md:pt-0">
-<a href="cong-cu.html" class="flex-shrink-0 inline-flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-white border border-gray-200 rounded-full text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition duration-300 shadow-sm">
-<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-</a>
-<h1 class="text-lg md:text-3xl font-bold text-center text-gray-800 flex-grow px-2">
-Máy Đếm Giọt
-</h1>
-<div class="w-8 h-8 md:w-10 md:h-10 flex-shrink-0"></div>
-</div>
-<div class="mt-0 md:mt-8 bg-white rounded-lg shadow-lg p-2 md:p-8 max-w-4xl mx-auto">
-    <div class="bg-white md:bg-gray-50 p-2 sm:p-6 md:p-8 rounded-xl border-none md:border border-gray-100">
+        /* Cho phép chọn text ở input và kết quả */
+        .result-text, input, textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
         
-        <!-- KẾT QUẢ ĐƯỢC ĐƯA LÊN ĐẦU TIÊN -->
-        <div id="result-container" class="mb-4 text-center">
-            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 shadow-sm mx-auto max-w-xs">
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Tốc độ truyền dịch</h3>
-                <div class="flex items-center justify-center items-baseline gap-2">
-                    <div id="main-result" class="text-5xl md:text-6xl font-bold text-indigo-700">--</div>
-                    <span class="text-lg text-indigo-600 font-medium">giọt/phút</span>
+        /* Custom animation cho nút bấm giọt */
+        @keyframes ripple {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(79, 70, 229, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+        }
+        .animate-ripple {
+            animation: ripple 0.3s linear;
+        }
+
+        /* Tùy chỉnh thanh cuộn nếu cần */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER DESKTOP -->
+<header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
+    <div class="flex items-center gap-3">
+        <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png'" alt="Logo" class="w-10 h-10 object-contain">
+        <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
+    </div>
+    <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
+        <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
+        <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
+        <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
+    </nav>
+</header>
+
+<!-- HEADER MOBILE -->
+<header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
+    <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
+        <i class="fa-solid fa-chevron-left text-lg"></i>
+    </a>
+    <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+        Máy Đếm Giọt
+    </h1>
+    <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
+</header>
+
+<!-- MAIN CONTENT WRAPPER -->
+<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
+    <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+        
+        <!-- HEADER CỦA CARD (DESKTOP) -->
+        <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
+            <div class="flex items-center">
+                <!-- Nút Back Desktop -->
+                <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold">Máy Đếm Giọt Dịch Truyền</h1>
+                    <p class="text-indigo-100 mt-1 text-sm">Công cụ hỗ trợ tính toán tốc độ truyền dịch (giọt/phút)</p>
                 </div>
-                <p id="sub-result" class="text-xs text-indigo-500 mt-1 h-4">Sẵn sàng đo...</p>
             </div>
+            <!-- Icon đại diện mờ -->
+            <i class="fa-solid fa-droplet text-4xl text-indigo-300 opacity-50"></i>
         </div>
 
-        <!-- Form có novalidate để tắt bong bóng mặc định -->
-        <form id="tool-form" class="space-y-4" novalidate>
-            <!-- NÚT BẤM -->
-            <div class="text-center">
+        <!-- FORM TÍNH TOÁN -->
+        <div class="p-4 md:p-8">
+            
+            <!-- KẾT QUẢ HIỂN THỊ -->
+            <div id="result-container" class="mb-6 text-center">
+                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 shadow-sm mx-auto max-w-xs transition-all duration-300">
+                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Tốc độ truyền dịch</h3>
+                    <div class="flex items-center justify-center items-baseline gap-2">
+                        <div id="main-result" class="text-5xl md:text-6xl font-bold text-indigo-700 result-text">--</div>
+                        <span class="text-lg text-indigo-600 font-medium">giọt/phút</span>
+                    </div>
+                    <p id="sub-result" class="text-xs text-indigo-500 mt-2 font-medium h-4">Sẵn sàng đo...</p>
+                </div>
+            </div>
+
+            <!-- AREA NÚT BẤM -->
+            <div class="flex flex-col items-center justify-center space-y-6">
+                <!-- Nút TAP Lớn -->
                 <div class="relative inline-block">
-                    <button type="button" id="tapBtn" class="w-40 h-40 sm:w-56 sm:h-56 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 text-white shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-150 flex flex-col items-center justify-center border-4 border-indigo-200 ring-4 ring-indigo-50 focus:outline-none select-none">
-                        <i class="fa-solid fa-droplet text-3xl sm:text-5xl mb-2 animate-bounce"></i>
-                        <span class="text-lg sm:text-2xl font-bold uppercase tracking-wider">+1 GIỌT</span>
-                        <span class="text-xs sm:text-sm font-light opacity-80 mt-1">Bấm vào đây</span>
+                    <button type="button" id="tapBtn" class="w-48 h-48 md:w-56 md:h-56 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 text-white shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-150 flex flex-col items-center justify-center border-4 border-indigo-200 ring-4 ring-indigo-50 focus:outline-none select-none cursor-pointer">
+                        <i class="fa-solid fa-droplet text-4xl md:text-5xl mb-3 animate-bounce"></i>
+                        <span class="text-xl md:text-2xl font-bold uppercase tracking-wider">+1 GIỌT</span>
+                        <span class="text-xs md:text-sm font-light opacity-80 mt-1">Bấm khi giọt rơi</span>
                     </button>
                     <!-- Visual feedback bubble -->
-                    <div id="tap-feedback" class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold rounded-full h-8 w-8 flex items-center justify-center opacity-0 transition-opacity z-10 border-2 border-white shadow-sm">
+                    <div id="tap-feedback" class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold rounded-full h-8 w-8 flex items-center justify-center opacity-0 transition-opacity z-10 border-2 border-white shadow-sm pointer-events-none">
                         +1
                     </div>
                 </div>
 
-                <div class="mt-4 grid grid-cols-2 gap-3 max-w-xs mx-auto text-sm">
-                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100 shadow-sm">
-                        <span class="block text-gray-500 text-xs">Số giọt đã đếm</span>
-                        <span id="sample-count" class="font-bold text-indigo-600 text-lg">0</span>
+                <!-- Thông số phụ -->
+                <div class="grid grid-cols-2 gap-4 w-full max-w-xs">
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 text-center">
+                        <span class="block text-gray-400 text-xs font-medium uppercase">Số mẫu</span>
+                        <span id="sample-count" class="font-bold text-indigo-600 text-xl">0</span>
                     </div>
-                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100 shadow-sm">
-                        <span class="block text-gray-500 text-xs">Trạng thái</span>
-                        <span id="status-text" class="font-bold text-gray-600 text-xs mt-1">Sẵn sàng</span>
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 text-center">
+                        <span class="block text-gray-400 text-xs font-medium uppercase">Trạng thái</span>
+                        <span id="status-text" class="font-bold text-gray-600 text-sm mt-1">Sẵn sàng</span>
                     </div>
                 </div>
-            </div>
-            
-            <div class="mt-4 flex flex-col items-center">
-                <button type="button" id="clearBtn" class="w-full max-w-xs bg-white text-red-500 border border-red-200 font-bold py-2 px-4 rounded-lg shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center text-sm">
-                    <i class="fa-solid fa-arrow-rotate-left mr-2"></i> Đếm lại
+
+                <!-- Nút Reset -->
+                <button type="button" id="clearBtn" class="group flex items-center justify-center px-6 py-2.5 rounded-xl text-red-500 bg-red-50 hover:bg-red-100 border border-red-100 transition-colors w-full max-w-xs font-medium text-sm">
+                    <i class="fa-solid fa-arrow-rotate-left mr-2 group-hover:-rotate-180 transition-transform duration-500"></i>
+                    Bắt đầu lại
                 </button>
             </div>
-        </form>
 
-        <!-- PHẦN HƯỚNG DẪN MỚI THÊM -->
-        <div class="mt-6 border-t border-gray-200 pt-4">
-            <h4 class="text-sm font-bold text-gray-800 mb-2 flex items-center">
-                <i class="fa-solid fa-circle-info text-indigo-600 mr-2"></i> Hướng dẫn nhanh
-            </h4>
-            <div class="bg-blue-50 rounded-lg p-3 text-xs md:text-sm text-gray-700 space-y-1.5">
-                <p>1. Quan sát bầu đếm giọt.</p>
-                <p>2. Bấm nút <strong>"+1 GIỌT"</strong> mỗi khi thấy giọt rơi.</p>
-                <p>3. Bấm liên tục 3-5 lần để máy tính tốc độ.</p>
+            <!-- HƯỚNG DẪN SỬ DỤNG -->
+            <div class="mt-8 border-t border-gray-100 pt-6">
+                <div class="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
+                    <h4 class="text-sm font-bold text-blue-800 mb-2 flex items-center">
+                        <i class="fa-solid fa-circle-info mr-2"></i> Hướng dẫn
+                    </h4>
+                    <ul class="space-y-2 text-sm text-blue-900/80 pl-1">
+                        <li class="flex items-start gap-2">
+                            <span class="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</span>
+                            <span>Quan sát bầu đếm giọt trên dây truyền dịch.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</span>
+                            <span>Bấm nút lớn <strong>+1 GIỌT</strong> mỗi khi nhìn thấy một giọt rơi xuống.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</span>
+                            <span>Bấm liên tục khoảng 3-5 giọt để máy tính toán tốc độ trung bình chính xác.</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
+
         </div>
     </div>
-</div>
 </main>
-<!-- CUSTOM MODAL -->
-<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-<div class="absolute inset-0 bg-black opacity-50 transition-opacity"></div>
-<div class="bg-white rounded-lg shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100">
-<div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 mb-4">
-<svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-</svg>
-</div>
-<h3 class="text-lg leading-6 font-medium text-gray-900 mb-2">Thông báo</h3>
-<p id="modal-message" class="text-sm text-gray-500 mb-6">Vui lòng chọn đủ mục.</p>
-<button id="close-modal-btn" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
-Đóng
-</button>
-</div>
-</div>
-<footer id="lien-he" class="bg-gray-800 text-white py-4 md:py-8 text-center rounded-t-lg shadow-inner">
-<div class="container mx-auto px-4">
-<!-- Dòng bản quyền: Ẩn bớt text thừa trên mobile -->
-<p class="text-xs md:text-base">&copy; 2025 Máy tính y học<span class="hidden md:inline">. Mọi quyền được bảo lưu.</span></p>
-    <!-- Thông tin liên hệ: Chữ nhỏ hơn, rút gọn nội dung trên mobile -->
-    <div class="mt-1 md:mt-2 text-xs md:text-base text-gray-400 md:text-white">
-        <!-- Hiện trên Mobile -->
-        <p class="md:hidden">BS. Nguyễn Duy Toàn - BVĐK Lâm Đồng</p>
-        <!-- Hiện trên Desktop -->
-        <p class="hidden md:block">Liên hệ: BS. Nguyễn Duy Toàn - Bệnh viện đa khoa Lâm Đồng</p>
-        
-        <p class="mt-0.5 md:mt-1">
-            <span class="hidden md:inline">Email: </span><a href="mailto:toannguyen284@gmail.com" class="text-indigo-400 hover:text-white transition duration-300">toannguyen284@gmail.com</a>
-        </p>
-    </div>
 
-    <!-- Links: Rút gọn tên và thêm dấu gạch phân cách -->
-    <div class="flex justify-center space-x-3 md:space-x-4 mt-2 md:mt-4 text-xs md:text-base">
-        <a href="chinh-sach-bao-mat.html" class="text-gray-400 hover:text-white transition duration-300">Bảo mật</a>
-        <span class="text-gray-600 md:hidden">|</span>
-        <a href="dieu-khoan-dich-vu.html" class="text-gray-400 hover:text-white transition duration-300">Điều khoản</a>
+<!-- DRAWER MENU -->
+<div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+<div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
+    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
+        <h2 class="font-bold text-xl text-gray-800">Menu</h2>
+        <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
+        <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
+            <span class="font-medium">Giới thiệu</span>
+        </a>
+        <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
+            <span class="font-medium">Liên hệ</span>
+        </a>
+        <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
+            <span class="font-medium">Điều khoản</span>
+        </a>
+        <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
+            <span class="font-medium">Chính sách</span>
+        </a>
+        <div class="my-2 border-t border-gray-100"></div>
+        <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
+            <span class="font-medium">Ủng hộ</span>
+        </a>
     </div>
 </div>
-</footer>
-<nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-50 flex justify-around py-2 pb-safe md:hidden">
-<a href="index.html" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span>Trang Chủ</span></a>
-<a href="cong-cu.html" class="bottom-nav-item active"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg><span>Công Cụ</span></a>
-<a href="gioi-thieu.html" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg><span>Giới thiệu</span></a>
-<a href="#lien-he" class="bottom-nav-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg><span>Liên Hệ</span></a>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+        <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+            <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
+            <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
+        </a>
+        <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
+            <i class="fa-solid fa-calculator text-xl mb-1"></i>
+            <span class="text-[10px]">Công cụ</span>
+        </a>
+        <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+            <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
+            <span class="text-[10px] group-hover:text-teal-600">Khác</span>
+        </button>
+    </div>
 </nav>
+
+<!-- NOTIFICATION MODAL -->
+<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+    <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+    <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 mb-4">
+            <i class="fa-solid fa-bell text-indigo-600 text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+        <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
+        <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            Đóng
+        </button>
+    </div>
+</div>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-// --- LAYOUT ADJUSTMENT (KHÔNG ĐƯỢC XOÁ) ---
-const header = document.querySelector('header');
-const body = document.body;
-function adjustBodyPadding() {
-if (header && getComputedStyle(header).display !== 'none') {
-body.style.paddingTop = header.offsetHeight + 'px';
-} else { body.style.paddingTop = '0px'; }
+// --- 1. LOGIC LƯU LỊCH SỬ ---
+function useTool(id, name, icon, color, url) {
+    try {
+        let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+        recentTools = recentTools.filter(tool => tool.id !== id);
+        recentTools.unshift({
+            id: id,
+            name: name,
+            icon: icon,
+            color: color,
+            url: url,
+            timestamp: new Date().getTime()
+        });
+        if (recentTools.length > 5) recentTools.pop();
+        localStorage.setItem('recentTools', JSON.stringify(recentTools));
+    } catch (e) { console.log('LocalStorage unavailable'); }
 }
-adjustBodyPadding();
-window.addEventListener('resize', adjustBodyPadding);
-    document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('dblclick', () => { input.value = ''; });
-    });
 
-    // --- MODAL LOGIC (GIỮ NGUYÊN) ---
-    const modal = document.getElementById('notification-modal');
-    const modalMessage = document.getElementById('modal-message');
-    const closeModalBtn = document.getElementById('close-modal-btn');
+// --- 2. LOGIC DRAWER MENU ---
+function openDrawer(e) {
+    if(e) e.preventDefault();
+    const drawer = document.getElementById('drawer-menu');
+    const overlay = document.getElementById('drawer-overlay');
+    overlay.classList.remove('hidden');
+    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+    drawer.classList.remove('translate-x-full');
+    document.body.style.overflow = 'hidden';
+}
 
-    window.showModal = function(message) {
+function closeDrawer() {
+    const drawer = document.getElementById('drawer-menu');
+    const overlay = document.getElementById('drawer-overlay');
+    drawer.classList.add('translate-x-full');
+    overlay.classList.add('opacity-0');
+    setTimeout(() => {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    }, 300);
+}
+
+// --- 3. LOGIC MODAL ---
+const modal = document.getElementById('notification-modal');
+const modalMessage = document.getElementById('modal-message');
+
+window.showModal = function(message) {
+    if(modal && modalMessage) {
         modalMessage.textContent = message;
         modal.classList.remove('hidden');
     }
+}
 
-    function hideModal() {
-        modal.classList.add('hidden');
-    }
+window.hideModal = function() {
+    if(modal) modal.classList.add('hidden');
+}
 
-    closeModalBtn.addEventListener('click', hideModal);
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal.querySelector('.absolute')) {
-            hideModal();
-        }
-    });
+// --- 4. LOGIC CHÍNH CỦA MÁY ĐẾM GIỌT ---
+document.addEventListener('DOMContentLoaded', function() {
+    // Gọi hàm useTool
+    useTool('may-dem-giot', 'Máy Đếm Giọt', 'fa-droplet', 'text-indigo-600', window.location.href);
 
-    // --- [GEMINI: VIẾT LOGIC TÍNH TOÁN TẠI ĐÂY] ---
-    const form = document.getElementById('tool-form');
     const tapBtn = document.getElementById('tapBtn');
     const clearBtn = document.getElementById('clearBtn');
-    const resultContainer = document.getElementById('result-container');
     const mainResult = document.getElementById('main-result');
     const subResult = document.getElementById('sub-result');
     const sampleCountDisplay = document.getElementById('sample-count');
@@ -242,7 +319,7 @@ window.addEventListener('resize', adjustBodyPadding);
 
     // Variables for logic
     let timestamps = [];
-    let totalDrops = 0; // Biến đếm tổng số giọt
+    let totalDrops = 0;
     const maxSamples = 5; // Rolling average window
     const resetThreshold = 10000; // 10 seconds timeout
 
@@ -268,8 +345,7 @@ window.addEventListener('resize', adjustBodyPadding);
         const rate = Math.round(60000 / avgIntervalMs);
 
         mainResult.textContent = rate;
-        // Đã xóa phần mô tả "Dựa trên tốc độ trung bình..."
-        subResult.textContent = ""; 
+        subResult.textContent = "Tốc độ trung bình (đang đo)";
     }
 
     // Function to handle Reset
@@ -278,69 +354,85 @@ window.addEventListener('resize', adjustBodyPadding);
         totalDrops = 0;
         sampleCountDisplay.textContent = "0";
         statusText.textContent = "Sẵn sàng";
-        statusText.className = "font-bold text-gray-600 text-xs mt-1";
+        statusText.className = "font-bold text-gray-600 text-sm mt-1";
         mainResult.textContent = "--";
         subResult.textContent = "Sẵn sàng đo...";
     }
 
     // MAIN TAP LOGIC
-    tapBtn.addEventListener('click', function(e) {
-        // Visual effect
-        tapBtn.classList.remove('animate-ripple');
-        void tapBtn.offsetWidth; // Trigger reflow
-        tapBtn.classList.add('animate-ripple');
+    if (tapBtn) {
+        tapBtn.addEventListener('click', function(e) {
+            // Visual effect
+            tapBtn.classList.remove('animate-ripple');
+            void tapBtn.offsetWidth; // Trigger reflow
+            tapBtn.classList.add('animate-ripple');
 
-        // Show feedback bubble
-        tapFeedback.style.opacity = '1';
-        setTimeout(() => { tapFeedback.style.opacity = '0'; }, 500);
-
-        const now = Date.now();
-
-        // Check timeout (Reset if > 10s since last tap)
-        if (timestamps.length > 0) {
-            const lastTime = timestamps[timestamps.length - 1];
-            if (now - lastTime > resetThreshold) {
-                // Auto reset session
-                timestamps = [];
-                totalDrops = 0;
-                showModal("Đã quá 10 giây không có tương tác. Hệ thống tự động bắt đầu phiên đo mới.");
+            // Show feedback bubble
+            if (tapFeedback) {
+                tapFeedback.style.opacity = '1';
+                setTimeout(() => { tapFeedback.style.opacity = '0'; }, 300);
             }
-        }
 
-        // Add new timestamp
-        timestamps.push(now);
-        totalDrops++; // Tăng biến đếm tổng
+            const now = Date.now();
 
-        // Maintain rolling window
-        if (timestamps.length > maxSamples) {
-            timestamps.shift();
-        }
+            // Check timeout (Reset if > 10s since last tap)
+            if (timestamps.length > 0) {
+                const lastTime = timestamps[timestamps.length - 1];
+                if (now - lastTime > resetThreshold) {
+                    timestamps = [];
+                    totalDrops = 0;
+                    window.showModal("Đã quá 10 giây không có tương tác. Hệ thống tự động bắt đầu phiên đo mới.");
+                }
+            }
 
-        // Update Status UI
-        sampleCountDisplay.textContent = totalDrops; // Hiển thị tổng số giọt đã đếm
-        
-        if (totalDrops === 1) {
-            statusText.textContent = "Đang đo...";
-            statusText.className = "font-bold text-indigo-500 text-xs mt-1 animate-pulse";
-            subResult.textContent = "Đang tính toán...";
-        } else {
-            statusText.textContent = "Đã có kết quả";
-            statusText.className = "font-bold text-green-600 text-xs mt-1";
-        }
+            // Add new timestamp
+            timestamps.push(now);
+            totalDrops++;
 
-        // Calculate
-        calculateRate();
-    });
+            // Maintain rolling window
+            if (timestamps.length > maxSamples) {
+                timestamps.shift();
+            }
 
-    // Prevent default form submit (since we use custom logic)
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-    });
+            // Update Status UI
+            sampleCountDisplay.textContent = totalDrops;
+            
+            if (totalDrops === 1) {
+                statusText.textContent = "Đang đo...";
+                statusText.className = "font-bold text-indigo-500 text-sm mt-1 animate-pulse";
+                subResult.textContent = "Đang tính toán...";
+            } else {
+                statusText.textContent = "Đã có kết quả";
+                statusText.className = "font-bold text-green-600 text-sm mt-1";
+            }
+
+            // Calculate
+            calculateRate();
+        });
+    }
 
     // Manual Clear
-    clearBtn.addEventListener('click', function() {
-        resetData();
-    });
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            resetData();
+        });
+    }
+});
+
+// --- 5. BẢO MẬT (CHẶN MENU & PHÍM TẮT) ---
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+
+document.addEventListener('keydown', function(e) {
+    // Chặn Ctrl+U, Ctrl+C, Ctrl+A
+    if (e.ctrlKey && (
+        e.key === 'u' || e.key === 'U' || 
+        e.key === 'c' || e.key === 'C' || 
+        e.key === 'a' || e.key === 'A'
+    )) {
+        e.preventDefault();
+    }
 });
 </script>
 </body>
