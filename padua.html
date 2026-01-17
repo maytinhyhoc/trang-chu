@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thang điểm PADUA - Đánh giá nguy cơ thuyên tắc phổi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; padding-bottom: 80px; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; touch-action: pan-x pan-y; }
+        .result-text, input, textarea { -webkit-user-select: text; user-select: text; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 20px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out; }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        
+        /* Custom Radio Style */
+        .radio-card:checked + div {
+            border-color: #4f46e5;
+            background-color: #eef2ff;
+            color: #4f46e5;
+        }
+        .radio-card:checked + div .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body>
+
+<!-- DESKTOP HEADER -->
+<header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
+    <div class="flex items-center gap-3">
+        <!-- BẮT BUỘC: Logo lấy từ file cùng thư mục -->
+        <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
+        <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
+    </div>
+    <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
+        <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
+        <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
+        <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
+    </nav>
+</header>
+
+<!-- MOBILE HEADER -->
+<header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
+    <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition"><i class="fa-solid fa-chevron-left text-lg"></i></a>
+    <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">PADUA Score</h1>
+    <div class="w-8"></div>
+</header>
+
+<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+        <!-- Card Header -->
+        <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
+            <div class="flex items-center">
+                <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4"><i class="fa-solid fa-chevron-left"></i></a>
+                <div>
+                    <h1 class="text-2xl font-bold">Thang điểm PADUA</h1>
+                    <p class="text-indigo-100 mt-1 text-sm">Đánh giá nguy cơ thuyên tắc huyết khối tĩnh mạch ở bệnh nhân nội khoa</p>
+                </div>
+            </div>
+            <i class="fa-solid fa-heart-pulse text-4xl text-indigo-300 opacity-50"></i>
+        </div>
+
+        <!-- FORM CONTENT -->
+        <div class="p-4 md:p-8" id="tool-content">
+            <form id="padua-form">
+                
+                <!-- Input Tuổi (Number Input) -->
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-bold mb-2 text-sm uppercase tracking-wide">1. Tuổi bệnh nhân</label>
+                    <div class="relative">
+                        <input type="number" id="age" inputmode="decimal" placeholder="Nhập tuổi (ví dụ: 65)" 
+                            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition text-lg font-medium text-gray-800 placeholder-gray-400 bg-gray-50">
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Tuổi</span>
+                    </div>
+                </div>
+
+                <div class="h-px bg-gray-100 my-6"></div>
+
+                <!-- Các câu hỏi Radio (Yes/No) -->
+                <div class="space-y-6">
+                    
+                    <!-- Question 1 -->
+                    <div class="question-group" data-points="3">
+                        <p class="font-bold text-gray-800 mb-3 text-base flex justify-between items-start">
+                            <span>2. Ung thư đang hoạt động?</span>
+                            <span class="text-xs font-normal text-indigo-600 bg-indigo-50 px-2 py-1 rounded ml-2 whitespace-nowrap">3 điểm</span>
+                        </p>
+                        <p class="text-xs text-gray-500 mb-3 -mt-2 italic">Bao gồm di căn và/hoặc điều trị Hóa/Xạ trị trong 6 tháng qua.</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_cancer" value="0" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center">
+                                    Không
+                                </div>
+                            </label>
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_cancer" value="3" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center">
+                                    <i class="fa-solid fa-check check-icon absolute top-2 right-2 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-xs"></i>
+                                    Có
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="question-group">
+                        <p class="font-bold text-gray-800 mb-3 text-base flex justify-between items-start">
+                            <span>3. Tiền sử VTE?</span>
+                            <span class="text-xs font-normal text-indigo-600 bg-indigo-50 px-2 py-1 rounded ml-2 whitespace-nowrap">3 điểm</span>
+                        </p>
+                        <p class="text-xs text-gray-500 mb-3 -mt-2 italic">Trừ huyết khối tĩnh mạch nông.</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_vte" value="0" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center">Không</div>
+                            </label>
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_vte" value="3" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center"><i class="fa-solid fa-check check-icon absolute top-2 right-2 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-xs"></i>Có</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="question-group">
+                        <p class="font-bold text-gray-800 mb-3 text-base flex justify-between items-start">
+                            <span>4. Giảm vận động?</span>
+                            <span class="text-xs font-normal text-indigo-600 bg-indigo-50 px-2 py-1 rounded ml-2 whitespace-nowrap">3 điểm</span>
+                        </p>
+                        <p class="text-xs text-gray-500 mb-3 -mt-2 italic">Nằm tại giường ít nhất 3 ngày (vệ sinh tại chỗ).</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_mobility" value="0" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center">Không</div>
+                            </label>
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_mobility" value="3" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center"><i class="fa-solid fa-check check-icon absolute top-2 right-2 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-xs"></i>Có</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="question-group">
+                        <p class="font-bold text-gray-800 mb-3 text-base flex justify-between items-start">
+                            <span>5. Tình trạng tăng đông đã biết?</span>
+                            <span class="text-xs font-normal text-indigo-600 bg-indigo-50 px-2 py-1 rounded ml-2 whitespace-nowrap">3 điểm</span>
+                        </p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_thrombo" value="0" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center">Không</div>
+                            </label>
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_thrombo" value="3" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center"><i class="fa-solid fa-check check-icon absolute top-2 right-2 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-xs"></i>Có</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="question-group">
+                        <p class="font-bold text-gray-800 mb-3 text-base flex justify-between items-start">
+                            <span>6. Chấn thương / Phẫu thuật gần đây?</span>
+                            <span class="text-xs font-normal text-indigo-600 bg-indigo-50 px-2 py-1 rounded ml-2 whitespace-nowrap">2 điểm</span>
+                        </p>
+                        <p class="text-xs text-gray-500 mb-3 -mt-2 italic">Trong vòng 1 tháng qua.</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_trauma" value="0" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center">Không</div>
+                            </label>
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="q_trauma" value="2" class="radio-card sr-only">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-50 transition font-medium text-gray-600 h-full flex items-center justify-center"><i class="fa-solid fa-check check-icon absolute top-2 right-2 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-xs"></i>Có</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 6 (Grouped 1 point items) -->
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <p class="font-bold text-indigo-800 mb-4 text-sm uppercase flex items-center">
+                            <i class="fa-solid fa-layer-group mr-2"></i>Các yếu tố nguy cơ khác (1 điểm)
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <!-- 6.1 Heart/Resp Failure -->
+                            <div class="question-group">
+                                <p class="text-sm font-semibold text-gray-700 mb-2">7. Suy tim và/hoặc Suy hô hấp?</p>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_heart" value="0" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm">Không</div></label>
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_heart" value="1" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm"><i class="fa-solid fa-check check-icon absolute top-1 right-1 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-[10px]"></i>Có</div></label>
+                                </div>
+                            </div>
+                            
+                            <!-- 6.2 AMI / Stroke -->
+                            <div class="question-group">
+                                <p class="text-sm font-semibold text-gray-700 mb-2">8. Nhồi máu cơ tim cấp hoặc Đột quỵ?</p>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_stroke" value="0" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm">Không</div></label>
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_stroke" value="1" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm"><i class="fa-solid fa-check check-icon absolute top-1 right-1 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-[10px]"></i>Có</div></label>
+                                </div>
+                            </div>
+
+                            <!-- 6.3 Infection/Rheumatic -->
+                            <div class="question-group">
+                                <p class="text-sm font-semibold text-gray-700 mb-2">9. Nhiễm trùng cấp và/hoặc Bệnh lý khớp?</p>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_infection" value="0" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm">Không</div></label>
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_infection" value="1" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm"><i class="fa-solid fa-check check-icon absolute top-1 right-1 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-[10px]"></i>Có</div></label>
+                                </div>
+                            </div>
+
+                            <!-- 6.4 Obesity -->
+                            <div class="question-group">
+                                <p class="text-sm font-semibold text-gray-700 mb-2">10. Béo phì (BMI ≥ 30)?</p>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_bmi" value="0" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm">Không</div></label>
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_bmi" value="1" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm"><i class="fa-solid fa-check check-icon absolute top-1 right-1 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-[10px]"></i>Có</div></label>
+                                </div>
+                            </div>
+
+                            <!-- 6.5 Hormonal -->
+                            <div class="question-group">
+                                <p class="text-sm font-semibold text-gray-700 mb-2">11. Đang điều trị Hormone?</p>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_hormone" value="0" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm">Không</div></label>
+                                    <label class="cursor-pointer relative"><input type="radio" name="q_hormone" value="1" class="radio-card sr-only"><div class="border border-white bg-white rounded-lg p-2 text-center text-sm hover:bg-gray-100 transition shadow-sm"><i class="fa-solid fa-check check-icon absolute top-1 right-1 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200 text-[10px]"></i>Có</div></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            
+            <!-- [BUTTON GROUP] -->
+            <div class="mt-8 grid grid-cols-2 gap-4">
+                <button type="button" id="btn-reset" class="flex items-center justify-center py-3 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition active:scale-95">
+                    <i class="fa-solid fa-rotate-right mr-2"></i>Nhập lại
+                </button>
+                <button type="button" id="btn-calc" class="flex items-center justify-center py-3 px-4 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition active:scale-95">
+                    <i class="fa-solid fa-calculator mr-2"></i>Tính điểm
+                </button>
+            </div>
+            
+            <!-- [KHU VỰC KẾT QUẢ (Ẩn mặc định)] -->
+            <div id="result-area" class="hidden mt-6 p-5 bg-white rounded-xl border-2 animate-fade-in-up shadow-sm">
+                <div class="text-center">
+                    <p class="text-gray-500 uppercase text-xs font-bold tracking-wider mb-1">Tổng Điểm PADUA</p>
+                    <div id="result-score" class="text-5xl font-black text-indigo-600 mb-2">0</div>
+                    
+                    <div class="my-4 h-px bg-gray-100"></div>
+                    
+                    <h3 id="result-title" class="text-xl font-bold mb-2"></h3>
+                    <p id="result-desc" class="text-sm text-gray-600 leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- DRAWER MENU -->
+<div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+<div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
+    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50"><h2 class="font-bold text-xl text-gray-800">Menu</h2><button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button></div>
+    <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
+        <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div><span class="font-medium">Giới thiệu</span></a>
+        <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div><span class="font-medium">Liên hệ</span></a>
+        <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div><span class="font-medium">Điều khoản</span></a>
+        <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div><span class="font-medium">Chính sách</span></a>
+        <div class="my-2 border-t border-gray-100"></div>
+        <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div><span class="font-medium">Ủng hộ</span></a>
+    </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+        <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600"><i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i><span class="text-[10px] group-hover:text-teal-600">Trang chủ</span></a>
+        <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group"><i class="fa-solid fa-calculator text-xl mb-1"></i><span class="text-[10px]">Công cụ</span></a>
+        <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600"><i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i><span class="text-[10px] group-hover:text-teal-600">Khác</span></button>
+    </div>
+</nav>
+
+<!-- MODAL -->
+<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+    <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+    <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4"><i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i></div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+        <p id="modal-message" class="text-sm text-gray-500 mb-6">...</p>
+        <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">Đóng</button>
+    </div>
+</div>
+
+<script>
+// --- 1. TIỆN ÍCH HỆ THỐNG ---
+function useTool(id, name, icon, color, url) {
+    let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+    recentTools = recentTools.filter(tool => tool.id !== id);
+    recentTools.unshift({ id, name, icon, color, url, timestamp: new Date().getTime() });
+    if (recentTools.length > 5) recentTools.pop();
+    localStorage.setItem('recentTools', JSON.stringify(recentTools));
+}
+function openDrawer(e) { if(e) e.preventDefault(); document.getElementById('drawer-overlay').classList.remove('hidden'); setTimeout(() => document.getElementById('drawer-overlay').classList.remove('opacity-0'), 10); document.getElementById('drawer-menu').classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; }
+function closeDrawer() { const d = document.getElementById('drawer-menu'); const o = document.getElementById('drawer-overlay'); d.classList.add('translate-x-full'); o.classList.add('opacity-0'); setTimeout(() => { o.classList.add('hidden'); document.body.style.overflow = ''; }, 300); }
+window.showModal = function(msg) { const m = document.getElementById('notification-modal'); if(m) { document.getElementById('modal-message').textContent = msg; m.classList.remove('hidden'); } };
+window.hideModal = function() { const m = document.getElementById('notification-modal'); if(m) m.classList.add('hidden'); };
+
+// --- 2. BẢO MẬT (CHẶN COPY/F12) ---
+document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'F12' || (event.ctrlKey && (['u', 'U', 'c', 'C', 'a', 'A', 's', 'S', 'p', 'P'].includes(event.key)))) {
+        event.preventDefault(); return false;
+    }
+});
+
+// --- 3. LOGIC CÔNG CỤ (PADUA SCORE) ---
+document.addEventListener('DOMContentLoaded', function() {
+    // Save usage for "Recent Tools" logic (Optional)
+    useTool('padua', 'Thang điểm PADUA', 'fa-heart-pulse', 'indigo', window.location.href);
+
+    const btnReset = document.getElementById('btn-reset');
+    const btnCalc = document.getElementById('btn-calc');
+    const resultArea = document.getElementById('result-area');
+    const ageInput = document.getElementById('age');
+
+    // A. Xử lý nút RESET
+    btnReset.addEventListener('click', function() {
+        // Reset inputs
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            if(input.type === 'radio' || input.type === 'checkbox') input.checked = false;
+            else input.value = '';
+        });
+        // Hide result
+        resultArea.classList.add('hidden');
+        resultArea.className = "hidden mt-6 p-5 bg-white rounded-xl border-2 animate-fade-in-up shadow-sm"; // Reset style
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // B. Xử lý nút TÍNH ĐIỂM
+    btnCalc.addEventListener('click', function() {
+        let totalScore = 0;
+        let isError = false;
+
+        // 1. Validate & Get Age
+        const ageValue = ageInput.value.trim();
+        if (ageValue === '') {
+            showModal('Vui lòng nhập tuổi bệnh nhân!');
+            ageInput.focus();
+            return;
+        }
+        // Logic Tuổi >= 70 là 1 điểm
+        if (parseInt(ageValue) >= 70) {
+            totalScore += 1;
+        }
+
+        // 2. Validate & Get Radio Groups
+        const radioGroups = [
+            'q_cancer', 'q_vte', 'q_mobility', 'q_thrombo', 
+            'q_trauma', 'q_heart', 'q_stroke', 'q_infection', 'q_bmi', 'q_hormone'
+        ];
+
+        for (const groupName of radioGroups) {
+            const selected = document.querySelector(`input[name="${groupName}"]:checked`);
+            if (!selected) {
+                isError = true;
+                // Highlight error visually if needed
+                break;
+            }
+            totalScore += parseInt(selected.value);
+        }
+
+        if (isError) {
+            showModal('Vui lòng trả lời đầy đủ tất cả các câu hỏi!');
+            return;
+        }
+
+        // 3. Hiển thị kết quả
+        const resultScoreEl = document.getElementById('result-score');
+        const resultTitleEl = document.getElementById('result-title');
+        const resultDescEl = document.getElementById('result-desc');
+        
+        resultScoreEl.textContent = totalScore;
+        resultArea.classList.remove('hidden');
+
+        // Logic Phân tầng nguy cơ PADUA
+        // < 4: Nguy cơ thấp
+        // >= 4: Nguy cơ cao
+        if (totalScore >= 4) {
+            resultArea.className = "mt-6 p-5 bg-red-50 rounded-xl border-2 border-red-200 animate-fade-in-up shadow-sm";
+            resultScoreEl.className = "text-5xl font-black text-red-600 mb-2";
+            resultTitleEl.textContent = "NGUY CƠ CAO";
+            resultTitleEl.className = "text-xl font-bold mb-2 text-red-700";
+            resultDescEl.innerHTML = `Bệnh nhân có nguy cơ cao bị thuyên tắc huyết khối tĩnh mạch.<br><strong class="text-red-600">Khuyến cáo:</strong> Cần xem xét điều trị dự phòng bằng thuốc chống đông (nếu không có chống chỉ định).`;
+        } else {
+            resultArea.className = "mt-6 p-5 bg-green-50 rounded-xl border-2 border-green-200 animate-fade-in-up shadow-sm";
+            resultScoreEl.className = "text-5xl font-black text-green-600 mb-2";
+            resultTitleEl.textContent = "NGUY CƠ THẤP";
+            resultTitleEl.className = "text-xl font-bold mb-2 text-green-700";
+            resultDescEl.innerHTML = `Bệnh nhân có nguy cơ thấp.<br><strong class="text-green-600">Khuyến cáo:</strong> Không cần điều trị dự phòng thường quy. Khuyến khích vận động sớm.`;
+        }
+
+        // Scroll to result
+        resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+});
+</script>
+</body>
+</html>

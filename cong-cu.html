@@ -53,8 +53,7 @@
         </div>
         <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
             <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <!-- Đã bỏ gạch chân (border-b-2) -->
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
+            <a href="cong-cu.html" class="text-teal-600 font-bold border-b-2 border-teal-600">Công cụ</a>
             <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
         </nav>
     </header>
@@ -77,7 +76,7 @@
             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
             </div>
-            <input type="text" id="search-input" onkeyup="filterTools()" placeholder="Tìm nhanh (VD: gcs, bmi, liều...)" 
+            <input type="text" id="search-input" onkeyup="filterTools()" placeholder="Tìm nhanh (VD: gcs, apache, liều, ards...)" 
                 class="w-full pl-11 pr-4 py-3 rounded-xl border-none shadow-md bg-white focus:ring-2 focus:ring-teal-500 focus:outline-none text-gray-700 text-sm md:text-base">
         </div>
 
@@ -98,14 +97,32 @@
                     <div><h4 class="font-semibold text-gray-800">Thang điểm SOFA</h4><p class="text-xs text-gray-500">Đánh giá suy tạng (Sepsis)</p></div>
                 </div>
 
+                <!-- NEW: APACHE II -->
+                <div onclick="useTool('apache2', 'Thang điểm APACHE II', 'fa-notes-medical', 'red', 'apache-ii.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-notes-medical"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm APACHE II</h4><p class="text-xs text-gray-500">Tiên lượng tử vong tại ICU</p></div>
+                </div>
+
                 <div onclick="useTool('news2', 'Thang điểm NEWS2', 'fa-tower-broadcast', 'red', 'news2.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-tower-broadcast"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Thang điểm NEWS2</h4><p class="text-xs text-gray-500">Cảnh báo sớm bệnh nặng</p></div>
                 </div>
 
+                <!-- NEW: PBW & Vt -->
+                <div onclick="useTool('pbw-vt', 'Cân nặng lý tưởng & Vt', 'fa-lungs-virus', 'red', 'pbw-vt.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-lungs-virus"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Cân nặng lý tưởng & Vt</h4><p class="text-xs text-gray-500">Cài đặt máy thở ARDSnet</p></div>
+                </div>
+
                 <div onclick="useTool('abg', 'Phân tích Khí máu (ABG)', 'fa-lungs', 'rose', 'phan-tich-khi-mau.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-xl"><i class="fa-solid fa-lungs"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Phân tích Khí máu (ABG)</h4><p class="text-xs text-gray-500">Toan kiềm & Oxy hóa máu</p></div>
+                </div>
+
+                <!-- NEW: FeNa -->
+                <div onclick="useTool('fena', 'Phân suất thải Natri (FeNa)', 'fa-flask', 'rose', 'fena.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-xl"><i class="fa-solid fa-flask"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Phân suất thải Natri (FeNa)</h4><p class="text-xs text-gray-500">Phân biệt nguyên nhân suy thận</p></div>
                 </div>
 
                 <div onclick="useTool('atropin', 'Thang điểm Atropin', 'fa-biohazard', 'rose', 'bang-diem-atropin.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
@@ -137,6 +154,18 @@
                     <div><h4 class="font-semibold text-gray-800">Thang điểm HAS-BLED</h4><p class="text-xs text-gray-500">Nguy cơ chảy máu</p></div>
                 </div>
 
+                <!-- NEW: PADUA -->
+                <div onclick="useTool('padua', 'Thang điểm PADUA', 'fa-user-shield', 'pink', 'padua.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-user-shield"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm PADUA</h4><p class="text-xs text-gray-500">Nguy cơ huyết khối tĩnh mạch</p></div>
+                </div>
+
+                <!-- NEW: IMPROVE -->
+                <div onclick="useTool('improve', 'Thang điểm IMPROVE', 'fa-file-medical', 'pink', 'improve.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-file-medical"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm IMPROVE</h4><p class="text-xs text-gray-500">Nguy cơ VTE & Chảy máu</p></div>
+                </div>
+
                 <div onclick="useTool('timi', 'Thang điểm TIMI', 'fa-heart-pulse', 'pink', 'timi.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-heart-pulse"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Thang điểm TIMI</h4><p class="text-xs text-gray-500">Tiên lượng NMCT cấp</p></div>
@@ -159,17 +188,17 @@
 
                 <div onclick="useTool('4t', 'Thang điểm 4T', 'fa-syringe', 'purple', '4tscore.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-xl"><i class="fa-solid fa-syringe"></i></div>
-                    <div><h4 class="font-semibold text-gray-800">Thang điểm 4T</h4><p class="text-xs text-gray-500">Sàng lọc HIT (Giảm tiểu cầu do Heparin)</p></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm 4T</h4><p class="text-xs text-gray-500">Sàng lọc HIT (Giảm tiểu cầu)</p></div>
                 </div>
 
                 <div onclick="useTool('isth', 'Thang điểm ISTH DIC', 'fa-vial', 'purple', 'isth-dic.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-xl"><i class="fa-solid fa-vial"></i></div>
-                    <div><h4 class="font-semibold text-gray-800">Thang điểm ISTH DIC</h4><p class="text-xs text-gray-500">Chẩn đoán đông máu nội mạch rải rác</p></div>
+                    <div><h4 class="font-semibold text-gray-800">Thang điểm ISTH DIC</h4><p class="text-xs text-gray-500">Chẩn đoán DIC</p></div>
                 </div>
 
                 <div onclick="useTool('tpe', 'Thay huyết tương (TPE)', 'fa-hand-holding-droplet', 'purple', 'tpe.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-xl"><i class="fa-solid fa-hand-holding-droplet"></i></div>
-                    <div><h4 class="font-semibold text-gray-800">Thay huyết tương (TPE)</h4><p class="text-xs text-gray-500">Tính thể tích huyết tương cần thay</p></div>
+                    <div><h4 class="font-semibold text-gray-800">Thay huyết tương (TPE)</h4><p class="text-xs text-gray-500">Tính thể tích huyết tương</p></div>
                 </div>
             </div>
         </div>
@@ -181,6 +210,12 @@
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 
+                <!-- NEW: Corticoid Conversion -->
+                <div onclick="useTool('corticoid', 'Chuyển đổi liều Corticoid', 'fa-pills', 'blue', 'doilieu-corticoid.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-xl"><i class="fa-solid fa-pills"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Chuyển đổi liều Corticoid</h4><p class="text-xs text-gray-500">So sánh hiệu lực thuốc</p></div>
+                </div>
+
                 <div onclick="useTool('antibiotic', 'Kháng sinh & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-xl"><i class="fa-solid fa-capsules"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Kháng sinh & Virus</h4><p class="text-xs text-gray-500">Tra cứu liều dùng</p></div>
@@ -410,17 +445,10 @@
         // 1. Chặn menu chuột phải (Context Menu)
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
-            // Bạn có thể hiển thị thông báo ở đây nếu muốn, ví dụ:
-            // alert("Chức năng này đã bị vô hiệu hóa.");
         });
 
         // 2. Chặn các phím tắt (Ctrl+C, Ctrl+A, Ctrl+U, F12)
         document.addEventListener('keydown', function(e) {
-            // Danh sách các phím cần chặn
-            // e.ctrlKey: Kiểm tra xem phím Ctrl có đang được nhấn không
-            // e.key: Kiểm tra phím được nhấn
-            
-            // Chặn Ctrl+C (Sao chép), Ctrl+A (Chọn tất cả), Ctrl+U (Xem nguồn), Ctrl+S (Lưu)
             if (e.ctrlKey && (
                 e.key === 'c' || e.key === 'C' || 
                 e.key === 'a' || e.key === 'A' || 
@@ -431,7 +459,6 @@
                 return false;
             }
 
-            // Chặn F12 (Developer Tools)
             if (e.key === 'F12' || e.keyCode === 123) {
                 e.preventDefault();
                 return false;
