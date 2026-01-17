@@ -66,9 +66,14 @@
         <!-- Mobile Header (Simplified) -->
         <div class="md:hidden pt-2 pb-4 flex items-center justify-between">
             <h1 class="text-2xl font-bold text-blue-600">Tất cả công cụ</h1>
-            <a href="index.html" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600">
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
+            <div class="flex items-center gap-2">
+                <button onclick="window.location.reload()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 active:scale-95 transition">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <a href="index.html" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 active:scale-95 transition">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
         </div>
         
         <!-- Search Bar -->
