@@ -18,7 +18,7 @@
     <meta name="description" content="Công cụ tính toán y khoa dành cho bác sĩ và sinh viên y dược.">
     <meta name="theme-color" content="#0d9488"> <!-- Màu Teal chủ đạo -->
     
-    <!-- === OPEN GRAPH (HIỂN THỊ KHI CHIA SẺ LINK ZALO/FACEBOOK) === -->
+    <!-- === OPEN GRAPH === -->
     <meta property="og:title" content="Máy tính Y học">
     <meta property="og:description" content="Công cụ tính toán y khoa miễn phí, hỗ trợ PWA offline.">
     <meta property="og:image" content="logo.png">
@@ -27,80 +27,46 @@
     <!-- iOS Specific -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- CẬP NHẬT: Tên hiển thị khi Add to Home Screen trên iOS -->
     <meta name="apple-mobile-web-app-title" content="Máy Tính Y Học">
-    <!-- CẬP NHẬT: Tên ứng dụng cho Windows/Android (nếu không có manifest) -->
     <meta name="application-name" content="Máy Tính Y Học">
     
     <!-- Icons -->
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="shortcut icon" href="logo.png">
-    
-    <!-- Manifest Link (Cần tạo file manifest.json riêng khi chạy thực tế) -->
     <link rel="manifest" href="/manifest.json">
 
     <style>
-        /* --- CẬP NHẬT: Áp dụng cho body và class .content-text --- */
         body, .content-text {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
-            -webkit-tap-highlight-color: transparent; /* Loại bỏ highlight xanh khi tap trên mobile */
-            
-            /* --- CHỐNG BÔI ĐEN (SELECT TEXT) --- */
-            -webkit-user-select: none; /* Safari */
-            -ms-user-select: none; /* IE 10 and IE 11 */
-            user-select: none; /* Standard syntax */
-
-            /* --- HẠN CHẾ ZOOM CỬ CHỈ --- */
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
             touch-action: pan-x pan-y;
         }
-        
-        /* Hiệu ứng mượt mà cho Bottom Nav */
-        .nav-item {
-            transition: all 0.2s ease;
-        }
-        .nav-item.active {
-            color: #0d9488;
-        }
-        .nav-item.active i {
-            transform: translateY(-2px);
-        }
-
-        /* Ẩn thanh cuộn nhưng vẫn cuộn được */
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        
-        /* Cho phép chọn text ở các ô input để nhập liệu (quan trọng) */
-        input, textarea {
-            -webkit-user-select: text;
-            user-select: text;
-        }
+        .nav-item { transition: all 0.2s ease; }
+        .nav-item.active { color: #0d9488; }
+        .nav-item.active i { transform: translateY(-2px); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        input, textarea { -webkit-user-select: text; user-select: text; }
     </style>
 </head>
 <body class="text-gray-800 pb-20 md:pb-0 overflow-x-hidden">
 
     <!-- ============================================ -->
-    <!-- DESKTOP HEADER (Chỉ hiện trên màn hình lớn) -->
+    <!-- DESKTOP HEADER -->
     <!-- ============================================ -->
     <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
         <div class="flex items-center gap-3">
-            <!-- Logo hiển thị trên PC -->
             <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://placehold.co/40x40?text=Logo'">
-            <!-- Tăng cỡ chữ tiêu đề trên PC -->
             <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
         </div>
-        <!-- Tăng cỡ chữ menu trên PC -->
         <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
             <a href="#" class="hover:text-teal-600 transition">Trang chủ</a>
             <a href="cong-cu.html" class="hover:text-teal-600 transition">Công cụ</a>
-            <!-- Đổi thành Khác và gọi hàm mở Drawer -->
             <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
         </nav>
     </header>
@@ -110,19 +76,16 @@
     <!-- ============================================ -->
     <main class="md:pt-24 p-4 max-w-5xl mx-auto min-h-screen flex flex-col">
         
-        <!-- Mobile Header (CẬP NHẬT: THÊM LOGO) -->
+        <!-- Mobile Header -->
         <div class="md:hidden mb-6 pt-2 flex items-center justify-between">
             <div>
                 <h2 class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Chào mừng đến với</h2>
                 <h1 class="text-2xl font-bold text-blue-600">Máy tính Y học</h1>
             </div>
-            <!-- Logo hiển thị trên Mobile -->
             <img src="logo.png" alt="Logo" class="w-12 h-12 object-contain bg-white rounded-lg shadow-sm p-1" onerror="this.src='https://placehold.co/48x48?text=Logo'">
         </div>
 
-        <!-- ============================================ -->
-        <!-- MOBILE INSTALL GUIDE (OS DETECTION) -->
-        <!-- ============================================ -->
+        <!-- Mobile Install Guide -->
         <div id="install-guide" class="hidden mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-4 text-white shadow-lg relative overflow-hidden">
             <div class="relative z-10">
                 <div class="flex items-start justify-between">
@@ -130,20 +93,14 @@
                         <h3 class="font-bold text-lg mb-1"><i class="fa-solid fa-download mr-2"></i>Cài đặt ứng dụng</h3>
                         <p class="text-blue-100 text-sm mb-3">Sử dụng offline & truy cập nhanh hơn.</p>
                     </div>
-                    <button onclick="document.getElementById('install-guide').style.display='none'" class="text-white opacity-70 hover:opacity-100">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button onclick="document.getElementById('install-guide').style.display='none'" class="text-white opacity-70 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                
-                <!-- iOS Instructions -->
                 <div id="ios-instructions" class="hidden text-sm bg-white/20 rounded-lg p-3 backdrop-blur-sm">
                     <ol class="list-decimal list-inside space-y-1">
                         <li>Nhấn vào nút <strong>Chia sẻ</strong> <i class="fa-solid fa-arrow-up-from-bracket mx-1"></i> trên thanh công cụ.</li>
                         <li>Chọn <strong>"Thêm vào MH chính"</strong> (Add to Home Screen).</li>
                     </ol>
                 </div>
-
-                <!-- Android Instructions -->
                 <div id="android-instructions" class="hidden text-sm bg-white/20 rounded-lg p-3 backdrop-blur-sm">
                     <ol class="list-decimal list-inside space-y-1">
                         <li>Nhấn vào menu <strong>3 chấm</strong> <i class="fa-solid fa-ellipsis-vertical mx-1"></i> ở góc phải.</li>
@@ -151,27 +108,24 @@
                     </ol>
                 </div>
             </div>
-            <!-- Decorative circle -->
             <div class="absolute -right-6 -bottom-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
         </div>
 
         <!-- ============================================ -->
         <!-- TOOLS GRID -->
         <!-- ============================================ -->
-        <!-- Tăng cỡ chữ tiêu đề section -->
         <h3 class="font-bold text-gray-800 text-lg md:text-2xl mb-4 md:mb-6">Công cụ phổ biến</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-            <!-- Tool 1: Tra liều kháng sinh -->
+            <!-- Tool 1 -->
             <div onclick="useTool('antibiotic', 'Tra liều kháng sinh', 'fa-pills', 'rose', 'khang-sinh.html')" 
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-rose-200 transition">
                     <i class="fa-solid fa-pills"></i>
                 </div>
-                <!-- Tăng cỡ chữ tên công cụ -->
                 <span class="font-medium text-sm md:text-lg text-gray-700">Tra liều kháng sinh</span>
             </div>
 
-            <!-- Tool 2: Tính thời gian truyền dịch -->
+            <!-- Tool 2 -->
             <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-clock', 'blue', 'tinh-thoi-gian-truyen-dich.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-blue-200 transition">
@@ -180,7 +134,7 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Tính thời gian truyền dịch</span>
             </div>
 
-            <!-- Tool 3: Đếm giọt dịch truyền -->
+            <!-- Tool 3 -->
             <div onclick="useTool('drip-rate', 'Đếm giọt dịch truyền', 'fa-droplet', 'cyan', 'dem-giot-dich-truyen.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-cyan-200 transition">
@@ -189,8 +143,7 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Đếm giọt dịch truyền</span>
             </div>
 
-            <!-- Tool 4: Tra cứu chế độ ăn -->
-            <!-- Cập nhật ID từ 'diet-lookup' thành 'diet' để đồng bộ với cong-cu.html -->
+            <!-- Tool 4: CẬP NHẬT ID thành 'diet' -->
             <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-utensils', 'green', 'tra-cuu-che-do-an.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-green-200 transition">
@@ -208,16 +161,12 @@
         
         <!-- Container for Recent Tools -->
         <div id="recent-container" class="space-y-3 mb-8 min-h-[100px]">
-            <!-- Content will be injected by JS -->
             <div id="empty-state" class="text-center py-8 text-gray-400 text-sm md:text-lg italic border-2 border-dashed border-gray-200 rounded-xl">
                 Chưa có công cụ nào được sử dụng gần đây.
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- DESKTOP INSTALL GUIDE (Added at bottom) -->
-        <!-- ============================================ -->
-        <!-- THÊM ID desktop-install-guide ĐỂ JAVASCRIPT CÓ THỂ ẨN -->
+        <!-- Desktop Install Guide -->
         <div id="desktop-install-guide" class="hidden md:block mt-auto pt-8 border-t border-gray-200">
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
                 <h3 class="font-bold text-gray-800 text-lg md:text-2xl mb-3 flex items-center">
@@ -247,86 +196,53 @@
                 </div>
             </div>
         </div>
-
     </main>
 
     <!-- ============================================ -->
-    <!-- SIDE DRAWER (NGĂN KÉO BÊN PHẢI) -->
+    <!-- SIDE DRAWER & MENU -->
     <!-- ============================================ -->
-    <!-- Overlay -->
     <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-
-    <!-- Drawer Content -->
     <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <!-- Drawer Header -->
         <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
             <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
+            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
-
-        <!-- Drawer Links -->
         <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
             <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition">
-                    <i class="fa-solid fa-circle-info"></i>
-                </div>
+                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
                 <span class="font-medium">Giới thiệu</span>
             </a>
-
-            <!-- Thêm mục Liên hệ -->
             <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition">
-                    <i class="fa-solid fa-envelope"></i>
-                </div>
+                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
                 <span class="font-medium">Liên hệ</span>
             </a>
-            
             <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition">
-                    <i class="fa-solid fa-file-contract"></i>
-                </div>
+                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
                 <span class="font-medium">Điều khoản</span>
             </a>
-
             <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
+                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
                 <span class="font-medium">Chính sách</span>
             </a>
-
             <div class="my-2 border-t border-gray-100"></div>
-
             <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition">
-                    <i class="fa-solid fa-heart"></i>
-                </div>
+                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
                 <span class="font-medium">Ủng hộ</span>
             </a>
         </div>
-        
     </div>
 
-    <!-- ============================================ -->
-    <!-- MOBILE BOTTOM NAVIGATION (Chỉ hiện trên Mobile) -->
-    <!-- ============================================ -->
+    <!-- Mobile Bottom Nav -->
     <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <!-- Home Item (Active) -->
             <button type="button" class="nav-item active inline-flex flex-col items-center justify-center px-5 group">
                 <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
                 <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
             </button>
-            
-            <!-- Tools Item (Updated to link) -->
             <a href="cong-cu.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
                 <i class="fa-solid fa-calculator text-xl mb-1 group-hover:text-teal-600"></i>
                 <span class="text-[10px] group-hover:text-teal-600">Công cụ</span>
             </a>
-            
-            <!-- Other Item (Replaced About Us) -->
             <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
                 <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
                 <span class="text-[10px] group-hover:text-teal-600">Khác</span>
@@ -338,72 +254,41 @@
     <!-- SCRIPT XỬ LÝ -->
     <!-- ============================================ -->
     <script>
-        // --- CONTENT PROTECTION (CHỐNG COPY/RIGHT CLICK) ---
-        // 1. Chặn Menu chuột phải (Right Click)
-        document.addEventListener('contextmenu', function(event) {
-            event.preventDefault();
+        // --- 1. CONTENT PROTECTION ---
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && ['c','a','u'].includes(e.key.toLowerCase())) e.preventDefault();
         });
 
-        // 2. Chặn phím tắt (Ctrl+C, Ctrl+A, Ctrl+U)
-        document.addEventListener('keydown', function(event) {
-            if (event.ctrlKey) {
-                const key = event.key.toLowerCase();
-                if (key === 'c' || key === 'a' || key === 'u') {
-                    event.preventDefault();
-                    // Optional: Có thể thêm alert để báo người dùng
-                    // alert('Chức năng này đã bị vô hiệu hóa.');
-                }
-            }
-        });
-
-        // --- DRAWER LOGIC ---
+        // --- 2. DRAWER LOGIC ---
         function openDrawer(e) {
             if(e) e.preventDefault();
             const drawer = document.getElementById('drawer-menu');
             const overlay = document.getElementById('drawer-overlay');
-            
-            // Show overlay
             overlay.classList.remove('hidden');
-            // Small delay to allow display block to apply before opacity transition
-            setTimeout(() => {
-                overlay.classList.remove('opacity-0');
-            }, 10);
-
-            // Slide in drawer
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
             drawer.classList.remove('translate-x-full');
-            
-            // Prevent body scroll
             document.body.style.overflow = 'hidden';
         }
 
         function closeDrawer() {
             const drawer = document.getElementById('drawer-menu');
             const overlay = document.getElementById('drawer-overlay');
-
-            // Slide out drawer
             drawer.classList.add('translate-x-full');
-            
-            // Fade out overlay
             overlay.classList.add('opacity-0');
-            
-            // Wait for transition to finish before hiding overlay
             setTimeout(() => {
                 overlay.classList.add('hidden');
                 document.body.style.overflow = '';
             }, 300);
         }
 
-        // --- 1. RECENT TOOLS LOGIC ---
-        // Hàm lưu và xử lý công cụ vừa dùng
+        // --- 3. RECENT TOOLS LOGIC (FIX LỖI TRÙNG LẶP) ---
         function useTool(id, name, icon, color, url) {
-            // Lấy danh sách hiện tại từ localStorage
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // CẬP NHẬT: Xóa tool nếu đã tồn tại (check cả ID và URL để tránh trùng lặp)
-            // Nếu URL giống nhau thì coi là 1 công cụ -> Xóa cái cũ đi để cập nhật cái mới lên đầu
+            // Lọc bỏ nếu trùng ID HOẶC trùng URL (để tránh lưu 2 phiên bản của cùng 1 công cụ)
             recentTools = recentTools.filter(tool => tool.id !== id && tool.url !== url);
             
-            // Thêm tool mới vào đầu danh sách
             recentTools.unshift({
                 id: id,
                 name: name,
@@ -413,65 +298,44 @@
                 timestamp: new Date().getTime()
             });
 
-            // Giới hạn chỉ lưu 5 tool gần nhất
-            if (recentTools.length > 5) {
-                recentTools.pop();
-            }
+            if (recentTools.length > 5) recentTools.pop();
 
-            // Lưu lại vào localStorage
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
-            
-            // Render lại giao diện
             renderRecentTools();
 
-            // Điều hướng
-            if (url) {
-                window.location.href = url;
-            }
+            if (url) window.location.href = url;
         }
 
-        // Hàm render danh sách gần đây
         function renderRecentTools() {
             const container = document.getElementById('recent-container');
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
 
-            // --- CẬP NHẬT QUAN TRỌNG: Lọc trùng lặp URL ngay khi render để fix lỗi dữ liệu cũ ---
+            // --- QUAN TRỌNG: TỰ ĐỘNG SỬA DỮ LIỆU CŨ ---
+            // Lọc lại danh sách một lần nữa để đảm bảo không có URL trùng lặp
             const uniqueTools = [];
             const seenUrls = new Set();
-            
             recentTools.forEach(tool => {
-                // Chỉ thêm vào danh sách hiển thị nếu URL chưa từng xuất hiện
                 if (!seenUrls.has(tool.url)) {
                     seenUrls.add(tool.url);
                     uniqueTools.push(tool);
                 }
             });
-            
-            // Cập nhật lại danh sách đã lọc vào biến để render (và có thể lưu lại để dọn dẹp storage)
+            // Lưu lại danh sách sạch vào localStorage
             recentTools = uniqueTools;
-            // Tự động dọn dẹp storage cho sạch luôn
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
-            // ---------------------------------------------------------------------------
+            // ---------------------------------------------
 
             if (recentTools.length === 0) {
-                container.innerHTML = `
-                    <div id="empty-state" class="text-center py-8 text-gray-400 text-sm md:text-lg italic border-2 border-dashed border-gray-200 rounded-xl">
-                        Chưa có công cụ nào được sử dụng gần đây.
-                    </div>
-                `;
+                container.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm md:text-lg italic border-2 border-dashed border-gray-200 rounded-xl">Chưa có công cụ nào được sử dụng gần đây.</div>`;
                 return;
             }
 
-            // Tạo HTML cho danh sách
             let html = '';
             recentTools.forEach(tool => {
-                // Tính thời gian (giả lập "vừa xong")
                 const timeDiff = Math.floor((new Date().getTime() - tool.timestamp) / 60000);
                 let timeString = 'Vừa xong';
                 if (timeDiff > 0) timeString = `${timeDiff} phút trước`;
                 if (timeDiff > 60) timeString = `${Math.floor(timeDiff/60)} giờ trước`;
-
-                // Đảm bảo url không bị undefined khi render lại
                 const toolUrl = tool.url || '#';
 
                 html += `
@@ -487,7 +351,6 @@
                     </div>
                 `;
             });
-
             container.innerHTML = html;
         }
 
@@ -496,57 +359,34 @@
             renderRecentTools();
         }
 
-        // --- 2. APP INITIALIZATION ---
+        // --- 4. APP INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Render danh sách gần đây khi mới vào app
             renderRecentTools();
 
-            // Logic phát hiện thiết bị và hiển thị hướng dẫn
-            const detectDeviceAndShowInstallGuide = () => {
-                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                const mobileGuide = document.getElementById('install-guide');
-                const desktopGuide = document.getElementById('desktop-install-guide');
-                const iosInstructions = document.getElementById('ios-instructions');
-                const androidInstructions = document.getElementById('android-instructions');
-                
-                // Regex kiểm tra thiết bị mobile/tablet chung
-                const isMobileOrTablet = /iPad|iPhone|iPod|android/i.test(userAgent);
-                
-                if (isMobileOrTablet) {
-                    // Nếu là mobile/tablet thì ẩn ngay hướng dẫn cho PC
-                    if (desktopGuide) {
-                        desktopGuide.style.display = 'none';
-                        desktopGuide.classList.add('hidden'); // Thêm class hidden để chắc chắn
-                    }
-
-                    // Tiếp tục logic cho mobile
-                    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-                    if (isStandalone) return;
-
+            // Device detection logic
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const mobileGuide = document.getElementById('install-guide');
+            const desktopGuide = document.getElementById('desktop-install-guide');
+            const isMobileOrTablet = /iPad|iPhone|iPod|android/i.test(userAgent);
+            
+            if (isMobileOrTablet) {
+                if (desktopGuide) desktopGuide.classList.add('hidden');
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+                if (!isStandalone) {
                     if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
                         mobileGuide.classList.remove('hidden');
-                        iosInstructions.classList.remove('hidden');
-                    } 
-                    else if (/android/i.test(userAgent)) {
+                        document.getElementById('ios-instructions').classList.remove('hidden');
+                    } else if (/android/i.test(userAgent)) {
                         mobileGuide.classList.remove('hidden');
-                        androidInstructions.classList.remove('hidden');
+                        document.getElementById('android-instructions').classList.remove('hidden');
                     }
                 }
-                // Nếu là PC thì desktopGuide sẽ tự hiện do class "hidden md:block" (với điều kiện màn hình >= md)
-            };
+            }
 
-            detectDeviceAndShowInstallGuide();
-
-            // Logic Bottom Nav Active State
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => {
+            // Nav active state
+            document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', function() {
-                    // Nếu là nút "Khác" (có chứa onclick openDrawer), ta không set active state kiểu toggle bình thường
-                    // mà chỉ set khi người dùng click vào trang chủ/công cụ.
-                    // Tuy nhiên, nếu bạn muốn nút "Khác" sáng lên khi mở menu thì giữ nguyên logic này.
-                    // Ở đây tôi giữ nguyên logic để nút sáng lên khi bấm.
-                    
-                    navItems.forEach(nav => {
+                    document.querySelectorAll('.nav-item').forEach(nav => {
                         nav.classList.remove('active', 'text-teal-600');
                         nav.classList.add('text-gray-500');
                     });
