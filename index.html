@@ -117,8 +117,8 @@
         <h3 class="font-bold text-gray-800 text-lg md:text-2xl mb-4 md:mb-6">Công cụ phổ biến</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
             
-            <!-- Tool 1: Kháng sinh -->
-            <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" 
+            <!-- Tool 1: Kháng sinh (Cập nhật icon full class: fa-solid fa-capsules) -->
+            <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-solid fa-capsules', 'blue', 'khang-sinh.html')" 
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-blue-200 transition">
                     <i class="fa-solid fa-capsules"></i>
@@ -126,8 +126,8 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Kháng sinh, Kháng nấm & Virus</span>
             </div>
 
-            <!-- Tool 2: Thời gian truyền dịch -->
-            <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-clock', 'cyan', 'tinh-thoi-gian-truyen-dich.html')"
+            <!-- Tool 2: Thời gian truyền dịch (Cập nhật icon full class: fa-regular fa-clock cho đồng bộ) -->
+            <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-regular fa-clock', 'cyan', 'tinh-thoi-gian-truyen-dich.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-cyan-200 transition">
                     <i class="fa-regular fa-clock"></i>
@@ -135,8 +135,8 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Tính thời gian truyền dịch</span>
             </div>
 
-            <!-- Tool 3: Đếm giọt -->
-            <div onclick="useTool('drip-rate', 'Đếm giọt dịch truyền', 'fa-droplet', 'cyan', 'dem-giot-dich-truyen.html')"
+            <!-- Tool 3: Đếm giọt (Cập nhật icon full class: fa-solid fa-droplet) -->
+            <div onclick="useTool('drip-rate', 'Đếm giọt dịch truyền', 'fa-solid fa-droplet', 'cyan', 'dem-giot-dich-truyen.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-cyan-200 transition">
                     <i class="fa-solid fa-droplet"></i>
@@ -144,8 +144,8 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Đếm giọt dịch truyền</span>
             </div>
 
-            <!-- Tool 4: Chế độ ăn -->
-            <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-utensils', 'green', 'tra-cuu-che-do-an.html')"
+            <!-- Tool 4: Chế độ ăn (Cập nhật icon full class: fa-solid fa-utensils) -->
+            <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-solid fa-utensils', 'green', 'tra-cuu-che-do-an.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-green-200 transition">
                     <i class="fa-solid fa-utensils"></i>
@@ -283,50 +283,118 @@
             }, 300);
         }
 
-        // --- 3. RECENT TOOLS LOGIC (TỐI ƯU HÓA & SỬA LỖI) ---
-        // Biến cờ để ngăn chặn double-click
+        // --- 3. RECENT TOOLS LOGIC (FIX: DATA SYNCHRONIZATION & ICON DISPLAY) ---
+        // DANH SÁCH CHUẨN: Dùng để ép buộc tên/icon đúng ngay cả khi trang con ghi đè sai
+        const TOOLS_CONFIG = [
+            {
+                id: 'antibiotic',
+                url: 'khang-sinh.html',
+                name: 'Kháng sinh, Kháng nấm & Virus',
+                icon: 'fa-solid fa-capsules',
+                color: 'blue'
+            },
+            {
+                id: 'infusion-time',
+                url: 'tinh-thoi-gian-truyen-dich.html',
+                name: 'Tính thời gian truyền dịch',
+                icon: 'fa-regular fa-clock',
+                color: 'cyan'
+            },
+            {
+                id: 'drip-rate',
+                url: 'dem-giot-dich-truyen.html',
+                name: 'Đếm giọt dịch truyền',
+                icon: 'fa-solid fa-droplet',
+                color: 'cyan'
+            },
+            {
+                id: 'diet',
+                url: 'tra-cuu-che-do-an.html',
+                name: 'Tra cứu chế độ ăn',
+                icon: 'fa-solid fa-utensils',
+                color: 'green'
+            }
+        ];
+
         let isNavigating = false;
 
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                isNavigating = false;
+            }
+        });
+
+        function getFileName(url) {
+            if (!url) return '';
+            try {
+                if (url.startsWith('http')) {
+                    const urlObj = new URL(url);
+                    const path = urlObj.pathname;
+                    return path.substring(path.lastIndexOf('/') + 1);
+                }
+                let cleanUrl = url.split('?')[0].split('#')[0];
+                return cleanUrl.split('/').pop();
+            } catch (e) {
+                return url; 
+            }
+        }
+
         function useTool(id, name, icon, color, url) {
-            // Nếu đang trong quá trình chuyển trang thì bỏ qua các click tiếp theo
             if (isNavigating) return;
             isNavigating = true;
 
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // Chuẩn hóa input đầu vào
-            const targetId = String(id).trim();
-            const targetUrl = String(url).trim();
-
-            // LỌC TRÙNG LẶP TRIỆT ĐỂ:
-            // Loại bỏ bất kỳ mục nào có cùng ID hoặc cùng URL với mục sắp thêm
-            recentTools = recentTools.filter(tool => {
-                const currentId = String(tool.id || '').trim();
-                const currentUrl = String(tool.url || '').trim();
-                // Giữ lại nếu KHÁC id VÀ KHÁC url
-                return currentId !== targetId && currentUrl !== targetUrl;
-            });
-            
-            // Thêm mục mới lên đầu
-            recentTools.unshift({
-                id: targetId,
+            const newItem = {
+                id: String(id).trim(),
                 name: name,
                 icon: icon,
                 color: color,
-                url: targetUrl,
+                url: String(url).trim(),
                 timestamp: new Date().getTime()
-            });
+            };
 
-            // Giới hạn danh sách 5 mục
-            if (recentTools.length > 5) recentTools = recentTools.slice(0, 5);
+            recentTools.unshift(newItem);
 
-            localStorage.setItem('recentTools', JSON.stringify(recentTools));
+            // LOGIC LỌC & ĐỒNG BỘ HÓA
+            const uniqueTools = [];
+            const seenIds = new Set();
+            const seenFiles = new Set();
+
+            for (let tool of recentTools) {
+                const tId = String(tool.id || '').trim();
+                const tUrl = String(tool.url || '').trim();
+                const tFileName = getFileName(tUrl);
+
+                // Nếu URL khớp với danh sách chuẩn, ta ÉP DỮ LIỆU hiển thị theo danh sách chuẩn
+                // Điều này giúp khắc phục lỗi trang con ghi đè tên/icon sai
+                const config = TOOLS_CONFIG.find(c => getFileName(c.url) === tFileName);
+                if (config) {
+                    tool = {
+                        ...tool,
+                        id: config.id, // Dùng ID chuẩn
+                        name: config.name, // Dùng tên chuẩn
+                        icon: config.icon, // Dùng icon chuẩn
+                        color: config.color // Dùng màu chuẩn
+                    };
+                }
+
+                const isIdDuplicate = tId && seenIds.has(tId);
+                const isFileDuplicate = tFileName && seenFiles.has(tFileName);
+
+                if (!isIdDuplicate && !isFileDuplicate) {
+                    uniqueTools.push(tool);
+                    if (tId) seenIds.add(tId);
+                    if (tFileName) seenFiles.add(tFileName);
+                }
+            }
+
+            const finalList = uniqueTools.slice(0, 5);
+            localStorage.setItem('recentTools', JSON.stringify(finalList));
             
-            // Chuyển trang
             if (url) {
                 window.location.href = url;
             } else {
-                // Nếu không có URL (để test), reset cờ sau 500ms
                 setTimeout(() => {
                     isNavigating = false;
                     renderRecentTools();
@@ -334,40 +402,55 @@
             }
         }
 
-        // HÀM TỰ ĐỘNG LÀM SẠCH KHI TẢI TRANG (SELF-HEALING)
+        // TỰ ĐỘNG SỬA DỮ LIỆU SAI KHI TẢI TRANG
         function cleanToolsList() {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             if (!recentTools.length) return;
 
             const uniqueTools = [];
             const seenIds = new Set();
-            const seenUrls = new Set();
+            const seenFiles = new Set();
             let hasChanges = false;
 
-            // Duyệt qua danh sách, chỉ giữ lại lần xuất hiện đầu tiên của mỗi ID/URL
-            recentTools.forEach(tool => {
+            for (let tool of recentTools) {
                 const tId = String(tool.id || '').trim();
                 const tUrl = String(tool.url || '').trim();
+                const tFileName = getFileName(tUrl);
 
-                // Nếu ID chưa thấy VÀ URL chưa thấy -> Giữ lại
-                if (!seenIds.has(tId) && !seenUrls.has(tUrl)) {
-                    if (tId) seenIds.add(tId);
-                    if (tUrl) seenUrls.add(tUrl);
-                    uniqueTools.push(tool);
-                } else {
-                    // Đã thấy rồi -> Bỏ qua (đây là bản sao cũ hơn)
-                    hasChanges = true;
+                // --- LOGIC QUAN TRỌNG: TỰ ĐỘNG SỬA LỖI TÊN/ICON ---
+                // Kiểm tra xem tool này có trong danh sách chuẩn không
+                const config = TOOLS_CONFIG.find(c => getFileName(c.url) === tFileName);
+                if (config) {
+                    // Nếu dữ liệu hiện tại khác với dữ liệu chuẩn, đánh dấu là có thay đổi
+                    if (tool.name !== config.name || tool.icon !== config.icon || tool.color !== config.color) {
+                        hasChanges = true;
+                        // Ghi đè dữ liệu chuẩn vào
+                        tool = { ...tool, ...config };
+                    }
                 }
-            });
+                // ------------------------------------------------
 
-            // Nếu có thay đổi, cập nhật lại localStorage
-            if (hasChanges || uniqueTools.length !== recentTools.length) {
+                const isIdDuplicate = tId && seenIds.has(tId);
+                const isFileDuplicate = tFileName && seenFiles.has(tFileName);
+
+                if (!isIdDuplicate && !isFileDuplicate) {
+                    uniqueTools.push(tool);
+                    if (tId) seenIds.add(tId);
+                    if (tFileName) seenFiles.add(tFileName);
+                } else {
+                    hasChanges = true; // Có trùng lặp
+                }
+            }
+
+            if (hasChanges) {
                 localStorage.setItem('recentTools', JSON.stringify(uniqueTools));
             }
         }
 
         function renderRecentTools() {
             const container = document.getElementById('recent-container');
+            cleanToolsList(); // Tự sửa lỗi trước khi render
+            
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
 
             if (recentTools.length === 0) {
@@ -382,14 +465,27 @@
                 if (timeDiff > 0) timeString = `${timeDiff} phút trước`;
                 if (timeDiff > 60) timeString = `${Math.floor(timeDiff/60)} giờ trước`;
                 const toolUrl = tool.url || '#';
+                const safeName = (tool.name || '').replace(/'/g, "\\'");
                 
-                // Escape dấu nháy đơn trong tên để tránh lỗi JS
-                const safeName = tool.name.replace(/'/g, "\\'");
+                // Fallback màu sắc nếu thiếu
+                const color = tool.color || 'gray'; 
+
+                // XỬ LÝ ICON THÔNG MINH (NÂNG CẤP):
+                // Kiểm tra xem chuỗi icon đã chứa bất kỳ class định dạng nào chưa (bao gồm cả fas, far, fab...)
+                // Regex tìm kiếm các từ khóa: fa-solid, fa-regular, fa-brands, fas, far, fab
+                const hasStyle = /\b(fa-solid|fa-regular|fa-brands|fas|far|fab)\b/.test(tool.icon);
+                
+                let iconClass = tool.icon;
+                if (!hasStyle) {
+                    // Nếu không tìm thấy style nào, mặc định thêm fa-solid
+                    // (Điều này sửa lỗi cho các công cụ lạ chỉ gửi tên 'fa-user' mà thiếu style)
+                    iconClass = `fa-solid ${iconClass}`;
+                }
 
                 html += `
-                    <div onclick="useTool('${tool.id}', '${safeName}', '${tool.icon}', '${tool.color}', '${toolUrl}')" class="bg-white p-4 rounded-xl shadow-sm flex items-center gap-4 cursor-pointer hover:bg-gray-50 active:scale-95 transition">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-${tool.color}-100 flex items-center justify-center text-${tool.color}-600 md:text-xl">
-                            <i class="fa-solid ${tool.icon}"></i>
+                    <div onclick="useTool('${tool.id}', '${safeName}', '${tool.icon}', '${color}', '${toolUrl}')" class="bg-white p-4 rounded-xl shadow-sm flex items-center gap-4 cursor-pointer hover:bg-gray-50 active:scale-95 transition">
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-${color}-100 flex items-center justify-center text-${color}-600 md:text-xl">
+                            <i class="${iconClass}"></i>
                         </div>
                         <div class="flex-1">
                             <h4 class="font-semibold text-gray-800 text-sm md:text-lg">${tool.name}</h4>
@@ -409,7 +505,6 @@
 
         // --- 4. APP INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            cleanToolsList(); // Chạy ngay khi mở trang để dọn dẹp dữ liệu cũ
             renderRecentTools();
 
             // Device detection logic
