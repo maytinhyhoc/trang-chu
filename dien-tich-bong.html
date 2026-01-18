@@ -3,40 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tính diện tích bỏng & Bù dịch</title>
+    <title>Tính diện tích bỏng & Bù dịch - Công Cụ Y Học</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
+
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; padding-bottom: 80px; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; touch-action: pan-x pan-y; }
-        .result-text, input, textarea { -webkit-user-select: text; user-select: text; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 20px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
-        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out; }
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f3f4f6; 
+            padding-bottom: 80px; /* Space for Bottom Nav */
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            user-select: none;
+            touch-action: pan-x pan-y;
+        }
+
+        /* Cho phép chọn text ở input và kết quả */
+        .result-text, input, textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        /* Tùy chỉnh thanh cuộn */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        /* --- CUSTOM STYLES CHO BODY MAP --- */
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         
-        /* Fix lỗi zoom trên iOS: Input phải có font-size tối thiểu 16px */
+        /* Fix lỗi zoom trên iOS */
         @media screen and (max-width: 768px) {
-            input[type="number"] {
-                font-size: 16px !important;
-            }
+            input[type="number"] { font-size: 16px !important; }
         }
         
-        /* Custom Styles cho Body Map Detailed */
-        /* Mobile: Mặc định (Người lớn) là 220px */
-        /* Tính toán chiều cao: 220 * (420/200) = 462px */
+        /* Body Map Detailed Configuration */
         .body-container { position: relative; width: 100%; max-width: 220px; margin: 0 auto; }
-        
-        /* Mobile: Riêng Trẻ em chỉnh thành 272px để chiều cao khớp với Người lớn (~462px) */
-        /* Tính toán: 272 * (340/200) = 462.4px => Gần bằng nhau, layout sẽ không bị nhảy */
         .body-container.child-view { max-width: 272px; }
         
-        /* Desktop: Tăng kích thước lên cho cân đối (cả 2 loại đều 260px) */
         @media (min-width: 768px) {
             .body-container { max-width: 260px; }
             .body-container.child-view { max-width: 260px; }
@@ -45,51 +66,56 @@
         .body-part { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1.2; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; vector-effect: non-scaling-stroke; }
         .body-part:hover { fill: #e2e8f0; stroke: #64748b; }
         .body-part.selected { fill: #ef4444; stroke: #991b1b; filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.5)); }
-        .part-label { display: none; } 
         .hidden-map { display: none !important; }
+        /* Ẩn scrollbar ngang cho input group */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 
 <body>
 
-<!-- DESKTOP HEADER -->
 <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
     <div class="flex items-center gap-3">
         <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
         <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
     </div>
     <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-        <a href="#" class="hover:text-teal-600 transition">Trang chủ</a>
+        <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
         <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
         <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
     </nav>
 </header>
 
-<!-- MOBILE HEADER -->
 <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-    <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition"><i class="fa-solid fa-chevron-left text-lg"></i></a>
-    <h1 class="flex-1 text-center text-base font-bold text-gray-800 truncate px-2">Tính diện tích bỏng & Bù dịch</h1>
+    <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
+        <i class="fa-solid fa-chevron-left text-lg"></i>
+    </a>
+    <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+        Tính diện tích bỏng
+    </h1>
     <div class="w-8"></div>
 </header>
 
-<!-- MAIN CONTENT -->
-<main class="flex-grow container mx-auto px-4 pt-16 md:pt-24 pb-4 max-w-4xl">
+<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-        <!-- Card Header -->
+        
         <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
             <div class="flex items-center">
-                <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4"><i class="fa-solid fa-chevron-left"></i></a>
-                <div><h1 class="text-2xl font-bold">Tính Diện Tích Bỏng & Bù Dịch</h1><p class="text-indigo-100 mt-1 text-sm">Hỗ trợ Lund-Browder (Trẻ em) & Wallace (Người lớn)</p></div>
+                <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold">Tính Diện Tích Bỏng & Bù Dịch</h1>
+                    <p class="text-indigo-100 mt-1 text-sm">Hỗ trợ Lund-Browder (Trẻ em) & Wallace (Người lớn)</p>
+                </div>
             </div>
-            <i class="fa-solid fa-child-reaching text-4xl text-indigo-300 opacity-50"></i>
+            <i class="fa-solid fa-fire-flame-curved text-4xl text-indigo-300 opacity-50"></i>
         </div>
 
-        <!-- FORM CONTENT -->
-        <div class="p-2 md:p-8" id="tool-content">
-            <!-- 1. Cấu hình bệnh nhân -->
-            <div class="mb-2 bg-indigo-50 rounded-xl p-2 md:p-6 border border-indigo-100">
-                <div class="flex flex-row items-end gap-2 md:gap-8 overflow-x-auto md:overflow-visible no-scrollbar">
-                    <!-- Loại bệnh nhân Toggle -->
+        <div class="p-4 md:p-8" id="tool-content">
+            <div class="mb-4 bg-indigo-50 rounded-xl p-3 md:p-6 border border-indigo-100">
+                <div class="flex flex-row items-end gap-3 md:gap-8 overflow-x-auto md:overflow-visible no-scrollbar pb-1">
                     <div class="shrink-0">
                         <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Đối tượng</label>
                         <div class="flex bg-white rounded-lg p-0.5 border border-indigo-200 shadow-sm h-[36px] md:h-[44px]">
@@ -98,8 +124,7 @@
                         </div>
                     </div>
 
-                    <!-- Input Cân nặng -->
-                    <div class="flex-1 min-w-[70px]">
+                    <div class="flex-1 min-w-[80px]">
                         <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Cân nặng <span class="text-red-500">*</span></label>
                         <div class="relative h-[36px] md:h-[44px]">
                             <input type="number" id="weight" inputmode="decimal" placeholder="0" class="block w-full pl-3 pr-6 md:pr-10 h-full text-base font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg bg-white border shadow-sm">
@@ -107,8 +132,7 @@
                         </div>
                     </div>
 
-                    <!-- Input Tuổi -->
-                    <div id="age-input-group" class="w-[60px] md:w-[150px] hidden opacity-0 transition-all duration-300">
+                    <div id="age-input-group" class="w-[70px] md:w-[150px] hidden opacity-0 transition-all duration-300">
                         <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Tuổi</label>
                         <div class="relative h-[36px] md:h-[44px]">
                             <input type="number" id="age" inputmode="numeric" placeholder="0" value="0" min="0" max="15" class="block w-full px-1 md:px-3 h-full text-base font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg bg-white border shadow-sm text-center">
@@ -118,23 +142,18 @@
                 </div>
             </div>
 
-            <hr class="border-gray-100 my-2 md:my-4">
-
-            <!-- 2. Biểu đồ cơ thể chi tiết -->
-            <div class="mb-2">
-                <div class="flex justify-between items-start mb-1 sticky top-[60px] z-30 bg-white/95 backdrop-blur-sm py-2 border-b border-gray-100 md:static md:bg-transparent md:border-none">
+            <div class="mb-4">
+                <div class="flex justify-between items-start mb-2 sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 border-b border-gray-100 md:static md:bg-transparent md:border-none">
                     <div class="flex flex-col gap-1">
                         <div class="flex items-center gap-2">
                             <h3 class="text-xs uppercase tracking-wide text-gray-500 font-bold flex items-center">
                                 <i class="fa-solid fa-hand-pointer mr-1.5"></i>Chọn vùng
                             </h3>
-                            <!-- Nút Chuyển Mặt (Chỉ hiện trên Mobile) -->
                             <div class="md:hidden flex bg-gray-100 rounded-md p-0.5 w-fit border border-gray-200 scale-90 origin-left">
                                 <button type="button" id="view-front-btn" class="px-3 py-0.5 rounded-[3px] text-[10px] font-bold text-indigo-600 bg-white shadow-sm transition-all leading-none">Trước</button>
                                 <button type="button" id="view-back-btn" class="px-3 py-0.5 rounded-[3px] text-[10px] font-bold text-gray-500 hover:text-indigo-600 transition-all leading-none">Sau</button>
                             </div>
                         </div>
-
                         <span id="chart-info" class="text-[10px] text-indigo-500 font-semibold leading-none">Wallace (Người lớn)</span>
                     </div>
                     <div class="bg-red-50 text-red-600 px-3 py-1.5 rounded-xl text-lg font-bold border border-red-100 shadow-sm flex flex-col items-center min-w-[70px]">
@@ -144,11 +163,7 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 bg-white rounded-xl justify-items-center relative">
-                    <div id="map-loading" class="absolute inset-0 bg-white/80 z-20 hidden items-center justify-center backdrop-blur-sm rounded-xl"><i class="fa-solid fa-spinner fa-spin text-2xl text-indigo-600"></i></div>
-
-                    <!-- ================= MAP NGƯỜI LỚN ================= -->
                     <div id="container-adult-front" class="body-container adult-view">
-                        <!-- Chú thích: Ẩn trên Mobile (hidden), Hiện trên PC (md:block) -->
                         <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT TRƯỚC</div>
                         <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path class="body-part" data-name="Đầu (Trước)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
@@ -172,7 +187,6 @@
                     </div>
 
                     <div id="container-adult-back" class="body-container adult-view hidden md:block">
-                        <!-- Chỉ hiện chú thích trên PC -->
                         <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT SAU</div>
                         <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path class="body-part" data-name="Đầu (Sau)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
@@ -196,9 +210,7 @@
                         </svg>
                     </div>
 
-                    <!-- ================= MAP TRẺ EM ================= -->
                     <div id="container-child-front" class="body-container child-view hidden-map">
-                        <!-- Chỉ hiện chú thích trên PC -->
                         <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT TRƯỚC</div>
                         <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path id="child-head-front" class="body-part" data-name="Đầu (Trước)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
@@ -221,7 +233,6 @@
                     </div>
 
                     <div id="container-child-back" class="body-container child-view hidden-map hidden md:block">
-                        <!-- Chỉ hiện chú thích trên PC -->
                         <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT SAU</div>
                         <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path id="child-head-back" class="body-part" data-name="Đầu (Sau)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
@@ -245,12 +256,9 @@
                     </div>
                 </div>
                 
-                <!-- Hiển thị tên vùng vừa chọn -->
                 <div id="selected-part-name" class="h-6 text-center text-sm font-semibold text-indigo-600 mt-2 transition-opacity opacity-0">...</div>
             </div>
 
-            <!-- BUTTON GROUP -->
-            <!-- Giảm margin-top từ 4 xuống 2 -->
             <div class="mt-2 grid grid-cols-2 gap-3 md:gap-4">
                 <button type="button" id="btn-reset" class="flex items-center justify-center py-3 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition active:scale-95">
                     <i class="fa-solid fa-rotate-right mr-2"></i>Nhập lại
@@ -260,7 +268,6 @@
                 </button>
             </div>
             
-            <!-- KHU VỰC KẾT QUẢ -->
             <div id="result-area" class="hidden mt-6 bg-white border border-indigo-100 rounded-xl overflow-hidden animate-fade-in-up shadow-sm">
                 <div class="bg-indigo-50 p-4 border-b border-indigo-100 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
@@ -316,30 +323,131 @@
     </div>
 </main>
 
-<!-- DRAWER MENU & OTHER COMPONENTS -->
 <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
 <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50"><h2 class="font-bold text-xl text-gray-800">Menu</h2><button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button></div>
+    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
+        <h2 class="font-bold text-xl text-gray-800">Menu</h2>
+        <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
     <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-        <a href="#" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div><span class="font-medium">Giới thiệu</span></a>
-        <a href="#" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div><span class="font-medium">Liên hệ</span></a>
-        <a href="#" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div><span class="font-medium">Điều khoản</span></a>
-        <a href="#" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div><span class="font-medium">Chính sách</span></a>
+        <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
+            <span class="font-medium">Giới thiệu</span>
+        </a>
+        <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
+            <span class="font-medium">Liên hệ</span>
+        </a>
+        <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
+            <span class="font-medium">Điều khoản</span>
+        </a>
+        <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
+            <span class="font-medium">Chính sách</span>
+        </a>
         <div class="my-2 border-t border-gray-100"></div>
-        <a href="#" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div><span class="font-medium">Ủng hộ</span></a>
+        <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
+            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
+            <span class="font-medium">Ủng hộ</span>
+        </a>
     </div>
 </div>
 
-<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden"><div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div><div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up"><div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4"><i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i></div><h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3><p id="modal-message" class="text-sm text-gray-500 mb-6">...</p><button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">Đóng</button></div></div>
+<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+        <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+            <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
+            <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
+        </a>
+        <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
+            <i class="fa-solid fa-calculator text-xl mb-1"></i>
+            <span class="text-[10px]">Công cụ</span>
+        </a>
+        <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
+            <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
+            <span class="text-[10px] group-hover:text-teal-600">Khác</span>
+        </button>
+    </div>
+</nav>
+
+<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+    <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+    <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+            <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+        <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
+        <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            Đóng
+        </button>
+    </div>
+</div>
 
 <script>
-// --- 1. TIỆN ÍCH HỆ THỐNG ---
-function openDrawer(e) { if(e) e.preventDefault(); document.getElementById('drawer-overlay').classList.remove('hidden'); setTimeout(() => document.getElementById('drawer-overlay').classList.remove('opacity-0'), 10); document.getElementById('drawer-menu').classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; }
-function closeDrawer() { const d = document.getElementById('drawer-menu'); const o = document.getElementById('drawer-overlay'); d.classList.add('translate-x-full'); o.classList.add('opacity-0'); setTimeout(() => { o.classList.add('hidden'); document.body.style.overflow = ''; }, 300); }
-window.showModal = function(msg) { const m = document.getElementById('notification-modal'); if(m) { document.getElementById('modal-message').textContent = msg; m.classList.remove('hidden'); } };
-window.hideModal = function() { const m = document.getElementById('notification-modal'); if(m) m.classList.add('hidden'); };
+// --- 1. LOGIC LƯU LỊCH SỬ ---
+function useTool(id, name, icon, color, url) {
+    let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+    recentTools = recentTools.filter(tool => tool.id !== id);
+    recentTools.unshift({
+        id: id,
+        name: name,
+        icon: icon,
+        color: color,
+        url: url,
+        timestamp: new Date().getTime()
+    });
+    if (recentTools.length > 5) recentTools.pop();
+    localStorage.setItem('recentTools', JSON.stringify(recentTools));
+}
 
-// --- 2. DATA & LOGIC ---
+// --- 2. LOGIC DRAWER MENU ---
+function openDrawer(e) {
+    if(e) e.preventDefault();
+    const drawer = document.getElementById('drawer-menu');
+    const overlay = document.getElementById('drawer-overlay');
+    overlay.classList.remove('hidden');
+    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+    drawer.classList.remove('translate-x-full');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+    const drawer = document.getElementById('drawer-menu');
+    const overlay = document.getElementById('drawer-overlay');
+    drawer.classList.add('translate-x-full');
+    overlay.classList.add('opacity-0');
+    setTimeout(() => {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    }, 300);
+}
+
+// --- 3. LOGIC MODAL ---
+const modal = document.getElementById('notification-modal');
+const modalMessage = document.getElementById('modal-message');
+
+window.showModal = function(message) {
+    if(modal && modalMessage) {
+        modalMessage.textContent = message;
+        modal.classList.remove('hidden');
+    }
+}
+
+window.hideModal = function() {
+    if(modal) modal.classList.add('hidden');
+}
+
+// --- 4. BẢO MẬT & CHẶN COPY ---
+document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('keydown', function(event) {
+    if ((event.ctrlKey || event.metaKey) && (event.key === 'c' || event.key === 'u' || event.key === 'a')) {
+        event.preventDefault();
+    }
+});
+
+// --- 5. LOGIC TÍNH TOÁN DIỆN TÍCH BỎNG (GIỮ NGUYÊN) ---
 const lundBrowderData = {
     0:  { head: 9.5, thigh: 2.75, leg: 2.5 },
     1:  { head: 8.5, thigh: 3.25, leg: 2.5 },
@@ -385,23 +493,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const modeAdultBtn = document.getElementById('mode-adult');
     const modeChildBtn = document.getElementById('mode-child');
     
-    // New View Toggle Buttons (Mobile Only)
     const viewFrontBtn = document.getElementById('view-front-btn');
     const viewBackBtn = document.getElementById('view-back-btn');
     
     let isChildMode = false;
-    let currentSide = 'front'; // 'front' or 'back' (Mobile view state)
+    let currentSide = 'front';
     let totalTBSA = 0;
 
-    // UI Switching logic
-    // Containers
     const containerAdultFront = document.getElementById('container-adult-front');
     const containerAdultBack = document.getElementById('container-adult-back');
     const containerChildFront = document.getElementById('container-child-front');
     const containerChildBack = document.getElementById('container-child-back');
 
     function updateMapVisibility() {
-        // Reset base visibility (Adult vs Child)
         if (isChildMode) {
             containerAdultFront.classList.add('hidden-map');
             containerAdultBack.classList.add('hidden-map');
@@ -414,31 +518,21 @@ document.addEventListener('DOMContentLoaded', function() {
             containerAdultBack.classList.remove('hidden-map');
         }
 
-        // Apply Mobile Side Toggle Logic (via Tailwind Classes)
-        // Logic: 
-        // - On Mobile (default): Hide the side that is NOT selected.
-        // - On Desktop (md:): Always show both (block).
-        // Tailwind class 'hidden' hides element. 'md:block' shows it on desktop.
-        
         const frontContainer = isChildMode ? containerChildFront : containerAdultFront;
         const backContainer = isChildMode ? containerChildBack : containerAdultBack;
 
         if (currentSide === 'front') {
-            // Show Front, Hide Back (on mobile)
-            frontContainer.classList.remove('hidden', 'md:block'); // Ensure visible
-            backContainer.classList.add('hidden', 'md:block');     // Hide on mobile, show on desktop
+            frontContainer.classList.remove('hidden', 'md:block');
+            backContainer.classList.add('hidden', 'md:block');
             
-            // Update Buttons
             viewFrontBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
             viewFrontBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
             viewBackBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
             viewBackBtn.classList.add('text-gray-500', 'hover:text-indigo-600');
         } else {
-            // Show Back, Hide Front (on mobile)
-            backContainer.classList.remove('hidden', 'md:block'); // Ensure visible
-            frontContainer.classList.add('hidden', 'md:block');   // Hide on mobile, show on desktop
+            backContainer.classList.remove('hidden', 'md:block');
+            frontContainer.classList.add('hidden', 'md:block');
 
-            // Update Buttons
             viewBackBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
             viewBackBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
             viewFrontBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
@@ -446,16 +540,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Event Listeners for View Toggle
-    viewFrontBtn.addEventListener('click', () => {
-        currentSide = 'front';
-        updateMapVisibility();
-    });
-
-    viewBackBtn.addEventListener('click', () => {
-        currentSide = 'back';
-        updateMapVisibility();
-    });
+    viewFrontBtn.addEventListener('click', () => { currentSide = 'front'; updateMapVisibility(); });
+    viewBackBtn.addEventListener('click', () => { currentSide = 'back'; updateMapVisibility(); });
 
     function setMode(child) {
         isChildMode = child;
@@ -469,12 +555,10 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => ageGroup.classList.remove('opacity-0'), 10);
             chartInfo.textContent = "Đang dùng: Lund-Browder (Trẻ em)";
             
-            // Reset selection when switching modes? Maybe safer.
             document.querySelectorAll('.body-part.selected').forEach(el => el.classList.remove('selected'));
             totalTBSA = 0;
             tbsaDisplay.textContent = '0';
             resultArea.classList.add('hidden');
-
             updateMapValues();
         } else {
             modeAdultBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
@@ -497,29 +581,6 @@ document.addEventListener('DOMContentLoaded', function() {
     modeAdultBtn.addEventListener('click', () => setMode(false));
     modeChildBtn.addEventListener('click', () => setMode(true));
 
-    function updatePart(idBase, val) {
-        // Head (Front & Back)
-        if(idBase === 'head') {
-            const valHalf = val / 2; // Split for front/back
-            updateElem('child-head-front', valHalf);
-            updateElem('child-head-back', valHalf);
-        }
-        // Thigh
-        if(idBase === 'thigh') {
-            updateElem('child-thigh-left-front', val);
-            updateElem('child-thigh-right-front', val);
-            updateElem('child-thigh-left-back', val);
-            updateElem('child-thigh-right-back', val);
-        }
-        // Leg
-        if(idBase === 'leg') {
-            updateElem('child-leg-left-front', val);
-            updateElem('child-leg-right-front', val);
-            updateElem('child-leg-left-back', val);
-            updateElem('child-leg-right-back', val);
-        }
-    }
-
     function updateElem(id, val) {
         const el = document.getElementById(id);
         const rounded = Math.round(val * 100) / 100;
@@ -529,27 +590,18 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateMapValues() {
         if(!isChildMode) return;
         let age = parseFloat(ageInput.value);
-        
-        if (age > 15) {
-            showModal('Trẻ trên 15 tuổi được tính như người lớn. Vui lòng chọn chế độ "Người lớn"!');
-            age = 15; 
-            ageInput.value = 15; 
-        }
-        
+        if (age > 15) { showModal('Trẻ trên 15 tuổi được tính như người lớn. Vui lòng chọn chế độ "Người lớn"!'); age = 15; ageInput.value = 15; }
         if (isNaN(age) || age < 0) age = 0;
         
         const vals = getLBValues(age); 
-        
         const headVal = Math.max(0, vals.head - 1);
         
         updateElem('child-head-front', headVal);
         updateElem('child-head-back', headVal);
-
         updateElem('child-thigh-left-front', vals.thigh);
         updateElem('child-thigh-right-front', vals.thigh);
         updateElem('child-thigh-left-back', vals.thigh);
         updateElem('child-thigh-right-back', vals.thigh);
-
         updateElem('child-leg-left-front', vals.leg);
         updateElem('child-leg-right-front', vals.leg);
         updateElem('child-leg-left-back', vals.leg);
@@ -560,12 +612,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ageInput.addEventListener('input', updateMapValues);
 
-    // Common Interaction
     const bodyParts = document.querySelectorAll('.body-part');
     bodyParts.forEach(part => {
         part.addEventListener('click', function() {
-            if(this.closest('.hidden-map')) return; // Ignore clicks on hidden map elements (wrong mode)
-            // Note: Clicks on "mobile-hidden" elements are naturally prevented by display:none
+            if(this.closest('.hidden-map')) return; 
 
             this.classList.toggle('selected');
             
@@ -585,7 +635,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function recalculateSelectedTBSA() {
         totalTBSA = 0;
         const activeContainerQuery = isChildMode ? '.child-view' : '.adult-view';
-        // We select ALL active mode parts, even if hidden by mobile toggle
         document.querySelectorAll(`${activeContainerQuery} .body-part.selected`).forEach(p => {
             totalTBSA += parseFloat(p.getAttribute('data-value'));
         });
@@ -597,15 +646,17 @@ document.addEventListener('DOMContentLoaded', function() {
         weightInput.value = '';
         ageInput.value = '0';
         setMode(false);
-        currentSide = 'front'; // Reset view to front
+        currentSide = 'front';
         updateMapVisibility();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        resultArea.classList.add('hidden');
     });
 
     btnCalc.addEventListener('click', function() {
         const weight = parseFloat(weightInput.value);
         if (!weight || weight <= 0) { showModal('Vui lòng nhập cân nặng hợp lệ!'); return; }
         if (totalTBSA <= 0) { showModal('Vui lòng chọn vùng bị bỏng!'); return; }
+        
         const mlPerKg = isChildMode ? 3 : 4; 
         const totalFluid = mlPerKg * weight * totalTBSA;
         
@@ -620,9 +671,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         resultArea.classList.remove('hidden');
         resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Lưu lịch sử
+        useTool('tinh-dien-tich-bong', 'Diện Tích Bỏng', 'fa-fire-flame-curved', 'text-orange-500', window.location.href);
     });
     
-    // Initialize
     updateMapVisibility();
 });
 </script>
