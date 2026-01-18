@@ -315,9 +315,7 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- MOBILE BOTTOM NAVIGATION -->
-    <!-- ============================================ -->
+    <!-- Mobile Bottom Nav -->
     <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
             <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
@@ -341,15 +339,21 @@
     <!-- SCRIPTS -->
     <!-- ============================================ -->
     <script>
-        // --- LOGIC LƯU LỊCH SỬ (Đồng bộ với Index) ---
+        // --- LOGIC LƯU LỊCH SỬ (Đồng bộ với Index - SIÊU MẠNH) ---
         function useTool(id, name, icon, color, url) {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // CẬP NHẬT QUAN TRỌNG:
-            // Xóa nếu trùng ID HOẶC trùng URL. Điều này giúp loại bỏ các mục cũ có tên khác nhưng cùng trỏ về 1 công cụ.
-            recentTools = recentTools.filter(tool => tool.id !== id && tool.url !== url);
+            // XÓA MỌI DẤU VẾT CŨ:
+            // Lọc bỏ nếu trùng URL (bất kể ID cũ là gì)
+            // Lọc bỏ nếu trùng ID (bất kể URL cũ là gì)
+            // Lọc bỏ nếu trùng Tên (bất kể ID/URL là gì) - Đây là lớp bảo vệ cuối cùng
+            recentTools = recentTools.filter(tool => 
+                tool.url !== url && 
+                tool.id !== id && 
+                tool.name !== name
+            );
             
-            // Thêm mới lên đầu
+            // Thêm công cụ mới vào đầu danh sách
             recentTools.unshift({
                 id: id,
                 name: name,
@@ -359,19 +363,55 @@
                 timestamp: new Date().getTime()
             });
 
-            // Giới hạn 5 công cụ
-            if (recentTools.length > 5) {
-                recentTools.pop();
-            }
+            // Giới hạn 5 mục
+            if (recentTools.length > 5) recentTools = recentTools.slice(0, 5);
 
-            // Lưu vào localStorage
+            // Lưu và làm sạch
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
+            
+            // Gọi hàm render (nếu đang ở trang index, nhưng ở đây là trang cong-cu thì không cần render lại list gần đây)
+            // Nhưng ta vẫn cần gọi hàm làm sạch để đảm bảo
+            cleanToolsList();
 
             // Chuyển trang
             if (url) {
                 window.location.href = url;
             } else {
                 alert('Trang này chưa sẵn sàng!');
+            }
+        }
+
+        // --- HÀM TỰ ĐỘNG LÀM SẠCH DANH SÁCH (Self-Healing) ---
+        // Hàm này sẽ chạy khi tải trang để xóa các mục trùng lặp trong quá khứ
+        function cleanToolsList() {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            if (recentTools.length === 0) return;
+
+            const uniqueTools = [];
+            const seenUrls = new Set();
+            const seenIds = new Set();
+            let hasDuplicates = false;
+
+            for (const tool of recentTools) {
+                // Chuẩn hóa URL và ID để so sánh
+                const safeUrl = (tool.url || '').trim();
+                const safeId = (tool.id || '').trim();
+
+                // Logic: Nếu URL chưa từng thấy VÀ ID chưa từng thấy thì giữ lại
+                // (Ưu tiên giữ cái mới nhất vì vòng lặp chạy từ đầu mảng)
+                if (!seenUrls.has(safeUrl) && !seenIds.has(safeId)) {
+                    seenUrls.add(safeUrl);
+                    seenIds.add(safeId);
+                    uniqueTools.push(tool);
+                } else {
+                    hasDuplicates = true; // Đánh dấu là có trùng
+                }
+            }
+
+            // Nếu phát hiện trùng lặp, lưu lại danh sách sạch
+            if (hasDuplicates) {
+                recentTools = uniqueTools;
+                localStorage.setItem('recentTools', JSON.stringify(recentTools));
             }
         }
 
@@ -450,30 +490,18 @@
         }
 
         // ============================================
-        // TÍNH NĂNG BẢO MẬT (CHẶN SAO CHÉP)
+        // APP INIT (CHẠY KHI TẢI TRANG)
         // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Chạy hàm làm sạch danh sách ngay khi mở trang
+            // Điều này đảm bảo dù bạn chưa click gì, danh sách cũ lỗi cũng sẽ được sửa
+            cleanToolsList();
 
-        // 1. Chặn menu chuột phải (Context Menu)
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // 2. Chặn các phím tắt (Ctrl+C, Ctrl+A, Ctrl+U, F12)
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && (
-                e.key === 'c' || e.key === 'C' || 
-                e.key === 'a' || e.key === 'A' || 
-                e.key === 'u' || e.key === 'U' ||
-                e.key === 's' || e.key === 'S'
-            )) {
-                e.preventDefault();
-                return false;
-            }
-
-            if (e.key === 'F12' || e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
+            // Các logic khác...
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                if (e.ctrlKey && ['c','a','u'].includes(e.key.toLowerCase())) e.preventDefault();
+            });
         });
 
     </script>
