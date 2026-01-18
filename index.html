@@ -189,13 +189,14 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Đếm giọt dịch truyền</span>
             </div>
 
-            <!-- Tool 4: Độ lọc cầu thận (eGFR) -->
-            <div onclick="useTool('egfr', 'Độ lọc cầu thận (eGFR)', 'fa-filter', 'orange', 'do-loc-cau-than.html')"
+            <!-- Tool 4: Tra cứu chế độ ăn -->
+            <!-- Cập nhật ID từ 'diet-lookup' thành 'diet' để đồng bộ với cong-cu.html -->
+            <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-utensils', 'green', 'tra-cuu-che-do-an.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
-                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-orange-200 transition">
-                    <i class="fa-solid fa-filter"></i>
+                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-green-200 transition">
+                    <i class="fa-solid fa-utensils"></i>
                 </div>
-                <span class="font-medium text-sm md:text-lg text-gray-700">Độ lọc cầu thận (eGFR)</span>
+                <span class="font-medium text-sm md:text-lg text-gray-700">Tra cứu chế độ ăn</span>
             </div>
         </div>
 
@@ -398,8 +399,9 @@
             // Lấy danh sách hiện tại từ localStorage
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // Xóa tool nếu đã tồn tại để đưa lên đầu
-            recentTools = recentTools.filter(tool => tool.id !== id);
+            // CẬP NHẬT: Xóa tool nếu đã tồn tại (check cả ID và URL để tránh trùng lặp)
+            // Nếu URL giống nhau thì coi là 1 công cụ -> Xóa cái cũ đi để cập nhật cái mới lên đầu
+            recentTools = recentTools.filter(tool => tool.id !== id && tool.url !== url);
             
             // Thêm tool mới vào đầu danh sách
             recentTools.unshift({
@@ -431,7 +433,25 @@
         // Hàm render danh sách gần đây
         function renderRecentTools() {
             const container = document.getElementById('recent-container');
-            const recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+
+            // --- CẬP NHẬT QUAN TRỌNG: Lọc trùng lặp URL ngay khi render để fix lỗi dữ liệu cũ ---
+            const uniqueTools = [];
+            const seenUrls = new Set();
+            
+            recentTools.forEach(tool => {
+                // Chỉ thêm vào danh sách hiển thị nếu URL chưa từng xuất hiện
+                if (!seenUrls.has(tool.url)) {
+                    seenUrls.add(tool.url);
+                    uniqueTools.push(tool);
+                }
+            });
+            
+            // Cập nhật lại danh sách đã lọc vào biến để render (và có thể lưu lại để dọn dẹp storage)
+            recentTools = uniqueTools;
+            // Tự động dọn dẹp storage cho sạch luôn
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
+            // ---------------------------------------------------------------------------
 
             if (recentTools.length === 0) {
                 container.innerHTML = `
