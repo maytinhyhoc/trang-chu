@@ -20,6 +20,13 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         
+        /* Fix lỗi zoom trên iOS: Input phải có font-size tối thiểu 16px */
+        @media screen and (max-width: 768px) {
+            input[type="number"] {
+                font-size: 16px !important;
+            }
+        }
+        
         /* Custom Styles cho Body Map Detailed */
         .body-container { position: relative; width: 100%; max-width: 240px; margin: 0 auto; }
         .body-part { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1.2; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; vector-effect: non-scaling-stroke; }
@@ -71,39 +78,40 @@
 
         <!-- FORM CONTENT -->
         <div class="p-4 md:p-8" id="tool-content">
-            <!-- 1. Cấu hình bệnh nhân -->
-            <div class="mb-6 bg-indigo-50 rounded-xl p-4 border border-indigo-100">
-                <div class="flex flex-col md:flex-row gap-6">
+            <!-- 1. Cấu hình bệnh nhân (Responsive: Compact Mobile, Balanced PC) -->
+            <div class="mb-4 bg-indigo-50 rounded-xl p-3 md:p-6 border border-indigo-100">
+                <div class="flex flex-row items-end gap-2 md:gap-8 overflow-x-auto md:overflow-visible no-scrollbar">
+                    
                     <!-- Loại bệnh nhân Toggle -->
-                    <div class="flex-1">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Đối tượng</label>
-                        <div class="flex bg-white rounded-lg p-1 border border-indigo-200 shadow-sm">
-                            <button type="button" id="mode-adult" class="flex-1 py-2 px-4 rounded-md text-sm font-semibold transition-all bg-indigo-600 text-white shadow-md">Người lớn</button>
-                            <button type="button" id="mode-child" class="flex-1 py-2 px-4 rounded-md text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-all">Trẻ em</button>
+                    <div class="shrink-0">
+                        <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Đối tượng</label>
+                        <div class="flex bg-white rounded-lg p-0.5 border border-indigo-200 shadow-sm h-[36px] md:h-[44px]">
+                            <button type="button" id="mode-adult" class="px-3 md:px-6 rounded-md text-[11px] md:text-sm font-bold transition-all bg-indigo-600 text-white shadow-sm whitespace-nowrap leading-none flex items-center justify-center h-full">Người lớn</button>
+                            <button type="button" id="mode-child" class="px-3 md:px-6 rounded-md text-[11px] md:text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap leading-none flex items-center justify-center h-full">Trẻ em</button>
                         </div>
                     </div>
 
-                    <!-- Input Cân nặng & Tuổi -->
-                    <div class="flex-1 grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-1 uppercase">Cân nặng <span class="text-red-500">*</span></label>
-                            <div class="relative">
-                                <input type="number" id="weight" inputmode="decimal" placeholder="kg" class="block w-full pl-3 pr-8 py-2.5 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg bg-white border shadow-sm">
-                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400 font-bold text-xs">kg</div>
-                            </div>
+                    <!-- Input Cân nặng -->
+                    <div class="flex-1 min-w-[70px]">
+                        <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Cân nặng <span class="text-red-500">*</span></label>
+                        <div class="relative h-[36px] md:h-[44px]">
+                            <input type="number" id="weight" inputmode="decimal" placeholder="0" class="block w-full pl-3 pr-6 md:pr-10 h-full text-base font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg bg-white border shadow-sm">
+                            <div class="absolute inset-y-0 right-0 pr-2 md:pr-4 flex items-center pointer-events-none text-gray-400 font-bold text-[10px] md:text-sm">kg</div>
                         </div>
-                        <div id="age-input-group" class="hidden opacity-0 transition-opacity duration-300">
-                            <label class="block text-xs font-bold text-gray-500 mb-1 uppercase">Tuổi (0-15) <span class="text-red-500">*</span></label>
-                            <div class="relative">
-                                <input type="number" id="age" inputmode="numeric" placeholder="Tuổi" value="0" min="0" max="15" class="block w-full pl-3 pr-8 py-2.5 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg bg-white border shadow-sm">
-                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400 font-bold text-xs">tuổi</div>
-                            </div>
+                    </div>
+
+                    <!-- Input Tuổi -->
+                    <div id="age-input-group" class="w-[60px] md:w-[150px] hidden opacity-0 transition-all duration-300">
+                        <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Tuổi</label>
+                        <div class="relative h-[36px] md:h-[44px]">
+                            <input type="number" id="age" inputmode="numeric" placeholder="0" value="0" min="0" max="15" class="block w-full px-1 md:px-3 h-full text-base font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg bg-white border shadow-sm text-center">
+                            <div class="hidden md:flex absolute inset-y-0 right-0 pr-4 items-center pointer-events-none text-gray-400 font-bold text-sm">tuổi</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <hr class="border-gray-100 my-6">
+            <hr class="border-gray-100 my-4">
 
             <!-- 2. Biểu đồ cơ thể chi tiết -->
             <div class="mb-6">
@@ -118,45 +126,27 @@
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-2 md:gap-8 bg-white rounded-xl justify-items-center relative min-h-[400px]">
-                    <!-- Loading Overlay for Value Update -->
+                <div class="grid grid-cols-2 gap-2 md:gap-8 bg-white rounded-xl justify-items-center relative">
                     <div id="map-loading" class="absolute inset-0 bg-white/80 z-20 hidden items-center justify-center backdrop-blur-sm rounded-xl"><i class="fa-solid fa-spinner fa-spin text-2xl text-indigo-600"></i></div>
 
-                    <!-- ================= MAP NGƯỜI LỚN (WALLACE - CHÂN TO, MÔNG TRÒN, SINH DỤC TRÒN, TAY TRÒN) ================= -->
+                    <!-- ================= MAP NGƯỜI LỚN ================= -->
                     <div id="map-adult-front" class="body-container adult-view">
                         <div class="text-center text-xs font-bold text-gray-400 mb-2">MẶT TRƯỚC</div>
-                        <svg viewBox="0 0 200 460" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <!-- ĐẦU -->
+                        <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path class="body-part" data-name="Đầu (Trước)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
-                            
-                            <!-- CỔ -->
                             <path class="body-part" data-name="Cổ (Trước)" data-value="1" d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
-
-                            <!-- NGỰC -->
                             <path class="body-part" data-name="Ngực" data-value="9" d="M85,75 Q100,80 115,75 L135,85 L125,145 Q100,150 75,145 L65,85 Z" />
-
-                            <!-- BỤNG -->
                             <path class="body-part" data-name="Bụng" data-value="9" d="M75,145 Q100,150 125,145 L120,205 Q100,210 80,205 Z" />
-
-                            <!-- SINH DỤC - HÌNH TRÒN -->
                             <circle class="body-part" data-name="Sinh dục" data-value="1" cx="100" cy="218" r="8" />
-                            
-                            <!-- TAY PHẢI (TRÁI MÀN HÌNH) - TRÒN HƠN, BỚT ĐƯA RA NGOÀI -->
                             <path class="body-part" data-name="C.Tay Phải (Trên)" data-value="2" d="M65,85 Q48,90 48,115 L50,140 Q60,135 68,130 Z" />
                             <path class="body-part" data-name="C.Tay Phải (Dưới)" data-value="1.5" d="M50,140 L35,180 L55,185 L68,130 Z" />
                             <path class="body-part" data-name="Bàn Tay Phải" data-value="1" d="M35,180 L55,185 L50,210 L30,205 Z" />
-
-                            <!-- TAY TRÁI (PHẢI MÀN HÌNH) - TRÒN HƠN, BỚT ĐƯA RA NGOÀI -->
                             <path class="body-part" data-name="C.Tay Trái (Trên)" data-value="2" d="M135,85 Q152,90 152,115 L150,140 Q140,135 132,130 Z" />
                             <path class="body-part" data-name="C.Tay Trái (Dưới)" data-value="1.5" d="M150,140 L165,180 L145,185 L132,130 Z" />
                             <path class="body-part" data-name="Bàn Tay Trái" data-value="1" d="M165,180 L145,185 L150,210 L170,205 Z" />
-
-                            <!-- CHÂN PHẢI (TRÁI MÀN HÌNH) - ĐÙI TO -->
                             <path class="body-part" data-name="Đùi Phải (Trước)" data-value="4.5" d="M80,205 Q65,225 60,260 L68,310 L95,310 L92,225 Z" />
                             <path class="body-part" data-name="Cẳng Chân Phải (Trước)" data-value="3.5" d="M68,310 L95,310 Q92,350 90,390 L75,390 Q72,350 68,310 Z" />
                             <path class="body-part" data-name="Bàn Chân Phải" data-value="1" d="M75,390 L90,390 L92,410 L65,410 Z" />
-
-                            <!-- CHÂN TRÁI (PHẢI MÀN HÌNH) - ĐÙI TO -->
                             <path class="body-part" data-name="Đùi Trái (Trước)" data-value="4.5" d="M120,205 Q135,225 140,260 L132,310 L105,310 L108,225 Z" />
                             <path class="body-part" data-name="Cẳng Chân Trái (Trước)" data-value="3.5" d="M132,310 L105,310 Q108,350 110,390 L125,390 Q128,350 132,310 Z" />
                             <path class="body-part" data-name="Bàn Chân Trái" data-value="1" d="M125,390 L110,390 L108,410 L135,410 Z" />
@@ -165,79 +155,61 @@
 
                     <div id="map-adult-back" class="body-container adult-view">
                         <div class="text-center text-xs font-bold text-gray-400 mb-2">MẶT SAU</div>
-                        <svg viewBox="0 0 200 460" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <!-- ĐẦU SAU -->
+                        <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path class="body-part" data-name="Đầu (Sau)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
-
-                            <!-- CỔ SAU -->
                             <path class="body-part" data-name="Cổ (Sau)" data-value="1" d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
-
-                            <!-- LƯNG TRÊN -->
                             <path class="body-part" data-name="Lưng Trên" data-value="9" d="M85,75 Q100,80 115,75 L135,85 L125,145 Q100,150 75,145 L65,85 Z" />
-
-                            <!-- LƯNG DƯỚI -->
                             <path class="body-part" data-name="Lưng Dưới" data-value="5" d="M75,145 Q100,150 125,145 L122,170 L78,170 Z" />
-
-                            <!-- MÔNG (TÁCH RIÊNG & TRÒN TRỊA & THẤP) -->
-                            <!-- Mông Trái (Màn hình) -->
                             <path class="body-part" data-name="Mông Trái" data-value="2" d="M78,170 L100,170 L100,210 Q80,215 75,190 Q73,175 78,170 Z" />
-                            <!-- Mông Phải (Màn hình) -->
                             <path class="body-part" data-name="Mông Phải" data-value="2" d="M100,170 L122,170 Q127,175 125,190 Q120,215 100,210 Z" />
-
-                            <!-- TAY TRÁI (TRÁI MÀN HÌNH) - TRÒN HƠN, BỚT ĐƯA RA NGOÀI -->
                             <path class="body-part" data-name="C.Tay Trái (Sau)" data-value="2" d="M65,85 Q48,90 48,115 L50,140 Q60,135 68,130 Z" />
                             <path class="body-part" data-name="C.Tay Trái (Dưới)" data-value="1.5" d="M50,140 L35,180 L55,185 L68,130 Z" />
                             <path class="body-part" data-name="Bàn Tay Trái" data-value="1" d="M35,180 L55,185 L50,210 L30,205 Z" />
-
-                            <!-- TAY PHẢI (PHẢI MÀN HÌNH) - TRÒN HƠN, BỚT ĐƯA RA NGOÀI -->
                             <path class="body-part" data-name="C.Tay Phải (Sau)" data-value="2" d="M135,85 Q152,90 152,115 L150,140 Q140,135 132,130 Z" />
                             <path class="body-part" data-name="C.Tay Phải (Dưới)" data-value="1.5" d="M150,140 L165,180 L145,185 L132,130 Z" />
                             <path class="body-part" data-name="Bàn Tay Phải" data-value="1" d="M165,180 L145,185 L150,210 L170,205 Z" />
-
-                            <!-- CHÂN TRÁI (TRÁI MÀN HÌNH) - ĐÙI TO -->
                             <path class="body-part" data-name="Đùi Trái (Sau)" data-value="4.5" d="M75,190 Q65,210 60,260 L68,310 L95,310 L98,210 L100,210 Q85,215 75,190 Z" />
                             <path class="body-part" data-name="Cẳng Chân Trái (Sau)" data-value="3.5" d="M68,310 L95,310 Q92,350 90,390 L75,390 Q72,350 68,310 Z" />
                             <path class="body-part" data-name="Bàn Chân Trái" data-value="1" d="M75,390 L90,390 L92,410 L65,410 Z" />
-
-                            <!-- CHÂN PHẢI (PHẢI MÀN HÌNH) - ĐÙI TO -->
                             <path class="body-part" data-name="Đùi Phải (Sau)" data-value="4.5" d="M125,190 Q135,210 140,260 L132,310 L105,310 L102,210 L100,210 Q115,215 125,190 Z" />
                             <path class="body-part" data-name="Cẳng Chân Phải (Sau)" data-value="3.5" d="M132,310 L105,310 Q108,350 110,390 L125,390 Q128,350 132,310 Z" />
                             <path class="body-part" data-name="Bàn Chân Phải" data-value="1" d="M125,390 L110,390 L108,410 L135,410 Z" />
                         </svg>
                     </div>
 
-                    <!-- ================= MAP TRẺ EM (CẬP NHẬT: TRÒN TRỊA, TỈ LỆ CHUẨN) ================= -->
+                    <!-- ================= MAP TRẺ EM (Updated: Lund-Browder Standard) ================= -->
                     <div id="map-child-front" class="body-container child-view hidden-map">
                         <div class="text-center text-xs font-bold text-gray-400 mb-2">TRẺ EM (TRƯỚC)</div>
-                        <svg viewBox="0 0 200 460" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <!-- ĐẦU TO (TRẺ EM) - Tròn trịa hơn -->
-                            <path id="child-head-front" class="body-part" data-name="Đầu (Trước)" data-value="9.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
+                        <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
+                            <!-- ĐẦU (Dynamic: LB - 1%) -->
+                            <path id="child-head-front" class="body-part" data-name="Đầu (Trước)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
 
-                            <!-- CỔ NGẮN -->
-                            <path class="body-part" data-name="Cổ" data-value="0" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
+                            <!-- CỔ: Cố định 1% -->
+                            <path id="child-neck-front" class="body-part" data-name="Cổ (Trước)" data-value="1" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
 
-                            <!-- THÂN BỤ BẪM -->
+                            <!-- THÂN (Anterior Trunk): 13% -->
                             <path class="body-part" data-name="Ngực/Bụng" data-value="13" d="M85,92 Q100,95 115,92 L125,100 L120,175 Q100,185 80,175 L75,100 Z" />
                             
-                            <!-- SINH DỤC - TRÒN -->
+                            <!-- SINH DỤC: 1% -->
                             <circle class="body-part" data-name="Sinh dục" data-value="1" cx="100" cy="182" r="7" />
 
-                            <!-- TAY PHẢI (TRÁI MÀN HÌNH) - BỤ BẪM, TRÒN -->
-                            <path class="body-part" data-name="Tay Phải" data-value="2.5" d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
-                            <path class="body-part" data-name="Cẳng Tay Phải" data-value="2" d="M60,145 L45,170 L60,175 L75,135 Z" />
+                            <!-- TAY PHẢI (Mặt trước): Cánh tay 2%, Cẳng tay 1.5%, Bàn tay 1.25% -->
+                            <path class="body-part" data-name="Tay Phải" data-value="2.0" d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
+                            <path class="body-part" data-name="Cẳng Tay Phải" data-value="1.5" d="M60,145 L45,170 L60,175 L75,135 Z" />
                             <path class="body-part" data-name="Bàn Tay Phải" data-value="1.25" d="M45,170 L60,175 L55,190 L40,185 Z" />
 
-                            <!-- TAY TRÁI (PHẢI MÀN HÌNH) -->
-                            <path class="body-part" data-name="Tay Trái" data-value="2.5" d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
-                            <path class="body-part" data-name="Cẳng Tay Trái" data-value="2" d="M140,145 L155,170 L140,175 L125,135 Z" />
+                            <!-- TAY TRÁI (Mặt trước) -->
+                            <path class="body-part" data-name="Tay Trái" data-value="2.0" d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
+                            <path class="body-part" data-name="Cẳng Tay Trái" data-value="1.5" d="M140,145 L155,170 L140,175 L125,135 Z" />
                             <path class="body-part" data-name="Bàn Tay Trái" data-value="1.25" d="M155,170 L140,175 L145,190 L160,185 Z" />
 
-                            <!-- CHÂN PHẢI (TRÁI MÀN HÌNH) - NGẮN, BỤ -->
+                            <!-- CHÂN PHẢI (Dynamic LB: Đùi + Cẳng chân) -->
+                            <!-- Bàn chân cố định: 1.75% mặt trước -->
                             <path id="child-thigh-right-front" class="body-part" data-name="Đùi Phải" data-value="2.75" d="M80,175 Q70,190 65,220 L72,255 L95,255 L92,185 Z" />
                             <path id="child-leg-right-front" class="body-part" data-name="Cẳng Chân Phải" data-value="2.5" d="M72,255 L95,255 Q92,285 90,315 L78,315 Q75,285 72,255 Z" />
                             <path class="body-part" data-name="Bàn Chân Phải" data-value="1.75" d="M78,315 L90,315 L92,330 L70,330 Z" />
 
-                            <!-- CHÂN TRÁI (PHẢI MÀN HÌNH) -->
+                            <!-- CHÂN TRÁI -->
                             <path id="child-thigh-left-front" class="body-part" data-name="Đùi Trái" data-value="2.75" d="M120,175 Q130,190 135,220 L128,255 L105,255 L108,185 Z" />
                             <path id="child-leg-left-front" class="body-part" data-name="Cẳng Chân Trái" data-value="2.5" d="M128,255 L105,255 Q108,285 110,315 L122,315 Q125,285 128,255 Z" />
                             <path class="body-part" data-name="Bàn Chân Trái" data-value="1.75" d="M122,315 L110,315 L108,330 L130,330 Z" />
@@ -246,36 +218,35 @@
 
                     <div id="map-child-back" class="body-container child-view hidden-map">
                         <div class="text-center text-xs font-bold text-gray-400 mb-2">TRẺ EM (SAU)</div>
-                        <svg viewBox="0 0 200 460" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <path id="child-head-back" class="body-part" data-name="Đầu (Sau)" data-value="9.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
+                        <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
+                            <!-- ĐẦU (Dynamic: LB - 1%) -->
+                            <path id="child-head-back" class="body-part" data-name="Đầu (Sau)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
 
-                            <!-- CỔ SAU -->
-                            <path class="body-part" data-name="Cổ" data-value="0" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
+                            <!-- CỔ SAU: Cố định 1% -->
+                            <path id="child-neck-back" class="body-part" data-name="Cổ (Sau)" data-value="1" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
 
-                            <!-- LƯNG (Kéo dài xuống thấp hơn) -->
+                            <!-- LƯNG (Posterior Trunk): 13% -->
                             <path class="body-part" data-name="Lưng" data-value="13" d="M85,92 Q100,95 115,92 L125,100 L120,158 L80,158 L75,100 Z" />
                             
-                            <!-- MÔNG (HẠ THẤP & TÁCH ĐÔI & TRÒN TRỊA) -->
-                            <!-- Mông Trái -->
+                            <!-- MÔNG: 2.5% mỗi bên -->
                             <path class="body-part" data-name="Mông Trái" data-value="2.5" d="M80,158 L100,158 L100,195 Q80,200 75,180 Q78,165 80,158 Z" />
-                            <!-- Mông Phải -->
                             <path class="body-part" data-name="Mông Phải" data-value="2.5" d="M100,158 L120,158 Q122,165 125,180 Q120,200 100,195 Z" />
 
-                            <!-- TAY (Giữ nguyên) -->
-                            <path class="body-part" data-name="Tay Trái" data-value="2.5" d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
-                            <path class="body-part" data-name="Cẳng Tay Trái" data-value="2" d="M60,145 L45,170 L60,175 L75,135 Z" />
+                            <!-- TAY (Mặt sau): Cánh tay 2%, Cẳng tay 1.5%, Bàn tay 1.25% -->
+                            <path class="body-part" data-name="Tay Trái" data-value="2.0" d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
+                            <path class="body-part" data-name="Cẳng Tay Trái" data-value="1.5" d="M60,145 L45,170 L60,175 L75,135 Z" />
                             <path class="body-part" data-name="Bàn Tay Trái" data-value="1.25" d="M45,170 L60,175 L55,190 L40,185 Z" />
 
-                            <path class="body-part" data-name="Tay Phải" data-value="2.5" d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
-                            <path class="body-part" data-name="Cẳng Tay Phải" data-value="2" d="M140,145 L155,170 L140,175 L125,135 Z" />
+                            <path class="body-part" data-name="Tay Phải" data-value="2.0" d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
+                            <path class="body-part" data-name="Cẳng Tay Phải" data-value="1.5" d="M140,145 L155,170 L140,175 L125,135 Z" />
                             <path class="body-part" data-name="Bàn Tay Phải" data-value="1.25" d="M155,170 L140,175 L145,190 L160,185 Z" />
 
-                            <!-- CHÂN TRÁI (Điều chỉnh khớp mông mới) -->
+                            <!-- CHÂN TRÁI -->
                             <path id="child-thigh-left-back" class="body-part" data-name="Đùi Trái" data-value="2.75" d="M75,180 Q65,195 65,220 L72,255 L95,255 L98,190 L100,195 Q85,200 75,180 Z" />
                             <path id="child-leg-left-back" class="body-part" data-name="Cẳng Chân Trái" data-value="2.5" d="M72,255 L95,255 Q92,285 90,315 L78,315 Q75,285 72,255 Z" />
                             <path class="body-part" data-name="Bàn Chân Trái" data-value="1.75" d="M78,315 L90,315 L92,330 L70,330 Z" />
 
-                            <!-- CHÂN PHẢI (Điều chỉnh khớp mông mới) -->
+                            <!-- CHÂN PHẢI -->
                             <path id="child-thigh-right-back" class="body-part" data-name="Đùi Phải" data-value="2.75" d="M125,180 Q135,195 135,220 L128,255 L105,255 L102,190 L100,195 Q115,200 125,180 Z" />
                             <path id="child-leg-right-back" class="body-part" data-name="Cẳng Chân Phải" data-value="2.5" d="M128,255 L105,255 Q108,285 110,315 L122,315 Q125,285 128,255 Z" />
                             <path class="body-part" data-name="Bàn Chân Phải" data-value="1.75" d="M122,315 L110,315 L108,330 L130,330 Z" />
@@ -288,7 +259,7 @@
             </div>
 
             <!-- BUTTON GROUP -->
-            <div class="mt-8 grid grid-cols-2 gap-4">
+            <div class="mt-4 grid grid-cols-2 gap-4">
                 <button type="button" id="btn-reset" class="flex items-center justify-center py-3 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition active:scale-95">
                     <i class="fa-solid fa-rotate-right mr-2"></i>Nhập lại
                 </button>
@@ -506,13 +477,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateMapValues() {
         if(!isChildMode) return;
-        let age = parseFloat(ageInput.value) || 0;
-        if (age > 15) age = 15;
-        if (age < 0) age = 0;
+        let age = parseFloat(ageInput.value);
+        
+        // Cảnh báo nếu nhập tuổi > 15
+        if (age > 15) {
+            showModal('Trẻ trên 15 tuổi được tính như người lớn. Vui lòng chọn chế độ "Người lớn"!');
+            age = 15; 
+            ageInput.value = 15; // Tự động đưa về giới hạn 15
+        }
+        
+        if (isNaN(age) || age < 0) age = 0;
+        
         const vals = getLBValues(age); 
         
-        updateElem('child-head-front', vals.head);
-        updateElem('child-head-back', vals.head);
+        // ĐẦU: LB Value = Đầu + Cổ. Do Cổ cố định 1%, ta trừ 1 đi để gán vào phần đầu
+        // Đảm bảo không âm (dù thực tế LB luôn > 1)
+        const headVal = Math.max(0, vals.head - 1);
+        
+        updateElem('child-head-front', headVal);
+        updateElem('child-head-back', headVal);
 
         updateElem('child-thigh-left-front', vals.thigh);
         updateElem('child-thigh-right-front', vals.thigh);
