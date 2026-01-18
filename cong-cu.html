@@ -81,7 +81,7 @@
             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
             </div>
-            <input type="text" id="search-input" onkeyup="filterTools()" placeholder="Tìm nhanh (VD: gcs, apache, liều, ards...)" 
+            <input type="text" id="search-input" onkeyup="filterTools()" placeholder="Tìm nhanh (VD: bỏng, gcs, liều, lọc máu...)" 
                 class="w-full pl-11 pr-4 py-3 rounded-xl border-none shadow-md bg-white focus:ring-2 focus:ring-teal-500 focus:outline-none text-gray-700 text-sm md:text-base">
         </div>
 
@@ -92,6 +92,12 @@
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 
+                <!-- NEW: BURN CALCULATOR (Priority placement) -->
+                <div onclick="useTool('burn', 'Diện tích bỏng & Bù dịch', 'fa-fire', 'orange', 'dien-tich-bong.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 text-xl"><i class="fa-solid fa-fire"></i></div>
+                    <div><h4 class="font-semibold text-gray-800">Diện tích bỏng & Bù dịch</h4><p class="text-xs text-gray-500">Parkland & Quy tắc số 9</p></div>
+                </div>
+
                 <div onclick="useTool('glasgow', 'Thang điểm Glasgow (GCS)', 'fa-brain', 'red', 'glasgow.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-brain"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Thang điểm Glasgow (GCS)</h4><p class="text-xs text-gray-500">Đánh giá tri giác</p></div>
@@ -102,7 +108,6 @@
                     <div><h4 class="font-semibold text-gray-800">Thang điểm SOFA</h4><p class="text-xs text-gray-500">Đánh giá suy tạng (Sepsis)</p></div>
                 </div>
 
-                <!-- NEW: APACHE II -->
                 <div onclick="useTool('apache2', 'Thang điểm APACHE II', 'fa-notes-medical', 'red', 'apache-ii.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-notes-medical"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Thang điểm APACHE II</h4><p class="text-xs text-gray-500">Tiên lượng tử vong tại ICU</p></div>
@@ -113,13 +118,11 @@
                     <div><h4 class="font-semibold text-gray-800">Thang điểm NEWS2</h4><p class="text-xs text-gray-500">Cảnh báo sớm bệnh nặng</p></div>
                 </div>
 
-                <!-- NEW: PBW & Vt -->
                 <div onclick="useTool('pbw-vt', 'Cân nặng lý tưởng & Vt', 'fa-lungs-virus', 'red', 'pbw-vt.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-lungs-virus"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Cân nặng lý tưởng & Vt</h4><p class="text-xs text-gray-500">Cài đặt máy thở ARDSnet</p></div>
                 </div>
 
-                <!-- NEW: Stress Ulcer Prophylaxis -->
                 <div onclick="useTool('stress-ulcer', 'Dự phòng loét Stress', 'fa-shield-halved', 'red', 'loet-do-stress.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl"><i class="fa-solid fa-shield-halved"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Dự phòng loét Stress</h4><p class="text-xs text-gray-500">Chỉ định dùng PPI (ICU)</p></div>
@@ -130,7 +133,6 @@
                     <div><h4 class="font-semibold text-gray-800">Phân tích Khí máu (ABG)</h4><p class="text-xs text-gray-500">Toan kiềm & Oxy hóa máu</p></div>
                 </div>
 
-                <!-- NEW: FeNa -->
                 <div onclick="useTool('fena', 'Phân suất thải Natri (FeNa)', 'fa-flask', 'rose', 'fena.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-xl"><i class="fa-solid fa-flask"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Phân suất thải Natri (FeNa)</h4><p class="text-xs text-gray-500">Phân biệt nguyên nhân suy thận</p></div>
@@ -165,13 +167,11 @@
                     <div><h4 class="font-semibold text-gray-800">Thang điểm HAS-BLED</h4><p class="text-xs text-gray-500">Nguy cơ chảy máu</p></div>
                 </div>
 
-                <!-- NEW: PADUA -->
                 <div onclick="useTool('padua', 'Thang điểm PADUA', 'fa-user-shield', 'pink', 'padua.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-user-shield"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Thang điểm PADUA</h4><p class="text-xs text-gray-500">Nguy cơ huyết khối tĩnh mạch</p></div>
                 </div>
 
-                <!-- NEW: IMPROVE -->
                 <div onclick="useTool('improve', 'Thang điểm IMPROVE', 'fa-file-medical', 'pink', 'improve.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-file-medical"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Thang điểm IMPROVE</h4><p class="text-xs text-gray-500">Nguy cơ VTE & Chảy máu</p></div>
@@ -221,7 +221,6 @@
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 
-                <!-- NEW: Corticoid Conversion -->
                 <div onclick="useTool('corticoid', 'Chuyển đổi liều Corticoid', 'fa-pills', 'blue', 'doilieu-corticoid.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-xl"><i class="fa-solid fa-pills"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Chuyển đổi liều Corticoid</h4><p class="text-xs text-gray-500">So sánh hiệu lực thuốc</p></div>
