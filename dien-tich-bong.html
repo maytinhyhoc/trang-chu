@@ -28,14 +28,24 @@
         }
         
         /* Custom Styles cho Body Map Detailed */
-        .body-container { position: relative; width: 100%; max-width: 240px; margin: 0 auto; }
+        /* Mobile: Mặc định (Người lớn) là 220px */
+        /* Tính toán chiều cao: 220 * (420/200) = 462px */
+        .body-container { position: relative; width: 100%; max-width: 220px; margin: 0 auto; }
+        
+        /* Mobile: Riêng Trẻ em chỉnh thành 272px để chiều cao khớp với Người lớn (~462px) */
+        /* Tính toán: 272 * (340/200) = 462.4px => Gần bằng nhau, layout sẽ không bị nhảy */
+        .body-container.child-view { max-width: 272px; }
+        
+        /* Desktop: Tăng kích thước lên cho cân đối (cả 2 loại đều 260px) */
+        @media (min-width: 768px) {
+            .body-container { max-width: 260px; }
+            .body-container.child-view { max-width: 260px; }
+        }
+
         .body-part { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1.2; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; vector-effect: non-scaling-stroke; }
         .body-part:hover { fill: #e2e8f0; stroke: #64748b; }
         .body-part.selected { fill: #ef4444; stroke: #991b1b; filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.5)); }
-        
-        /* Labels - Đã ẩn đi nhưng giữ class để tránh lỗi CSS thừa */
         .part-label { display: none; } 
-
         .hidden-map { display: none !important; }
     </style>
 </head>
@@ -57,19 +67,17 @@
 
 <!-- MOBILE HEADER -->
 <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-    <!-- Nút quay lại trên Mobile -->
     <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition"><i class="fa-solid fa-chevron-left text-lg"></i></a>
     <h1 class="flex-1 text-center text-base font-bold text-gray-800 truncate px-2">Tính diện tích bỏng & Bù dịch</h1>
     <div class="w-8"></div>
 </header>
 
 <!-- MAIN CONTENT -->
-<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
+<main class="flex-grow container mx-auto px-4 pt-16 md:pt-24 pb-4 max-w-4xl">
     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
         <!-- Card Header -->
         <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
             <div class="flex items-center">
-                <!-- Nút quay lại trên Desktop (trong card) -->
                 <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4"><i class="fa-solid fa-chevron-left"></i></a>
                 <div><h1 class="text-2xl font-bold">Tính Diện Tích Bỏng & Bù Dịch</h1><p class="text-indigo-100 mt-1 text-sm">Hỗ trợ Lund-Browder (Trẻ em) & Wallace (Người lớn)</p></div>
             </div>
@@ -77,11 +85,10 @@
         </div>
 
         <!-- FORM CONTENT -->
-        <div class="p-4 md:p-8" id="tool-content">
-            <!-- 1. Cấu hình bệnh nhân (Responsive: Compact Mobile, Balanced PC) -->
-            <div class="mb-4 bg-indigo-50 rounded-xl p-3 md:p-6 border border-indigo-100">
+        <div class="p-2 md:p-8" id="tool-content">
+            <!-- 1. Cấu hình bệnh nhân -->
+            <div class="mb-2 bg-indigo-50 rounded-xl p-2 md:p-6 border border-indigo-100">
                 <div class="flex flex-row items-end gap-2 md:gap-8 overflow-x-auto md:overflow-visible no-scrollbar">
-                    
                     <!-- Loại bệnh nhân Toggle -->
                     <div class="shrink-0">
                         <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Đối tượng</label>
@@ -111,27 +118,38 @@
                 </div>
             </div>
 
-            <hr class="border-gray-100 my-4">
+            <hr class="border-gray-100 my-2 md:my-4">
 
             <!-- 2. Biểu đồ cơ thể chi tiết -->
-            <div class="mb-6">
-                <div class="flex justify-between items-center mb-3 sticky top-[60px] z-30 bg-white/95 backdrop-blur-sm py-3 border-b border-gray-100 md:static md:bg-transparent md:border-none">
-                    <div class="flex flex-col">
-                        <h3 class="text-sm uppercase tracking-wide text-gray-500 font-bold flex items-center"><i class="fa-solid fa-hand-pointer mr-2"></i>Chọn vùng</h3>
-                        <span id="chart-info" class="text-[10px] text-indigo-500 font-semibold">Đang dùng: Wallace (Người lớn)</span>
+            <div class="mb-2">
+                <div class="flex justify-between items-start mb-1 sticky top-[60px] z-30 bg-white/95 backdrop-blur-sm py-2 border-b border-gray-100 md:static md:bg-transparent md:border-none">
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-xs uppercase tracking-wide text-gray-500 font-bold flex items-center">
+                                <i class="fa-solid fa-hand-pointer mr-1.5"></i>Chọn vùng
+                            </h3>
+                            <!-- Nút Chuyển Mặt (Chỉ hiện trên Mobile) -->
+                            <div class="md:hidden flex bg-gray-100 rounded-md p-0.5 w-fit border border-gray-200 scale-90 origin-left">
+                                <button type="button" id="view-front-btn" class="px-3 py-0.5 rounded-[3px] text-[10px] font-bold text-indigo-600 bg-white shadow-sm transition-all leading-none">Trước</button>
+                                <button type="button" id="view-back-btn" class="px-3 py-0.5 rounded-[3px] text-[10px] font-bold text-gray-500 hover:text-indigo-600 transition-all leading-none">Sau</button>
+                            </div>
+                        </div>
+
+                        <span id="chart-info" class="text-[10px] text-indigo-500 font-semibold leading-none">Wallace (Người lớn)</span>
                     </div>
-                    <div class="bg-red-50 text-red-600 px-4 py-2 rounded-xl text-lg font-bold border border-red-100 shadow-sm flex flex-col items-center min-w-[80px]">
-                        <span class="text-[10px] text-red-400 font-medium uppercase leading-none">Tổng</span>
-                        <div><span id="total-tbsa">0</span>%</div>
+                    <div class="bg-red-50 text-red-600 px-3 py-1.5 rounded-xl text-lg font-bold border border-red-100 shadow-sm flex flex-col items-center min-w-[70px]">
+                        <span class="text-[9px] text-red-400 font-medium uppercase leading-none">Tổng</span>
+                        <div class="leading-none"><span id="total-tbsa">0</span>%</div>
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-2 md:gap-8 bg-white rounded-xl justify-items-center relative">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 bg-white rounded-xl justify-items-center relative">
                     <div id="map-loading" class="absolute inset-0 bg-white/80 z-20 hidden items-center justify-center backdrop-blur-sm rounded-xl"><i class="fa-solid fa-spinner fa-spin text-2xl text-indigo-600"></i></div>
 
                     <!-- ================= MAP NGƯỜI LỚN ================= -->
-                    <div id="map-adult-front" class="body-container adult-view">
-                        <div class="text-center text-xs font-bold text-gray-400 mb-2">MẶT TRƯỚC</div>
+                    <div id="container-adult-front" class="body-container adult-view">
+                        <!-- Chú thích: Ẩn trên Mobile (hidden), Hiện trên PC (md:block) -->
+                        <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT TRƯỚC</div>
                         <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path class="body-part" data-name="Đầu (Trước)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
                             <path class="body-part" data-name="Cổ (Trước)" data-value="1" d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
@@ -153,8 +171,9 @@
                         </svg>
                     </div>
 
-                    <div id="map-adult-back" class="body-container adult-view">
-                        <div class="text-center text-xs font-bold text-gray-400 mb-2">MẶT SAU</div>
+                    <div id="container-adult-back" class="body-container adult-view hidden md:block">
+                        <!-- Chỉ hiện chú thích trên PC -->
+                        <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT SAU</div>
                         <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path class="body-part" data-name="Đầu (Sau)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
                             <path class="body-part" data-name="Cổ (Sau)" data-value="1" d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
@@ -177,76 +196,48 @@
                         </svg>
                     </div>
 
-                    <!-- ================= MAP TRẺ EM (Updated: Lund-Browder Standard) ================= -->
-                    <div id="map-child-front" class="body-container child-view hidden-map">
-                        <div class="text-center text-xs font-bold text-gray-400 mb-2">TRẺ EM (TRƯỚC)</div>
+                    <!-- ================= MAP TRẺ EM ================= -->
+                    <div id="container-child-front" class="body-container child-view hidden-map">
+                        <!-- Chỉ hiện chú thích trên PC -->
+                        <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT TRƯỚC</div>
                         <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <!-- ĐẦU (Dynamic: LB - 1%) -->
                             <path id="child-head-front" class="body-part" data-name="Đầu (Trước)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
-
-                            <!-- CỔ: Cố định 1% -->
                             <path id="child-neck-front" class="body-part" data-name="Cổ (Trước)" data-value="1" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
-
-                            <!-- THÂN (Anterior Trunk): 13% -->
                             <path class="body-part" data-name="Ngực/Bụng" data-value="13" d="M85,92 Q100,95 115,92 L125,100 L120,175 Q100,185 80,175 L75,100 Z" />
-                            
-                            <!-- SINH DỤC: 1% -->
                             <circle class="body-part" data-name="Sinh dục" data-value="1" cx="100" cy="182" r="7" />
-
-                            <!-- TAY PHẢI (Mặt trước): Cánh tay 2%, Cẳng tay 1.5%, Bàn tay 1.25% -->
                             <path class="body-part" data-name="Tay Phải" data-value="2.0" d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
                             <path class="body-part" data-name="Cẳng Tay Phải" data-value="1.5" d="M60,145 L45,170 L60,175 L75,135 Z" />
                             <path class="body-part" data-name="Bàn Tay Phải" data-value="1.25" d="M45,170 L60,175 L55,190 L40,185 Z" />
-
-                            <!-- TAY TRÁI (Mặt trước) -->
                             <path class="body-part" data-name="Tay Trái" data-value="2.0" d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
                             <path class="body-part" data-name="Cẳng Tay Trái" data-value="1.5" d="M140,145 L155,170 L140,175 L125,135 Z" />
                             <path class="body-part" data-name="Bàn Tay Trái" data-value="1.25" d="M155,170 L140,175 L145,190 L160,185 Z" />
-
-                            <!-- CHÂN PHẢI (Dynamic LB: Đùi + Cẳng chân) -->
-                            <!-- Bàn chân cố định: 1.75% mặt trước -->
                             <path id="child-thigh-right-front" class="body-part" data-name="Đùi Phải" data-value="2.75" d="M80,175 Q70,190 65,220 L72,255 L95,255 L92,185 Z" />
                             <path id="child-leg-right-front" class="body-part" data-name="Cẳng Chân Phải" data-value="2.5" d="M72,255 L95,255 Q92,285 90,315 L78,315 Q75,285 72,255 Z" />
                             <path class="body-part" data-name="Bàn Chân Phải" data-value="1.75" d="M78,315 L90,315 L92,330 L70,330 Z" />
-
-                            <!-- CHÂN TRÁI -->
                             <path id="child-thigh-left-front" class="body-part" data-name="Đùi Trái" data-value="2.75" d="M120,175 Q130,190 135,220 L128,255 L105,255 L108,185 Z" />
                             <path id="child-leg-left-front" class="body-part" data-name="Cẳng Chân Trái" data-value="2.5" d="M128,255 L105,255 Q108,285 110,315 L122,315 Q125,285 128,255 Z" />
                             <path class="body-part" data-name="Bàn Chân Trái" data-value="1.75" d="M122,315 L110,315 L108,330 L130,330 Z" />
                         </svg>
                     </div>
 
-                    <div id="map-child-back" class="body-container child-view hidden-map">
-                        <div class="text-center text-xs font-bold text-gray-400 mb-2">TRẺ EM (SAU)</div>
+                    <div id="container-child-back" class="body-container child-view hidden-map hidden md:block">
+                        <!-- Chỉ hiện chú thích trên PC -->
+                        <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT SAU</div>
                         <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <!-- ĐẦU (Dynamic: LB - 1%) -->
                             <path id="child-head-back" class="body-part" data-name="Đầu (Sau)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
-
-                            <!-- CỔ SAU: Cố định 1% -->
                             <path id="child-neck-back" class="body-part" data-name="Cổ (Sau)" data-value="1" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
-
-                            <!-- LƯNG (Posterior Trunk): 13% -->
                             <path class="body-part" data-name="Lưng" data-value="13" d="M85,92 Q100,95 115,92 L125,100 L120,158 L80,158 L75,100 Z" />
-                            
-                            <!-- MÔNG: 2.5% mỗi bên -->
                             <path class="body-part" data-name="Mông Trái" data-value="2.5" d="M80,158 L100,158 L100,195 Q80,200 75,180 Q78,165 80,158 Z" />
                             <path class="body-part" data-name="Mông Phải" data-value="2.5" d="M100,158 L120,158 Q122,165 125,180 Q120,200 100,195 Z" />
-
-                            <!-- TAY (Mặt sau): Cánh tay 2%, Cẳng tay 1.5%, Bàn tay 1.25% -->
                             <path class="body-part" data-name="Tay Trái" data-value="2.0" d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
                             <path class="body-part" data-name="Cẳng Tay Trái" data-value="1.5" d="M60,145 L45,170 L60,175 L75,135 Z" />
                             <path class="body-part" data-name="Bàn Tay Trái" data-value="1.25" d="M45,170 L60,175 L55,190 L40,185 Z" />
-
                             <path class="body-part" data-name="Tay Phải" data-value="2.0" d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
                             <path class="body-part" data-name="Cẳng Tay Phải" data-value="1.5" d="M140,145 L155,170 L140,175 L125,135 Z" />
                             <path class="body-part" data-name="Bàn Tay Phải" data-value="1.25" d="M155,170 L140,175 L145,190 L160,185 Z" />
-
-                            <!-- CHÂN TRÁI -->
                             <path id="child-thigh-left-back" class="body-part" data-name="Đùi Trái" data-value="2.75" d="M75,180 Q65,195 65,220 L72,255 L95,255 L98,190 L100,195 Q85,200 75,180 Z" />
                             <path id="child-leg-left-back" class="body-part" data-name="Cẳng Chân Trái" data-value="2.5" d="M72,255 L95,255 Q92,285 90,315 L78,315 Q75,285 72,255 Z" />
                             <path class="body-part" data-name="Bàn Chân Trái" data-value="1.75" d="M78,315 L90,315 L92,330 L70,330 Z" />
-
-                            <!-- CHÂN PHẢI -->
                             <path id="child-thigh-right-back" class="body-part" data-name="Đùi Phải" data-value="2.75" d="M125,180 Q135,195 135,220 L128,255 L105,255 L102,190 L100,195 Q115,200 125,180 Z" />
                             <path id="child-leg-right-back" class="body-part" data-name="Cẳng Chân Phải" data-value="2.5" d="M128,255 L105,255 Q108,285 110,315 L122,315 Q125,285 128,255 Z" />
                             <path class="body-part" data-name="Bàn Chân Phải" data-value="1.75" d="M122,315 L110,315 L108,330 L130,330 Z" />
@@ -259,7 +250,8 @@
             </div>
 
             <!-- BUTTON GROUP -->
-            <div class="mt-4 grid grid-cols-2 gap-4">
+            <!-- Giảm margin-top từ 4 xuống 2 -->
+            <div class="mt-2 grid grid-cols-2 gap-3 md:gap-4">
                 <button type="button" id="btn-reset" class="flex items-center justify-center py-3 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition active:scale-95">
                     <i class="fa-solid fa-rotate-right mr-2"></i>Nhập lại
                 </button>
@@ -393,28 +385,77 @@ document.addEventListener('DOMContentLoaded', function() {
     const modeAdultBtn = document.getElementById('mode-adult');
     const modeChildBtn = document.getElementById('mode-child');
     
+    // New View Toggle Buttons (Mobile Only)
+    const viewFrontBtn = document.getElementById('view-front-btn');
+    const viewBackBtn = document.getElementById('view-back-btn');
+    
     let isChildMode = false;
+    let currentSide = 'front'; // 'front' or 'back' (Mobile view state)
     let totalTBSA = 0;
 
-    // UI Switching
-    const adultViews = document.querySelectorAll('.adult-view');
-    const childViews = document.querySelectorAll('.child-view');
+    // UI Switching logic
+    // Containers
+    const containerAdultFront = document.getElementById('container-adult-front');
+    const containerAdultBack = document.getElementById('container-adult-back');
+    const containerChildFront = document.getElementById('container-child-front');
+    const containerChildBack = document.getElementById('container-child-back');
 
-    function toggleViews(showChild) {
-        if (showChild) {
-            adultViews.forEach(el => el.classList.add('hidden-map'));
-            childViews.forEach(el => el.classList.remove('hidden-map'));
+    function updateMapVisibility() {
+        // Reset base visibility (Adult vs Child)
+        if (isChildMode) {
+            containerAdultFront.classList.add('hidden-map');
+            containerAdultBack.classList.add('hidden-map');
+            containerChildFront.classList.remove('hidden-map');
+            containerChildBack.classList.remove('hidden-map');
         } else {
-            childViews.forEach(el => el.classList.add('hidden-map'));
-            adultViews.forEach(el => el.classList.remove('hidden-map'));
+            containerChildFront.classList.add('hidden-map');
+            containerChildBack.classList.add('hidden-map');
+            containerAdultFront.classList.remove('hidden-map');
+            containerAdultBack.classList.remove('hidden-map');
         }
-        // Reset selection on switch
-        document.querySelectorAll('.body-part.selected').forEach(el => el.classList.remove('selected'));
-        // Không cần remove selected ở label nữa vì label đã bị xóa
-        totalTBSA = 0;
-        tbsaDisplay.textContent = '0';
-        resultArea.classList.add('hidden');
+
+        // Apply Mobile Side Toggle Logic (via Tailwind Classes)
+        // Logic: 
+        // - On Mobile (default): Hide the side that is NOT selected.
+        // - On Desktop (md:): Always show both (block).
+        // Tailwind class 'hidden' hides element. 'md:block' shows it on desktop.
+        
+        const frontContainer = isChildMode ? containerChildFront : containerAdultFront;
+        const backContainer = isChildMode ? containerChildBack : containerAdultBack;
+
+        if (currentSide === 'front') {
+            // Show Front, Hide Back (on mobile)
+            frontContainer.classList.remove('hidden', 'md:block'); // Ensure visible
+            backContainer.classList.add('hidden', 'md:block');     // Hide on mobile, show on desktop
+            
+            // Update Buttons
+            viewFrontBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
+            viewFrontBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
+            viewBackBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
+            viewBackBtn.classList.add('text-gray-500', 'hover:text-indigo-600');
+        } else {
+            // Show Back, Hide Front (on mobile)
+            backContainer.classList.remove('hidden', 'md:block'); // Ensure visible
+            frontContainer.classList.add('hidden', 'md:block');   // Hide on mobile, show on desktop
+
+            // Update Buttons
+            viewBackBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
+            viewBackBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
+            viewFrontBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
+            viewFrontBtn.classList.add('text-gray-500', 'hover:text-indigo-600');
+        }
     }
+
+    // Event Listeners for View Toggle
+    viewFrontBtn.addEventListener('click', () => {
+        currentSide = 'front';
+        updateMapVisibility();
+    });
+
+    viewBackBtn.addEventListener('click', () => {
+        currentSide = 'back';
+        updateMapVisibility();
+    });
 
     function setMode(child) {
         isChildMode = child;
@@ -427,7 +468,13 @@ document.addEventListener('DOMContentLoaded', function() {
             ageGroup.classList.remove('hidden');
             setTimeout(() => ageGroup.classList.remove('opacity-0'), 10);
             chartInfo.textContent = "Đang dùng: Lund-Browder (Trẻ em)";
-            toggleViews(true);
+            
+            // Reset selection when switching modes? Maybe safer.
+            document.querySelectorAll('.body-part.selected').forEach(el => el.classList.remove('selected'));
+            totalTBSA = 0;
+            tbsaDisplay.textContent = '0';
+            resultArea.classList.add('hidden');
+
             updateMapValues();
         } else {
             modeAdultBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
@@ -438,8 +485,13 @@ document.addEventListener('DOMContentLoaded', function() {
             ageGroup.classList.add('opacity-0');
             setTimeout(() => ageGroup.classList.add('hidden'), 300);
             chartInfo.textContent = "Đang dùng: Wallace (Người lớn)";
-            toggleViews(false);
+            
+            document.querySelectorAll('.body-part.selected').forEach(el => el.classList.remove('selected'));
+            totalTBSA = 0;
+            tbsaDisplay.textContent = '0';
+            resultArea.classList.add('hidden');
         }
+        updateMapVisibility();
     }
 
     modeAdultBtn.addEventListener('click', () => setMode(false));
@@ -472,26 +524,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const el = document.getElementById(id);
         const rounded = Math.round(val * 100) / 100;
         if(el) el.setAttribute('data-value', rounded);
-        // Label update logic removed because labels are deleted from HTML
     }
 
     function updateMapValues() {
         if(!isChildMode) return;
         let age = parseFloat(ageInput.value);
         
-        // Cảnh báo nếu nhập tuổi > 15
         if (age > 15) {
             showModal('Trẻ trên 15 tuổi được tính như người lớn. Vui lòng chọn chế độ "Người lớn"!');
             age = 15; 
-            ageInput.value = 15; // Tự động đưa về giới hạn 15
+            ageInput.value = 15; 
         }
         
         if (isNaN(age) || age < 0) age = 0;
         
         const vals = getLBValues(age); 
         
-        // ĐẦU: LB Value = Đầu + Cổ. Do Cổ cố định 1%, ta trừ 1 đi để gán vào phần đầu
-        // Đảm bảo không âm (dù thực tế LB luôn > 1)
         const headVal = Math.max(0, vals.head - 1);
         
         updateElem('child-head-front', headVal);
@@ -516,8 +564,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const bodyParts = document.querySelectorAll('.body-part');
     bodyParts.forEach(part => {
         part.addEventListener('click', function() {
-            // Check if visible
-            if(this.closest('.hidden-map')) return;
+            if(this.closest('.hidden-map')) return; // Ignore clicks on hidden map elements (wrong mode)
+            // Note: Clicks on "mobile-hidden" elements are naturally prevented by display:none
 
             this.classList.toggle('selected');
             
@@ -536,9 +584,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function recalculateSelectedTBSA() {
         totalTBSA = 0;
-        // Only count visible selected parts
-        const activeContainer = isChildMode ? '.child-view' : '.adult-view';
-        document.querySelectorAll(`${activeContainer} .body-part.selected`).forEach(p => {
+        const activeContainerQuery = isChildMode ? '.child-view' : '.adult-view';
+        // We select ALL active mode parts, even if hidden by mobile toggle
+        document.querySelectorAll(`${activeContainerQuery} .body-part.selected`).forEach(p => {
             totalTBSA += parseFloat(p.getAttribute('data-value'));
         });
         totalTBSA = Math.round(totalTBSA * 100) / 100;
@@ -549,6 +597,8 @@ document.addEventListener('DOMContentLoaded', function() {
         weightInput.value = '';
         ageInput.value = '0';
         setMode(false);
+        currentSide = 'front'; // Reset view to front
+        updateMapVisibility();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
@@ -571,6 +621,9 @@ document.addEventListener('DOMContentLoaded', function() {
         resultArea.classList.remove('hidden');
         resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+    
+    // Initialize
+    updateMapVisibility();
 });
 </script>
 </body>
