@@ -16,7 +16,7 @@
 
     <!-- === PWA & SEO META TAGS === -->
     <meta name="description" content="Công cụ tính toán y khoa dành cho bác sĩ và sinh viên y dược.">
-    <meta name="theme-color" content="#0d9488"> <!-- Màu Teal chủ đạo -->
+    <meta name="theme-color" content="#0d9488">
     
     <!-- === OPEN GRAPH === -->
     <meta property="og:title" content="Máy tính Y học">
@@ -112,29 +112,30 @@
         </div>
 
         <!-- ============================================ -->
-        <!-- TOOLS GRID -->
+        <!-- TOOLS GRID (ĐÃ ĐỒNG BỘ 100% VỚI cong-cu.html) -->
         <!-- ============================================ -->
         <h3 class="font-bold text-gray-800 text-lg md:text-2xl mb-4 md:mb-6">Công cụ phổ biến</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-            <!-- Tool 1 -->
-            <div onclick="useTool('antibiotic', 'Tra liều kháng sinh', 'fa-pills', 'rose', 'khang-sinh.html')" 
-                 class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
-                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-rose-200 transition">
-                    <i class="fa-solid fa-pills"></i>
-                </div>
-                <span class="font-medium text-sm md:text-lg text-gray-700">Tra liều kháng sinh</span>
-            </div>
-
-            <!-- Tool 2 -->
-            <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-clock', 'blue', 'tinh-thoi-gian-truyen-dich.html')"
+            
+            <!-- Tool 1: Kháng sinh (Sửa từ 'rose' thành 'blue', icon 'fa-pills' thành 'fa-capsules', cập nhật tên mới) -->
+            <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" 
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-blue-200 transition">
+                    <i class="fa-solid fa-capsules"></i>
+                </div>
+                <span class="font-medium text-sm md:text-lg text-gray-700">Kháng sinh & Virus</span>
+            </div>
+
+            <!-- Tool 2: Thời gian truyền dịch (Sửa từ 'blue' thành 'cyan') -->
+            <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-clock', 'cyan', 'tinh-thoi-gian-truyen-dich.html')"
+                 class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
+                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-cyan-200 transition">
                     <i class="fa-regular fa-clock"></i>
                 </div>
                 <span class="font-medium text-sm md:text-lg text-gray-700">Tính thời gian truyền dịch</span>
             </div>
 
-            <!-- Tool 3 -->
+            <!-- Tool 3: Đếm giọt (Giữ nguyên 'cyan') -->
             <div onclick="useTool('drip-rate', 'Đếm giọt dịch truyền', 'fa-droplet', 'cyan', 'dem-giot-dich-truyen.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-cyan-200 transition">
@@ -143,7 +144,7 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Đếm giọt dịch truyền</span>
             </div>
 
-            <!-- Tool 4: CẬP NHẬT ID thành 'diet' -->
+            <!-- Tool 4: Chế độ ăn (Đã chuẩn ID 'diet', màu 'green') -->
             <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-utensils', 'green', 'tra-cuu-che-do-an.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-green-200 transition">
@@ -282,12 +283,12 @@
             }, 300);
         }
 
-        // --- 3. RECENT TOOLS LOGIC (FIX LỖI TRÙNG LẶP) ---
+        // --- 3. RECENT TOOLS LOGIC (ĐÃ TỐI ƯU HÓA) ---
         function useTool(id, name, icon, color, url) {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // Lọc bỏ nếu trùng ID HOẶC trùng URL (để tránh lưu 2 phiên bản của cùng 1 công cụ)
-            recentTools = recentTools.filter(tool => tool.id !== id && tool.url !== url);
+            // Xóa tool cũ nếu trùng URL (để tránh trùng lặp)
+            recentTools = recentTools.filter(tool => tool.url !== url);
             
             recentTools.unshift({
                 id: id,
@@ -298,7 +299,7 @@
                 timestamp: new Date().getTime()
             });
 
-            if (recentTools.length > 5) recentTools.pop();
+            if (recentTools.length > 5) recentTools = recentTools.slice(0, 5);
 
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
             renderRecentTools();
@@ -310,20 +311,24 @@
             const container = document.getElementById('recent-container');
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
 
-            // --- QUAN TRỌNG: TỰ ĐỘNG SỬA DỮ LIỆU CŨ ---
-            // Lọc lại danh sách một lần nữa để đảm bảo không có URL trùng lặp
+            // --- TỰ ĐỘNG LỌC TRÙNG (Self-Healing) ---
             const uniqueTools = [];
             const seenUrls = new Set();
-            recentTools.forEach(tool => {
+            let hasDuplicates = false;
+
+            for (const tool of recentTools) {
                 if (!seenUrls.has(tool.url)) {
                     seenUrls.add(tool.url);
                     uniqueTools.push(tool);
+                } else {
+                    hasDuplicates = true;
                 }
-            });
-            // Lưu lại danh sách sạch vào localStorage
-            recentTools = uniqueTools;
-            localStorage.setItem('recentTools', JSON.stringify(recentTools));
-            // ---------------------------------------------
+            }
+            if (hasDuplicates) {
+                recentTools = uniqueTools;
+                localStorage.setItem('recentTools', JSON.stringify(recentTools));
+            }
+            // ----------------------------------------
 
             if (recentTools.length === 0) {
                 container.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm md:text-lg italic border-2 border-dashed border-gray-200 rounded-xl">Chưa có công cụ nào được sử dụng gần đây.</div>`;
