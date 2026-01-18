@@ -117,7 +117,7 @@
         <h3 class="font-bold text-gray-800 text-lg md:text-2xl mb-4 md:mb-6">Công cụ phổ biến</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
             
-            <!-- Tool 1: Kháng sinh (Cập nhật tên & màu & ID) -->
+            <!-- Tool 1: Kháng sinh -->
             <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" 
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-blue-200 transition">
@@ -283,44 +283,20 @@
             }, 300);
         }
 
-        // --- 3. LOGIC LỊCH SỬ THÔNG MINH (Smart History) ---
-        // Hàm làm sạch danh sách (Self-Healing)
-        function cleanToolsList() {
-            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-            if (recentTools.length === 0) return;
-
-            const uniqueTools = [];
-            const seenUrls = new Set();
-            let hasDuplicates = false;
-
-            // Duyệt danh sách (giả sử danh sách đã được sort mới nhất lên đầu)
-            for (const tool of recentTools) {
-                const safeUrl = (tool.url || '').trim();
-                
-                // Nếu URL này chưa từng thấy thì giữ lại, nếu thấy rồi thì bỏ qua (xóa trùng)
-                if (safeUrl && !seenUrls.has(safeUrl)) {
-                    seenUrls.add(safeUrl);
-                    uniqueTools.push(tool);
-                } else {
-                    hasDuplicates = true; // Phát hiện có trùng lặp
-                }
-            }
-
-            // Chỉ ghi lại vào bộ nhớ nếu có sự thay đổi
-            if (hasDuplicates) {
-                localStorage.setItem('recentTools', JSON.stringify(uniqueTools));
-                renderRecentTools(); // Render lại ngay lập tức
-            }
-        }
-
+        // --- 3. RECENT TOOLS LOGIC (TỐI ƯU HÓA TOÀN DIỆN) ---
         function useTool(id, name, icon, color, url) {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // BƯỚC QUAN TRỌNG: Lọc bỏ tất cả các mục cũ có cùng URL (bất kể tên là gì)
-            // Điều này đảm bảo khi bạn bấm vào, phiên bản cũ sẽ bị xóa sạch
-            recentTools = recentTools.filter(tool => tool.url !== url);
+            // XÓA TRIỆT ĐỂ: Check trùng URL HOẶC trùng ID
+            // Điều này đảm bảo dù tên khác, ID khác nhưng cùng trỏ về 1 file thì vẫn bị xóa
+            // Hoặc dù URL khác (do lỗi) nhưng cùng ID thì cũng xóa
+            recentTools = recentTools.filter(tool => {
+                const isSameUrl = (tool.url || '').trim() === (url || '').trim();
+                const isSameId = (tool.id || '').trim() === (id || '').trim();
+                return !isSameUrl && !isSameId;
+            });
             
-            // Thêm mục mới vào đầu danh sách
+            // Thêm mới
             recentTools.unshift({
                 id: id,
                 name: name,
@@ -330,14 +306,47 @@
                 timestamp: new Date().getTime()
             });
 
-            // Giới hạn 5 mục
+            // Giới hạn 5
             if (recentTools.length > 5) recentTools = recentTools.slice(0, 5);
 
-            // Lưu và render
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
             renderRecentTools();
 
             if (url) window.location.href = url;
+        }
+
+        // HÀM TỰ ĐỘNG LÀM SẠCH KHI TẢI TRANG (SELF-HEALING)
+        function cleanToolsList() {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            if (recentTools.length === 0) return;
+
+            const uniqueTools = [];
+            const seenUrls = new Set();
+            const seenIds = new Set();
+            let hasDuplicates = false;
+
+            for (const tool of recentTools) {
+                const safeUrl = (tool.url || '').trim();
+                const safeId = (tool.id || '').trim();
+
+                // Logic: Nếu URL chưa thấy VÀ ID chưa thấy thì giữ lại
+                // (Ưu tiên cái đầu tiên vì danh sách đã sort theo thời gian mới nhất)
+                const isUrlNew = !seenUrls.has(safeUrl);
+                const isIdNew = !seenIds.has(safeId);
+
+                if (isUrlNew && isIdNew) {
+                    if (safeUrl) seenUrls.add(safeUrl);
+                    if (safeId) seenIds.add(safeId);
+                    uniqueTools.push(tool);
+                } else {
+                    hasDuplicates = true; // Có trùng -> Cần update lại storage
+                }
+            }
+
+            if (hasDuplicates) {
+                localStorage.setItem('recentTools', JSON.stringify(uniqueTools));
+                renderRecentTools(); // Render lại ngay lập tức với danh sách sạch
+            }
         }
 
         function renderRecentTools() {
@@ -380,8 +389,7 @@
 
         // --- 4. APP INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Chạy hàm dọn dẹp ngay khi tải trang để xử lý dữ liệu cũ
-            cleanToolsList();
+            cleanToolsList(); // Chạy ngay khi mở trang để dọn dẹp dữ liệu cũ
             renderRecentTools();
 
             // Device detection logic
