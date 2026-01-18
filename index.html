@@ -117,7 +117,7 @@
         <h3 class="font-bold text-gray-800 text-lg md:text-2xl mb-4 md:mb-6">Công cụ phổ biến</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
             
-            <!-- Tool 1: Kháng sinh (Cập nhật tên & màu) -->
+            <!-- Tool 1: Kháng sinh -->
             <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" 
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-blue-200 transition">
@@ -283,70 +283,71 @@
             }, 300);
         }
 
-        // --- 3. RECENT TOOLS LOGIC (SIÊU MẠNH MẼ - KHÔNG TRÙNG LẶP) ---
+        // --- 3. RECENT TOOLS LOGIC (CỰC KỲ MẠNH MẼ - LOẠI BỎ TRIỆT ĐỂ TRÙNG LẶP) ---
         function useTool(id, name, icon, color, url) {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // XÓA MỌI DẤU VẾT CŨ LIÊN QUAN ĐẾN CÔNG CỤ NÀY
-            // Lọc bỏ nếu trùng URL (cho dù ID là gì)
-            // Lọc bỏ nếu trùng ID (cho dù URL là gì)
-            // Điều này đảm bảo công cụ cũ (tên cũ) cũng sẽ bị xóa
-            recentTools = recentTools.filter(tool => tool.url !== url && tool.id !== id);
-            
-            // Thêm công cụ mới vào đầu danh sách
-            recentTools.unshift({
+            // TẠO OBJECT CÔNG CỤ MỚI
+            const newTool = {
                 id: id,
                 name: name,
                 icon: icon,
                 color: color,
                 url: url,
                 timestamp: new Date().getTime()
-            });
+            };
 
-            // Giới hạn 5 mục
-            if (recentTools.length > 5) recentTools = recentTools.slice(0, 5);
+            // THÊM VÀO ĐẦU DANH SÁCH
+            recentTools.unshift(newTool);
 
-            localStorage.setItem('recentTools', JSON.stringify(recentTools));
-            renderRecentTools();
+            // GỌI HÀM LƯU VÀ LÀM SẠCH (Hàm này sẽ lo việc xóa trùng lặp)
+            saveAndRenderTools(recentTools);
 
             if (url) window.location.href = url;
         }
 
-        function renderRecentTools() {
-            const container = document.getElementById('recent-container');
-            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-
-            // --- CƠ CHẾ TỰ ĐỘNG DỌN DẸP KHI HIỂN THỊ ---
-            // Chỉ giữ lại 1 bản ghi duy nhất cho mỗi URL
-            const uniqueTools = [];
-            const seenUrls = new Set();
-            let needsUpdate = false;
-
-            for (const tool of recentTools) {
-                // Chuẩn hóa URL để so sánh (tránh lỗi do dấu / hay khoảng trắng)
-                const safeUrl = tool.url.trim(); 
-                
-                if (!seenUrls.has(safeUrl)) {
-                    seenUrls.add(safeUrl);
-                    uniqueTools.push(tool);
-                } else {
-                    needsUpdate = true; // Phát hiện trùng -> Cần cập nhật DB
+        // HÀM TRUNG TÂM: LỌC TRÙNG, LƯU VÀ HIỂN THỊ
+        function saveAndRenderTools(toolsList) {
+            // SỬ DỤNG MAP ĐỂ ĐẢM BẢO DUY NHẤT THEO URL
+            // (Nếu cùng URL, chỉ giữ lại cái đầu tiên gặp - tức là cái mới nhất vì list đã được unshift)
+            const uniqueMap = new Map();
+            
+            toolsList.forEach(tool => {
+                // Chuẩn hóa URL (bỏ khoảng trắng) để làm khóa chính
+                if(tool.url) {
+                    const cleanUrl = tool.url.trim();
+                    if (!uniqueMap.has(cleanUrl)) {
+                        uniqueMap.set(cleanUrl, tool);
+                    }
                 }
+            });
+
+            // Chuyển Map ngược lại thành Array
+            let cleanedTools = Array.from(uniqueMap.values());
+
+            // Giới hạn 5 công cụ
+            if (cleanedTools.length > 5) {
+                cleanedTools = cleanedTools.slice(0, 5);
             }
 
-            // Nếu có thay đổi (đã lọc bớt trùng), lưu lại ngay
-            if (needsUpdate) {
-                recentTools = uniqueTools;
-                localStorage.setItem('recentTools', JSON.stringify(recentTools));
-            }
+            // Lưu vào LocalStorage
+            localStorage.setItem('recentTools', JSON.stringify(cleanedTools));
 
-            if (recentTools.length === 0) {
+            // Gọi hàm render
+            renderRecentContainer(cleanedTools);
+        }
+
+        // HÀM CHỈ LÀM NHIỆM VỤ HIỂN THỊ HTML
+        function renderRecentContainer(tools) {
+            const container = document.getElementById('recent-container');
+            
+            if (!tools || tools.length === 0) {
                 container.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm md:text-lg italic border-2 border-dashed border-gray-200 rounded-xl">Chưa có công cụ nào được sử dụng gần đây.</div>`;
                 return;
             }
 
             let html = '';
-            recentTools.forEach(tool => {
+            tools.forEach(tool => {
                 const timeDiff = Math.floor((new Date().getTime() - tool.timestamp) / 60000);
                 let timeString = 'Vừa xong';
                 if (timeDiff > 0) timeString = `${timeDiff} phút trước`;
@@ -371,12 +372,17 @@
 
         function clearRecent() {
             localStorage.removeItem('recentTools');
-            renderRecentTools();
+            renderRecentContainer([]);
         }
 
         // --- 4. APP INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            renderRecentTools(); // Render & Tự động dọn dẹp ngay khi vào trang
+            // Lấy dữ liệu khi tải trang
+            let loadedTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            
+            // CHẠY NGAY LẬP TỨC QUY TRÌNH LÀM SẠCH KHI VÀO TRANG
+            // Điều này sẽ fix lỗi dữ liệu cũ (VD: Máy đếm giọt vs Đếm giọt dịch truyền) ngay lập tức
+            saveAndRenderTools(loadedTools);
 
             // Device detection logic
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
