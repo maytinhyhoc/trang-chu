@@ -283,69 +283,86 @@
             }, 300);
         }
 
-        // --- 3. RECENT TOOLS LOGIC (TỐI ƯU HÓA TOÀN DIỆN) ---
+        // --- 3. RECENT TOOLS LOGIC (TỐI ƯU HÓA & SỬA LỖI) ---
+        // Biến cờ để ngăn chặn double-click
+        let isNavigating = false;
+
         function useTool(id, name, icon, color, url) {
+            // Nếu đang trong quá trình chuyển trang thì bỏ qua các click tiếp theo
+            if (isNavigating) return;
+            isNavigating = true;
+
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // XÓA TRIỆT ĐỂ: Check trùng URL HOẶC trùng ID
-            // Điều này đảm bảo dù tên khác, ID khác nhưng cùng trỏ về 1 file thì vẫn bị xóa
-            // Hoặc dù URL khác (do lỗi) nhưng cùng ID thì cũng xóa
+            // Chuẩn hóa input đầu vào
+            const targetId = String(id).trim();
+            const targetUrl = String(url).trim();
+
+            // LỌC TRÙNG LẶP TRIỆT ĐỂ:
+            // Loại bỏ bất kỳ mục nào có cùng ID hoặc cùng URL với mục sắp thêm
             recentTools = recentTools.filter(tool => {
-                const isSameUrl = (tool.url || '').trim() === (url || '').trim();
-                const isSameId = (tool.id || '').trim() === (id || '').trim();
-                return !isSameUrl && !isSameId;
+                const currentId = String(tool.id || '').trim();
+                const currentUrl = String(tool.url || '').trim();
+                // Giữ lại nếu KHÁC id VÀ KHÁC url
+                return currentId !== targetId && currentUrl !== targetUrl;
             });
             
-            // Thêm mới
+            // Thêm mục mới lên đầu
             recentTools.unshift({
-                id: id,
+                id: targetId,
                 name: name,
                 icon: icon,
                 color: color,
-                url: url,
+                url: targetUrl,
                 timestamp: new Date().getTime()
             });
 
-            // Giới hạn 5
+            // Giới hạn danh sách 5 mục
             if (recentTools.length > 5) recentTools = recentTools.slice(0, 5);
 
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
-            renderRecentTools();
-
-            if (url) window.location.href = url;
+            
+            // Chuyển trang
+            if (url) {
+                window.location.href = url;
+            } else {
+                // Nếu không có URL (để test), reset cờ sau 500ms
+                setTimeout(() => {
+                    isNavigating = false;
+                    renderRecentTools();
+                }, 500);
+            }
         }
 
         // HÀM TỰ ĐỘNG LÀM SẠCH KHI TẢI TRANG (SELF-HEALING)
         function cleanToolsList() {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-            if (recentTools.length === 0) return;
+            if (!recentTools.length) return;
 
             const uniqueTools = [];
-            const seenUrls = new Set();
             const seenIds = new Set();
-            let hasDuplicates = false;
+            const seenUrls = new Set();
+            let hasChanges = false;
 
-            for (const tool of recentTools) {
-                const safeUrl = (tool.url || '').trim();
-                const safeId = (tool.id || '').trim();
+            // Duyệt qua danh sách, chỉ giữ lại lần xuất hiện đầu tiên của mỗi ID/URL
+            recentTools.forEach(tool => {
+                const tId = String(tool.id || '').trim();
+                const tUrl = String(tool.url || '').trim();
 
-                // Logic: Nếu URL chưa thấy VÀ ID chưa thấy thì giữ lại
-                // (Ưu tiên cái đầu tiên vì danh sách đã sort theo thời gian mới nhất)
-                const isUrlNew = !seenUrls.has(safeUrl);
-                const isIdNew = !seenIds.has(safeId);
-
-                if (isUrlNew && isIdNew) {
-                    if (safeUrl) seenUrls.add(safeUrl);
-                    if (safeId) seenIds.add(safeId);
+                // Nếu ID chưa thấy VÀ URL chưa thấy -> Giữ lại
+                if (!seenIds.has(tId) && !seenUrls.has(tUrl)) {
+                    if (tId) seenIds.add(tId);
+                    if (tUrl) seenUrls.add(tUrl);
                     uniqueTools.push(tool);
                 } else {
-                    hasDuplicates = true; // Có trùng -> Cần update lại storage
+                    // Đã thấy rồi -> Bỏ qua (đây là bản sao cũ hơn)
+                    hasChanges = true;
                 }
-            }
+            });
 
-            if (hasDuplicates) {
+            // Nếu có thay đổi, cập nhật lại localStorage
+            if (hasChanges || uniqueTools.length !== recentTools.length) {
                 localStorage.setItem('recentTools', JSON.stringify(uniqueTools));
-                renderRecentTools(); // Render lại ngay lập tức với danh sách sạch
             }
         }
 
@@ -365,9 +382,12 @@
                 if (timeDiff > 0) timeString = `${timeDiff} phút trước`;
                 if (timeDiff > 60) timeString = `${Math.floor(timeDiff/60)} giờ trước`;
                 const toolUrl = tool.url || '#';
+                
+                // Escape dấu nháy đơn trong tên để tránh lỗi JS
+                const safeName = tool.name.replace(/'/g, "\\'");
 
                 html += `
-                    <div onclick="useTool('${tool.id}', '${tool.name}', '${tool.icon}', '${tool.color}', '${toolUrl}')" class="bg-white p-4 rounded-xl shadow-sm flex items-center gap-4 cursor-pointer hover:bg-gray-50 active:scale-95 transition">
+                    <div onclick="useTool('${tool.id}', '${safeName}', '${tool.icon}', '${tool.color}', '${toolUrl}')" class="bg-white p-4 rounded-xl shadow-sm flex items-center gap-4 cursor-pointer hover:bg-gray-50 active:scale-95 transition">
                         <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-${tool.color}-100 flex items-center justify-center text-${tool.color}-600 md:text-xl">
                             <i class="fa-solid ${tool.icon}"></i>
                         </div>
