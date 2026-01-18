@@ -226,9 +226,9 @@
                     <div><h4 class="font-semibold text-gray-800">Chuyển đổi liều Corticoid</h4><p class="text-xs text-gray-500">So sánh hiệu lực thuốc</p></div>
                 </div>
 
-                <div onclick="useTool('antibiotic', 'Kháng sinh & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
                     <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-xl"><i class="fa-solid fa-capsules"></i></div>
-                    <div><h4 class="font-semibold text-gray-800">Kháng sinh & Virus</h4><p class="text-xs text-gray-500">Tra cứu liều dùng</p></div>
+                    <div><h4 class="font-semibold text-gray-800">Kháng sinh, Kháng nấm & Virus</h4><p class="text-xs text-gray-500">Tra cứu liều dùng</p></div>
                 </div>
 
                 <div onclick="useTool('drug-lookup', 'Tra cứu thuốc & VTYT', 'fa-book-medical', 'blue', 'danh-muc-thuoc.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
@@ -271,8 +271,8 @@
                     <div><h4 class="font-semibold text-gray-800">Độ lọc cầu thận (eGFR)</h4><p class="text-xs text-gray-500">Đánh giá chức năng thận</p></div>
                 </div>
 
-                <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-apple-whole', 'green', 'tra-cuu-che-do-an.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
-                    <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-xl"><i class="fa-solid fa-apple-whole"></i></div>
+                <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-utensils', 'green', 'tra-cuu-che-do-an.html')" class="tool-item bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex items-center gap-4 active:scale-95 duration-100">
+                    <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-xl"><i class="fa-solid fa-utensils"></i></div>
                     <div><h4 class="font-semibold text-gray-800">Tra cứu chế độ ăn</h4><p class="text-xs text-gray-500">Dinh dưỡng cho bệnh lý</p></div>
                 </div>
 
@@ -345,8 +345,9 @@
         function useTool(id, name, icon, color, url) {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // Xóa nếu trùng để đưa lên đầu
-            recentTools = recentTools.filter(tool => tool.id !== id);
+            // CẬP NHẬT QUAN TRỌNG:
+            // Xóa nếu trùng ID HOẶC trùng URL. Điều này giúp loại bỏ các mục cũ có tên khác nhưng cùng trỏ về 1 công cụ.
+            recentTools = recentTools.filter(tool => tool.id !== id && tool.url !== url);
             
             // Thêm mới lên đầu
             recentTools.unshift({
