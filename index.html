@@ -112,12 +112,12 @@
         </div>
 
         <!-- ============================================ -->
-        <!-- TOOLS GRID (ĐÃ ĐỒNG BỘ HOÀN TOÀN) -->
+        <!-- TOOLS GRID -->
         <!-- ============================================ -->
         <h3 class="font-bold text-gray-800 text-lg md:text-2xl mb-4 md:mb-6">Công cụ phổ biến</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
             
-            <!-- Tool 1: CẬP NHẬT TÊN MỚI, MÀU BLUE, ICON CAPSULES -->
+            <!-- Tool 1: Kháng sinh (Cập nhật tên & màu) -->
             <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" 
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-blue-200 transition">
@@ -126,7 +126,7 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Kháng sinh, Kháng nấm & Virus</span>
             </div>
 
-            <!-- Tool 2: Tính thời gian truyền dịch (Cyan) -->
+            <!-- Tool 2: Thời gian truyền dịch -->
             <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-clock', 'cyan', 'tinh-thoi-gian-truyen-dich.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-cyan-200 transition">
@@ -135,7 +135,7 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Tính thời gian truyền dịch</span>
             </div>
 
-            <!-- Tool 3: Đếm giọt (Cyan) -->
+            <!-- Tool 3: Đếm giọt -->
             <div onclick="useTool('drip-rate', 'Đếm giọt dịch truyền', 'fa-droplet', 'cyan', 'dem-giot-dich-truyen.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-cyan-200 transition">
@@ -144,7 +144,7 @@
                 <span class="font-medium text-sm md:text-lg text-gray-700">Đếm giọt dịch truyền</span>
             </div>
 
-            <!-- Tool 4: Chế độ ăn (Green, ID diet) -->
+            <!-- Tool 4: Chế độ ăn -->
             <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-utensils', 'green', 'tra-cuu-che-do-an.html')"
                  class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-green-200 transition">
@@ -283,14 +283,17 @@
             }, 300);
         }
 
-        // --- 3. RECENT TOOLS LOGIC (TỐI ƯU HÓA & LỌC TRÙNG) ---
+        // --- 3. RECENT TOOLS LOGIC (SIÊU MẠNH MẼ - KHÔNG TRÙNG LẶP) ---
         function useTool(id, name, icon, color, url) {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             
-            // Bước 1: Loại bỏ bất kỳ mục nào có cùng URL (để đảm bảo không trùng lặp)
-            recentTools = recentTools.filter(tool => tool.url !== url);
+            // XÓA MỌI DẤU VẾT CŨ LIÊN QUAN ĐẾN CÔNG CỤ NÀY
+            // Lọc bỏ nếu trùng URL (cho dù ID là gì)
+            // Lọc bỏ nếu trùng ID (cho dù URL là gì)
+            // Điều này đảm bảo công cụ cũ (tên cũ) cũng sẽ bị xóa
+            recentTools = recentTools.filter(tool => tool.url !== url && tool.id !== id);
             
-            // Bước 2: Thêm công cụ mới vào đầu danh sách
+            // Thêm công cụ mới vào đầu danh sách
             recentTools.unshift({
                 id: id,
                 name: name,
@@ -300,7 +303,7 @@
                 timestamp: new Date().getTime()
             });
 
-            // Bước 3: Giới hạn 5 mục
+            // Giới hạn 5 mục
             if (recentTools.length > 5) recentTools = recentTools.slice(0, 5);
 
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
@@ -313,24 +316,29 @@
             const container = document.getElementById('recent-container');
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
 
-            // --- CƠ CHẾ TỰ ĐỘNG LỌC TRÙNG KHI RENDER (SELF-HEALING) ---
+            // --- CƠ CHẾ TỰ ĐỘNG DỌN DẸP KHI HIỂN THỊ ---
+            // Chỉ giữ lại 1 bản ghi duy nhất cho mỗi URL
             const uniqueTools = [];
             const seenUrls = new Set();
-            let hasDuplicates = false;
+            let needsUpdate = false;
 
             for (const tool of recentTools) {
-                if (!seenUrls.has(tool.url)) {
-                    seenUrls.add(tool.url);
+                // Chuẩn hóa URL để so sánh (tránh lỗi do dấu / hay khoảng trắng)
+                const safeUrl = tool.url.trim(); 
+                
+                if (!seenUrls.has(safeUrl)) {
+                    seenUrls.add(safeUrl);
                     uniqueTools.push(tool);
                 } else {
-                    hasDuplicates = true;
+                    needsUpdate = true; // Phát hiện trùng -> Cần cập nhật DB
                 }
             }
-            if (hasDuplicates) {
+
+            // Nếu có thay đổi (đã lọc bớt trùng), lưu lại ngay
+            if (needsUpdate) {
                 recentTools = uniqueTools;
                 localStorage.setItem('recentTools', JSON.stringify(recentTools));
             }
-            // -----------------------------------------------------------
 
             if (recentTools.length === 0) {
                 container.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm md:text-lg italic border-2 border-dashed border-gray-200 rounded-xl">Chưa có công cụ nào được sử dụng gần đây.</div>`;
@@ -368,7 +376,7 @@
 
         // --- 4. APP INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            renderRecentTools();
+            renderRecentTools(); // Render & Tự động dọn dẹp ngay khi vào trang
 
             // Device detection logic
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
