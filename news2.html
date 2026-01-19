@@ -18,24 +18,22 @@
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
-        /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
+        /* --- APP FEEL OPTIMIZATIONS --- */
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: #f3f4f6; 
             padding-bottom: 80px; /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
-        /* Cho phép chọn text ở input và kết quả */
         .result-text, input, textarea {
             -webkit-user-select: text;
             user-select: text;
         }
 
-        /* Animations */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translate3d(0, 20px, 0); }
             to { opacity: 1; transform: translate3d(0, 0, 0); }
@@ -44,25 +42,26 @@
             animation: fadeInUp 0.5s ease-out;
         }
         
-        /* Tùy chỉnh thanh cuộn nếu cần */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-        /* Custom Radio Button Style từ file cũ */
-        .custom-radio:checked + label {
-            background-color: #e0e7ff;
-            border-color: #4f46e5;
-            color: #4f46e5;
-            font-weight: 600;
+        /* --- MOBILE INPUT OPTIMIZATION (Prevent iOS Zoom) --- */
+        @media screen and (max-width: 768px) {
+            input[type="number"], input[type="text"], select, textarea {
+                font-size: 16px !important;
+            }
         }
-        input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        /* Remove spin buttons */
+        input[type="number"]::-webkit-outer-spin-button, 
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
     </style>
 </head>
 <body>
 
-    <!-- DESKTOP HEADER -->
+    <!-- DESKTOP HEADER (GIỮ NGUYÊN) -->
     <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
         <div class="flex items-center gap-3">
             <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png'" alt="Logo" class="w-10 h-10 object-contain">
@@ -75,7 +74,7 @@
         </nav>
     </header>
 
-    <!-- MOBILE HEADER (App Style) -->
+    <!-- MOBILE HEADER (GIỮ NGUYÊN) -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -83,110 +82,130 @@
         <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
             NEWS2 Score
         </h1>
-        <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
+        <div class="w-8"></div>
     </header>
 
-    <!-- MAIN CONTENT WRAPPER -->
-    <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-        <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
+    <!-- MAIN CONTENT WRAPPER (TỐI ƯU HÓA) -->
+    <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-6xl">
+        <!-- KHỐI CARD CHÍNH -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
             
-            <!-- HEADER CỦA CARD (DESKTOP) -->
-            <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
-                <div class="flex items-center">
-                    <!-- Nút Back Desktop -->
-                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+            <!-- HEADER CỦA CARD -->
+            <div class="hidden md:flex bg-indigo-600 p-5 text-white items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <a href="cong-cu.html" class="hidden md:flex w-9 h-9 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <div>
-                        <h1 class="text-2xl font-bold">Thang điểm NEWS2</h1>
-                        <p class="text-indigo-100 mt-1 text-sm">National Early Warning Score 2 - Đánh giá cảnh báo sớm mức độ bệnh nặng.</p>
+                        <h1 class="text-xl font-bold">Thang điểm NEWS2</h1>
+                        <p class="text-indigo-100 text-sm">Đánh giá cảnh báo sớm mức độ bệnh nặng</p>
                     </div>
                 </div>
-                <!-- Icon đại diện mờ -->
-                <i class="fa-solid fa-heart-pulse text-4xl text-indigo-300 opacity-50"></i>
+                <i class="fa-solid fa-heart-pulse text-3xl text-indigo-300 opacity-50"></i>
             </div>
 
-            <!-- FORM TÍNH TOÁN -->
-            <div class="p-4 md:p-8">
-                <!-- Nội dung form NEWS2 -->
-                <form id="tool-form" class="space-y-6 md:space-y-8" novalidate>
+            <!-- FORM TÍNH TOÁN (GRID LAYOUT) -->
+            <div class="p-4 md:p-6">
+                <form id="tool-form" class="space-y-6" novalidate>
                     
-                    <!-- 1. Nhịp thở -->
-                    <div>
-                        <label for="rr" class="block text-sm font-semibold text-gray-700 mb-2">1. Nhịp thở (lần/phút)</label>
-                        <input type="number" id="rr" name="rr" placeholder="VD: 18" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-lg" inputmode="numeric">
-                    </div>
-    
-                    <!-- 2. SpO2 -->
-                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
-                        <div class="flex items-center justify-between mb-2">
-                            <label for="spo2" class="block text-sm font-semibold text-gray-700">2. SpO2 (%)</label>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="copd" name="copd" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                <label for="copd" class="ml-2 text-xs font-medium text-red-600 cursor-pointer select-none">Bệnh nhân COPD (Thang 2)</label>
+                    <!-- GRID CONTAINER: 1 cột Mobile, 2 cột PC -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-5">
+                        
+                        <!-- CỘT TRÁI -->
+                        <div class="space-y-5">
+                            <!-- 1. Nhịp thở -->
+                            <div>
+                                <label for="rr" class="block text-sm font-semibold text-gray-700 mb-1.5">1. Nhịp thở (lần/phút)</label>
+                                <input type="number" id="rr" name="rr" placeholder="VD: 18" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-base" inputmode="numeric">
+                            </div>
+
+                            <!-- 2. SpO2 & COPD -->
+                            <div class="bg-indigo-50/60 p-3.5 rounded-xl border border-indigo-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="spo2" class="block text-sm font-semibold text-gray-700">2. SpO2 (%)</label>
+                                    <!-- Flexbox Checkbox Fix -->
+                                    <label class="flex items-center cursor-pointer group">
+                                        <input type="checkbox" id="copd" name="copd" class="peer sr-only">
+                                        <div class="w-4 h-4 border-2 border-gray-400 rounded bg-white peer-checked:bg-red-600 peer-checked:border-red-600 flex items-center justify-center transition-all mr-2">
+                                            <i class="fa-solid fa-check text-white text-[10px] opacity-0 peer-checked:opacity-100"></i>
+                                        </div>
+                                        <span class="text-xs font-bold text-gray-500 peer-checked:text-red-600 select-none transition-colors">Bệnh nhân COPD (Thang 2)</span>
+                                    </label>
+                                </div>
+                                <input type="number" id="spo2" name="spo2" placeholder="VD: 96" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-base" inputmode="numeric">
+                                <p id="scale-hint" class="text-xs text-gray-500 mt-2 flex items-center gap-1 font-medium">
+                                    <i class="fa-solid fa-circle-info text-indigo-500"></i> <span>Sử dụng Thang 1 (Mặc định)</span>
+                                </p>
+                            </div>
+
+                            <!-- 3. Thở Oxy (Flex Radio Fix) -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">3. Hỗ trợ Oxy?</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="oxygen" value="air" class="peer sr-only">
+                                        <div class="h-full px-3 py-2.5 border border-gray-200 rounded-xl bg-white text-gray-600 text-center text-sm font-medium hover:bg-gray-50 peer-checked:bg-indigo-50 peer-checked:border-indigo-500 peer-checked:text-indigo-700 transition flex items-center justify-center gap-2">
+                                            <i class="fa-solid fa-wind opacity-50 peer-checked:opacity-100"></i> Không khí
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="oxygen" value="o2" class="peer sr-only">
+                                        <div class="h-full px-3 py-2.5 border border-gray-200 rounded-xl bg-white text-gray-600 text-center text-sm font-medium hover:bg-gray-50 peer-checked:bg-indigo-50 peer-checked:border-indigo-500 peer-checked:text-indigo-700 transition flex items-center justify-center gap-2">
+                                            <i class="fa-solid fa-mask-ventilator opacity-50 peer-checked:opacity-100"></i> Có thở Oxy
+                                        </div>
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                        <input type="number" id="spo2" name="spo2" placeholder="VD: 96" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-lg" inputmode="numeric">
-                        <p id="scale-hint" class="text-xs text-gray-500 mt-2 flex items-center gap-1">
-                            <i class="fa-solid fa-circle-info"></i> <span>Sử dụng Thang 1 (Mặc định)</span>
-                        </p>
-                    </div>
-    
-                    <!-- 3. Thở Oxy -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">3. Hỗ trợ Oxy?</label>
-                        <div class="grid grid-cols-2 gap-4">
+
+                        <!-- CỘT PHẢI -->
+                        <div class="space-y-5">
+                            <!-- 4. Huyết áp -->
                             <div>
-                                <input type="radio" id="air" name="oxygen" value="air" class="hidden custom-radio">
-                                <label for="air" class="block w-full text-center px-4 py-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition bg-white text-gray-600">Không khí phòng</label>
+                                <label for="sys_bp" class="block text-sm font-semibold text-gray-700 mb-1.5">4. Huyết áp tâm thu (mmHg)</label>
+                                <input type="number" id="sys_bp" name="sys_bp" placeholder="VD: 120" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-base" inputmode="numeric">
                             </div>
+
+                            <!-- 5. Mạch -->
                             <div>
-                                <input type="radio" id="o2" name="oxygen" value="o2" class="hidden custom-radio">
-                                <label for="o2" class="block w-full text-center px-4 py-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition bg-white text-gray-600">Có thở Oxy</label>
+                                <label for="pulse" class="block text-sm font-semibold text-gray-700 mb-1.5">5. Mạch (lần/phút)</label>
+                                <input type="number" id="pulse" name="pulse" placeholder="VD: 80" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-base" inputmode="numeric">
                             </div>
-                        </div>
-                    </div>
-    
-                    <!-- 4. Huyết áp tâm thu -->
-                    <div>
-                        <label for="sys_bp" class="block text-sm font-semibold text-gray-700 mb-2">4. Huyết áp tâm thu (mmHg)</label>
-                        <input type="number" id="sys_bp" name="sys_bp" placeholder="VD: 120" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-lg" inputmode="numeric">
-                    </div>
-    
-                    <!-- 5. Mạch -->
-                    <div>
-                        <label for="pulse" class="block text-sm font-semibold text-gray-700 mb-2">5. Mạch (lần/phút)</label>
-                        <input type="number" id="pulse" name="pulse" placeholder="VD: 80" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-lg" inputmode="numeric">
-                    </div>
-    
-                    <!-- 6. Tri giác -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">6. Tri giác (AVPU)</label>
-                        <div class="grid grid-cols-2 gap-4">
+
+                            <!-- 6. Tri giác (Flex Radio Fix) -->
                             <div>
-                                <input type="radio" id="alert" name="avpu" value="alert" class="hidden custom-radio">
-                                <label for="alert" class="block w-full text-center px-4 py-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition bg-white text-gray-600">Tỉnh táo (Alert)</label>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">6. Tri giác (AVPU)</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="avpu" value="alert" class="peer sr-only">
+                                        <div class="h-full px-3 py-2.5 border border-gray-200 rounded-xl bg-white text-gray-600 text-center text-sm font-medium hover:bg-gray-50 peer-checked:bg-green-50 peer-checked:border-green-500 peer-checked:text-green-700 transition flex items-center justify-center gap-2">
+                                            <i class="fa-regular fa-face-smile opacity-50 peer-checked:opacity-100"></i> Tỉnh táo
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="avpu" value="cvpu" class="peer sr-only">
+                                        <div class="h-full px-3 py-2.5 border border-gray-200 rounded-xl bg-white text-gray-600 text-center text-sm font-medium hover:bg-gray-50 peer-checked:bg-red-50 peer-checked:border-red-500 peer-checked:text-red-700 transition flex items-center justify-center gap-2">
+                                            <i class="fa-solid fa-bed-pulse opacity-50 peer-checked:opacity-100"></i> C / V / P / U
+                                        </div>
+                                    </label>
+                                </div>
+                                <p class="text-[11px] text-gray-400 mt-1 ml-1 font-medium">C: Mới lú lẫn | V: Lời nói | P: Đau | U: Không đáp ứng</p>
                             </div>
+
+                            <!-- 7. Nhiệt độ -->
                             <div>
-                                <input type="radio" id="cvpu" name="avpu" value="cvpu" class="hidden custom-radio">
-                                <label for="cvpu" class="block w-full text-center px-4 py-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition bg-white text-gray-600">C / V / P / U</label>
+                                <label for="temp" class="block text-sm font-semibold text-gray-700 mb-1.5">7. Nhiệt độ (°C)</label>
+                                <input type="number" id="temp" name="temp" placeholder="VD: 37.0" step="0.1" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-base" inputmode="decimal">
                             </div>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1 ml-1">C: Mới lú lẫn, V: Đáp ứng lời nói, P: Đáp ứng đau, U: Không đáp ứng</p>
-                    </div>
-    
-                    <!-- 7. Nhiệt độ -->
-                    <div>
-                        <label for="temp" class="block text-sm font-semibold text-gray-700 mb-2">7. Nhiệt độ (°C)</label>
-                        <input type="number" id="temp" name="temp" placeholder="VD: 37.0" step="0.1" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm outline-none text-lg" inputmode="decimal">
                     </div>
                     
-                    <div class="pt-4 flex flex-col sm:flex-row gap-4">
-                        <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-md hover:shadow-lg transition duration-300 active:scale-95 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
+                    <!-- ACTION BUTTONS -->
+                    <div class="pt-4 flex flex-col sm:flex-row gap-3 md:gap-4 lg:col-span-2">
+                        <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-indigo-700 hover:shadow-lg transition duration-300 active:scale-95 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính điểm
                         </button>
-                        <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3.5 px-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
+                        <button type="button" id="clearBtn" class="flex-1 sm:flex-none sm:w-40 bg-white text-gray-600 border border-gray-200 font-semibold py-3 px-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 hover:bg-gray-50 hover:text-red-500 flex items-center justify-center text-base">
                             <i class="fa-solid fa-rotate-right mr-2"></i> Làm mới
                         </button>
                     </div>
@@ -195,54 +214,36 @@
                 <!-- KẾT QUẢ -->
                 <div id="result-container" class="mt-8 hidden animate-fade-in-up">
                     <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 text-center shadow-inner relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-2 opacity-10">
-                            <i class="fa-solid fa-file-medical text-6xl text-indigo-600"></i>
+                        <div class="absolute top-0 right-0 p-2 opacity-5">
+                            <i class="fa-solid fa-file-medical text-8xl text-indigo-900"></i>
                         </div>
                         <h3 class="text-xs font-bold text-indigo-500 uppercase tracking-wider mb-2">Điểm NEWS2</h3>
-                        <div id="main-result" class="text-6xl font-black text-indigo-700 mb-3 tracking-tighter">--</div>
+                        <div id="main-result" class="text-6xl font-black text-indigo-700 mb-3 tracking-tighter leading-none">--</div>
                         
-                        <div id="risk-badge" class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-6 bg-gray-200 text-gray-700 shadow-sm">
+                        <div id="risk-badge" class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-5 bg-gray-200 text-gray-700 shadow-sm">
                             Chưa đánh giá
                         </div>
     
-                        <div class="bg-white/80 rounded-xl p-4 text-left border border-indigo-100 shadow-sm">
-                            <p id="sub-result" class="result-text text-gray-800 leading-relaxed text-sm">
-                                ...
-                            </p>
+                        <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 text-left border border-indigo-100 shadow-sm">
+                            <p id="sub-result" class="result-text text-gray-800 leading-relaxed text-sm">...</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- MÔ TẢ & CHỈ ĐỊNH (MỚI) -->
-                <div class="mt-10 pt-8 border-t border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                <!-- INFO SECTION (ALWAYS VISIBLE) -->
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <h3 class="flex items-center text-gray-700 font-bold text-sm mb-3 select-none">
                         <i class="fa-solid fa-circle-info text-indigo-600 mr-2"></i> Thông tin & Chỉ định
                     </h3>
-                    <div class="text-gray-600 text-sm space-y-4 leading-relaxed">
-                        <div>
-                            <span class="font-bold text-gray-700 block mb-1">Mô tả:</span>
-                            <p>NEWS2 (National Early Warning Score 2) là hệ thống chấm điểm cảnh báo sớm chuẩn hóa, được sử dụng để đánh giá mức độ bệnh nặng và phát hiện sớm tình trạng suy giảm lâm sàng ở bệnh nhân cấp tính.</p>
-                        </div>
-                        
-                        <div>
-                            <span class="font-bold text-gray-700 block mb-1">Chỉ định:</span>
-                            <ul class="list-disc pl-5 space-y-1 marker:text-indigo-500">
-                                <li>Theo dõi sinh hiệu thường quy cho bệnh nhân nội trú người lớn (≥ 16 tuổi).</li>
-                                <li>Đánh giá ban đầu tại khoa Cấp cứu, Khám bệnh.</li>
-                                <li>Theo dõi tiền phẫu và hậu phẫu.</li>
-                            </ul>
-                        </div>
-
-                        <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
-                            <span class="font-bold text-orange-800 block mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Lưu ý & Chống chỉ định:</span>
-                            <ul class="list-disc pl-5 space-y-1 text-orange-700 marker:text-orange-500">
-                                <li><strong>Thang SpO2 2:</strong> Chỉ áp dụng cho bệnh nhân suy hô hấp tăng carbonic (như COPD) với đích SpO2 88-92%.</li>
-                                <li><strong>Không áp dụng cho:</strong> Trẻ em dưới 16 tuổi, phụ nữ mang thai (khuyên dùng MEOWS), bệnh nhân tổn thương tủy sống (do rối loạn thần kinh tự chủ).</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="text-xs text-gray-400 italic pt-2">
-                            Nguồn: Royal College of Physicians (UK). National Early Warning Score (NEWS) 2.
+                    <div class="text-gray-600 text-sm space-y-3 leading-relaxed">
+                        <p><strong>NEWS2:</strong> Hệ thống chấm điểm cảnh báo sớm chuẩn hóa mức độ bệnh nặng.</p>
+                        <ul class="list-disc pl-5 space-y-1 marker:text-indigo-400 text-xs md:text-sm">
+                            <li><strong>Chỉ định:</strong> Theo dõi sinh hiệu thường quy (≥ 16 tuổi), đánh giá ban đầu cấp cứu/nội trú.</li>
+                            <li><strong>Lưu ý (SpO2 Thang 2):</strong> Dùng cho bệnh nhân suy hô hấp tăng carbonic (COPD) với đích SpO2 88-92%.</li>
+                            <li class="text-orange-600"><strong>Không dùng:</strong> Trẻ em <16t, phụ nữ mang thai, tổn thương tủy sống.</li>
+                        </ul>
+                        <div class="text-[10px] text-gray-400 italic text-right">
+                            Nguồn: Royal College of Physicians (UK).
                         </div>
                     </div>
                 </div>
@@ -250,7 +251,7 @@
         </div>
     </main>
 
-    <!-- DRAWER MENU -->
+    <!-- DRAWER MENU (GIỮ NGUYÊN) -->
     <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
     <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
         <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
@@ -282,7 +283,7 @@
         </div>
     </div>
 
-    <!-- MOBILE BOTTOM NAV -->
+    <!-- MOBILE BOTTOM NAV (GIỮ NGUYÊN) -->
     <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
             <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
@@ -385,7 +386,7 @@
                 if (this.checked) {
                     scaleHint.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-red-500"></i> <span class="text-red-600 font-bold">Thang 2 (Suy hô hấp tăng carbonic)</span>';
                 } else {
-                    scaleHint.innerHTML = '<i class="fa-solid fa-circle-info"></i> <span>Sử dụng Thang 1 (Mặc định)</span>';
+                    scaleHint.innerHTML = '<i class="fa-solid fa-circle-info text-indigo-500"></i> <span>Sử dụng Thang 1 (Mặc định)</span>';
                 }
             });
 
@@ -513,7 +514,7 @@
                     message = "Cần phản hồi khẩn cấp hoặc cấp cứu. Xem xét chuyển ICU hoặc kích hoạt đội phản ứng nhanh. Theo dõi liên tục.";
                 }
 
-                // Simplified Logic override matching previous logic structure
+                // Simplified Logic Logic Override
                 if (score >= 7) {
                      riskLevel = "Nguy cơ CAO";
                      riskClass = "bg-red-100 text-red-800 border border-red-200";
@@ -537,10 +538,31 @@
                 // Save History
                 useTool('news2', 'Thang điểm NEWS2', 'fa-heart-pulse', 'text-indigo-600', window.location.href);
 
-                // Auto Scroll
-                const headerHeight = document.querySelector('header')?.offsetHeight || 0;
-                const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-                window.scrollTo({ top: targetPos, behavior: 'smooth' });
+                // --- SMART SCROLL LOGIC (MOBILE & PC) ---
+                setTimeout(() => {
+                    const resultRect = resultContainer.getBoundingClientRect();
+                    const isObstructed = resultRect.bottom > window.innerHeight; // Kiểm tra xem đuôi kết quả có bị che không
+                    
+                    if (isObstructed) {
+                        const isMobile = window.innerWidth < 768;
+                        
+                        if (isMobile) {
+                            // Mobile: Cuộn phần đầu kết quả lên ngay dưới Header để dễ đọc
+                            const headerOffset = 60; 
+                            const padding = 20;
+                            const elementTop = resultRect.top + window.scrollY; 
+                            const targetPosition = elementTop - headerOffset - padding;
+
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: "smooth"
+                            });
+                        } else {
+                            // PC: Cuộn nhẹ xuống để thấy phần đuôi
+                            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        }
+                    }
+                }, 100);
             });
 
             // Xử lý nút Clear
@@ -550,7 +572,9 @@
                 mainResult.textContent = "--";
                 riskBadge.className = "inline-block px-4 py-1 rounded-full text-sm font-bold mb-6 bg-gray-200 text-gray-700 shadow-sm";
                 riskBadge.textContent = "Chưa đánh giá";
-                scaleHint.innerHTML = '<i class="fa-solid fa-circle-info"></i> <span>Sử dụng Thang 1 (Mặc định)</span>';
+                scaleHint.innerHTML = '<i class="fa-solid fa-circle-info text-indigo-500"></i> <span>Sử dụng Thang 1 (Mặc định)</span>';
+                
+                // Reset visual states for styled radios/checkboxes if needed (Tailwind peer works automatically)
             });
         });
 

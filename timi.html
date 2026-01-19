@@ -24,12 +24,11 @@
             background-color: #f3f4f6; 
             padding-bottom: 80px; /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
-        /* Cho phép chọn text ở input và kết quả */
         .result-text, input, textarea {
             -webkit-user-select: text;
             user-select: text;
@@ -41,26 +40,48 @@
             to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
         .animate-fade-in-up {
-            animation: fadeInUp 0.5s ease-out;
+            animation: fadeInUp 0.4s ease-out;
         }
         
-        /* Tùy chỉnh thanh cuộn nếu cần */
-        ::-webkit-scrollbar { width: 6px; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-        /* Custom Radio Style for cleaner look */
+        /* --- MOBILE INPUT OPTIMIZATION (Prevent iOS Zoom) --- */
+        @media (max-width: 768px) {
+            input[type="number"], 
+            input[type="text"],
+            input[type="tel"],
+            input[type="email"],
+            select, 
+            textarea { 
+                font-size: 16px !important; 
+            }
+        }
+
+        /* Custom Radio Style */
         .radio-option {
-            transition: all 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            /* Flexbox ensures icon next to text */
         }
         .radio-option:active {
-            transform: scale(0.98);
+            transform: scale(0.99);
+        }
+        
+        /* Ẩn input radio mặc định để custom đẹp hơn nếu cần, 
+           nhưng ở đây ta giữ input visible để UX rõ ràng */
+        .radio-ring:checked {
+            border-color: #4f46e5;
+            border-width: 5px;
         }
     </style>
 </head>
 <body>
 
-<!-- HEADER & NAVIGATION -->
+<!-- HEADER & NAVIGATION (GIỮ NGUYÊN 100%) -->
 <!-- A. Desktop Header -->
 <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
     <div class="flex items-center gap-3">
@@ -82,18 +103,19 @@
     <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
         Thang điểm TIMI
     </h1>
-    <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
+    <div class="w-8"></div>
 </header>
 
-<!-- CẤU TRÚC MAIN CONTENT (Wrapper) -->
-<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-    <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
+<!-- CẤU TRÚC MAIN CONTENT (TỐI ƯU HÓA) -->
+<!-- Thay đổi: max-w-4xl -> max-w-6xl để rộng hơn trên PC -->
+<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-6xl">
+    
+    <!-- KHỐI CARD CHÍNH -->
     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
         
         <!-- HEADER CỦA CARD (DESKTOP) -->
         <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
             <div class="flex items-center">
-                <!-- Nút Back Desktop -->
                 <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
@@ -102,7 +124,6 @@
                     <p class="text-indigo-100 mt-1 text-sm">Đánh giá nguy cơ cho bệnh nhân UA/NSTEMI</p>
                 </div>
             </div>
-            <!-- Icon đại diện mờ -->
             <i class="fa-solid fa-heart-pulse text-4xl text-indigo-300 opacity-50"></i>
         </div>
 
@@ -110,122 +131,140 @@
         <div class="p-4 md:p-8">
             <form id="tool-form" class="space-y-6" novalidate>
                 
-                <!-- Question 1 -->
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <p class="font-semibold text-gray-800 mb-3">1. Tuổi bệnh nhân &ge; 65?</p>
-                    <div class="flex gap-4">
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-indigo-300 transition">
-                            <input type="radio" name="age" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
-                            <span class="ml-2 font-medium">Có (+1)</span>
-                        </label>
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-gray-300 transition">
-                            <input type="radio" name="age" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
-                            <span class="ml-2 text-gray-600">Không (0)</span>
-                        </label>
-                    </div>
-                </div>
+                <!-- GRID CONTAINER CHO CÂU HỎI (Responsive: 1 cột mobile, 2 cột PC) -->
+                <!-- Thay đổi: Thêm grid, gap, lg:grid-cols-2 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
 
-                <!-- Question 2 -->
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <p class="font-semibold text-gray-800 mb-1">2. Có &ge; 3 Yếu tố nguy cơ bệnh mạch vành?</p>
-                    <p class="text-xs text-gray-500 mb-3">(Tiền sử gia đình, THA, Rối loạn mỡ máu, ĐTĐ, Hút thuốc)</p>
-                    <div class="flex gap-4">
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-indigo-300 transition">
-                            <input type="radio" name="risk" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
-                            <span class="ml-2 font-medium">Có (+1)</span>
-                        </label>
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-gray-300 transition">
-                            <input type="radio" name="risk" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
-                            <span class="ml-2 text-gray-600">Không (0)</span>
-                        </label>
+                    <!-- Question 1 -->
+                    <!-- Thay đổi: Padding gọn hơn (p-3), Font size responsive (text-sm/text-base) -->
+                    <div class="bg-gray-50 p-3 lg:p-4 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors">
+                        <p class="font-semibold text-gray-800 mb-2 lg:text-base text-sm">1. Tuổi bệnh nhân &ge; 65?</p>
+                        <div class="flex gap-3">
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-indigo-300">
+                                <input type="radio" name="age" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                                <span class="ml-2 font-medium text-gray-700 lg:text-base text-sm">Có (+1)</span>
+                            </label>
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-gray-300">
+                                <input type="radio" name="age" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
+                                <span class="ml-2 text-gray-600 lg:text-base text-sm">Không (0)</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Question 3 -->
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <p class="font-semibold text-gray-800 mb-1">3. Đã biết hẹp động mạch vành (&ge; 50%)?</p>
-                    <p class="text-xs text-gray-500 mb-3">(Đã có kết quả chụp mạch vành trước đó)</p>
-                    <div class="flex gap-4">
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-indigo-300 transition">
-                            <input type="radio" name="cad" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
-                            <span class="ml-2 font-medium">Có (+1)</span>
-                        </label>
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-gray-300 transition">
-                            <input type="radio" name="cad" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
-                            <span class="ml-2 text-gray-600">Không (0)</span>
-                        </label>
+                    <!-- Question 2 -->
+                    <div class="bg-gray-50 p-3 lg:p-4 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors">
+                        <div class="mb-2">
+                            <p class="font-semibold text-gray-800 lg:text-base text-sm">2. Có &ge; 3 Yếu tố nguy cơ mạch vành?</p>
+                            <p class="text-xs text-gray-500 mt-0.5 truncate md:whitespace-normal">TS gia đình, THA, RL Mỡ máu, ĐTĐ, Hút thuốc</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-indigo-300">
+                                <input type="radio" name="risk" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                                <span class="ml-2 font-medium text-gray-700 lg:text-base text-sm">Có (+1)</span>
+                            </label>
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-gray-300">
+                                <input type="radio" name="risk" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
+                                <span class="ml-2 text-gray-600 lg:text-base text-sm">Không (0)</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Question 4 -->
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <p class="font-semibold text-gray-800 mb-3">4. Sử dụng Aspirin trong 7 ngày qua?</p>
-                    <div class="flex gap-4">
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-indigo-300 transition">
-                            <input type="radio" name="aspirin" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
-                            <span class="ml-2 font-medium">Có (+1)</span>
-                        </label>
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-gray-300 transition">
-                            <input type="radio" name="aspirin" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
-                            <span class="ml-2 text-gray-600">Không (0)</span>
-                        </label>
+                    <!-- Question 3 -->
+                    <div class="bg-gray-50 p-3 lg:p-4 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors">
+                        <div class="mb-2">
+                            <p class="font-semibold text-gray-800 lg:text-base text-sm">3. Đã biết hẹp ĐM vành (&ge; 50%)?</p>
+                            <p class="text-xs text-gray-500 mt-0.5">(Đã có kết quả chụp mạch vành trước đó)</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-indigo-300">
+                                <input type="radio" name="cad" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                                <span class="ml-2 font-medium text-gray-700 lg:text-base text-sm">Có (+1)</span>
+                            </label>
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-gray-300">
+                                <input type="radio" name="cad" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
+                                <span class="ml-2 text-gray-600 lg:text-base text-sm">Không (0)</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Question 5 -->
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <p class="font-semibold text-gray-800 mb-1">5. Cơn đau thắt ngực nặng?</p>
-                    <p class="text-xs text-gray-500 mb-3">(&ge; 2 cơn đau trong vòng 24 giờ qua)</p>
-                    <div class="flex gap-4">
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-indigo-300 transition">
-                            <input type="radio" name="angina" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
-                            <span class="ml-2 font-medium">Có (+1)</span>
-                        </label>
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-gray-300 transition">
-                            <input type="radio" name="angina" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
-                            <span class="ml-2 text-gray-600">Không (0)</span>
-                        </label>
+                    <!-- Question 4 -->
+                    <div class="bg-gray-50 p-3 lg:p-4 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors">
+                        <p class="font-semibold text-gray-800 mb-2 lg:text-base text-sm">4. Dùng Aspirin trong 7 ngày qua?</p>
+                        <div class="flex gap-3">
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-indigo-300">
+                                <input type="radio" name="aspirin" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                                <span class="ml-2 font-medium text-gray-700 lg:text-base text-sm">Có (+1)</span>
+                            </label>
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-gray-300">
+                                <input type="radio" name="aspirin" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
+                                <span class="ml-2 text-gray-600 lg:text-base text-sm">Không (0)</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Question 6 -->
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <p class="font-semibold text-gray-800 mb-1">6. Đoạn ST thay đổi &ge; 0.5mm?</p>
-                    <p class="text-xs text-gray-500 mb-3">(Trên điện tâm đồ lúc nhập viện)</p>
-                    <div class="flex gap-4">
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-indigo-300 transition">
-                            <input type="radio" name="st" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
-                            <span class="ml-2 font-medium">Có (+1)</span>
-                        </label>
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-gray-300 transition">
-                            <input type="radio" name="st" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
-                            <span class="ml-2 text-gray-600">Không (0)</span>
-                        </label>
+                    <!-- Question 5 -->
+                    <div class="bg-gray-50 p-3 lg:p-4 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors">
+                        <div class="mb-2">
+                            <p class="font-semibold text-gray-800 lg:text-base text-sm">5. Cơn đau thắt ngực nặng?</p>
+                            <p class="text-xs text-gray-500 mt-0.5">(&ge; 2 cơn đau trong vòng 24 giờ qua)</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-indigo-300">
+                                <input type="radio" name="angina" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                                <span class="ml-2 font-medium text-gray-700 lg:text-base text-sm">Có (+1)</span>
+                            </label>
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-gray-300">
+                                <input type="radio" name="angina" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
+                                <span class="ml-2 text-gray-600 lg:text-base text-sm">Không (0)</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Question 7 -->
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <p class="font-semibold text-gray-800 mb-1">7. Tăng chỉ điểm sinh học tim?</p>
-                    <p class="text-xs text-gray-500 mb-3">(CK-MB hoặc Troponin tăng cao)</p>
-                    <div class="flex gap-4">
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-indigo-300 transition">
-                            <input type="radio" name="markers" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
-                            <span class="ml-2 font-medium">Có (+1)</span>
-                        </label>
-                        <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg p-3 flex items-center hover:border-gray-300 transition">
-                            <input type="radio" name="markers" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
-                            <span class="ml-2 text-gray-600">Không (0)</span>
-                        </label>
+                    <!-- Question 6 -->
+                    <div class="bg-gray-50 p-3 lg:p-4 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors">
+                        <div class="mb-2">
+                            <p class="font-semibold text-gray-800 lg:text-base text-sm">6. Đoạn ST thay đổi &ge; 0.5mm?</p>
+                            <p class="text-xs text-gray-500 mt-0.5">(Trên điện tâm đồ lúc nhập viện)</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-indigo-300">
+                                <input type="radio" name="st" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                                <span class="ml-2 font-medium text-gray-700 lg:text-base text-sm">Có (+1)</span>
+                            </label>
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-gray-300">
+                                <input type="radio" name="st" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
+                                <span class="ml-2 text-gray-600 lg:text-base text-sm">Không (0)</span>
+                            </label>
+                        </div>
                     </div>
+
+                    <!-- Question 7 (Có thể full width trên PC hoặc nằm gọn trong grid) -->
+                    <div class="bg-gray-50 p-3 lg:p-4 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors lg:col-span-2 xl:col-span-1">
+                        <div class="mb-2">
+                            <p class="font-semibold text-gray-800 lg:text-base text-sm">7. Tăng chỉ điểm sinh học tim?</p>
+                            <p class="text-xs text-gray-500 mt-0.5">(CK-MB hoặc Troponin tăng cao)</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-indigo-300">
+                                <input type="radio" name="markers" value="1" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                                <span class="ml-2 font-medium text-gray-700 lg:text-base text-sm">Có (+1)</span>
+                            </label>
+                            <label class="radio-option flex-1 cursor-pointer bg-white border border-gray-200 rounded-lg py-2.5 px-3 hover:border-gray-300">
+                                <input type="radio" name="markers" value="0" class="w-5 h-5 text-gray-400 focus:ring-gray-400 border-gray-300">
+                                <span class="ml-2 text-gray-600 lg:text-base text-sm">Không (0)</span>
+                            </label>
+                        </div>
+                    </div>
+
                 </div>
+                <!-- END GRID CONTAINER -->
 
                 <!-- Buttons -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-8">
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 text-base lg:text-lg">
                         <i class="fa-solid fa-calculator"></i> Tính điểm
                     </button>
-                    <button type="button" id="clearBtn" class="w-full bg-white text-gray-700 border border-gray-300 font-bold py-3.5 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                    <button type="button" id="clearBtn" class="w-full bg-white text-gray-700 border border-gray-300 font-bold py-3.5 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 text-base lg:text-lg">
                         <i class="fa-solid fa-rotate-right"></i> Làm lại
                     </button>
                 </div>
@@ -233,7 +272,7 @@
 
             <!-- Result Container -->
             <div id="result-container" class="mt-8 hidden animate-fade-in-up">
-                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 text-center shadow-inner relative overflow-hidden">
+                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 text-center shadow-inner relative overflow-hidden lg:max-w-2xl lg:mx-auto">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-300 via-indigo-500 to-indigo-300"></div>
                     
                     <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Kết quả TIMI</h3>
@@ -243,17 +282,17 @@
                     
                     <div class="bg-white rounded-xl p-4 shadow-sm text-left border border-gray-100 space-y-3">
                         <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <span class="text-gray-600">Nguy cơ</span>
+                            <span class="text-gray-600 lg:text-base text-sm">Nguy cơ</span>
                             <span id="risk-level" class="font-bold text-lg result-text">--</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600 text-sm">Tử vong/NMCT/Tái tưới máu (14 ngày)</span>
+                            <span class="text-gray-600 text-sm lg:text-base">Tử vong/NMCT/Tái tưới máu (14 ngày)</span>
                             <span id="risk-percent" class="font-bold text-indigo-600 result-text">--</span>
                         </div>
                     </div>
                     
-                    <div class="mt-4 p-3 bg-blue-50 rounded-lg text-xs text-blue-800 text-left flex gap-2">
-                        <i class="fa-solid fa-circle-info mt-0.5"></i>
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg text-xs lg:text-sm text-blue-800 text-left flex gap-2">
+                        <i class="fa-solid fa-circle-info mt-0.5 flex-shrink-0"></i>
                         <span>Thang điểm TIMI giúp phân tầng nguy cơ để hướng dẫn điều trị.</span>
                     </div>
                 </div>
@@ -269,7 +308,7 @@
     </div>
 </main>
 
-<!-- DRAWER, NAV & MODAL -->
+<!-- DRAWER, NAV & MODAL (GIỮ NGUYÊN 100%) -->
 <!-- DRAWER MENU -->
 <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
 <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
@@ -400,7 +439,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const riskPercentEl = document.getElementById('risk-percent');
     const clearBtn = document.getElementById('clearBtn');
 
-    // Mảng các tên radio input
     const criteria = ['age', 'risk', 'cad', 'aspirin', 'angina', 'st', 'markers'];
 
     // Hiệu ứng chọn radio
@@ -409,7 +447,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const input = this.querySelector('input[type="radio"]');
             if (input) {
                 input.checked = true;
-                // Highlight logic (tuỳ chọn thêm để đẹp hơn)
                 const groupName = input.name;
                 document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
                     const parent = radio.closest('.radio-option');
@@ -431,7 +468,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalScore = 0;
         let missing = false;
 
-        // Validation
         for (const criterion of criteria) {
             const selected = document.querySelector(`input[name="${criterion}"]:checked`);
             if (!selected) {
@@ -447,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Logic Tính toán & Phân tầng nguy cơ
+        // Tính toán
         let riskLevelText = "";
         let riskPercentText = "";
         let colorClass = ""; 
@@ -468,7 +504,6 @@ document.addEventListener('DOMContentLoaded', function() {
             colorClass = "text-red-600";
         }
 
-        // Hiển thị kết quả
         mainResult.textContent = totalScore;
         mainResult.className = `text-6xl font-extrabold mb-2 result-text ${colorClass}`;
         
@@ -479,7 +514,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         resultContainer.classList.remove('hidden');
         
-        // Scroll xuống kết quả
+        // --- REVERTED SCROLL LOGIC (Logic cũ) ---
+        // Cuộn xuống kết quả mỗi khi tính toán xong
         setTimeout(() => {
             const headerHeight = document.querySelector('header')?.offsetHeight || 60;
             const targetPos = resultContainer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
@@ -496,12 +532,12 @@ document.addEventListener('DOMContentLoaded', function() {
         resultContainer.classList.add('hidden');
         mainResult.textContent = "--";
         
-        // Reset style radio buttons
         document.querySelectorAll('.radio-option').forEach(opt => {
             opt.classList.remove('border-indigo-500', 'bg-indigo-50');
             opt.classList.add('border-gray-200', 'bg-white');
         });
         
+        // Cuộn lên đầu trang khi reset
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });
