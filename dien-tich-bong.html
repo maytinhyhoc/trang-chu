@@ -15,59 +15,67 @@
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
-        /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
+        /* --- APP FEEL OPTIMIZATIONS --- */
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: #f3f4f6; 
-            padding-bottom: 80px; /* Space for Bottom Nav */
+            padding-bottom: 70px; 
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
-        /* Cho phép chọn text ở input và kết quả */
         .result-text, input, textarea {
             -webkit-user-select: text;
             user-select: text;
         }
 
-        /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            from { opacity: 0; transform: translate3d(0, 10px, 0); }
             to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
         .animate-fade-in-up {
-            animation: fadeInUp 0.5s ease-out;
+            animation: fadeInUp 0.4s ease-out;
         }
         
-        /* Tùy chỉnh thanh cuộn */
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
 
-        /* --- CUSTOM STYLES CHO BODY MAP --- */
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         
-        /* Fix lỗi zoom trên iOS */
         @media screen and (max-width: 768px) {
             input[type="number"] { font-size: 16px !important; }
         }
         
-        /* Body Map Detailed Configuration */
-        .body-container { position: relative; width: 100%; max-width: 220px; margin: 0 auto; }
-        .body-container.child-view { max-width: 272px; }
+        /* Body Map Configuration - UPDATED SIZES */
+        .body-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 220px; /* UPDATED: Adult Width 220px */
+            margin: 0 auto; 
+        }
+        .body-container.child-view { 
+            /* Calculation:
+               Adult (220px width) -> Height approx 462px.
+               Child needs Height 462px to match.
+               Child Aspect Ratio (Height/Width) = 340/200 = 1.7.
+               Child Width = 462 / 1.7 ≈ 271.7px -> Round to 272px.
+            */
+            max-width: 272px; 
+        }
         
         @media (min-width: 768px) {
+            /* On tablet/desktop, keep them slightly uniform or let them grow */
             .body-container { max-width: 260px; }
             .body-container.child-view { max-width: 260px; }
         }
 
-        .body-part { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1.2; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; vector-effect: non-scaling-stroke; }
+        .body-part { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1.2; transition: all 0.15s ease; cursor: pointer; vector-effect: non-scaling-stroke; }
         .body-part:hover { fill: #e2e8f0; stroke: #64748b; }
-        .body-part.selected { fill: #ef4444; stroke: #991b1b; filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.5)); }
+        .body-part.selected { fill: #ef4444; stroke: #991b1b; filter: drop-shadow(0 0 1px rgba(239, 68, 68, 0.5)); }
         .hidden-map { display: none !important; }
-        /* Ẩn scrollbar ngang cho input group */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -75,6 +83,7 @@
 
 <body>
 
+<!-- Header Desktop (Original Size) -->
 <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
     <div class="flex items-center gap-3">
         <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
@@ -87,6 +96,7 @@
     </nav>
 </header>
 
+<!-- Header Mobile (Original Size) -->
 <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
     <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
         <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -97,74 +107,76 @@
     <div class="w-8"></div>
 </header>
 
-<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+<!-- Main Content -->
+<main class="flex-grow container mx-auto px-2 md:px-4 pt-20 md:pt-24 pb-2 max-w-4xl">
+    <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden animate-fade-in-up">
         
-        <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
+        <!-- Title Banner (Desktop only) -->
+        <div class="hidden md:flex bg-indigo-600 p-4 text-white items-center justify-between">
             <div class="flex items-center">
-                <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
-                    <i class="fa-solid fa-chevron-left"></i>
+                <a href="cong-cu.html" class="hidden md:flex w-8 h-8 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-3">
+                    <i class="fa-solid fa-chevron-left text-sm"></i>
                 </a>
                 <div>
-                    <h1 class="text-2xl font-bold">Tính Diện Tích Bỏng & Bù Dịch</h1>
-                    <p class="text-indigo-100 mt-1 text-sm">Hỗ trợ Lund-Browder (Trẻ em) & Wallace (Người lớn)</p>
+                    <h1 class="text-xl font-bold">Tính Diện Tích Bỏng & Bù Dịch</h1>
                 </div>
             </div>
-            <i class="fa-solid fa-fire-flame-curved text-4xl text-indigo-300 opacity-50"></i>
         </div>
 
-        <div class="p-4 md:p-8" id="tool-content">
-            <div class="mb-4 bg-indigo-50 rounded-xl p-3 md:p-6 border border-indigo-100">
-                <div class="flex flex-row items-end gap-3 md:gap-8 overflow-x-auto md:overflow-visible no-scrollbar pb-1">
+        <div class="p-2 md:p-6" id="tool-content">
+            <!-- INPUT AREA (Compact) -->
+            <div class="mb-2 bg-indigo-50/80 rounded-lg p-2 md:p-4 border border-indigo-100">
+                <div class="flex flex-row items-end gap-2 md:gap-6 overflow-x-auto md:overflow-visible no-scrollbar pb-1">
                     <div class="shrink-0">
-                        <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Đối tượng</label>
-                        <div class="flex bg-white rounded-lg p-0.5 border border-indigo-200 shadow-sm h-[36px] md:h-[44px]">
-                            <button type="button" id="mode-adult" class="px-3 md:px-6 rounded-md text-[11px] md:text-sm font-bold transition-all bg-indigo-600 text-white shadow-sm whitespace-nowrap leading-none flex items-center justify-center h-full">Người lớn</button>
-                            <button type="button" id="mode-child" class="px-3 md:px-6 rounded-md text-[11px] md:text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap leading-none flex items-center justify-center h-full">Trẻ em</button>
+                        <label class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Đối tượng</label>
+                        <div class="flex bg-white rounded-md p-0.5 border border-indigo-200 shadow-sm h-[32px] md:h-[38px]">
+                            <button type="button" id="mode-adult" class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold transition-all bg-indigo-600 text-white shadow-sm whitespace-nowrap leading-none flex items-center justify-center h-full">Người lớn</button>
+                            <button type="button" id="mode-child" class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap leading-none flex items-center justify-center h-full">Trẻ em</button>
                         </div>
                     </div>
 
-                    <div class="flex-1 min-w-[80px]">
-                        <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Cân nặng <span class="text-red-500">*</span></label>
-                        <div class="relative h-[36px] md:h-[44px]">
-                            <input type="number" id="weight" inputmode="decimal" placeholder="0" class="block w-full pl-3 pr-6 md:pr-10 h-full text-base font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg bg-white border shadow-sm">
-                            <div class="absolute inset-y-0 right-0 pr-2 md:pr-4 flex items-center pointer-events-none text-gray-400 font-bold text-[10px] md:text-sm">kg</div>
+                    <div class="flex-1 min-w-[70px]">
+                        <label class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Cân nặng <span class="text-red-500">*</span></label>
+                        <div class="relative h-[32px] md:h-[38px]">
+                            <input type="number" id="weight" inputmode="decimal" placeholder="0" class="block w-full pl-2 pr-5 md:pr-8 h-full text-sm font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white border shadow-sm">
+                            <div class="absolute inset-y-0 right-0 pr-1.5 md:pr-3 flex items-center pointer-events-none text-gray-400 font-bold text-[10px] md:text-xs">kg</div>
                         </div>
                     </div>
 
-                    <div id="age-input-group" class="w-[70px] md:w-[150px] hidden opacity-0 transition-all duration-300">
-                        <label class="block text-[10px] md:text-sm font-bold text-gray-500 mb-1 md:mb-2 uppercase truncate">Tuổi</label>
-                        <div class="relative h-[36px] md:h-[44px]">
-                            <input type="number" id="age" inputmode="numeric" placeholder="0" value="0" min="0" max="15" class="block w-full px-1 md:px-3 h-full text-base font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-lg bg-white border shadow-sm text-center">
-                            <div class="hidden md:flex absolute inset-y-0 right-0 pr-4 items-center pointer-events-none text-gray-400 font-bold text-sm">tuổi</div>
+                    <div id="age-input-group" class="w-[60px] md:w-[120px] hidden opacity-0 transition-all duration-300">
+                        <label class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Tuổi</label>
+                        <div class="relative h-[32px] md:h-[38px]">
+                            <input type="number" id="age" inputmode="numeric" placeholder="0" value="0" min="0" max="15" class="block w-full px-1 md:px-2 h-full text-sm font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white border shadow-sm text-center">
+                            <div class="hidden md:flex absolute inset-y-0 right-0 pr-3 items-center pointer-events-none text-gray-400 font-bold text-xs">tuổi</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="mb-4">
-                <div class="flex justify-between items-start mb-2 sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 border-b border-gray-100 md:static md:bg-transparent md:border-none">
-                    <div class="flex flex-col gap-1">
+            <!-- MAP AREA -->
+            <div class="mb-2">
+                <!-- Sticky Control Bar (Compact) -->
+                <div class="flex justify-between items-center mb-1 sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-1 border-b border-gray-100 md:static md:bg-transparent md:border-none">
+                    <div class="flex flex-col gap-0.5">
                         <div class="flex items-center gap-2">
-                            <h3 class="text-xs uppercase tracking-wide text-gray-500 font-bold flex items-center">
-                                <i class="fa-solid fa-hand-pointer mr-1.5"></i>Chọn vùng
-                            </h3>
-                            <div class="md:hidden flex bg-gray-100 rounded-md p-0.5 w-fit border border-gray-200 scale-90 origin-left">
-                                <button type="button" id="view-front-btn" class="px-3 py-0.5 rounded-[3px] text-[10px] font-bold text-indigo-600 bg-white shadow-sm transition-all leading-none">Trước</button>
-                                <button type="button" id="view-back-btn" class="px-3 py-0.5 rounded-[3px] text-[10px] font-bold text-gray-500 hover:text-indigo-600 transition-all leading-none">Sau</button>
+                            <div class="md:hidden flex bg-gray-100 rounded p-0.5 w-fit border border-gray-200">
+                                <button type="button" id="view-front-btn" class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-indigo-600 bg-white shadow-sm transition-all leading-none">Trước</button>
+                                <button type="button" id="view-back-btn" class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-gray-500 hover:text-indigo-600 transition-all leading-none">Sau</button>
                             </div>
+                            <span id="chart-info" class="text-[10px] text-gray-400 font-medium leading-none hidden md:inline-block">Wallace (Người lớn)</span>
                         </div>
-                        <span id="chart-info" class="text-[10px] text-indigo-500 font-semibold leading-none">Wallace (Người lớn)</span>
                     </div>
-                    <div class="bg-red-50 text-red-600 px-3 py-1.5 rounded-xl text-lg font-bold border border-red-100 shadow-sm flex flex-col items-center min-w-[70px]">
+                    <!-- Total Percentage Badge -->
+                    <div class="bg-red-50 text-red-600 px-2.5 py-1 rounded-lg text-base font-bold border border-red-100 shadow-sm flex items-center gap-1.5 min-w-[60px] justify-center">
                         <span class="text-[9px] text-red-400 font-medium uppercase leading-none">Tổng</span>
                         <div class="leading-none"><span id="total-tbsa">0</span>%</div>
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 bg-white rounded-xl justify-items-center relative">
+                <!-- SVG Map Container (Min-height updated to 462px to match new size) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 bg-white rounded-lg justify-items-center relative" style="min-height: 462px;">
                     <div id="container-adult-front" class="body-container adult-view">
-                        <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT TRƯỚC</div>
+                        <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT TRƯỚC</div>
                         <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path class="body-part" data-name="Đầu (Trước)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
                             <path class="body-part" data-name="Cổ (Trước)" data-value="1" d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
@@ -187,7 +199,7 @@
                     </div>
 
                     <div id="container-adult-back" class="body-container adult-view hidden md:block">
-                        <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT SAU</div>
+                        <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT SAU</div>
                         <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path class="body-part" data-name="Đầu (Sau)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
                             <path class="body-part" data-name="Cổ (Sau)" data-value="1" d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
@@ -211,7 +223,7 @@
                     </div>
 
                     <div id="container-child-front" class="body-container child-view hidden-map">
-                        <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT TRƯỚC</div>
+                        <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT TRƯỚC</div>
                         <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path id="child-head-front" class="body-part" data-name="Đầu (Trước)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
                             <path id="child-neck-front" class="body-part" data-name="Cổ (Trước)" data-value="1" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
@@ -233,7 +245,7 @@
                     </div>
 
                     <div id="container-child-back" class="body-container child-view hidden-map hidden md:block">
-                        <div class="hidden md:block text-center text-xs font-bold text-gray-400 mb-2">MẶT SAU</div>
+                        <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT SAU</div>
                         <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
                             <path id="child-head-back" class="body-part" data-name="Đầu (Sau)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
                             <path id="child-neck-back" class="body-part" data-name="Cổ (Sau)" data-value="1" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
@@ -256,66 +268,58 @@
                     </div>
                 </div>
                 
-                <div id="selected-part-name" class="h-6 text-center text-sm font-semibold text-indigo-600 mt-2 transition-opacity opacity-0">...</div>
+                <div id="selected-part-name" class="h-5 text-center text-xs font-semibold text-indigo-600 mt-1 transition-opacity opacity-0">...</div>
             </div>
 
-            <div class="mt-2 grid grid-cols-2 gap-3 md:gap-4">
-                <button type="button" id="btn-reset" class="flex items-center justify-center py-3 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition active:scale-95">
-                    <i class="fa-solid fa-rotate-right mr-2"></i>Nhập lại
+            <!-- Action Buttons -->
+            <div class="mt-1 grid grid-cols-2 gap-3">
+                <button type="button" id="btn-reset" class="flex items-center justify-center py-2.5 px-3 rounded-lg border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition active:scale-95">
+                    <i class="fa-solid fa-rotate-right mr-1.5"></i>Nhập lại
                 </button>
-                <button type="button" id="btn-calc" class="flex items-center justify-center py-3 px-4 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition active:scale-95">
-                    <i class="fa-solid fa-calculator mr-2"></i>Tính toán
+                <button type="button" id="btn-calc" class="flex items-center justify-center py-2.5 px-3 rounded-lg bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition active:scale-95">
+                    <i class="fa-solid fa-calculator mr-1.5"></i>Tính toán
                 </button>
             </div>
             
-            <div id="result-area" class="hidden mt-6 bg-white border border-indigo-100 rounded-xl overflow-hidden animate-fade-in-up shadow-sm">
-                <div class="bg-indigo-50 p-4 border-b border-indigo-100 flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                        <i class="fa-solid fa-prescription-bottle-medical"></i>
+            <!-- Result Area (Compact) -->
+            <div id="result-area" class="hidden mt-3 bg-white border border-indigo-100 rounded-lg overflow-hidden animate-fade-in-up shadow-sm">
+                <div class="bg-indigo-50 p-3 border-b border-indigo-100 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                        <i class="fa-solid fa-prescription-bottle-medical text-sm"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-gray-900">Kết quả & Phác đồ</h4>
-                        <p class="text-xs text-indigo-600 font-medium" id="result-subtitle">Parkland Formula</p>
+                        <h4 class="font-bold text-sm text-gray-900">Kết quả & Phác đồ</h4>
+                        <p class="text-[10px] text-indigo-600 font-medium" id="result-subtitle">Parkland Formula</p>
                     </div>
                 </div>
                 
-                <div class="p-5">
-                    <div class="flex justify-between items-end mb-2">
-                        <span class="text-gray-600 text-sm">Tổng lượng dịch 24h:</span>
-                        <span class="text-2xl font-bold text-indigo-700" id="res-total">0 ml</span>
+                <div class="p-3">
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-gray-600 text-xs">Tổng 24h:</span>
+                        <span class="text-lg font-bold text-indigo-700" id="res-total">0 ml</span>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 100%"></div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5 mb-3">
+                        <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 100%"></div>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4">
-                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 relative overflow-hidden">
-                            <div class="absolute right-0 top-0 p-2 opacity-10"><i class="fa-solid fa-hourglass-start text-4xl"></i></div>
-                            <p class="text-xs font-bold text-blue-600 uppercase mb-1">8 giờ đầu</p>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-xl font-bold text-gray-800" id="res-first-8">0</span>
-                                <span class="text-sm text-gray-600">ml</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-blue-50 p-2.5 rounded border border-blue-100 relative overflow-hidden">
+                            <p class="text-[10px] font-bold text-blue-600 uppercase mb-0.5">8 giờ đầu</p>
+                            <div class="flex items-baseline gap-0.5">
+                                <span class="text-lg font-bold text-gray-800" id="res-first-8">0</span>
+                                <span class="text-[10px] text-gray-600">ml</span>
                             </div>
-                            <p class="text-xs text-gray-500 mt-1">Tốc độ: <span id="rate-first-8" class="font-semibold">0</span> ml/giờ</p>
+                            <p class="text-[10px] text-gray-500 mt-0.5">Tốc độ: <span id="rate-first-8" class="font-semibold">0</span> ml/h</p>
                         </div>
 
-                        <div class="bg-teal-50 p-4 rounded-lg border border-teal-100 relative overflow-hidden">
-                            <div class="absolute right-0 top-0 p-2 opacity-10"><i class="fa-solid fa-hourglass-end text-4xl"></i></div>
-                            <p class="text-xs font-bold text-teal-600 uppercase mb-1">16 giờ tiếp theo</p>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-xl font-bold text-gray-800" id="res-next-16">0</span>
-                                <span class="text-sm text-gray-600">ml</span>
+                        <div class="bg-teal-50 p-2.5 rounded border border-teal-100 relative overflow-hidden">
+                            <p class="text-[10px] font-bold text-teal-600 uppercase mb-0.5">16 giờ sau</p>
+                            <div class="flex items-baseline gap-0.5">
+                                <span class="text-lg font-bold text-gray-800" id="res-next-16">0</span>
+                                <span class="text-[10px] text-gray-600">ml</span>
                             </div>
-                             <p class="text-xs text-gray-500 mt-1">Tốc độ: <span id="rate-next-16" class="font-semibold">0</span> ml/giờ</p>
+                             <p class="text-[10px] text-gray-500 mt-0.5">Tốc độ: <span id="rate-next-16" class="font-semibold">0</span> ml/h</p>
                         </div>
-                    </div>
-                    
-                    <div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-100 flex gap-3 items-start">
-                         <i class="fa-solid fa-circle-info text-yellow-500 mt-0.5 text-sm"></i>
-                         <p class="text-xs text-yellow-700 text-justify">
-                            Công thức: <strong>4ml (hoặc 3ml với trẻ em) × Cân nặng × %Diện tích</strong>.
-                            Lưu ý: Với trẻ em < 14 tuổi, cần bổ sung nhu cầu duy trì cơ bản (Dịch duy trì) bằng Dextrose 5% trong 0.45% NaCl. Công cụ này hiện chỉ tính lượng dịch bù do bỏng (Dịch hồi sức).
-                        </p>
                     </div>
                 </div>
             </div>
@@ -354,19 +358,19 @@
     </div>
 </div>
 
-<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-14 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
     <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
         <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
+            <i class="fa-solid fa-house text-lg mb-1 group-hover:text-teal-600"></i>
+            <span class="text-[9px] group-hover:text-teal-600">Trang chủ</span>
         </a>
         <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-            <i class="fa-solid fa-calculator text-xl mb-1"></i>
-            <span class="text-[10px]">Công cụ</span>
+            <i class="fa-solid fa-calculator text-lg mb-1"></i>
+            <span class="text-[9px]">Công cụ</span>
         </a>
         <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[10px] group-hover:text-teal-600">Khác</span>
+            <i class="fa-solid fa-bars text-lg mb-1 group-hover:text-teal-600"></i>
+            <span class="text-[9px] group-hover:text-teal-600">Khác</span>
         </button>
     </div>
 </nav>
