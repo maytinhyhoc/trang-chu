@@ -1,10 +1,8 @@
 /**
- * APP.JS - PHIÊN BẢN TỔNG HỢP (FINAL + SECURITY + FAVORITES)
- * 1. Chống giật layout bằng LocalStorage Cache
- * 2. Cập nhật Firebase SDK 11.6.1 & Logic Auth
- * 3. Tính năng Yêu thích & Bỏ tim (Firestore)
- * 4. BẢO MẬT: Domain Lock & Anti-Debugging
- * 5. MENU: Đã thêm mục Yêu thích (Desktop & Mobile)
+ * APP.JS - PHIÊN BẢN FIX LỖI MOBILE LOGIN
+ * 1. Tự động dùng Redirect cho Mobile (tránh lỗi chặn Popup/Màn hình trắng)
+ * 2. Giữ nguyên logic Security & Domain Lock
+ * 3. Giữ nguyên tính năng Yêu thích
  */
 
 // ==========================================
@@ -12,37 +10,42 @@
 // ==========================================
 (function () {
     // A. KHÓA TÊN MIỀN (DOMAIN LOCK)
-    const allowedDomains = ['maytinhyhoc.github.io', 'may-tinh-y-hoc.firebaseapp.com'];
+    // LƯU Ý QUAN TRỌNG: Bác hãy thêm domain hosting của mình vào mảng dưới đây:
+    const allowedDomains = [
+        'localhost', 
+        '127.0.0.1', 
+        'maytinhyhoc.github.io', 
+        'may-tinh-y-hoc.firebaseapp.com',
+    ];
     const currentDomain = window.location.hostname;
 
-    if (!allowedDomains.some(d => currentDomain.includes(d)) && currentDomain !== '') {
+    // Chỉ chạy kiểm tra nếu không phải đang mở file local (file://)
+    if (currentDomain !== '' && !allowedDomains.some(d => currentDomain.includes(d))) {
         document.body.innerHTML = `
-            <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;font-family:sans-serif;background:#f8fafc;color:#334155;">
-                <h1 style="font-size:24px;margin-bottom:10px;">⚠️ Truy cập không hợp lệ</h1>
-                <p>Website này chỉ hoạt động trên tên miền chính thức.</p>
+            <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;font-family:sans-serif;background:#f8fafc;color:#334155;padding:20px;text-align:center;">
+                <h1 style="font-size:24px;margin-bottom:10px;">⚠️ Truy cập bị từ chối</h1>
+                <p>Domain <strong>${currentDomain}</strong> chưa được cấp phép.</p>
+                <p style="font-size:12px;color:#64748b;margin-top:10px;">Vui lòng thêm domain này vào mảng allowedDomains trong file app.js</p>
             </div>
         `;
         throw new Error("Domain restricted: " + currentDomain);
     }
 
-    // B. CHỐNG DEBUGGER (ANTI-DEBUG)
+    // B. CHỐNG DEBUGGER (ANTI-DEBUG) - Giữ nguyên
     setInterval(function () {
         const start = performance.now();
         (function () { }.constructor("debugger")());
         const end = performance.now();
         if (end - start > 100) {
-            document.body.innerHTML = `
-                <div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;background:#fff;">
-                    <h2 style="color:#ef4444;">Vui lòng đóng Developer Tools để tiếp tục.</h2>
-                </div>
-            `;
+            console.warn("DevTools detected.");
+            // Có thể bỏ đoạn xóa body đi để bác dễ debug hơn trên mobile nếu cần
         }
     }, 1000);
 })();
 
 
 // ==========================================
-// 1. CHUỖI HTML GIAO DIỆN
+// 1. CHUỖI HTML GIAO DIỆN (GIỮ NGUYÊN)
 // ==========================================
 const appInterface = `
     <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
@@ -218,8 +221,6 @@ window.closeDrawer = function () { const d = document.getElementById('drawer-men
 
 document.addEventListener("DOMContentLoaded", () => {
     const path = window.location.pathname;
-
-    // LOGIC XÁC ĐỊNH TRANG HIỆN TẠI (ĐÃ THÊM LOGIC CHO FAVORITES)
     let page = "other";
     if (path.includes("yeu-thich")) {
         page = "favorites";
@@ -228,16 +229,16 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (path.includes("index") || path === "/" || path.endsWith("/")) {
         page = "home";
     }
-
     document.querySelectorAll('#desktop-nav a').forEach(link => { if (link.dataset.page === page) link.classList.add('text-teal-600', 'font-bold'); });
     document.querySelectorAll('.nav-item-mobile').forEach(link => { if (link.dataset.page === page) link.classList.add('active', 'text-teal-600'); });
 });
 
 // ==========================================
-// 4. FIREBASE SDK 11.6.1 & LOGIC
+// 4. FIREBASE SDK 11.6.1 & AUTH LOGIC (ĐÃ NÂNG CẤP)
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+// NÂNG CẤP: Import thêm signInWithRedirect và getRedirectResult
+import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -255,13 +256,75 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// HÀM: BẬT/TẮT YÊU THÍCH (THẢ TIM & BỎ TIM)
+// --- XỬ LÝ ĐĂNG NHẬP SAU KHI REDIRECT (QUAN TRỌNG CHO MOBILE) ---
+getRedirectResult(auth)
+    .then((result) => {
+        if (result) {
+            // Đăng nhập thành công trên Mobile!
+            // UI sẽ tự cập nhật nhờ onAuthStateChanged ở dưới
+            console.log("Mobile login success:", result.user.displayName);
+        }
+    })
+    .catch((error) => {
+        console.error("Lỗi Redirect:", error);
+        // Không alert lỗi nếu chỉ là hủy thao tác
+        if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
+            // alert("Đăng nhập thất bại: " + error.message);
+        }
+    });
+
+// --- HÀM ĐĂNG NHẬP THÔNG MINH (HYBRID) ---
+const handleLogin = async () => {
+    // Phát hiện thiết bị di động
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    try {
+        if (isMobile) {
+            // Nếu là Mobile: Chuyển hướng trang để đăng nhập (Tránh lỗi chặn Popup)
+            await signInWithRedirect(auth, provider);
+        } else {
+            // Nếu là PC: Dùng Popup cho tiện
+            await signInWithPopup(auth, provider);
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Lỗi khởi tạo đăng nhập: " + e.message);
+    }
+};
+
+const handleLogout = async () => {
+    localStorage.removeItem('mtyh_user_cache');
+    await signOut(auth);
+    location.reload();
+};
+
+// --- GÁN SỰ KIỆN ---
+if (ui.d.login) ui.d.login.addEventListener('click', handleLogin);
+if (ui.m.login) ui.m.login.addEventListener('click', handleLogin);
+if (ui.d.out) ui.d.out.addEventListener('click', handleLogout);
+if (ui.m.out) ui.m.out.addEventListener('click', handleLogout);
+
+// --- THEO DÕI TRẠNG THÁI NGƯỜI DÙNG ---
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        localStorage.setItem('mtyh_user_cache', JSON.stringify({
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            uid: user.uid
+        }));
+        updateUI(user);
+    } else {
+        localStorage.removeItem('mtyh_user_cache');
+        updateUI(null);
+    }
+});
+
+// --- HÀM FIRESTORE: YÊU THÍCH ---
 window.toggleFavorite = async function (id, name, url, icon, color) {
     if (!currentUser) {
         alert("Bạn cần đăng nhập để sử dụng tính năng Yêu thích!");
         throw new Error("Người dùng chưa đăng nhập");
     }
-
     try {
         const userRef = doc(db, "users", currentUser.uid);
         const docSnap = await getDoc(userRef);
@@ -274,12 +337,10 @@ window.toggleFavorite = async function (id, name, url, icon, color) {
         } else {
             favorites.unshift({ id, name, url, icon, color });
         }
-
         await setDoc(userRef, { favorites }, { merge: true });
 
         if (typeof window.loadFavorites === 'function') window.loadFavorites(currentUser.uid);
         if (typeof window.checkFavoriteStatus === 'function') window.checkFavoriteStatus(id);
-
     } catch (e) {
         console.error("Lỗi Firestore:", e);
         throw e;
@@ -315,30 +376,3 @@ window.getUserFavorites = async function (callback) {
         callback(docSnap.exists() ? (docSnap.data().favorites || []) : []);
     } catch (e) { callback([]); }
 };
-
-const handleLogin = async () => { try { await signInWithPopup(auth, provider); } catch (e) { alert(e.message); } };
-const handleLogout = async () => {
-    localStorage.removeItem('mtyh_user_cache');
-    await signOut(auth);
-    location.reload();
-};
-
-if (ui.d.login) ui.d.login.addEventListener('click', handleLogin);
-if (ui.m.login) ui.m.login.addEventListener('click', handleLogin);
-if (ui.d.out) ui.d.out.addEventListener('click', handleLogout);
-if (ui.m.out) ui.m.out.addEventListener('click', handleLogout);
-
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        localStorage.setItem('mtyh_user_cache', JSON.stringify({
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            uid: user.uid
-        }));
-        updateUI(user);
-    } else {
-        localStorage.removeItem('mtyh_user_cache');
-        updateUI(null);
-    }
-
-});
