@@ -1,80 +1,90 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thang điểm ISTH DIC</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 90px; /* Tăng khoảng trống dưới cùng để cuộn thoải mái hơn */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 90px;
+            /* Tăng khoảng trống dưới cùng để cuộn thoải mái hơn */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
+            /* Ngăn chọn text toàn trang */
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
         /* Cho phép chọn text ở input và kết quả */
-        .result-text, input, textarea {
+        .result-text,
+        input,
+        textarea {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-        
+
         /* Custom Radio Style for Cards */
-        .custom-radio:checked + label {
+        .custom-radio:checked+label {
             background-color: #eef2ff;
             border-color: #6366f1;
             color: #4338ca;
             box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1), 0 2px 4px -1px rgba(99, 102, 241, 0.06);
         }
-        .custom-radio:checked + label .check-icon {
+
+        .custom-radio:checked+label .check-icon {
             opacity: 1;
             transform: scale(1);
         }
 
         /* Tùy chỉnh thanh cuộn nếu cần */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
     </style>
 </head>
+
 <body class="flex flex-col min-h-screen">
 
-    <!-- Header Desktop (Giữ nguyên) -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
-
-    <!-- Header Mobile (Giữ nguyên) -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -82,133 +92,151 @@
         <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
             Thang điểm ISTH DIC
         </h1>
-        <div class="w-8"></div> 
+        <div class="w-8"></div>
     </header>
 
-    <!-- Main Content: Đã tối ưu padding cho mobile (pt-[68px], px-3) -->
     <main class="flex-grow container mx-auto px-3 md:px-4 pt-[68px] md:pt-24 pb-4 max-w-4xl">
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            
+
             <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <div>
                         <h1 class="text-2xl font-bold">Thang điểm ISTH chẩn đoán DIC</h1>
-                        <p class="text-indigo-100 mt-1 text-sm">Tiêu chuẩn vàng chẩn đoán Đông máu nội mạch lan tỏa (2001)</p>
+                        <p class="text-indigo-100 mt-1 text-sm">Tiêu chuẩn vàng chẩn đoán Đông máu nội mạch lan tỏa
+                            (2001)</p>
                     </div>
                 </div>
                 <i class="fa-solid fa-file-medical text-4xl text-indigo-300 opacity-50"></i>
             </div>
-    
-            <!-- Content Padding: Giảm p-4 xuống p-3 trên mobile -->
+
             <div class="p-3 md:p-8">
-                
-                <!-- Alert Box: Giảm mb-6 xuống mb-4 -->
-                <div class="mb-4 md:mb-6 p-3 md:p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 text-sm rounded-r-lg shadow-sm">
+
+                <div
+                    class="mb-4 md:mb-6 p-3 md:p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 text-sm rounded-r-lg shadow-sm">
                     <div class="flex">
                         <i class="fa-solid fa-triangle-exclamation mr-3 mt-0.5"></i>
                         <div>
-                            <strong>Lưu ý quan trọng:</strong> Thang điểm chỉ áp dụng cho bệnh nhân có bệnh lý nền nguy cơ cao (nhiễm trùng huyết, chấn thương...).
+                            <strong>Lưu ý quan trọng:</strong> Thang điểm chỉ áp dụng cho bệnh nhân có bệnh lý nền nguy
+                            cơ cao (nhiễm trùng huyết, chấn thương...).
                         </div>
                     </div>
                 </div>
 
-                <!-- Form: Giảm space-y-6 xuống space-y-4 trên mobile -->
                 <form id="tool-form" class="space-y-4 md:space-y-6" novalidate>
-                    
-                    <!-- Câu 1 -->
+
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1.5 md:mb-2 uppercase tracking-wide">
-                            <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">1</span>Số lượng Tiểu cầu
+                            <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">1</span>Số lượng Tiểu
+                            cầu
                         </label>
                         <div class="grid grid-cols-3 gap-2">
                             <div class="relative">
-                                <input type="radio" name="platelets" id="plt_0" value="0" class="custom-radio peer sr-only">
-                                <label for="plt_0" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                <input type="radio" name="platelets" id="plt_0" value="0"
+                                    class="custom-radio peer sr-only">
+                                <label for="plt_0"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
                                     <div class="w-full">
                                         <div class="font-bold text-sm text-gray-800 leading-tight">> 100</div>
                                         <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
                                     </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
                                         <i class="fa-solid fa-circle-check text-sm"></i>
                                     </div>
                                 </label>
                             </div>
                             <div class="relative">
-                                <input type="radio" name="platelets" id="plt_1" value="1" class="custom-radio peer sr-only">
-                                <label for="plt_1" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                <input type="radio" name="platelets" id="plt_1" value="1"
+                                    class="custom-radio peer sr-only">
+                                <label for="plt_1"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
                                     <div class="w-full">
-                                        <div class="font-bold text-sm text-gray-800 leading-tight">< 100</div>
-                                        <div class="text-[10px] text-gray-500 mt-1">1 điểm</div>
-                                    </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
-                                        <i class="fa-solid fa-circle-check text-sm"></i>
-                                    </div>
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">
+                                            < 100</div>
+                                                <div class="text-[10px] text-gray-500 mt-1">1 điểm</div>
+                                        </div>
+                                        <div
+                                            class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                            <i class="fa-solid fa-circle-check text-sm"></i>
+                                        </div>
                                 </label>
                             </div>
                             <div class="relative">
-                                <input type="radio" name="platelets" id="plt_2" value="2" class="custom-radio peer sr-only">
-                                <label for="plt_2" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                <input type="radio" name="platelets" id="plt_2" value="2"
+                                    class="custom-radio peer sr-only">
+                                <label for="plt_2"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
                                     <div class="w-full">
-                                        <div class="font-bold text-sm text-gray-800 leading-tight">< 50</div>
-                                        <div class="text-[10px] text-gray-500 mt-1">2 điểm</div>
-                                    </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
-                                        <i class="fa-solid fa-circle-check text-sm"></i>
-                                    </div>
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">
+                                            < 50</div>
+                                                <div class="text-[10px] text-gray-500 mt-1">2 điểm</div>
+                                        </div>
+                                        <div
+                                            class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                            <i class="fa-solid fa-circle-check text-sm"></i>
+                                        </div>
                                 </label>
                             </div>
                         </div>
                     </div>
-        
-                    <!-- Câu 2 -->
+
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1.5 md:mb-2 uppercase tracking-wide">
                             <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">2</span>D-Dimer/FDP
                         </label>
                         <div class="grid grid-cols-3 gap-2">
                             <div class="relative">
-                                <input type="radio" name="ddimer" id="ddimer_0" value="0" class="custom-radio peer sr-only">
-                                <label for="ddimer_0" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                <input type="radio" name="ddimer" id="ddimer_0" value="0"
+                                    class="custom-radio peer sr-only">
+                                <label for="ddimer_0"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
                                     <div class="w-full">
                                         <div class="font-bold text-sm text-gray-800 leading-tight">Không tăng</div>
                                         <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
                                     </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
                                         <i class="fa-solid fa-circle-check text-sm"></i>
                                     </div>
                                 </label>
                             </div>
                             <div class="relative">
-                                <input type="radio" name="ddimer" id="ddimer_2" value="2" class="custom-radio peer sr-only">
-                                <label for="ddimer_2" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                <input type="radio" name="ddimer" id="ddimer_2" value="2"
+                                    class="custom-radio peer sr-only">
+                                <label for="ddimer_2"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
                                     <div class="w-full">
                                         <div class="font-bold text-sm text-gray-800 leading-tight">Tăng vừa</div>
                                         <div class="text-[10px] text-gray-500 mt-1">2 điểm</div>
                                     </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
                                         <i class="fa-solid fa-circle-check text-sm"></i>
                                     </div>
                                 </label>
                             </div>
                             <div class="relative">
-                                <input type="radio" name="ddimer" id="ddimer_3" value="3" class="custom-radio peer sr-only">
-                                <label for="ddimer_3" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                <input type="radio" name="ddimer" id="ddimer_3" value="3"
+                                    class="custom-radio peer sr-only">
+                                <label for="ddimer_3"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
                                     <div class="w-full">
                                         <div class="font-bold text-sm text-gray-800 leading-tight">Tăng mạnh</div>
                                         <div class="text-[10px] text-gray-500 mt-1">3 điểm</div>
                                     </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
                                         <i class="fa-solid fa-circle-check text-sm"></i>
                                     </div>
                                 </label>
                             </div>
                         </div>
                     </div>
-        
-                    <!-- Câu 3 -->
+
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1.5 md:mb-2 uppercase tracking-wide">
                             <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">3</span>PT kéo dài
@@ -216,69 +244,43 @@
                         <div class="grid grid-cols-3 gap-2">
                             <div class="relative">
                                 <input type="radio" name="pt" id="pt_0" value="0" class="custom-radio peer sr-only">
-                                <label for="pt_0" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                <label for="pt_0"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
                                     <div class="w-full">
-                                        <div class="font-bold text-sm text-gray-800 leading-tight">< 3s</div>
-                                        <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
-                                    </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
-                                        <i class="fa-solid fa-circle-check text-sm"></i>
-                                    </div>
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">
+                                            < 3s</div>
+                                                <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
+                                        </div>
+                                        <div
+                                            class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                            <i class="fa-solid fa-circle-check text-sm"></i>
+                                        </div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input type="radio" name="pt" id="pt_1" value="1" class="custom-radio peer sr-only">
-                                <label for="pt_1" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                <label for="pt_1"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
                                     <div class="w-full">
                                         <div class="font-bold text-sm text-gray-800 leading-tight">3 - 6s</div>
                                         <div class="text-[10px] text-gray-500 mt-1">1 điểm</div>
                                     </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
                                         <i class="fa-solid fa-circle-check text-sm"></i>
                                     </div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input type="radio" name="pt" id="pt_2" value="2" class="custom-radio peer sr-only">
-                                <label for="pt_2" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                <label for="pt_2"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
                                     <div class="w-full">
                                         <div class="font-bold text-sm text-gray-800 leading-tight">> 6s</div>
                                         <div class="text-[10px] text-gray-500 mt-1">2 điểm</div>
                                     </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
-                                        <i class="fa-solid fa-circle-check text-sm"></i>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-        
-                    <!-- Câu 4 -->
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1.5 md:mb-2 uppercase tracking-wide">
-                            <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">4</span>Fibrinogen
-                        </label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div class="relative">
-                                <input type="radio" name="fibrinogen" id="fib_0" value="0" class="custom-radio peer sr-only">
-                                <label for="fib_0" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
-                                    <div class="w-full">
-                                        <div class="font-bold text-sm text-gray-800 leading-tight">> 1.0 g/L</div>
-                                        <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
-                                    </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
-                                        <i class="fa-solid fa-circle-check text-sm"></i>
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="relative">
-                                <input type="radio" name="fibrinogen" id="fib_1" value="1" class="custom-radio peer sr-only">
-                                <label for="fib_1" class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
-                                    <div class="w-full">
-                                        <div class="font-bold text-sm text-gray-800 leading-tight">< 1.0 g/L</div>
-                                        <div class="text-[10px] text-gray-500 mt-1">1 điểm</div>
-                                    </div>
-                                    <div class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
                                         <i class="fa-solid fa-circle-check text-sm"></i>
                                     </div>
                                 </label>
@@ -286,11 +288,52 @@
                         </div>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1.5 md:mb-2 uppercase tracking-wide">
+                            <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">4</span>Fibrinogen
+                        </label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="relative">
+                                <input type="radio" name="fibrinogen" id="fib_0" value="0"
+                                    class="custom-radio peer sr-only">
+                                <label for="fib_0"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">> 1.0 g/L</div>
+                                        <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
+                                    </div>
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                        <i class="fa-solid fa-circle-check text-sm"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" name="fibrinogen" id="fib_1" value="1"
+                                    class="custom-radio peer sr-only">
+                                <label for="fib_1"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">
+                                            < 1.0 g/L</div>
+                                                <div class="text-[10px] text-gray-500 mt-1">1 điểm</div>
+                                        </div>
+                                        <div
+                                            class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                            <i class="fa-solid fa-circle-check text-sm"></i>
+                                        </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="pt-2 md:pt-4 flex gap-3">
-                        <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3 md:py-3.5 px-4 md:px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-indigo-700 transition transform active:scale-95 flex items-center justify-center text-base md:text-lg">
+                        <button type="submit"
+                            class="flex-1 bg-indigo-600 text-white font-bold py-3 md:py-3.5 px-4 md:px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-indigo-700 transition transform active:scale-95 flex items-center justify-center text-base md:text-lg">
                             <i class="fa-solid fa-calculator mr-2"></i> Tính
                         </button>
-                        <button type="button" id="clearBtn" class="flex-1 bg-white text-gray-600 border border-gray-200 font-bold py-3 md:py-3.5 px-4 md:px-6 rounded-xl shadow-sm hover:shadow-md hover:bg-gray-50 transition active:scale-95 flex items-center justify-center text-base md:text-lg">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-600 border border-gray-200 font-bold py-3 md:py-3.5 px-4 md:px-6 rounded-xl shadow-sm hover:shadow-md hover:bg-gray-50 transition active:scale-95 flex items-center justify-center text-base md:text-lg">
                             <i class="fa-solid fa-rotate-left mr-2"></i> Làm Mới
                         </button>
                     </div>
@@ -298,28 +341,42 @@
                 </form>
 
                 <div id="result-container" class="mt-5 md:mt-8 hidden animate-fade-in-up">
-                    <div class="relative overflow-hidden rounded-2xl border-2 border-indigo-100 bg-indigo-50/50 p-4 md:p-6 text-center">
-                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-600"></div>
-                        
-                        <h3 class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wide mb-1 md:mb-2">Tổng điểm ISTH</h3>
-                        <div id="main-result" class="text-4xl md:text-5xl font-extrabold text-indigo-700 mb-3 md:mb-4 drop-shadow-sm">--</div>
-                        
-                        <div class="bg-white rounded-xl p-3 md:p-4 shadow-sm border border-indigo-50 inline-block w-full">
-                            <p id="sub-result" class="text-base md:text-lg font-medium text-gray-800 leading-relaxed">...</p>
+                    <div
+                        class="relative overflow-hidden rounded-2xl border-2 border-indigo-100 bg-indigo-50/50 p-4 md:p-6 text-center">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-600">
+                        </div>
+
+                        <h3 class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wide mb-1 md:mb-2">Tổng
+                            điểm ISTH</h3>
+                        <div id="main-result"
+                            class="text-4xl md:text-5xl font-extrabold text-indigo-700 mb-3 md:mb-4 drop-shadow-sm">--
+                        </div>
+
+                        <div
+                            class="bg-white rounded-xl p-3 md:p-4 shadow-sm border border-indigo-50 inline-block w-full">
+                            <p id="sub-result" class="text-base md:text-lg font-medium text-gray-800 leading-relaxed">
+                                ...</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-100">
-                    <button class="w-full flex items-center justify-between text-left font-bold text-gray-700 hover:text-indigo-600 transition" onclick="document.getElementById('info-content').classList.toggle('hidden');">
-                        <span class="flex items-center"><i class="fa-solid fa-circle-info text-indigo-500 mr-2"></i> Chi tiết & Phân giải</span>
+                    <button
+                        class="w-full flex items-center justify-between text-left font-bold text-gray-700 hover:text-indigo-600 transition"
+                        onclick="document.getElementById('info-content').classList.toggle('hidden');">
+                        <span class="flex items-center"><i class="fa-solid fa-circle-info text-indigo-500 mr-2"></i> Chi
+                            tiết & Phân giải</span>
                         <i class="fa-solid fa-chevron-down text-sm"></i>
                     </button>
-                    <div id="info-content" class="mt-3 md:mt-4 hidden text-sm text-gray-600 space-y-2 md:space-y-3 bg-gray-50 p-3 md:p-4 rounded-xl">
+                    <div id="info-content"
+                        class="mt-3 md:mt-4 hidden text-sm text-gray-600 space-y-2 md:space-y-3 bg-gray-50 p-3 md:p-4 rounded-xl">
                         <p><strong>1. Phân giải kết quả:</strong></p>
                         <ul class="list-disc pl-5 space-y-1">
-                            <li><strong><span class="text-red-600 font-semibold">≥ 5 điểm:</span></strong> Phù hợp với chẩn đoán DIC điển hình (Overt DIC).</li>
-                            <li><strong><span class="text-indigo-600 font-semibold">< 5 điểm:</span></strong> Chưa đủ tiêu chuẩn DIC điển hình (Non-overt DIC). Theo dõi và làm lại sau <strong>12-24h</strong>.</li>
+                            <li><strong><span class="text-red-600 font-semibold">≥ 5 điểm:</span></strong> Phù hợp với
+                                chẩn đoán DIC điển hình (Overt DIC).</li>
+                            <li><strong><span class="text-indigo-600 font-semibold">
+                                        < 5 điểm:</span></strong> Chưa đủ tiêu chuẩn DIC điển hình (Non-overt DIC). Theo
+                                dõi và làm lại sau <strong>12-24h</strong>.</li>
                         </ul>
                         <p><strong>2. Thông tin thêm:</strong> Tiêu chuẩn ISTH 2001.</p>
                     </div>
@@ -329,63 +386,19 @@
         </div>
     </main>
 
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
@@ -410,7 +423,7 @@
 
         // --- 2. LOGIC DRAWER MENU ---
         function openDrawer(e) {
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
             const drawer = document.getElementById('drawer-menu');
             const overlay = document.getElementById('drawer-overlay');
             overlay.classList.remove('hidden');
@@ -434,40 +447,40 @@
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
 
-        window.showModal = function(message) {
-            if(modal && modalMessage) {
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
                 modalMessage.textContent = message;
                 modal.classList.remove('hidden');
             }
         }
 
-        window.hideModal = function() {
-            if(modal) modal.classList.add('hidden');
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
         }
 
         // --- 4. BẢO MẬT & KHỞI TẠO CÔNG CỤ ---
         document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123) return false; // F12
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Ctrl+Shift+I
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false; // Ctrl+Shift+C
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Ctrl+Shift+J
-            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U
-            if(e.ctrlKey && e.keyCode == 'C'.charCodeAt(0)) return false; // Ctrl+C
-            if(e.ctrlKey && e.keyCode == 'A'.charCodeAt(0)) return false; // Ctrl+A
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) return false; // F12
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false; // Ctrl+Shift+C
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Ctrl+Shift+J
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U
+            if (e.ctrlKey && e.keyCode == 'C'.charCodeAt(0)) return false; // Ctrl+C
+            if (e.ctrlKey && e.keyCode == 'A'.charCodeAt(0)) return false; // Ctrl+A
         }
 
         // --- 5. LOGIC ISTH DIC ---
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('tool-form');
             const resultContainer = document.getElementById('result-container');
             const mainResult = document.getElementById('main-result');
             const subResult = document.getElementById('sub-result');
             const clearBtn = document.getElementById('clearBtn');
 
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
                 // Validate inputs
                 const platelets = document.querySelector('input[name="platelets"]:checked');
                 const ddimer = document.querySelector('input[name="ddimer"]:checked');
@@ -488,7 +501,7 @@
 
                 // Interpret Result
                 let interpretation = "";
-                
+
                 if (score >= 5) {
                     interpretation = "Tương thích với chẩn đoán Đông máu nội mạch lan tỏa (DIC) điển hình.";
                     mainResult.style.color = "#dc2626"; // Red
@@ -501,9 +514,9 @@
 
                 mainResult.textContent = score + " Điểm";
                 subResult.textContent = interpretation;
-                
+
                 resultContainer.classList.remove('hidden');
-                
+
                 // Save History
                 useTool('isth-dic', 'Thang điểm ISTH DIC', 'fa-file-medical', 'indigo', window.location.href);
 
@@ -513,16 +526,16 @@
                     const rect = resultContainer.getBoundingClientRect();
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                     const elementBottom = rect.bottom + scrollTop;
-                    
+
                     // Thông số màn hình
                     const viewportHeight = window.innerHeight;
                     const bottomNavHeight = 70; // Chiều cao nav ~60px + đệm an toàn
-                    
+
                     // Tính toán điểm cuộn mục tiêu:
                     // Sao cho đáy phần tử nằm ngay trên nav bar
                     // Công thức: Đỉnh cuộn + Chiều cao màn hình = Đáy phần tử + Chiều cao Nav
                     const targetScrollY = elementBottom + bottomNavHeight - viewportHeight;
-                    
+
                     // Kiểm tra xem phần tử có thực sự bị che bên dưới không
                     // (rect.bottom > viewportHeight - bottomNavHeight) nghĩa là nó đang bị che
                     if (rect.bottom > viewportHeight - bottomNavHeight) {
@@ -535,7 +548,7 @@
             });
 
             // Clear Button Logic
-            clearBtn.addEventListener('click', function() {
+            clearBtn.addEventListener('click', function () {
                 form.reset();
                 resultContainer.classList.add('hidden');
                 mainResult.textContent = "--";
@@ -543,5 +556,7 @@
             });
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

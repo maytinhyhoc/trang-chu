@@ -1,44 +1,47 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thang điểm Glasgow - Công Cụ Y Học</title>
     <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         /* --- APP FEEL OPTIMIZATIONS --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
             /* Đảm bảo khoảng trống dưới cùng đủ lớn để không bị che bởi menu */
-            padding-bottom: 100px; 
-            
+            padding-bottom: 100px;
+
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            
+
             -webkit-tap-highlight-color: transparent;
         }
 
-        .result-text, input, textarea {
+        .result-text,
+        input,
+        textarea {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Custom Radio Style */
-        .glasgow-option:checked + label {
+        .glasgow-option:checked+label {
             background-color: #eef2ff;
             border-color: #6366f1;
             color: #4338ca;
         }
-        
-        .glasgow-option:checked + label .check-icon {
+
+        .glasgow-option:checked+label .check-icon {
             opacity: 1;
             transform: scale(1);
             width: 1.25rem;
@@ -49,41 +52,37 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .score-box { 
-            background-color: #eef2ff; 
-            color: #4f46e5; 
-            padding: 0.5rem 1rem; 
-            border-radius: 0.75rem; 
-            font-size: 2rem; 
-            font-weight: bold; 
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
-            text-align: center; 
-            border: 1px solid #c7d2fe; 
+        .score-box {
+            background-color: #eef2ff;
+            color: #4f46e5;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #c7d2fe;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
     </style>
 </head>
-<body class="text-gray-800 flex flex-col min-h-screen">
 
-    <!-- HEADER -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" alt="Logo" class="w-10 h-10 object-contain">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
+<body class="text-gray-800 flex flex-col min-h-screen">
 
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
@@ -95,13 +94,14 @@
         <div class="w-8"></div>
     </header>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
-        
+
         <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
             <div class="hidden md:flex bg-indigo-600 p-4 text-white items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <a href="cong-cu.html" class="hidden md:flex w-8 h-8 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-2" title="Quay lại">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-8 h-8 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-2"
+                        title="Quay lại">
                         <i class="fa-solid fa-chevron-left text-sm"></i>
                     </a>
                     <div>
@@ -114,175 +114,255 @@
 
             <div class="p-3 md:p-6">
                 <form id="tool-form" class="space-y-4" novalidate>
-                    
-                    <!-- Phần E: Mắt -->
+
                     <div class="space-y-2">
-                        <h3 class="text-base font-bold text-indigo-800 border-b border-indigo-200 pb-1 flex items-center">
-                            <span class="bg-indigo-100 text-indigo-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">E</span>
+                        <h3
+                            class="text-base font-bold text-indigo-800 border-b border-indigo-200 pb-1 flex items-center">
+                            <span
+                                class="bg-indigo-100 text-indigo-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">E</span>
                             Đáp ứng của mắt
                         </h3>
                         <div class="grid grid-cols-1 gap-2">
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="eye" id="e4" value="4">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="e4">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Mở mắt tự nhiên</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="e4">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Mở mắt tự nhiên
+                                    </div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">4đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="eye" id="e3" value="3">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="e3">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Mở mắt khi gọi</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="e3">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Mở mắt khi gọi
+                                    </div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">3đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="eye" id="e2" value="2">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="e2">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Mở mắt khi cấu véo (đau)</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="e2">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Mở mắt khi cấu
+                                        véo (đau)</div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">2đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="eye" id="e1" value="1">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="e1">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Không mở mắt</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="e1">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Không mở mắt
+                                    </div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">1đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                         </div>
                     </div>
-    
-                    <!-- Phần V: Lời nói -->
+
                     <div class="space-y-2">
-                        <h3 class="text-base font-bold text-indigo-800 border-b border-indigo-200 pb-1 flex items-center">
-                            <span class="bg-indigo-100 text-indigo-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">V</span>
+                        <h3
+                            class="text-base font-bold text-indigo-800 border-b border-indigo-200 pb-1 flex items-center">
+                            <span
+                                class="bg-indigo-100 text-indigo-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">V</span>
                             Đáp ứng lời nói
                         </h3>
                         <div class="grid grid-cols-1 gap-2">
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="verbal" id="v5" value="5">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="v5">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Trả lời đúng, nhanh</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="v5">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Trả lời đúng,
+                                        nhanh</div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">5đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="verbal" id="v4" value="4">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="v4">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Trả lời chậm, lẫn lộn</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="v4">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Trả lời chậm, lẫn
+                                        lộn</div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">4đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="verbal" id="v3" value="3">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="v3">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Trả lời không phù hợp</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="v3">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Trả lời không phù
+                                        hợp</div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">3đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="verbal" id="v2" value="2">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="v2">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Kêu rên, vô nghĩa</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="v2">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Kêu rên, vô nghĩa
+                                    </div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">2đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="verbal" id="v1" value="1">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="v1">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Im lặng hoàn toàn</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="v1">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Im lặng hoàn toàn
+                                    </div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">1đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                         </div>
                     </div>
-    
-                    <!-- Phần M: Vận động -->
+
                     <div class="space-y-2">
-                        <h3 class="text-base font-bold text-indigo-800 border-b border-indigo-200 pb-1 flex items-center">
-                            <span class="bg-indigo-100 text-indigo-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">M</span>
+                        <h3
+                            class="text-base font-bold text-indigo-800 border-b border-indigo-200 pb-1 flex items-center">
+                            <span
+                                class="bg-indigo-100 text-indigo-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">M</span>
                             Đáp ứng vận động
                         </h3>
                         <div class="grid grid-cols-1 gap-2">
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="motor" id="m6" value="6">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="m6">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Làm theo lệnh</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="m6">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Làm theo lệnh
+                                    </div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">6đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="motor" id="m5" value="5">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="m5">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Định khu được nơi đau</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="m5">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Định khu được nơi
+                                        đau</div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">5đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="motor" id="m4" value="4">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="m4">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Co tay lại khi đau</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="m4">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Co tay lại khi
+                                        đau</div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">4đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="motor" id="m3" value="3">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="m3">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Gấp cứng mất vỏ</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="m3">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Gấp cứng mất vỏ
+                                    </div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">3đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="motor" id="m2" value="2">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="m2">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Duỗi cứng mất não</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="m2">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Duỗi cứng mất não
+                                    </div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">2đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                             <div class="relative">
                                 <input class="sr-only glasgow-option" type="radio" name="motor" id="m1" value="1">
-                                <label class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200" for="m1">
-                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Không đáp ứng</div>
+                                <label
+                                    class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                    for="m1">
+                                    <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Không đáp ứng
+                                    </div>
                                     <div class="text-indigo-600 font-bold text-sm whitespace-nowrap">1đ</div>
-                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0"><i class="fas fa-check-circle"></i></div>
+                                    <div
+                                        class="check-icon w-0 opacity-0 transform scale-50 text-indigo-500 overflow-hidden flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
                                 </label>
                             </div>
                         </div>
                     </div>
-    
-                    <!-- Nút bấm -->
+
                     <div id="action-buttons" class="mt-5 flex flex-col sm:flex-row gap-3">
-                        <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-indigo-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                        <button type="submit"
+                            class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-indigo-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
                             <i class="fa-solid fa-calculator mr-2"></i> Tính toán
                         </button>
-                        <button type="button" id="clearBtn" class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
                             <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
                         </button>
                     </div>
                 </form>
-    
-                <!-- Kết quả -->
+
                 <div id="result-container" class="mt-5 hidden animate-fade-in-up">
                     <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-center">
                         <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Tổng điểm Glasgow</h3>
                         <div id="main-result" class="score-box mb-3 bg-white text-4xl text-indigo-700">--</div>
-                        <div id="sub-result-container" class="bg-white p-3 rounded-lg border border-indigo-100 inline-block w-full">
-                            <p id="sub-result" class="result-text text-indigo-700 leading-relaxed font-bold text-base">...</p>
+                        <div id="sub-result-container"
+                            class="bg-white p-3 rounded-lg border border-indigo-100 inline-block w-full">
+                            <p id="sub-result" class="result-text text-indigo-700 leading-relaxed font-bold text-base">
+                                ...</p>
                             <p id="recommendation" class="text-xs text-gray-600 mt-1">...</p>
                         </div>
                     </div>
@@ -291,80 +371,34 @@
         </div>
     </main>
 
-    <!-- DRAWER & MODALS -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
 
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-6">Vui lòng nhập đầy đủ thông tin.</p>
-            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
     </div>
 
     <script>
-        document.addEventListener('contextmenu', function(e) {
+        document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
 
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.ctrlKey || e.metaKey) {
-                if (e.key === 'c' || e.key === 'C' || 
-                    e.key === 'a' || e.key === 'A' || 
+                if (e.key === 'c' || e.key === 'C' ||
+                    e.key === 'a' || e.key === 'A' ||
                     e.key === 'u' || e.key === 'U') {
                     e.preventDefault();
                 }
@@ -389,7 +423,7 @@
         }
 
         function openDrawer(e) {
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
             const drawer = document.getElementById('drawer-menu');
             const overlay = document.getElementById('drawer-overlay');
             overlay.classList.remove('hidden');
@@ -412,18 +446,18 @@
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
 
-        window.showModal = function(message) {
-            if(modal && modalMessage) {
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
                 modalMessage.textContent = message;
                 modal.classList.remove('hidden');
             }
         }
 
-        window.hideModal = function() {
-            if(modal) modal.classList.add('hidden');
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('tool-form');
             const resultContainer = document.getElementById('result-container');
             const mainResult = document.getElementById('main-result');
@@ -432,9 +466,9 @@
             const clearBtn = document.getElementById('clearBtn');
             const actionButtons = document.getElementById('action-buttons');
 
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
                 const eye = document.querySelector('input[name="eye"]:checked');
                 const verbal = document.querySelector('input[name="verbal"]:checked');
                 const motor = document.querySelector('input[name="motor"]:checked');
@@ -466,30 +500,30 @@
                 mainResult.textContent = `${totalScore} Điểm`;
                 subResult.textContent = classification;
                 recommendation.textContent = `(E${eScore} - V${vScore} - M${mScore}): ${advice}`;
-                
+
                 resultContainer.classList.remove('hidden');
 
                 useTool(
-                    'glasgow', 
-                    'Thang điểm Glasgow', 
-                    'fa-brain', 
-                    'text-indigo-600', 
+                    'glasgow',
+                    'Thang điểm Glasgow',
+                    'fa-brain',
+                    'text-indigo-600',
                     window.location.href
                 );
-                
+
                 // --- LOGIC CUỘN THÔNG MINH (Chỉ cuộn nếu bị che) ---
                 setTimeout(() => {
                     const bottomNavHeight = 70; // Chiều cao menu dưới + khoảng đệm
                     const rect = resultContainer.getBoundingClientRect();
-                    
+
                     // Kiểm tra xem đáy của kết quả có bị che bởi cạnh dưới màn hình không
                     const isCutOff = rect.bottom > (window.innerHeight - bottomNavHeight);
-                    
+
                     if (isCutOff) {
                         // Tính toán khoảng cần cuộn thêm để vừa đủ thấy đáy kết quả
                         // Cộng thêm 15px để thoáng mắt
                         const scrollAmount = rect.bottom - (window.innerHeight - bottomNavHeight) + 15;
-                        
+
                         window.scrollBy({
                             top: scrollAmount,
                             behavior: 'smooth'
@@ -499,19 +533,21 @@
                 }, 150);
             });
 
-            clearBtn.addEventListener('click', function() {
+            clearBtn.addEventListener('click', function () {
                 form.reset();
                 resultContainer.classList.add('hidden');
                 mainResult.textContent = "--";
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
-            
+
             document.querySelectorAll('.glasgow-option').forEach(radio => {
-                radio.addEventListener('dblclick', function() {
+                radio.addEventListener('dblclick', function () {
                     this.checked = false;
                 });
             });
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

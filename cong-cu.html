@@ -1,311 +1,881 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Danh sách công cụ - Máy tính Y học</title>
-    
-    <!-- TAILWIND CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONT AWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- GOOGLE FONTS -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- ICONS & PWA -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <meta name="theme-color" content="#0d9488">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="manifest" href="/manifest.json">
 
-    <style>
-        /* BASE STYLES */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            touch-action: pan-x pan-y;
-            overscroll-behavior-y: none; /* Ngăn kéo trang quá mức trên mobile */
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { primary: '#0ea5e9', secondary: '#14b8a6' },
+                    animation: { 'float': 'float 6s ease-in-out infinite' },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
         }
-        
-        /* INPUT OVERRIDES */
+    </script>
+
+    <style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: pan-x pan-y;
+            overscroll-behavior-y: none;
+        }
+
+        .bg-pattern {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
         input {
             -webkit-user-select: text !important;
-            -moz-user-select: text !important;
-            -ms-user-select: text !important;
             user-select: text !important;
         }
 
-        /* ANTI-ZOOM ON IOS */
-        @media screen and (max-width: 768px) {
-            input, select, textarea {
-                font-size: 16px !important;
-            }
-        }
-
-        /* CUSTOM SCROLLBAR */
         ::-webkit-scrollbar {
             width: 6px;
         }
+
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #0d9488;
+            background: transparent;
         }
 
-        /* TOOL ITEM HOVER EFFECT */
-        .tool-item {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
         }
-        .tool-item:active {
-            transform: scale(0.96);
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .search-glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
     </style>
 </head>
-<body class="text-gray-800 pb-24 md:pb-8 overflow-x-hidden">
 
-    <!-- ============================================ -->
-    <!-- DESKTOP HEADER -->
-    <!-- ============================================ -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://placehold.co/40x40?text=Logo'">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <!-- Đã bỏ border-b-2 border-teal-600 ở đây -->
-            <a href="cong-cu.html" class="text-teal-600 font-bold hover:text-teal-700 transition">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
+<body
+    class="text-slate-800 bg-pattern min-h-screen pb-24 md:pb-8 overflow-x-hidden selection:bg-primary selection:text-white">
 
-    <!-- ============================================ -->
-    <!-- MAIN CONTENT -->
-    <!-- ============================================ -->
-    <main class="md:pt-20 p-3 md:p-6 max-w-5xl mx-auto min-h-screen">
-        
-        <!-- Mobile Header (Simplified) -->
-        <div class="md:hidden pt-2 pb-3 flex items-center justify-between">
-            <h1 class="text-xl font-bold text-blue-600">Tất cả công cụ</h1>
-            <div class="flex items-center gap-2">
-                <button onclick="window.location.reload()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-sm text-gray-600 active:scale-90 transition">
-                    <i class="fa-solid fa-rotate-right"></i>
-                </button>
-                <a href="index.html" class="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-sm text-gray-600 active:scale-90 transition">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
+    <div
+        class="fixed top-0 left-0 w-full h-96 bg-gradient-to-b from-blue-50/80 to-transparent -z-10 pointer-events-none">
+    </div>
+    <div
+        class="fixed -top-20 -right-20 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl -z-10 pointer-events-none mix-blend-multiply animate-float">
+    </div>
+    <div class="fixed top-1/2 -left-20 w-80 h-80 bg-teal-100/40 rounded-full blur-3xl -z-10 pointer-events-none mix-blend-multiply animate-float"
+        style="animation-delay: 2s;"></div>
+    <div class="fixed bottom-0 right-0 w-96 h-96 bg-purple-100/40 rounded-full blur-3xl -z-10 pointer-events-none mix-blend-multiply animate-float"
+        style="animation-delay: 4s;"></div>
+
+    <main class="md:pt-20 p-3 md:p-6 max-w-6xl mx-auto min-h-screen">
+
+        <div class="md:hidden pt-2 pb-4 flex items-center justify-between relative z-20">
+            <div>
+                <h2 class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Thư viện</h2>
+                <h1
+                    class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+                    Tất cả công cụ</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.location.reload()"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl bg-white shadow-sm border border-slate-100 text-slate-500 hover:text-blue-600 active:scale-95 transition"><i
+                        class="fa-solid fa-rotate-right"></i></button>
+                <a href="index.html"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl bg-white shadow-sm border border-slate-100 text-slate-500 hover:text-blue-600 active:scale-95 transition"><i
+                        class="fa-solid fa-arrow-left"></i></a>
             </div>
         </div>
-        
-        <!-- Search Bar (Sticky & Compact) -->
-        <div class="relative mb-5 sticky top-0 md:top-20 z-40 bg-[#f3f4f6] pb-1 pt-1">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
+
+        <div class="sticky top-0 md:top-20 z-40 -mx-3 px-3 md:mx-0 md:px-0 py-3 mb-6 transition-all duration-300"
+            id="search-container">
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                    <i
+                        class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                </div>
+                <input type="text" id="search-input" onkeyup="filterTools()"
+                    placeholder="Tìm nhanh (VD: bỏng, gcs, liều...)"
+                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border-none shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] bg-white/95 backdrop-blur-xl focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-slate-700 text-base placeholder:text-slate-400 transition-all">
             </div>
-            <input type="text" id="search-input" onkeyup="filterTools()" placeholder="Tìm nhanh (VD: bỏng, gcs, liều...)" 
-                class="w-full pl-9 pr-4 py-2.5 rounded-lg border-none shadow-sm bg-white focus:ring-2 focus:ring-teal-500 focus:outline-none text-gray-700 text-base">
         </div>
 
-        <!-- ==================== CẤP CỨU & HỒI SỨC ==================== -->
-        <div class="mb-6 tool-category">
-            <h3 class="font-bold text-gray-800 text-base md:text-lg mb-3 flex items-center border-l-4 border-red-500 pl-3 uppercase tracking-wide">
+        <div class="mb-8 tool-category animate-[fadeIn_0.5s_ease-out]">
+            <h3 class="font-bold text-slate-800 text-lg md:text-xl mb-4 flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-red-100 text-red-500 flex items-center justify-center shadow-sm"><i
+                        class="fa-solid fa-truck-medical"></i></span>
                 Cấp cứu & Hồi sức
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                
-                <div onclick="useTool('burn', 'Diện tích bỏng & Bù dịch', 'fa-fire', 'orange', 'dien-tich-bong.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 text-lg"><i class="fa-solid fa-fire"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Diện tích bỏng & Bù dịch</h4><p class="text-xs text-gray-500 truncate">Parkland & Quy tắc số 9</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <div onclick="useTool('burn', 'Diện tích bỏng & Bù dịch', 'fa-fire', 'orange', 'dien-tich-bong.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'burn', 'Diện tích bỏng & Bù dịch', 'dien-tich-bong.html', 'fa-fire', 'orange')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="burn">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-orange-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-orange-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center text-orange-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-fire"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-orange-600 transition-colors">
+                            Diện tích bỏng & Bù dịch</h4>
+                        <p class="text-xs text-slate-400 truncate">Parkland & Quy tắc số 9</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('glasgow', 'Thang điểm Glasgow (GCS)', 'fa-brain', 'red', 'glasgow.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-lg"><i class="fa-solid fa-brain"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm Glasgow (GCS)</h4><p class="text-xs text-gray-500 truncate">Đánh giá tri giác</p></div>
+                <div onclick="useTool('glasgow', 'Thang điểm Glasgow (GCS)', 'fa-brain', 'red', 'glasgow.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'glasgow', 'Thang điểm Glasgow (GCS)', 'glasgow.html', 'fa-brain', 'red')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="glasgow">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-red-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-red-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center text-red-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-brain"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-red-600 transition-colors">
+                            Thang điểm Glasgow (GCS)</h4>
+                        <p class="text-xs text-slate-400 truncate">Đánh giá tri giác</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('sofa', 'Thang điểm SOFA', 'fa-bed-pulse', 'red', 'sofa.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-lg"><i class="fa-solid fa-bed-pulse"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm SOFA</h4><p class="text-xs text-gray-500 truncate">Đánh giá suy tạng (Sepsis)</p></div>
+                <div onclick="useTool('sofa', 'Thang điểm SOFA', 'fa-bed-pulse', 'red', 'sofa.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'sofa', 'Thang điểm SOFA', 'sofa.html', 'fa-bed-pulse', 'red')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="sofa">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-red-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-red-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center text-red-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bed-pulse"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-red-600 transition-colors">
+                            Thang điểm SOFA</h4>
+                        <p class="text-xs text-slate-400 truncate">Đánh giá suy tạng (Sepsis)</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('apache2', 'Thang điểm APACHE II', 'fa-notes-medical', 'red', 'apache-ii.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-lg"><i class="fa-solid fa-notes-medical"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm APACHE II</h4><p class="text-xs text-gray-500 truncate">Tiên lượng tử vong tại ICU</p></div>
+                <div onclick="useTool('apache2', 'Thang điểm APACHE II', 'fa-notes-medical', 'red', 'apache-ii.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'apache2', 'Thang điểm APACHE II', 'apache-ii.html', 'fa-notes-medical', 'red')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="apache2">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-red-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-red-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center text-red-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-notes-medical"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-red-600 transition-colors">
+                            Thang điểm APACHE II</h4>
+                        <p class="text-xs text-slate-400 truncate">Tiên lượng tử vong tại ICU</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('news2', 'Thang điểm NEWS2', 'fa-tower-broadcast', 'red', 'news2.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-lg"><i class="fa-solid fa-tower-broadcast"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm NEWS2</h4><p class="text-xs text-gray-500 truncate">Cảnh báo sớm bệnh nặng</p></div>
+                <div onclick="useTool('news2', 'Thang điểm NEWS2', 'fa-tower-broadcast', 'red', 'news2.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'news2', 'Thang điểm NEWS2', 'news2.html', 'fa-tower-broadcast', 'red')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="news2">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-red-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-red-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center text-red-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-tower-broadcast"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-red-600 transition-colors">
+                            Thang điểm NEWS2</h4>
+                        <p class="text-xs text-slate-400 truncate">Cảnh báo sớm bệnh nặng</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('pbw-vt', 'Cân nặng lý tưởng & Vt', 'fa-lungs-virus', 'red', 'pbw-vt.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-lg"><i class="fa-solid fa-lungs-virus"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Cân nặng lý tưởng & Vt</h4><p class="text-xs text-gray-500 truncate">Cài đặt máy thở ARDSnet</p></div>
+                <div onclick="useTool('pbw-vt', 'Cân nặng lý tưởng & Vt', 'fa-lungs-virus', 'red', 'pbw-vt.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'pbw-vt', 'Cân nặng lý tưởng & Vt', 'pbw-vt.html', 'fa-lungs-virus', 'red')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="pbw-vt">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-red-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-red-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center text-red-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-lungs-virus"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-red-600 transition-colors">
+                            Cân nặng lý tưởng & Vt</h4>
+                        <p class="text-xs text-slate-400 truncate">Cài đặt máy thở ARDSnet</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('stress-ulcer', 'Dự phòng loét Stress', 'fa-shield-halved', 'red', 'loet-do-stress.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-lg"><i class="fa-solid fa-shield-halved"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Dự phòng loét Stress</h4><p class="text-xs text-gray-500 truncate">Chỉ định dùng PPI (ICU)</p></div>
+                <div onclick="useTool('stress-ulcer', 'Dự phòng loét Stress', 'fa-shield-halved', 'red', 'loet-do-stress.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'stress-ulcer', 'Dự phòng loét Stress', 'loet-do-stress.html', 'fa-shield-halved', 'red')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="stress-ulcer">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-red-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-red-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center text-red-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-red-600 transition-colors">
+                            Dự phòng loét Stress</h4>
+                        <p class="text-xs text-slate-400 truncate">Chỉ định dùng PPI (ICU)</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('abg', 'Phân tích Khí máu (ABG)', 'fa-lungs', 'rose', 'phan-tich-khi-mau.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-lg"><i class="fa-solid fa-lungs"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Phân tích Khí máu (ABG)</h4><p class="text-xs text-gray-500 truncate">Toan kiềm & Oxy hóa máu</p></div>
+                <div onclick="useTool('abg', 'Phân tích Khí máu (ABG)', 'fa-lungs', 'rose', 'phan-tich-khi-mau.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'abg', 'Phân tích Khí máu (ABG)', 'phan-tich-khi-mau.html', 'fa-lungs', 'rose')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="abg">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-rose-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-rose-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center text-rose-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-lungs"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-rose-600 transition-colors">
+                            Phân tích Khí máu (ABG)</h4>
+                        <p class="text-xs text-slate-400 truncate">Toan kiềm & Oxy hóa máu</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('fena', 'Phân suất thải Natri (FeNa)', 'fa-flask', 'rose', 'fena.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-lg"><i class="fa-solid fa-flask"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Phân suất thải Natri (FeNa)</h4><p class="text-xs text-gray-500 truncate">Phân biệt nguyên nhân suy thận</p></div>
+                <div onclick="useTool('fena', 'Phân suất thải Natri (FeNa)', 'fa-flask', 'rose', 'fena.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'fena', 'Phân suất thải Natri (FeNa)', 'fena.html', 'fa-flask', 'rose')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="fena">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-rose-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-rose-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center text-rose-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-flask"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-rose-600 transition-colors">
+                            Phân suất thải Natri (FeNa)</h4>
+                        <p class="text-xs text-slate-400 truncate">Phân biệt nguyên nhân suy thận</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('atropin', 'Thang điểm Atropin', 'fa-biohazard', 'rose', 'bang-diem-atropin.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-lg"><i class="fa-solid fa-biohazard"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm Atropin</h4><p class="text-xs text-gray-500 truncate">Theo dõi ngộ độc lân hữu cơ</p></div>
+                <div onclick="useTool('atropin', 'Thang điểm Atropin', 'fa-biohazard', 'rose', 'bang-diem-atropin.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'atropin', 'Thang điểm Atropin', 'bang-diem-atropin.html', 'fa-biohazard', 'rose')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="atropin">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-rose-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-rose-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center text-rose-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-biohazard"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-rose-600 transition-colors">
+                            Thang điểm Atropin</h4>
+                        <p class="text-xs text-slate-400 truncate">Theo dõi ngộ độc lân hữu cơ</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('bps', 'Thang điểm đau BPS', 'fa-face-grimace', 'rose', 'thang-dau-bps.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 text-lg"><i class="fa-solid fa-face-grimace"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm đau BPS</h4><p class="text-xs text-gray-500 truncate">Đánh giá đau (BN thở máy)</p></div>
+                <div onclick="useTool('bps', 'Thang điểm đau BPS', 'fa-face-grimace', 'rose', 'thang-dau-bps.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'bps', 'Thang điểm đau BPS', 'thang-dau-bps.html', 'fa-face-grimace', 'rose')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="bps">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-rose-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-rose-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center text-rose-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-face-grimace"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-rose-600 transition-colors">
+                            Thang điểm đau BPS</h4>
+                        <p class="text-xs text-slate-400 truncate">Đánh giá đau (BN thở máy)</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== TIM MẠCH & HUYẾT HỌC ==================== -->
-        <div class="mb-6 tool-category">
-            <h3 class="font-bold text-gray-800 text-base md:text-lg mb-3 flex items-center border-l-4 border-pink-500 pl-3 uppercase tracking-wide">
+        <div class="mb-8 tool-category animate-[fadeIn_0.5s_ease-out]" style="animation-delay: 100ms">
+            <h3 class="font-bold text-slate-800 text-lg md:text-xl mb-4 flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-xl bg-pink-100 text-pink-500 flex items-center justify-center shadow-sm"><i
+                        class="fa-solid fa-heart-pulse"></i></span>
                 Tim mạch & Huyết học
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                
-                <div onclick="useTool('chads', 'Thang điểm CHA₂DS₂-VASc', 'fa-heart-crack', 'pink', 'chads-vasc.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-lg"><i class="fa-solid fa-heart-crack"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm CHA₂DS₂-VASc</h4><p class="text-xs text-gray-500 truncate">Nguy cơ đột quỵ rung nhĩ</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <div onclick="useTool('chads', 'Thang điểm CHA₂DS₂-VASc', 'fa-heart-crack', 'pink', 'chads-vasc.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'chads', 'Thang điểm CHA₂DS₂-VASc', 'chads-vasc.html', 'fa-heart-crack', 'pink')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="chads">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-pink-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-pink-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center text-pink-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-heart-crack"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-pink-600 transition-colors">
+                            Thang điểm CHA₂DS₂-VASc</h4>
+                        <p class="text-xs text-slate-400 truncate">Nguy cơ đột quỵ rung nhĩ</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('hasbled', 'Thang điểm HAS-BLED', 'fa-droplet-slash', 'pink', 'hasbled.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-lg"><i class="fa-solid fa-droplet-slash"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm HAS-BLED</h4><p class="text-xs text-gray-500 truncate">Nguy cơ chảy máu</p></div>
+                <div onclick="useTool('hasbled', 'Thang điểm HAS-BLED', 'fa-droplet-slash', 'pink', 'hasbled.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'hasbled', 'Thang điểm HAS-BLED', 'hasbled.html', 'fa-droplet-slash', 'pink')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="hasbled">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-pink-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-pink-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center text-pink-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-droplet-slash"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-pink-600 transition-colors">
+                            Thang điểm HAS-BLED</h4>
+                        <p class="text-xs text-slate-400 truncate">Nguy cơ chảy máu</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('padua', 'Thang điểm PADUA', 'fa-user-shield', 'pink', 'padua.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-lg"><i class="fa-solid fa-user-shield"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm PADUA</h4><p class="text-xs text-gray-500 truncate">Nguy cơ huyết khối tĩnh mạch</p></div>
+                <div onclick="useTool('padua', 'Thang điểm PADUA', 'fa-user-shield', 'pink', 'padua.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'padua', 'Thang điểm PADUA', 'padua.html', 'fa-user-shield', 'pink')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="padua">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-pink-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-pink-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center text-pink-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-user-shield"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-pink-600 transition-colors">
+                            Thang điểm PADUA</h4>
+                        <p class="text-xs text-slate-400 truncate">Nguy cơ huyết khối tĩnh mạch</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('improve', 'Thang điểm IMPROVE', 'fa-file-medical', 'pink', 'improve.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-lg"><i class="fa-solid fa-file-medical"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm IMPROVE</h4><p class="text-xs text-gray-500 truncate">Nguy cơ VTE & Chảy máu</p></div>
+                <div onclick="useTool('improve', 'Thang điểm IMPROVE', 'fa-file-medical', 'pink', 'improve.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'improve', 'Thang điểm IMPROVE', 'improve.html', 'fa-file-medical', 'pink')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="improve">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-pink-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-pink-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center text-pink-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-file-medical"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-pink-600 transition-colors">
+                            Thang điểm IMPROVE</h4>
+                        <p class="text-xs text-slate-400 truncate">Nguy cơ VTE & Chảy máu</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('timi', 'Thang điểm TIMI', 'fa-heart-pulse', 'pink', 'timi.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-lg"><i class="fa-solid fa-heart-pulse"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm TIMI</h4><p class="text-xs text-gray-500 truncate">Tiên lượng NMCT cấp</p></div>
+                <div onclick="useTool('timi', 'Thang điểm TIMI', 'fa-heart-pulse', 'pink', 'timi.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'timi', 'Thang điểm TIMI', 'timi.html', 'fa-heart-pulse', 'pink')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="timi">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-pink-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-pink-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center text-pink-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-heart-pulse"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-pink-600 transition-colors">
+                            Thang điểm TIMI</h4>
+                        <p class="text-xs text-slate-400 truncate">Tiên lượng NMCT cấp</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('ldlc', 'Phân loại LDLc (ESC/EAS)', 'fa-chart-line', 'pink', 'ldlc.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-lg"><i class="fa-solid fa-chart-line"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Phân loại LDLc (ESC/EAS)</h4><p class="text-xs text-gray-500 truncate">Mục tiêu điều trị mỡ máu</p></div>
+                <div onclick="useTool('ldlc', 'Phân loại LDLc (ESC/EAS)', 'fa-chart-line', 'pink', 'ldlc.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'ldlc', 'Phân loại LDLc (ESC/EAS)', 'ldlc.html', 'fa-chart-line', 'pink')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="ldlc">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-pink-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-pink-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center text-pink-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-chart-line"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-pink-600 transition-colors">
+                            Phân loại LDLc (ESC/EAS)</h4>
+                        <p class="text-xs text-slate-400 truncate">Mục tiêu điều trị mỡ máu</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('orbit', 'Thang điểm ORBIT', 'fa-circle-notch', 'pink', 'orbit.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600 text-lg"><i class="fa-solid fa-circle-notch"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm ORBIT</h4><p class="text-xs text-gray-500 truncate">Nguy cơ chảy máu (Rung nhĩ)</p></div>
+                <div onclick="useTool('orbit', 'Thang điểm ORBIT', 'fa-circle-notch', 'pink', 'orbit.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'orbit', 'Thang điểm ORBIT', 'orbit.html', 'fa-circle-notch', 'pink')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="orbit">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-pink-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-pink-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center text-pink-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-circle-notch"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-pink-600 transition-colors">
+                            Thang điểm ORBIT</h4>
+                        <p class="text-xs text-slate-400 truncate">Nguy cơ chảy máu (Rung nhĩ)</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('nihss', 'Thang điểm NIHSS', 'fa-user-injured', 'purple', 'nihss.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-lg"><i class="fa-solid fa-user-injured"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm NIHSS</h4><p class="text-xs text-gray-500 truncate">Đánh giá mức độ đột quỵ não</p></div>
+                <div onclick="useTool('nihss', 'Thang điểm NIHSS', 'fa-user-injured', 'purple', 'nihss.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'nihss', 'Thang điểm NIHSS', 'nihss.html', 'fa-user-injured', 'purple')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="nihss">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-purple-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-purple-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center text-purple-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-user-injured"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-purple-600 transition-colors">
+                            Thang điểm NIHSS</h4>
+                        <p class="text-xs text-slate-400 truncate">Đánh giá mức độ đột quỵ não</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('4t', 'Thang điểm 4T', 'fa-syringe', 'purple', '4tscore.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-lg"><i class="fa-solid fa-syringe"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm 4T</h4><p class="text-xs text-gray-500 truncate">Sàng lọc HIT (Giảm tiểu cầu)</p></div>
+                <div onclick="useTool('4t', 'Thang điểm 4T', 'fa-syringe', 'purple', '4tscore.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, '4t', 'Thang điểm 4T', '4tscore.html', 'fa-syringe', 'purple')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="4t">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-purple-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-purple-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center text-purple-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-syringe"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-purple-600 transition-colors">
+                            Thang điểm 4T</h4>
+                        <p class="text-xs text-slate-400 truncate">Sàng lọc HIT (Giảm tiểu cầu)</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('isth', 'Thang điểm ISTH DIC', 'fa-vial', 'purple', 'isth-dic.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-lg"><i class="fa-solid fa-vial"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thang điểm ISTH DIC</h4><p class="text-xs text-gray-500 truncate">Chẩn đoán DIC</p></div>
+                <div onclick="useTool('isth', 'Thang điểm ISTH DIC', 'fa-vial', 'purple', 'isth-dic.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'isth', 'Thang điểm ISTH DIC', 'isth-dic.html', 'fa-vial', 'purple')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="isth">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-purple-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-purple-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center text-purple-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-vial"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-purple-600 transition-colors">
+                            Thang điểm ISTH DIC</h4>
+                        <p class="text-xs text-slate-400 truncate">Chẩn đoán DIC</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('tpe', 'Thay huyết tương (TPE)', 'fa-hand-holding-droplet', 'purple', 'tpe.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 text-lg"><i class="fa-solid fa-hand-holding-droplet"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Thay huyết tương (TPE)</h4><p class="text-xs text-gray-500 truncate">Tính thể tích huyết tương</p></div>
+                <div onclick="useTool('tpe', 'Thay huyết tương (TPE)', 'fa-hand-holding-droplet', 'purple', 'tpe.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'tpe', 'Thay huyết tương (TPE)', 'tpe.html', 'fa-hand-holding-droplet', 'purple')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="tpe">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-purple-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-purple-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center text-purple-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-hand-holding-droplet"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-purple-600 transition-colors">
+                            Thay huyết tương (TPE)</h4>
+                        <p class="text-xs text-slate-400 truncate">Tính thể tích huyết tương</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== DƯỢC & ĐIỀU DƯỠNG ==================== -->
-        <div class="mb-6 tool-category">
-            <h3 class="font-bold text-gray-800 text-base md:text-lg mb-3 flex items-center border-l-4 border-blue-500 pl-3 uppercase tracking-wide">
+        <div class="mb-8 tool-category animate-[fadeIn_0.5s_ease-out]" style="animation-delay: 200ms">
+            <h3 class="font-bold text-slate-800 text-lg md:text-xl mb-4 flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-xl bg-blue-100 text-blue-500 flex items-center justify-center shadow-sm"><i
+                        class="fa-solid fa-pills"></i></span>
                 Dược & Điều dưỡng
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                
-                <div onclick="useTool('corticoid', 'Chuyển đổi liều Corticoid', 'fa-pills', 'blue', 'doilieu-corticoid.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-lg"><i class="fa-solid fa-pills"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Chuyển đổi liều Corticoid</h4><p class="text-xs text-gray-500 truncate">So sánh hiệu lực thuốc</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <div onclick="useTool('corticoid', 'Chuyển đổi liều Corticoid', 'fa-pills', 'blue', 'doilieu-corticoid.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'corticoid', 'Chuyển đổi liều Corticoid', 'doilieu-corticoid.html', 'fa-pills', 'blue')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="corticoid">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-blue-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center text-blue-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-pills"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-blue-600 transition-colors">
+                            Chuyển đổi liều Corticoid</h4>
+                        <p class="text-xs text-slate-400 truncate">So sánh hiệu lực thuốc</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-lg"><i class="fa-solid fa-capsules"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Kháng sinh, Kháng nấm & Virus</h4><p class="text-xs text-gray-500 truncate">Tra cứu liều dùng</p></div>
+                <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-capsules', 'blue', 'khang-sinh.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'khang-sinh.html', 'fa-capsules', 'blue')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="antibiotic">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-blue-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center text-blue-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-capsules"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-blue-600 transition-colors">
+                            Kháng sinh & Virus</h4>
+                        <p class="text-xs text-slate-400 truncate">Tra cứu liều dùng</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('drug-lookup', 'Tra cứu thuốc & VTYT', 'fa-book-medical', 'blue', 'danh-muc-thuoc.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 text-lg"><i class="fa-solid fa-book-medical"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Tra cứu thuốc & VTYT</h4><p class="text-xs text-gray-500 truncate">Danh mục thuốc & Vật tư</p></div>
+                <div onclick="useTool('drug-lookup', 'Tra cứu thuốc & VTYT', 'fa-book-medical', 'blue', 'danh-muc-thuoc.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'drug-lookup', 'Tra cứu thuốc & VTYT', 'danh-muc-thuoc.html', 'fa-book-medical', 'blue')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="drug-lookup">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-blue-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-blue-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center text-blue-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-book-medical"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-blue-600 transition-colors">
+                            Tra cứu thuốc & VTYT</h4>
+                        <p class="text-xs text-slate-400 truncate">Danh mục thuốc & Vật tư</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('drip-rate', 'Đếm giọt dịch truyền', 'fa-droplet', 'cyan', 'dem-giot-dich-truyen.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600 text-lg"><i class="fa-solid fa-droplet"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Đếm giọt dịch truyền</h4><p class="text-xs text-gray-500 truncate">Tính số giọt/phút</p></div>
+                <div onclick="useTool('drip-rate', 'Đếm giọt dịch truyền', 'fa-droplet', 'cyan', 'dem-giot-dich-truyen.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'drip-rate', 'Đếm giọt dịch truyền', 'dem-giot-dich-truyen.html', 'fa-droplet', 'cyan')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="drip-rate">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-cyan-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-cyan-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-cyan-50 to-cyan-100 flex items-center justify-center text-cyan-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-droplet"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-cyan-600 transition-colors">
+                            Đếm giọt dịch truyền</h4>
+                        <p class="text-xs text-slate-400 truncate">Tính số giọt/phút</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-clock', 'cyan', 'tinh-thoi-gian-truyen-dich.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600 text-lg"><i class="fa-regular fa-clock"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Tính thời gian truyền dịch</h4><p class="text-xs text-gray-500 truncate">Dự báo thời gian hết dịch</p></div>
+                <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-clock', 'cyan', 'tinh-thoi-gian-truyen-dich.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'infusion-time', 'Tính thời gian truyền dịch', 'tinh-thoi-gian-truyen-dich.html', 'fa-clock', 'cyan')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="infusion-time">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-cyan-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-cyan-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-cyan-50 to-cyan-100 flex items-center justify-center text-cyan-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-regular fa-clock"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-cyan-600 transition-colors">
+                            Tính thời gian truyền dịch</h4>
+                        <p class="text-xs text-slate-400 truncate">Dự báo thời gian hết dịch</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('infusion-rate', 'Tính tốc độ truyền thuốc', 'fa-gauge-high', 'cyan', 'tinh-toc-do-truyen.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600 text-lg"><i class="fa-solid fa-gauge-high"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Tính tốc độ truyền thuốc</h4><p class="text-xs text-gray-500 truncate">ml/h hoặc mcg/kg/phút</p></div>
+                <div onclick="useTool('infusion-rate', 'Tính tốc độ truyền thuốc', 'fa-gauge-high', 'cyan', 'tinh-toc-do-truyen.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'infusion-rate', 'Tính tốc độ truyền thuốc', 'tinh-toc-do-truyen.html', 'fa-gauge-high', 'cyan')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="infusion-rate">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-cyan-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-cyan-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-cyan-50 to-cyan-100 flex items-center justify-center text-cyan-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-gauge-high"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-cyan-600 transition-colors">
+                            Tính tốc độ truyền thuốc</h4>
+                        <p class="text-xs text-slate-400 truncate">ml/h hoặc mcg/kg/phút</p>
+                    </div>
                 </div>
-
             </div>
         </div>
 
-        <!-- ==================== TỔNG QUÁT & DINH DƯỠNG ==================== -->
-        <div class="mb-6 tool-category">
-            <h3 class="font-bold text-gray-800 text-base md:text-lg mb-3 flex items-center border-l-4 border-green-500 pl-3 uppercase tracking-wide">
+        <div class="mb-8 tool-category animate-[fadeIn_0.5s_ease-out]" style="animation-delay: 300ms">
+            <h3 class="font-bold text-slate-800 text-lg md:text-xl mb-4 flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-xl bg-green-100 text-green-500 flex items-center justify-center shadow-sm"><i
+                        class="fa-solid fa-apple-whole"></i></span>
                 Tổng quát & Dinh dưỡng
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                
-                <div onclick="useTool('bmi', 'Chỉ số khối (BMI)', 'fa-weight-scale', 'green', 'bmi.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-lg"><i class="fa-solid fa-weight-scale"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Chỉ số khối (BMI)</h4><p class="text-xs text-gray-500 truncate">Đánh giá thể trạng cơ thể</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <div onclick="useTool('bmi', 'Chỉ số khối (BMI)', 'fa-weight-scale', 'green', 'bmi.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'bmi', 'Chỉ số khối (BMI)', 'bmi.html', 'fa-weight-scale', 'green')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="bmi">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-green-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-green-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center text-green-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-weight-scale"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-green-600 transition-colors">
+                            Chỉ số khối (BMI)</h4>
+                        <p class="text-xs text-slate-400 truncate">Đánh giá thể trạng cơ thể</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('egfr', 'Độ lọc cầu thận (eGFR)', 'fa-filter', 'green', 'do-loc-cau-than.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-lg"><i class="fa-solid fa-filter"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Độ lọc cầu thận (eGFR)</h4><p class="text-xs text-gray-500 truncate">Đánh giá chức năng thận</p></div>
+                <div onclick="useTool('egfr', 'Độ lọc cầu thận (eGFR)', 'fa-filter', 'green', 'do-loc-cau-than.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'egfr', 'Độ lọc cầu thận (eGFR)', 'do-loc-cau-than.html', 'fa-filter', 'green')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="egfr">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-green-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-green-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center text-green-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-filter"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-green-600 transition-colors">
+                            Độ lọc cầu thận (eGFR)</h4>
+                        <p class="text-xs text-slate-400 truncate">Đánh giá chức năng thận</p>
+                    </div>
                 </div>
 
-                <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-utensils', 'green', 'tra-cuu-che-do-an.html')" class="tool-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md cursor-pointer flex items-center gap-3 border border-transparent hover:border-teal-100">
-                    <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-green-100 flex items-center justify-center text-green-600 text-lg"><i class="fa-solid fa-utensils"></i></div>
-                    <div class="overflow-hidden"><h4 class="font-semibold text-gray-800 text-sm md:text-base truncate">Tra cứu chế độ ăn</h4><p class="text-xs text-gray-500 truncate">Dinh dưỡng cho bệnh lý</p></div>
+                <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-utensils', 'green', 'tra-cuu-che-do-an.html')"
+                    class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                    <button
+                        onclick="event.stopPropagation(); handleHeartClick(this, 'diet', 'Tra cứu chế độ ăn', 'tra-cuu-che-do-an.html', 'fa-utensils', 'green')"
+                        class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                        data-id="diet">
+                        <i
+                            class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                    </button>
+                    <div
+                        class="absolute top-0 right-0 w-12 h-12 bg-green-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-green-100">
+                    </div>
+                    <div
+                        class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center text-green-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-utensils"></i></div>
+                    <div class="overflow-hidden relative z-10">
+                        <h4
+                            class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-green-600 transition-colors">
+                            Tra cứu chế độ ăn</h4>
+                        <p class="text-xs text-slate-400 truncate">Dinh dưỡng cho bệnh lý</p>
+                    </div>
                 </div>
 
             </div>
@@ -313,74 +883,62 @@
 
     </main>
 
-    <!-- ============================================ -->
-    <!-- SIDE DRAWER (GIỮ NGUYÊN) -->
-    <!-- ============================================ -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- Mobile Bottom Nav (GIỮ NGUYÊN) -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            
-            <a href="#" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- ============================================ -->
-    <!-- SCRIPTS -->
-    <!-- ============================================ -->
     <script>
-        // --- LOGIC LƯU LỊCH SỬ ---
+        // LOGIC TIM (YÊU THÍCH)
+        async function handleHeartClick(btn, id, name, url, icon, color) {
+            // 1. UI Optimistic Update (Đổi màu ngay lập tức)
+            const iconEl = btn.querySelector('i');
+            const isFav = iconEl.classList.contains('fa-solid');
+
+            if (isFav) {
+                // Đang thích -> Bỏ thích
+                iconEl.className = 'fa-regular fa-heart text-slate-300 group-hover/btn:text-red-500 transition-colors';
+            } else {
+                // Chưa thích -> Thích
+                iconEl.className = 'fa-solid fa-heart text-red-500 transition-colors';
+            }
+
+            // 2. Call Global Firebase Logic
+            if (window.toggleFavorite) {
+                // Gọi hàm toggleFavorite từ app.js
+                await window.toggleFavorite(id, name, url, icon, color);
+            } else {
+                alert('Chưa tải xong dữ liệu, vui lòng đợi...');
+            }
+        }
+
+        // HÀM: TỰ ĐỘNG TẢI TRẠNG THÁI TIM KHI VÀO TRANG
+        window.loadFavorites = function (uid) {
+            // Hàm này được app.js gọi khi người dùng đã đăng nhập
+            if (window.getUserFavorites) {
+                window.getUserFavorites(function (favorites) {
+                    // Reset tất cả về rỗng trước
+                    document.querySelectorAll('.fav-btn i').forEach(i => {
+                        i.className = 'fa-regular fa-heart text-slate-300 group-hover/btn:text-red-500 transition-colors';
+                    });
+
+                    // Tô màu các item đã thích
+                    favorites.forEach(item => {
+                        const btn = document.querySelector(`.fav-btn[data-id="${item.id}"]`);
+                        if (btn) {
+                            const icon = btn.querySelector('i');
+                            icon.className = 'fa-solid fa-heart text-red-500 transition-colors';
+                        }
+                    });
+                });
+            }
+        }
+
+        // --- LOGIC LƯU LỊCH SỬ DÙNG CÔNG CỤ (Giữ nguyên) ---
         function useTool(id, name, icon, color, url) {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-            
-            recentTools = recentTools.filter(tool => 
-                tool.url !== url && 
-                tool.id !== id && 
+
+            recentTools = recentTools.filter(tool =>
+                tool.url !== url &&
+                tool.id !== id &&
                 tool.name !== name
             );
-            
+
             recentTools.unshift({
                 id: id,
                 name: name,
@@ -395,13 +953,14 @@
             cleanToolsList();
 
             if (url) {
-                window.location.href = url;
+                document.body.style.opacity = '0.7';
+                document.body.style.transition = 'opacity 0.2s';
+                setTimeout(() => window.location.href = url, 100);
             } else {
                 alert('Trang này chưa sẵn sàng!');
             }
         }
 
-        // --- HÀM TỰ ĐỘNG LÀM SẠCH DANH SÁCH ---
         function cleanToolsList() {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             if (recentTools.length === 0) return;
@@ -432,13 +991,13 @@
 
         // --- HÀM LOẠI BỎ DẤU TIẾNG VIỆT ---
         function removeVietnameseTones(str) {
-            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
-            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
-            str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
-            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
-            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
-            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
-            str = str.replace(/đ/g,"d");
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
             str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
             str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
             str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
@@ -446,8 +1005,8 @@
             str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
             str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
             str = str.replace(/Đ/g, "D");
-            str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); 
-            str = str.replace(/\u02C6|\u0306|\u031B/g, ""); 
+            str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, "");
+            str = str.replace(/\u02C6|\u0306|\u031B/g, "");
             return str;
         }
 
@@ -461,7 +1020,7 @@
             items.forEach(item => {
                 const text = item.textContent || item.innerText;
                 const normalizedText = removeVietnameseTones(text.toLowerCase());
-                
+
                 if (normalizedText.includes(filter)) {
                     item.style.display = "flex";
                 } else {
@@ -479,46 +1038,48 @@
             });
         }
 
-        // --- DRAWER MENU LOGIC ---
-        function openDrawer(e) {
-            if(e) e.preventDefault();
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            drawer.classList.remove('translate-x-full');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDrawer() {
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            drawer.classList.add('translate-x-full');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
         // ============================================
         // APP INIT & SECURITY
         // ============================================
         document.addEventListener('DOMContentLoaded', () => {
             cleanToolsList();
 
+            // Hiệu ứng cuộn khi search
+            const searchContainer = document.getElementById('search-container');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 10) {
+                    searchContainer.classList.add('shadow-sm');
+                } else {
+                    searchContainer.classList.remove('shadow-sm');
+                }
+            });
+
             // Prevent Right Click
             document.addEventListener('contextmenu', e => e.preventDefault());
-            
-            // Prevent Keyboard Shortcuts (F12, Ctrl+U, Ctrl+S, Ctrl+P)
+
+            // Prevent Keyboard Shortcuts
             document.addEventListener('keydown', e => {
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && ['u', 's', 'p', 'a', 'c'].includes(e.key.toLowerCase()))) {
+                if (e.key === 'F12' || (e.ctrlKey && ['u', 's', 'p', 'a', 'c'].includes(e.key.toLowerCase()))) {
                     e.preventDefault();
                 }
             });
         });
 
     </script>
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

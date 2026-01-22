@@ -1,53 +1,73 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tính Độ Lọc Cầu Thận (eGFR) - Máy Tính Y Học</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ICONS & PWA -->
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 80px; /* Space for Bottom Nav */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 80px;
+            /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
+            /* Ngăn chọn text toàn trang */
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
         /* Cho phép chọn text ở input và kết quả */
-        .result-text, input, textarea, select {
+        .result-text,
+        input,
+        textarea,
+        select {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-        
+
         /* Tùy chỉnh thanh cuộn nếu cần */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
 
         /* Style riêng cho form eGFR */
         .score-box {
@@ -62,35 +82,22 @@
             border: 1px solid #c7d2fe;
             margin-bottom: 1rem;
         }
-        
+
         /* Ẩn mũi tên input number */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
+
         input[type="number"] {
             -moz-appearance: textfield;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- 2. HEADER & NAVIGATION -->
-    <!-- A. Desktop Header -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png'" alt="Logo" class="w-10 h-10 object-contain">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
-
-    <!-- B. Mobile Header (App Style) -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -98,41 +105,39 @@
         <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
             Độ Lọc Cầu Thận
         </h1>
-        <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
+        <div class="w-8"></div>
     </header>
 
-    <!-- 3. CẤU TRÚC MAIN CONTENT -->
     <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-        <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            
-            <!-- HEADER CỦA CARD (DESKTOP) -->
+
             <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <!-- Nút Back Desktop -->
-                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <div>
                         <h1 class="text-2xl font-bold">Tính Độ Lọc Cầu Thận (eGFR)</h1>
-                        <p class="text-indigo-100 mt-1 text-sm">Đánh giá chức năng thận qua eGFR (CKD-EPI, MDRD, Schwartz...)</p>
+                        <p class="text-indigo-100 mt-1 text-sm">Đánh giá chức năng thận qua eGFR (CKD-EPI, MDRD,
+                            Schwartz...)</p>
                     </div>
                 </div>
-                <!-- Icon đại diện mờ -->
                 <i class="fa-solid fa-filter text-4xl text-indigo-300 opacity-50"></i>
             </div>
 
-            <!-- FORM TÍNH TOÁN -->
             <div class="p-4 md:p-8">
-                
+
                 <form id="egfr-calculator-form" class="space-y-6">
-                    
+
                     <div class="input-group">
                         <label for="formula-select" class="block text-sm font-bold text-gray-700 mb-2">
                             <i class="fa-solid fa-flask mr-2 text-indigo-600"></i>Chọn công thức tính
                         </label>
-                        <select id="formula-select" name="formula" class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-gray-50">
-                            <option value="ckd-epi-creatinine-2021">CKD-EPI Creatinine (2021) - Khuyên dùng (Người lớn)</option>
+                        <select id="formula-select" name="formula"
+                            class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-gray-50">
+                            <option value="ckd-epi-creatinine-2021">CKD-EPI Creatinine (2021) - Khuyên dùng (Người lớn)
+                            </option>
                             <option value="mdrd">MDRD - Người lớn (Cổ điển)</option>
                             <option value="bedside-schwartz">Bedside Schwartz - Trẻ em (&lt;19 tuổi)</option>
                             <option value="ckd-epi-cystatin-c-2012">CKD-EPI Cystatin C (2012)</option>
@@ -141,51 +146,60 @@
                     </div>
 
                     <div id="input-fields" class="space-y-4">
-                        
-                        <div class="input-group formula-field ckd-epi-creatinine-2021 mdrd ckd-epi-cystatin-c-2012 cockcroft-gault bg-gray-50 p-4 rounded-lg border border-gray-100">
+
+                        <div
+                            class="input-group formula-field ckd-epi-creatinine-2021 mdrd ckd-epi-cystatin-c-2012 cockcroft-gault bg-gray-50 p-4 rounded-lg border border-gray-100">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Giới tính</label>
                             <div class="flex space-x-6">
                                 <label class="flex items-center cursor-pointer group">
-                                    <input type="radio" name="gender" value="male" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                    <input type="radio" name="gender" value="male"
+                                        class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
                                     <span class="ml-2 text-gray-700 group-hover:text-indigo-600">Nam</span>
                                 </label>
                                 <label class="flex items-center cursor-pointer group">
-                                    <input type="radio" name="gender" value="female" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                    <input type="radio" name="gender" value="female"
+                                        class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
                                     <span class="ml-2 text-gray-700 group-hover:text-indigo-600">Nữ</span>
                                 </label>
                             </div>
                         </div>
 
-                        <div class="input-group formula-field mdrd hidden bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <div
+                            class="input-group formula-field mdrd hidden bg-gray-50 p-4 rounded-lg border border-gray-100">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Chủng tộc</label>
                             <div class="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0">
                                 <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="race" value="non-black" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                    <input type="radio" name="race" value="non-black"
+                                        class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
                                     <span class="ml-2 text-gray-700">Không phải người da đen</span>
                                 </label>
                                 <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="race" value="black" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                    <input type="radio" name="race" value="black"
+                                        class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
                                     <span class="ml-2 text-gray-700">Người da đen</span>
                                 </label>
                             </div>
                         </div>
 
-                        <div class="input-group formula-field ckd-epi-creatinine-2021 bedside-schwartz mdrd ckd-epi-cystatin-c-2012 cockcroft-gault">
+                        <div
+                            class="input-group formula-field ckd-epi-creatinine-2021 bedside-schwartz mdrd ckd-epi-cystatin-c-2012 cockcroft-gault">
                             <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Tuổi (năm)</label>
-                            <!-- Age is typically integer, keeping numeric -->
                             <input type="number" id="age" name="age" min="0" max="120" placeholder="Nhập tuổi" required
-                                   class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                   inputmode="numeric" pattern="[0-9]*">
+                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                inputmode="numeric" pattern="[0-9]*">
                         </div>
 
-                        <div class="input-group formula-field ckd-epi-creatinine-2021 bedside-schwartz mdrd cockcroft-gault">
-                            <label for="creatinine" class="block text-sm font-medium text-gray-700 mb-1">Creatinine huyết thanh</label>
+                        <div
+                            class="input-group formula-field ckd-epi-creatinine-2021 bedside-schwartz mdrd cockcroft-gault">
+                            <label for="creatinine" class="block text-sm font-medium text-gray-700 mb-1">Creatinine
+                                huyết thanh</label>
                             <div class="flex rounded-md shadow-sm">
-                                <!-- Changed inputmode to decimal for decimal keyboard -->
-                                <input type="number" id="creatinine" name="creatinine" step="any" min="0" placeholder="Nhập giá trị" required
-                                       class="flex-1 block w-full px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                       inputmode="decimal" pattern="[0-9.]*">
-                                <select id="creatinine-unit" name="creatinine-unit" class="bg-gray-50 border border-l-0 border-gray-300 rounded-r-lg px-3 py-3 text-gray-600 sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <input type="number" id="creatinine" name="creatinine" step="any" min="0"
+                                    placeholder="Nhập giá trị" required
+                                    class="flex-1 block w-full px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    inputmode="decimal" pattern="[0-9.]*">
+                                <select id="creatinine-unit" name="creatinine-unit"
+                                    class="bg-gray-50 border border-l-0 border-gray-300 rounded-r-lg px-3 py-3 text-gray-600 sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                     <option value="umol/L" selected>µmol/L</option>
                                     <option value="mg/dL">mg/dL</option>
                                 </select>
@@ -195,11 +209,12 @@
                         <div class="input-group formula-field bedside-schwartz hidden">
                             <label for="height" class="block text-sm font-medium text-gray-700 mb-1">Chiều cao</label>
                             <div class="flex rounded-md shadow-sm">
-                                <!-- Changed inputmode to decimal for decimal keyboard -->
-                                <input type="number" id="height" name="height" step="any" min="0" placeholder="Nhập chiều cao" required
-                                       class="flex-1 block w-full px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                       inputmode="decimal" pattern="[0-9.]*">
-                                <select id="height-unit" name="height-unit" class="bg-gray-50 border border-l-0 border-gray-300 rounded-r-lg px-3 py-3 text-gray-600 sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <input type="number" id="height" name="height" step="any" min="0"
+                                    placeholder="Nhập chiều cao" required
+                                    class="flex-1 block w-full px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    inputmode="decimal" pattern="[0-9.]*">
+                                <select id="height-unit" name="height-unit"
+                                    class="bg-gray-50 border border-l-0 border-gray-300 rounded-r-lg px-3 py-3 text-gray-600 sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                     <option value="cm" selected>cm</option>
                                     <option value="inch">inch</option>
                                 </select>
@@ -207,28 +222,32 @@
                         </div>
 
                         <div class="input-group formula-field ckd-epi-cystatin-c-2012 hidden">
-                            <label for="cystatin-c" class="block text-sm font-medium text-gray-700 mb-1">Cystatin C (mg/L)</label>
-                            <!-- Changed inputmode to decimal for decimal keyboard -->
-                            <input type="number" id="cystatin-c" name="cystatin-c" step="any" min="0" placeholder="Nhập giá trị" required
-                                   class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                   inputmode="decimal" pattern="[0-9.]*">
+                            <label for="cystatin-c" class="block text-sm font-medium text-gray-700 mb-1">Cystatin C
+                                (mg/L)</label>
+                            <input type="number" id="cystatin-c" name="cystatin-c" step="any" min="0"
+                                placeholder="Nhập giá trị" required
+                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                inputmode="decimal" pattern="[0-9.]*">
                         </div>
 
                         <div class="input-group formula-field cockcroft-gault hidden">
-                            <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Cân nặng (kg)</label>
-                            <!-- Changed inputmode to decimal for decimal keyboard -->
-                            <input type="number" id="weight" name="weight" step="any" min="0" placeholder="Nhập cân nặng" required
-                                   class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                   inputmode="decimal" pattern="[0-9.]*">
+                            <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Cân nặng
+                                (kg)</label>
+                            <input type="number" id="weight" name="weight" step="any" min="0"
+                                placeholder="Nhập cân nặng" required
+                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                inputmode="decimal" pattern="[0-9.]*">
                         </div>
 
                     </div>
 
                     <div class="pt-4 flex flex-col sm:flex-row gap-4">
-                        <button type="submit" id="calculateBtn" class="flex-1 bg-indigo-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
+                        <button type="submit" id="calculateBtn"
+                            class="flex-1 bg-indigo-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
                             <i class="fa-solid fa-calculator mr-2"></i> Tính toán
                         </button>
-                        <button type="button" id="clearBtn" class="flex-1 bg-white text-gray-600 border border-gray-200 font-bold py-3.5 px-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 hover:bg-gray-50 flex items-center justify-center">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-600 border border-gray-200 font-bold py-3.5 px-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 hover:bg-gray-50 flex items-center justify-center">
                             <i class="fa-solid fa-rotate-left mr-2"></i> Làm mới
                         </button>
                     </div>
@@ -236,8 +255,9 @@
 
                 <div id="result-container" class="mt-8 hidden animate-fade-in-up">
                     <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center shadow-inner">
-                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Kết quả eGFR / CrCl</h3>
-                        
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Kết quả eGFR / CrCl
+                        </h3>
+
                         <div id="egfr-display" class="score-box bg-white text-5xl text-indigo-700">0</div>
                         <p class="text-sm text-gray-500 mb-4">(mL/min/1.73m² hoặc mL/min)</p>
 
@@ -254,73 +274,22 @@
         </div>
     </main>
 
-    <!-- 4. DRAWER, NAV & MODAL -->
-    <!-- DRAWER MENU -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- MOBILE BOTTOM NAV -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- NOTIFICATION MODAL -->
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
     </div>
 
-    <!-- 5. JAVASCRIPT LOGIC -->
     <script>
         // --- 1. LOGIC LƯU LỊCH SỬ ---
         function useTool(id, name, icon, color, url) {
@@ -338,53 +307,31 @@
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
 
-        // --- 2. LOGIC DRAWER MENU ---
-        function openDrawer(e) {
-            if(e) e.preventDefault();
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            drawer.classList.remove('translate-x-full');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDrawer() {
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            drawer.classList.add('translate-x-full');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
         // --- 3. LOGIC MODAL ---
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
 
-        window.showModal = function(message) {
-            if(modal && modalMessage) {
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
                 modalMessage.textContent = message;
                 modal.classList.remove('hidden');
             }
         }
 
-        window.hideModal = function() {
-            if(modal) modal.classList.add('hidden');
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
         }
 
         // --- 4. ANTI-COPY & SECURITY ---
         document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 's' || event.key === 'S' || event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A')) {
                 event.preventDefault();
             }
         });
 
         // --- 5. LOGIC EGFR ---
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const formulaSelect = document.getElementById('formula-select');
             const egfrForm = document.getElementById('egfr-calculator-form');
             const egfrDisplay = document.getElementById('egfr-display');
@@ -440,13 +387,13 @@
             formulaSelect.addEventListener('change', updateInputFields);
 
             // Form Submit
-            egfrForm.addEventListener('submit', function(event) {
+            egfrForm.addEventListener('submit', function (event) {
                 event.preventDefault();
 
                 const selectedFormula = formulaSelect.value;
                 let egfrValue;
                 let errorMessage = '';
-                
+
                 const getRadioValue = (name) => {
                     const el = document.querySelector(`input[name="${name}"]:checked`);
                     return el ? el.value : null;
@@ -461,12 +408,12 @@
                 const gender = getRadioValue('gender');
                 let race = getRadioValue('race');
                 const age = getInputValue('age');
-                let creatinine = getInputValue('creatinine'); 
+                let creatinine = getInputValue('creatinine');
                 const creatinineUnit = creatinineUnitSelect.value;
-                let height = getInputValue('height'); 
-                const heightUnit = heightUnitSelect ? heightUnitSelect.value : 'cm'; 
-                const cystatinC = getInputValue('cystatin-c'); 
-                const weight = getInputValue('weight'); 
+                let height = getInputValue('height');
+                const heightUnit = heightUnitSelect ? heightUnitSelect.value : 'cm';
+                const cystatinC = getInputValue('cystatin-c');
+                const weight = getInputValue('weight');
 
                 // Conversions
                 if (creatinineUnit === 'umol/L' && creatinine !== null) creatinine /= 88.4;
@@ -494,7 +441,7 @@
                         if (age < 18) { errorMessage = 'CKD-EPI 2021 không dùng cho người dưới 18 tuổi.'; break; }
                         let kappa = 0.9, alpha = -0.302, femaleMult = 1;
                         if (gender === 'female') { kappa = 0.7; alpha = -0.241; femaleMult = 1.012; }
-                        egfrValue = 142 * Math.pow(Math.min(creatinine/kappa, 1), alpha) * Math.pow(Math.max(creatinine/kappa, 1), -1.200) * Math.pow(0.9938, age) * femaleMult;
+                        egfrValue = 142 * Math.pow(Math.min(creatinine / kappa, 1), alpha) * Math.pow(Math.max(creatinine / kappa, 1), -1.200) * Math.pow(0.9938, age) * femaleMult;
                         break;
 
                     case 'bedside-schwartz':
@@ -516,7 +463,7 @@
                         let kCys = 0.8, aCys = -0.364, fMultCys = 1;
                         if (gender === 'female') { kCys = 0.8; aCys = -0.329; fMultCys = 0.932; }
                         if (cystatinC <= 0) { errorMessage = 'Cystatin C phải > 0.'; break; }
-                        egfrValue = 133 * Math.pow(Math.min(cystatinC/kCys, 1), aCys) * Math.pow(Math.max(cystatinC/kCys, 1), -0.499) * Math.pow(0.996, age) * fMultCys;
+                        egfrValue = 133 * Math.pow(Math.min(cystatinC / kCys, 1), aCys) * Math.pow(Math.max(cystatinC / kCys, 1), -0.499) * Math.pow(0.996, age) * fMultCys;
                         break;
 
                     case 'cockcroft-gault':
@@ -557,7 +504,7 @@
                     evaluationText.className = "result-text text-lg leading-relaxed " + colorClass;
 
                     resultContainer.classList.remove('hidden');
-                    
+
                     // Save History
                     useTool('egfr-tool', 'Độ Lọc Cầu Thận (eGFR)', 'fa-solid fa-filter', '#4f46e5', window.location.href);
 
@@ -567,14 +514,16 @@
             });
 
             // Clear Button
-            clearBtn.addEventListener('click', function() {
-                egfrForm.reset(); 
+            clearBtn.addEventListener('click', function () {
+                egfrForm.reset();
                 creatinineUnitSelect.value = 'umol/L';
                 if (heightUnitSelect) heightUnitSelect.value = 'cm';
-                updateInputFields(); 
+                updateInputFields();
                 resultContainer.classList.add('hidden');
             });
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

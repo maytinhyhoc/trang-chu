@@ -1,259 +1,384 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tính & Phân loại LDLc</title>
-    
-    <!-- TAILWIND CSS -->
+    <title>Thang điểm ISTH DIC</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ICONS & PWA -->
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 80px; /* Space for Bottom Nav */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 90px;
+            /* Tăng khoảng trống dưới cùng để cuộn thoải mái hơn */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
+            /* Ngăn chọn text toàn trang */
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
         /* Cho phép chọn text ở input và kết quả */
-        .result-text, input, textarea, select {
+        .result-text,
+        input,
+        textarea {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-        
-        /* Tùy chỉnh thanh cuộn nếu cần */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-        /* Tùy chỉnh riêng cho Tool này */
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        /* Custom Radio Style for Cards */
+        .custom-radio:checked+label {
+            background-color: #eef2ff;
+            border-color: #6366f1;
+            color: #4338ca;
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1), 0 2px 4px -1px rgba(99, 102, 241, 0.06);
         }
-        input[type="radio"] {
-            accent-color: #4f46e5;
-            width: 1.2rem;
-            height: 1.2rem;
-            cursor: pointer;
+
+        .custom-radio:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Tùy chỉnh thanh cuộn nếu cần */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
         }
     </style>
 </head>
-<body>
 
-    <!-- === HEADER & NAVIGATION === -->
-    <!-- Desktop Header -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.style.display='none'">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
+<body class="flex flex-col min-h-screen">
 
-    <!-- Mobile Header (App Style) -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
         </a>
         <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
-            Phân Loại LDLc
+            Thang điểm ISTH DIC
         </h1>
         <div class="w-8"></div>
     </header>
 
-    <!-- === MAIN CONTENT === -->
-    <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-        <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
+    <main class="flex-grow container mx-auto px-3 md:px-4 pt-[68px] md:pt-24 pb-4 max-w-4xl">
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            
-            <!-- HEADER CỦA CARD (DESKTOP) -->
+
             <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <div>
-                        <h1 class="text-2xl font-bold">Tính & Phân loại LDLc</h1>
-                        <p class="text-indigo-100 mt-1 text-sm">Đánh giá mục tiêu điều trị theo ESC/EAS 2021</p>
+                        <h1 class="text-2xl font-bold">Thang điểm ISTH chẩn đoán DIC</h1>
+                        <p class="text-indigo-100 mt-1 text-sm">Tiêu chuẩn vàng chẩn đoán Đông máu nội mạch lan tỏa
+                            (2001)</p>
                     </div>
                 </div>
-                <i class="fa-solid fa-heart-pulse text-4xl text-indigo-300 opacity-50"></i>
+                <i class="fa-solid fa-file-medical text-4xl text-indigo-300 opacity-50"></i>
             </div>
 
-            <!-- FORM TÍNH TOÁN -->
-            <div class="p-4 md:p-8">
-                
-                <!-- Toggle Mode Buttons -->
-                <div class="flex p-1 bg-gray-100 rounded-xl mb-6 select-none">
-                    <button id="direct-input-btn" class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-sm bg-white text-indigo-600">
-                        Nhập LDLc
-                    </button>
-                    <button id="calculate-ldlc-btn" class="flex-1 py-2.5 rounded-lg text-sm font-semibold text-gray-500 transition-all hover:text-indigo-600">
-                        Tính toán
-                    </button>
+            <div class="p-3 md:p-8">
+
+                <div
+                    class="mb-4 md:mb-6 p-3 md:p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 text-sm rounded-r-lg shadow-sm">
+                    <div class="flex">
+                        <i class="fa-solid fa-triangle-exclamation mr-3 mt-0.5"></i>
+                        <div>
+                            <strong>Lưu ý quan trọng:</strong> Thang điểm chỉ áp dụng cho bệnh nhân có bệnh lý nền nguy
+                            cơ cao (nhiễm trùng huyết, chấn thương...).
+                        </div>
+                    </div>
                 </div>
 
-                <!-- FORM 1: Nhập trực tiếp -->
-                <form id="direct-ldlc-form" class="space-y-6">
+                <form id="tool-form" class="space-y-4 md:space-y-6" novalidate>
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Chỉ số LDL Cholesterol</label>
-                        <div class="flex items-center gap-3">
-                            <input type="number" id="ldlc-direct" step="0.01" placeholder="Nhập giá trị..." class="flex-1 p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-gray-50">
-                            <select id="ldlc-unit-direct" class="p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                                <option value="mmol/L">mmol/L</option>
-                                <option value="mg/dL">mg/dL</option>
-                            </select>
+                        <label class="block text-sm font-bold text-gray-700 mb-1.5 md:mb-2 uppercase tracking-wide">
+                            <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">1</span>Số lượng Tiểu
+                            cầu
+                        </label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="relative">
+                                <input type="radio" name="platelets" id="plt_0" value="0"
+                                    class="custom-radio peer sr-only">
+                                <label for="plt_0"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">> 100</div>
+                                        <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
+                                    </div>
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                        <i class="fa-solid fa-circle-check text-sm"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" name="platelets" id="plt_1" value="1"
+                                    class="custom-radio peer sr-only">
+                                <label for="plt_1"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">
+                                            < 100</div>
+                                                <div class="text-[10px] text-gray-500 mt-1">1 điểm</div>
+                                        </div>
+                                        <div
+                                            class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                            <i class="fa-solid fa-circle-check text-sm"></i>
+                                        </div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" name="platelets" id="plt_2" value="2"
+                                    class="custom-radio peer sr-only">
+                                <label for="plt_2"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">
+                                            < 50</div>
+                                                <div class="text-[10px] text-gray-500 mt-1">2 điểm</div>
+                                        </div>
+                                        <div
+                                            class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                            <i class="fa-solid fa-circle-check text-sm"></i>
+                                        </div>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </form>
 
-                <!-- FORM 2: Tính toán (Ẩn mặc định) -->
-                <form id="calculate-ldlc-form" class="space-y-6 hidden">
-                    <div class="grid md:grid-cols-1 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Cholesterol Toàn phần (TC)</label>
-                            <div class="flex items-center gap-3">
-                                <input type="number" id="tc-value" step="0.01" placeholder="Nhập TC" class="flex-1 p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-gray-50">
-                                <select id="tc-unit" class="p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                                    <option value="mmol/L">mmol/L</option>
-                                    <option value="mg/dL">mg/dL</option>
-                                </select>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1.5 md:mb-2 uppercase tracking-wide">
+                            <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">2</span>D-Dimer/FDP
+                        </label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="relative">
+                                <input type="radio" name="ddimer" id="ddimer_0" value="0"
+                                    class="custom-radio peer sr-only">
+                                <label for="ddimer_0"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">Không tăng</div>
+                                        <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
+                                    </div>
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                        <i class="fa-solid fa-circle-check text-sm"></i>
+                                    </div>
+                                </label>
                             </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">HDL Cholesterol</label>
-                            <div class="flex items-center gap-3">
-                                <input type="number" id="hdlc-value" step="0.01" placeholder="Nhập HDLc" class="flex-1 p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-gray-50">
-                                <select id="hdlc-unit" class="p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                                    <option value="mmol/L">mmol/L</option>
-                                    <option value="mg/dL">mg/dL</option>
-                                </select>
+                            <div class="relative">
+                                <input type="radio" name="ddimer" id="ddimer_2" value="2"
+                                    class="custom-radio peer sr-only">
+                                <label for="ddimer_2"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">Tăng vừa</div>
+                                        <div class="text-[10px] text-gray-500 mt-1">2 điểm</div>
+                                    </div>
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                        <i class="fa-solid fa-circle-check text-sm"></i>
+                                    </div>
+                                </label>
                             </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Triglyceride (TG)</label>
-                            <div class="flex items-center gap-3">
-                                <input type="number" id="tg-value" step="0.01" placeholder="Nhập TG" class="flex-1 p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-gray-50">
-                                <select id="tg-unit" class="p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                                    <option value="mmol/L">mmol/L</option>
-                                    <option value="mg/dL">mg/dL</option>
-                                </select>
+                            <div class="relative">
+                                <input type="radio" name="ddimer" id="ddimer_3" value="3"
+                                    class="custom-radio peer sr-only">
+                                <label for="ddimer_3"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">Tăng mạnh</div>
+                                        <div class="text-[10px] text-gray-500 mt-1">3 điểm</div>
+                                    </div>
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                        <i class="fa-solid fa-circle-check text-sm"></i>
+                                    </div>
+                                </label>
                             </div>
                         </div>
                     </div>
-                    <p class="text-xs text-blue-600 bg-blue-50 p-3 rounded-lg flex items-start gap-2">
-                        <i class="fa-solid fa-circle-info mt-0.5"></i>
-                        Công thức Friedewald: Không chính xác nếu TG > 4.5 mmol/L (400 mg/dL).
-                    </p>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1.5 md:mb-2 uppercase tracking-wide">
+                            <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">3</span>PT kéo dài
+                        </label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="relative">
+                                <input type="radio" name="pt" id="pt_0" value="0" class="custom-radio peer sr-only">
+                                <label for="pt_0"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">
+                                            < 3s</div>
+                                                <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
+                                        </div>
+                                        <div
+                                            class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                            <i class="fa-solid fa-circle-check text-sm"></i>
+                                        </div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" name="pt" id="pt_1" value="1" class="custom-radio peer sr-only">
+                                <label for="pt_1"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">3 - 6s</div>
+                                        <div class="text-[10px] text-gray-500 mt-1">1 điểm</div>
+                                    </div>
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                        <i class="fa-solid fa-circle-check text-sm"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" name="pt" id="pt_2" value="2" class="custom-radio peer sr-only">
+                                <label for="pt_2"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">> 6s</div>
+                                        <div class="text-[10px] text-gray-500 mt-1">2 điểm</div>
+                                    </div>
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                        <i class="fa-solid fa-circle-check text-sm"></i>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1.5 md:mb-2 uppercase tracking-wide">
+                            <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2">4</span>Fibrinogen
+                        </label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="relative">
+                                <input type="radio" name="fibrinogen" id="fib_0" value="0"
+                                    class="custom-radio peer sr-only">
+                                <label for="fib_0"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">> 1.0 g/L</div>
+                                        <div class="text-[10px] text-gray-500 mt-1">0 điểm</div>
+                                    </div>
+                                    <div
+                                        class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                        <i class="fa-solid fa-circle-check text-sm"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" name="fibrinogen" id="fib_1" value="1"
+                                    class="custom-radio peer sr-only">
+                                <label for="fib_1"
+                                    class="relative flex flex-col items-center justify-center text-center p-2 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all h-full min-h-[70px]">
+                                    <div class="w-full">
+                                        <div class="font-bold text-sm text-gray-800 leading-tight">
+                                            < 1.0 g/L</div>
+                                                <div class="text-[10px] text-gray-500 mt-1">1 điểm</div>
+                                        </div>
+                                        <div
+                                            class="check-icon opacity-0 transform scale-50 transition-all duration-200 text-indigo-600 absolute top-1 right-1">
+                                            <i class="fa-solid fa-circle-check text-sm"></i>
+                                        </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 md:pt-4 flex gap-3">
+                        <button type="submit"
+                            class="flex-1 bg-indigo-600 text-white font-bold py-3 md:py-3.5 px-4 md:px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-indigo-700 transition transform active:scale-95 flex items-center justify-center text-base md:text-lg">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính
+                        </button>
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-600 border border-gray-200 font-bold py-3 md:py-3.5 px-4 md:px-6 rounded-xl shadow-sm hover:shadow-md hover:bg-gray-50 transition active:scale-95 flex items-center justify-center text-base md:text-lg">
+                            <i class="fa-solid fa-rotate-left mr-2"></i> Làm Mới
+                        </button>
+                    </div>
+
                 </form>
 
-                <!-- Shared Risk Stratification -->
-                <div class="mt-6 pt-6 border-t border-gray-100">
-                    <label class="block text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group text-indigo-500"></i>
-                        Phân tầng nguy cơ (ESC/EAS 2021)
-                    </label>
-                    <div class="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <label class="flex items-start cursor-pointer group">
-                            <input type="radio" name="risk-category" value="very-high" class="mt-1" checked>
-                            <div class="ml-3">
-                                <span class="font-bold text-red-600 block text-sm">Rất cao</span>
-                                <span class="text-gray-500 text-xs mt-0.5 block">ASCVD lâm sàng, ĐTĐ tổn thương đích, Suy thận nặng (eGFR &lt;30)...</span>
-                            </div>
-                        </label>
-                        <div class="border-t border-gray-200 border-dashed my-1"></div>
-                        
-                        <label class="flex items-start cursor-pointer group">
-                            <input type="radio" name="risk-category" value="high" class="mt-1">
-                            <div class="ml-3">
-                                <span class="font-bold text-orange-500 block text-sm">Cao</span>
-                                <span class="text-gray-500 text-xs mt-0.5 block">TC &ge; 8 mmol/L, ĐTĐ &ge; 10 năm, Suy thận TB...</span>
-                            </div>
-                        </label>
-                        <div class="border-t border-gray-200 border-dashed my-1"></div>
+                <div id="result-container" class="mt-5 md:mt-8 hidden animate-fade-in-up">
+                    <div
+                        class="relative overflow-hidden rounded-2xl border-2 border-indigo-100 bg-indigo-50/50 p-4 md:p-6 text-center">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-600">
+                        </div>
 
-                        <label class="flex items-start cursor-pointer group">
-                            <input type="radio" name="risk-category" value="moderate" class="mt-1">
-                            <div class="ml-3">
-                                <span class="font-bold text-yellow-600 block text-sm">Trung bình</span>
-                                <span class="text-gray-500 text-xs mt-0.5 block">ĐTĐ trẻ tuổi, SCORE 1-4%.</span>
-                            </div>
-                        </label>
-                        <div class="border-t border-gray-200 border-dashed my-1"></div>
+                        <h3 class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wide mb-1 md:mb-2">Tổng
+                            điểm ISTH</h3>
+                        <div id="main-result"
+                            class="text-4xl md:text-5xl font-extrabold text-indigo-700 mb-3 md:mb-4 drop-shadow-sm">--
+                        </div>
 
-                        <label class="flex items-start cursor-pointer group">
-                            <input type="radio" name="risk-category" value="low" class="mt-1">
-                            <div class="ml-3">
-                                <span class="font-bold text-green-600 block text-sm">Thấp</span>
-                                <span class="text-gray-500 text-xs mt-0.5 block">SCORE &lt; 1%.</span>
-                            </div>
-                        </label>
+                        <div
+                            class="bg-white rounded-xl p-3 md:p-4 shadow-sm border border-indigo-50 inline-block w-full">
+                            <p id="sub-result" class="text-base md:text-lg font-medium text-gray-800 leading-relaxed">
+                                ...</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="flex gap-3 mt-8">
-                    <button id="calculate-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition active:scale-95 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-calculator"></i> Phân tích
+                <div class="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-100">
+                    <button
+                        class="w-full flex items-center justify-between text-left font-bold text-gray-700 hover:text-indigo-600 transition"
+                        onclick="document.getElementById('info-content').classList.toggle('hidden');">
+                        <span class="flex items-center"><i class="fa-solid fa-circle-info text-indigo-500 mr-2"></i> Chi
+                            tiết & Phân giải</span>
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
                     </button>
-                    <button id="clear-btn" class="w-12 bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold rounded-xl transition active:scale-95 flex items-center justify-center">
-                        <i class="fa-solid fa-rotate-right"></i>
-                    </button>
-                </div>
-
-                <!-- Result Area -->
-                <div id="result-container" class="hidden mt-8 animate-fade-in-up">
-                    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 text-center relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-4 opacity-10">
-                            <i class="fa-solid fa-heart-pulse text-6xl text-indigo-600"></i>
-                        </div>
-                        
-                        <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Kết quả LDL Cholesterol</h3>
-                        <div id="ldlc-display" class="text-4xl font-bold text-indigo-700 mb-6 font-mono tracking-tight">0.00 <span class="text-lg text-indigo-400 font-sans">mmol/L</span></div>
-                        
-                        <div class="bg-white rounded-xl p-4 text-left shadow-sm border border-indigo-100/50">
-                            <h4 class="text-sm font-bold text-gray-600 mb-2 flex items-center gap-2">
-                                <i class="fa-solid fa-clipboard-check text-indigo-500"></i> Khuyến cáo điều trị:
-                            </h4>
-                            <div id="recommendation-text" class="result-text text-gray-700 text-sm leading-relaxed">
-                                <!-- Kết quả sẽ hiện ở đây -->
-                            </div>
-                            <div id="warning-box" class="hidden mt-3 pt-3 border-t border-red-100">
-                                <p id="warning-text" class="text-red-500 text-xs italic flex items-start gap-1">
-                                    <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
-                                    <span></span>
-                                </p>
-                            </div>
-                        </div>
+                    <div id="info-content"
+                        class="mt-3 md:mt-4 hidden text-sm text-gray-600 space-y-2 md:space-y-3 bg-gray-50 p-3 md:p-4 rounded-xl">
+                        <p><strong>1. Phân giải kết quả:</strong></p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li><strong><span class="text-red-600 font-semibold">≥ 5 điểm:</span></strong> Phù hợp với
+                                chẩn đoán DIC điển hình (Overt DIC).</li>
+                            <li><strong><span class="text-indigo-600 font-semibold">
+                                        < 5 điểm:</span></strong> Chưa đủ tiêu chuẩn DIC điển hình (Non-overt DIC). Theo
+                                dõi và làm lại sau <strong>12-24h</strong>.</li>
+                        </ul>
+                        <p><strong>2. Thông tin thêm:</strong> Tiêu chuẩn ISTH 2001.</p>
                     </div>
                 </div>
 
@@ -261,84 +386,44 @@
         </div>
     </main>
 
-    <!-- === DRAWER, NAV & MODAL === -->
-    <!-- DRAWER MENU -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- MOBILE BOTTOM NAV -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- NOTIFICATION MODAL -->
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
     </div>
 
     <script>
-        // --- 1. CORE UTILS ---
+        // --- 1. LOGIC LƯU LỊCH SỬ ---
         function useTool(id, name, icon, color, url) {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             recentTools = recentTools.filter(tool => tool.id !== id);
-            recentTools.unshift({ id, name, icon, color, url, timestamp: new Date().getTime() });
+            recentTools.unshift({
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+                url: url,
+                timestamp: new Date().getTime()
+            });
             if (recentTools.length > 5) recentTools.pop();
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
 
+        // --- 2. LOGIC DRAWER MENU ---
         function openDrawer(e) {
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
             const drawer = document.getElementById('drawer-menu');
             const overlay = document.getElementById('drawer-overlay');
             overlay.classList.remove('hidden');
@@ -358,189 +443,120 @@
             }, 300);
         }
 
+        // --- 3. LOGIC MODAL ---
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
-        window.showModal = function(message) {
-            if(modal && modalMessage) {
-                modalMessage.innerHTML = message;
+
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
+                modalMessage.textContent = message;
                 modal.classList.remove('hidden');
             }
         }
-        window.hideModal = function() {
-            if(modal) modal.classList.add('hidden');
+
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
         }
 
-        // --- 2. SECURITY ---
+        // --- 4. BẢO MẬT & KHỞI TẠO CÔNG CỤ ---
         document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function(event) {
-            if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A')) {
-                event.preventDefault();
-            }
-        });
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) return false; // F12
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false; // Ctrl+Shift+C
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Ctrl+Shift+J
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U
+            if (e.ctrlKey && e.keyCode == 'C'.charCodeAt(0)) return false; // Ctrl+C
+            if (e.ctrlKey && e.keyCode == 'A'.charCodeAt(0)) return false; // Ctrl+A
+        }
 
-        // --- 3. TOOL LOGIC ---
-        document.addEventListener('DOMContentLoaded', function() {
-            // Elements
-            const directInputBtn = document.getElementById('direct-input-btn');
-            const calculateLdlcBtn = document.getElementById('calculate-ldlc-btn');
-            const directLdlcForm = document.getElementById('direct-ldlc-form');
-            const calculateLdlcForm = document.getElementById('calculate-ldlc-form');
-            
+        // --- 5. LOGIC ISTH DIC ---
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('tool-form');
             const resultContainer = document.getElementById('result-container');
-            const ldlcDisplay = document.getElementById('ldlc-display');
-            const recommendationText = document.getElementById('recommendation-text');
-            const warningBox = document.getElementById('warning-box');
-            const warningText = document.getElementById('warning-text');
-            const calculateBtn = document.getElementById('calculate-btn');
-            const clearBtn = document.getElementById('clear-btn');
+            const mainResult = document.getElementById('main-result');
+            const subResult = document.getElementById('sub-result');
+            const clearBtn = document.getElementById('clearBtn');
 
-            // Inputs
-            const ldlcDirect = document.getElementById('ldlc-direct');
-            const ldlcUnitDirect = document.getElementById('ldlc-unit-direct');
-            const tcValue = document.getElementById('tc-value');
-            const hdlcValue = document.getElementById('hdlc-value');
-            const tgValue = document.getElementById('tg-value');
-            const tcUnit = document.getElementById('tc-unit');
-            const hdlcUnit = document.getElementById('hdlc-unit');
-            const tgUnit = document.getElementById('tg-unit');
-            
-            let activeMode = 'direct'; // 'direct' or 'calculate'
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
 
-            // --- Toggle Mode Logic ---
-            function setMode(mode) {
-                activeMode = mode;
-                resultContainer.classList.add('hidden');
-                
-                const activeClass = ['bg-white', 'text-indigo-600', 'shadow-sm'];
-                const inactiveClass = ['text-gray-500', 'bg-transparent', 'shadow-none'];
+                // Validate inputs
+                const platelets = document.querySelector('input[name="platelets"]:checked');
+                const ddimer = document.querySelector('input[name="ddimer"]:checked');
+                const pt = document.querySelector('input[name="pt"]:checked');
+                const fibrinogen = document.querySelector('input[name="fibrinogen"]:checked');
 
-                if (mode === 'direct') {
-                    directLdlcForm.classList.remove('hidden');
-                    calculateLdlcForm.classList.add('hidden');
-                    
-                    directInputBtn.classList.add(...activeClass);
-                    directInputBtn.classList.remove(...inactiveClass);
-                    calculateLdlcBtn.classList.remove(...activeClass);
-                    calculateLdlcBtn.classList.add(...inactiveClass);
-                } else {
-                    directLdlcForm.classList.add('hidden');
-                    calculateLdlcForm.classList.remove('hidden');
-                    
-                    calculateLdlcBtn.classList.add(...activeClass);
-                    calculateLdlcBtn.classList.remove(...inactiveClass);
-                    directInputBtn.classList.remove(...activeClass);
-                    directInputBtn.classList.add(...inactiveClass);
-                }
-            }
-
-            directInputBtn.addEventListener('click', () => setMode('direct'));
-            calculateLdlcBtn.addEventListener('click', () => setMode('calculate'));
-
-            // --- Unit Sync Logic ---
-            function syncUnits(sourceSelect) {
-                const val = sourceSelect.value;
-                tcUnit.value = val;
-                hdlcUnit.value = val;
-                tgUnit.value = val;
-            }
-            tcUnit.addEventListener('change', () => syncUnits(tcUnit));
-            hdlcUnit.addEventListener('change', () => syncUnits(hdlcUnit));
-            tgUnit.addEventListener('change', () => syncUnits(tgUnit));
-
-            // --- Calculation Logic ---
-            const ldlcTargets = {
-                'very-high': { target: 1.4, label: 'Rất cao' },
-                'high': { target: 1.8, label: 'Cao' },
-                'moderate': { target: 2.6, label: 'Trung bình' },
-                'low': { target: 3.0, label: 'Thấp' }
-            };
-
-            calculateBtn.addEventListener('click', function() {
-                // Get Risk
-                const riskRadio = document.querySelector('input[name="risk-category"]:checked');
-                if(!riskRadio) return showModal("Vui lòng chọn phân tầng nguy cơ");
-                const riskCategory = riskRadio.value;
-
-                let calculatedLdlc = 0;
-                let currentUnit = 'mmol/L';
-                let tgWarningMsg = "";
-
-                if (activeMode === 'direct') {
-                    const val = parseFloat(ldlcDirect.value);
-                    if (isNaN(val) || val < 0) return showModal("Vui lòng nhập chỉ số LDLc hợp lệ");
-                    calculatedLdlc = val;
-                    currentUnit = ldlcUnitDirect.value;
-                } else {
-                    const tc = parseFloat(tcValue.value);
-                    const hdl = parseFloat(hdlcValue.value);
-                    const tg = parseFloat(tgValue.value);
-                    
-                    if (isNaN(tc) || isNaN(hdl) || isNaN(tg) || tc < 0 || hdl < 0 || tg < 0) {
-                        return showModal("Vui lòng nhập đầy đủ các chỉ số mỡ máu");
-                    }
-
-                    currentUnit = tcUnit.value;
-
-                    // Check TG Limit
-                    if (currentUnit === 'mmol/L') {
-                        if (tg > 4.5) tgWarningMsg = "TG > 4.5 mmol/L: Kết quả có thể không chính xác.";
-                        calculatedLdlc = tc - hdl - (tg / 2.2);
-                    } else {
-                        if (tg > 400) tgWarningMsg = "TG > 400 mg/dL: Kết quả có thể không chính xác.";
-                        calculatedLdlc = tc - hdl - (tg / 5);
-                    }
-                    
-                    if (calculatedLdlc < 0) calculatedLdlc = 0;
+                if (!platelets || !ddimer || !pt || !fibrinogen) {
+                    showModal("Vui lòng chọn đầy đủ 4 tiêu chí để tính toán.");
+                    return;
                 }
 
-                // Display Logic
-                ldlcDisplay.innerHTML = `${calculatedLdlc.toFixed(2)} <span class="text-lg text-indigo-400 font-sans">${currentUnit}</span>`;
-                
-                // Recommendation
-                let ldlcMmol = (currentUnit === 'mg/dL') ? calculatedLdlc / 38.6 : calculatedLdlc;
-                const target = ldlcTargets[riskCategory].target;
-                
-                let recHtml = "";
-                let colorClass = "";
+                // Calculate Score
+                let score = 0;
+                score += parseInt(platelets.value);
+                score += parseInt(ddimer.value);
+                score += parseInt(pt.value);
+                score += parseInt(fibrinogen.value);
 
-                if (ldlcMmol < target) {
-                    recHtml = `<span class="text-green-600 font-bold">ĐẠT MỤC TIÊU</span> (${ldlcMmol.toFixed(2)} < ${target} mmol/L).<br>Duy trì lối sống và theo dõi định kỳ.`;
-                    colorClass = "text-green-700";
-                    ldlcDisplay.className = "text-4xl font-bold text-green-600 mb-6 font-mono tracking-tight";
+                // Interpret Result
+                let interpretation = "";
+
+                if (score >= 5) {
+                    interpretation = "Tương thích với chẩn đoán Đông máu nội mạch lan tỏa (DIC) điển hình.";
+                    mainResult.style.color = "#dc2626"; // Red
+                    subResult.style.color = "#dc2626";
                 } else {
-                    recHtml = `<span class="text-red-600 font-bold">CHƯA ĐẠT MỤC TIÊU</span> (${ldlcMmol.toFixed(2)} >= ${target} mmol/L).<br>Cần xem xét điều chỉnh lối sống hoặc tối ưu hóa liệu pháp Statin/Ezetimibe.`;
-                    colorClass = "text-red-600";
-                    ldlcDisplay.className = "text-4xl font-bold text-red-600 mb-6 font-mono tracking-tight";
+                    interpretation = "Chưa đủ tiêu chuẩn chẩn đoán DIC điển hình. Có thể là giai đoạn chưa điển hình (tiềm tàng), cần theo dõi thêm.";
+                    mainResult.style.color = "#4f46e5"; // Indigo
+                    subResult.style.color = "#4f46e5";
                 }
 
-                recommendationText.innerHTML = recHtml;
-                
-                if(tgWarningMsg) {
-                    warningText.querySelector('span').textContent = tgWarningMsg;
-                    warningBox.classList.remove('hidden');
-                } else {
-                    warningBox.classList.add('hidden');
-                }
+                mainResult.textContent = score + " Điểm";
+                subResult.textContent = interpretation;
 
                 resultContainer.classList.remove('hidden');
-                
-                // Scroll to result
-                setTimeout(() => {
-                    resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 100);
 
                 // Save History
-                useTool('ldlc-tool', 'Phân loại LDLc', 'fa-heart-pulse', 'text-indigo-500', window.location.href);
+                useTool('isth-dic', 'Thang điểm ISTH DIC', 'fa-file-medical', 'indigo', window.location.href);
+
+                // Auto Scroll (Logic mới: Chính xác theo từng pixel)
+                setTimeout(() => {
+                    // Lấy vị trí của container kết quả
+                    const rect = resultContainer.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const elementBottom = rect.bottom + scrollTop;
+
+                    // Thông số màn hình
+                    const viewportHeight = window.innerHeight;
+                    const bottomNavHeight = 70; // Chiều cao nav ~60px + đệm an toàn
+
+                    // Tính toán điểm cuộn mục tiêu:
+                    // Sao cho đáy phần tử nằm ngay trên nav bar
+                    // Công thức: Đỉnh cuộn + Chiều cao màn hình = Đáy phần tử + Chiều cao Nav
+                    const targetScrollY = elementBottom + bottomNavHeight - viewportHeight;
+
+                    // Kiểm tra xem phần tử có thực sự bị che bên dưới không
+                    // (rect.bottom > viewportHeight - bottomNavHeight) nghĩa là nó đang bị che
+                    if (rect.bottom > viewportHeight - bottomNavHeight) {
+                        window.scrollTo({
+                            top: targetScrollY,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 150);
             });
 
-            clearBtn.addEventListener('click', function() {
-                directLdlcForm.reset();
-                calculateLdlcForm.reset();
+            // Clear Button Logic
+            clearBtn.addEventListener('click', function () {
+                form.reset();
                 resultContainer.classList.add('hidden');
-                document.querySelector('input[name="risk-category"][value="very-high"]').checked = true;
+                mainResult.textContent = "--";
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

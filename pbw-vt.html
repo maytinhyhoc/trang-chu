@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -11,326 +12,343 @@
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; padding-bottom: 80px; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; touch-action: pan-x pan-y; }
-        .result-text, input, textarea { -webkit-user-select: text; user-select: text; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 20px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
-        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out; }
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 80px;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: pan-x pan-y;
+        }
+
+        .result-text,
+        input,
+        textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
         /* Custom Radio Styles for Gender */
-        .gender-radio:checked + div {
+        .gender-radio:checked+div {
             border-color: #4f46e5;
             background-color: #eef2ff;
             color: #4f46e5;
         }
-        .gender-radio:checked + div .check-icon {
+
+        .gender-radio:checked+div .check-icon {
             opacity: 1;
             transform: scale(1);
         }
     </style>
 </head>
+
 <body>
 
-<!-- DESKTOP HEADER -->
-<header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-    <div class="flex items-center gap-3">
-        <!-- BẮT BUỘC: Logo lấy từ file cùng thư mục -->
-        <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
-        <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-    </div>
-    <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-        <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-        <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-        <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-    </nav>
-</header>
+    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
+        <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition"><i
+                class="fa-solid fa-chevron-left text-lg"></i></a>
+        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">PBW & Vt Mục Tiêu</h1>
+        <div class="w-8"></div>
+    </header>
 
-<!-- MOBILE HEADER -->
-<header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-    <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition"><i class="fa-solid fa-chevron-left text-lg"></i></a>
-    <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">PBW & Vt Mục Tiêu</h1>
-    <div class="w-8"></div>
-</header>
-
-<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-        <!-- Card Header -->
-        <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
-            <div class="flex items-center">
-                <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4"><i class="fa-solid fa-chevron-left"></i></a>
-                <div>
-                    <h1 class="text-2xl font-bold">Dự đoán cân nặng & Vt (ARDSnet)</h1>
-                    <p class="text-indigo-100 mt-1 text-sm">Tính cân nặng lý tưởng (PBW) và thể tích khí lưu thông mục tiêu</p>
-                </div>
-            </div>
-            <i class="fa-solid fa-lungs text-4xl text-indigo-300 opacity-50"></i>
-        </div>
-
-        <!-- FORM CONTENT -->
-        <div class="p-4 md:p-8" id="tool-content">
-            
-            <!-- 1. Chọn Giới Tính -->
-            <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-3">Giới tính bệnh nhân</label>
-                <div class="grid grid-cols-2 gap-4">
-                    <label class="cursor-pointer group">
-                        <input type="radio" name="gender" value="male" class="gender-radio hidden">
-                        <div class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-200 hover:border-indigo-300 transition relative bg-white h-24">
-                            <i class="fa-solid fa-mars text-2xl mb-2 text-gray-400 group-hover:text-indigo-500 transition-colors"></i>
-                            <span class="font-semibold text-gray-600">Nam</span>
-                            <div class="check-icon absolute top-2 right-2 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200">
-                                <i class="fa-solid fa-circle-check"></i>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer group">
-                        <input type="radio" name="gender" value="female" class="gender-radio hidden">
-                        <div class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-200 hover:border-indigo-300 transition relative bg-white h-24">
-                            <i class="fa-solid fa-venus text-2xl mb-2 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
-                            <span class="font-semibold text-gray-600">Nữ</span>
-                            <div class="check-icon absolute top-2 right-2 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200">
-                                <i class="fa-solid fa-circle-check"></i>
-                            </div>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <!-- 2. Nhập Chiều Cao -->
-            <div class="mb-6">
-                <label for="height" class="block text-sm font-semibold text-gray-700 mb-2">Chiều cao (cm)</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fa-solid fa-ruler-vertical text-gray-400"></i>
-                    </div>
-                    <input type="number" id="height" inputmode="decimal" placeholder="Ví dụ: 170" 
-                        class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-lg font-medium shadow-sm"
-                        oninput="if(value.length>3) value=value.slice(0,3)">
-                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <span class="text-gray-500 font-medium">cm</span>
+    <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
+                <div class="flex items-center">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4"><i
+                            class="fa-solid fa-chevron-left"></i></a>
+                    <div>
+                        <h1 class="text-2xl font-bold">Dự đoán cân nặng & Vt (ARDSnet)</h1>
+                        <p class="text-indigo-100 mt-1 text-sm">Tính cân nặng lý tưởng (PBW) và thể tích khí lưu thông
+                            mục tiêu</p>
                     </div>
                 </div>
-                <p class="text-xs text-gray-400 mt-2 ml-1 italic">*Nhập chiều cao thực tế của bệnh nhân</p>
+                <i class="fa-solid fa-lungs text-4xl text-indigo-300 opacity-50"></i>
             </div>
-            
-            <!-- BUTTON GROUP -->
-            <div class="mt-8 grid grid-cols-2 gap-4">
-                <button type="button" id="btn-reset" class="flex items-center justify-center py-3 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition active:scale-95">
-                    <i class="fa-solid fa-rotate-right mr-2"></i>Nhập lại
-                </button>
-                <button type="button" id="btn-calc" class="flex items-center justify-center py-3 px-4 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition active:scale-95">
-                    <i class="fa-solid fa-calculator mr-2"></i>Tính điểm
-                </button>
-            </div>
-            
-            <!-- KHU VỰC KẾT QUẢ -->
-            <div id="result-area" class="hidden mt-8 animate-fade-in-up">
-                <!-- Result Card -->
-                <div class="bg-indigo-50 rounded-xl border border-indigo-100 overflow-hidden">
-                    <div class="bg-indigo-600 px-4 py-3 text-white flex justify-between items-center">
-                        <span class="font-bold text-sm uppercase tracking-wider">Kết quả PBW</span>
-                        <i class="fa-solid fa-weight-scale opacity-75"></i>
-                    </div>
-                    
-                    <div class="p-6 text-center border-b border-indigo-100">
-                        <p class="text-sm text-gray-500 mb-1">Cân nặng dự đoán (Predicted Body Weight)</p>
-                        <div class="flex items-end justify-center gap-2">
-                            <span id="result-pbw" class="text-4xl md:text-5xl font-extrabold text-indigo-700">--</span>
-                            <span class="text-xl font-bold text-indigo-400 mb-2">kg</span>
-                        </div>
-                    </div>
 
-                    <div class="p-4 bg-white">
-                        <h4 class="font-bold text-gray-800 mb-3 text-sm flex items-center">
-                            <i class="fa-solid fa-lungs-virus text-indigo-500 mr-2"></i>
-                            Chiến lược bảo vệ phổi (6-8 ml/kg)
-                        </h4>
-                        
-                        <div class="space-y-3">
-                            <!-- 6 ml/kg (Ideal) -->
-                            <div class="flex justify-between items-center p-3 bg-green-50 border border-green-200 rounded-lg">
-                                <div>
-                                    <span class="block font-bold text-green-800 text-sm">Vt Mục tiêu (6 ml/kg)</span>
-                                    <span class="text-xs text-green-600">Khuyến cáo khởi đầu</span>
+            <div class="p-4 md:p-8" id="tool-content">
+
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Giới tính bệnh nhân</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="cursor-pointer group">
+                            <input type="radio" name="gender" value="male" class="gender-radio hidden">
+                            <div
+                                class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-200 hover:border-indigo-300 transition relative bg-white h-24">
+                                <i
+                                    class="fa-solid fa-mars text-2xl mb-2 text-gray-400 group-hover:text-indigo-500 transition-colors"></i>
+                                <span class="font-semibold text-gray-600">Nam</span>
+                                <div
+                                    class="check-icon absolute top-2 right-2 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200">
+                                    <i class="fa-solid fa-circle-check"></i>
                                 </div>
-                                <span id="vt-6" class="text-xl font-bold text-green-700">-- ml</span>
                             </div>
-
-                            <!-- Range -->
-                            <div class="grid grid-cols-2 gap-3">
-                                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
-                                    <span class="block text-xs text-yellow-700 font-semibold mb-1">Giới hạn dưới (4 ml/kg)</span>
-                                    <span id="vt-4" class="text-lg font-bold text-yellow-800">--</span>
+                        </label>
+                        <label class="cursor-pointer group">
+                            <input type="radio" name="gender" value="female" class="gender-radio hidden">
+                            <div
+                                class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-200 hover:border-indigo-300 transition relative bg-white h-24">
+                                <i
+                                    class="fa-solid fa-venus text-2xl mb-2 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
+                                <span class="font-semibold text-gray-600">Nữ</span>
+                                <div
+                                    class="check-icon absolute top-2 right-2 text-indigo-600 opacity-0 transform scale-50 transition-all duration-200">
+                                    <i class="fa-solid fa-circle-check"></i>
                                 </div>
-                                <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-center">
-                                    <span class="block text-xs text-red-700 font-semibold mb-1">Giới hạn trên (8 ml/kg)</span>
-                                    <span id="vt-8" class="text-lg font-bold text-red-800">--</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="height" class="block text-sm font-semibold text-gray-700 mb-2">Chiều cao (cm)</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-ruler-vertical text-gray-400"></i>
+                        </div>
+                        <input type="number" id="height" inputmode="decimal" placeholder="Ví dụ: 170"
+                            class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-lg font-medium shadow-sm"
+                            oninput="if(value.length>3) value=value.slice(0,3)">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 font-medium">cm</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2 ml-1 italic">*Nhập chiều cao thực tế của bệnh nhân</p>
+                </div>
+
+                <div class="mt-8 grid grid-cols-2 gap-4">
+                    <button type="button" id="btn-reset"
+                        class="flex items-center justify-center py-3 px-4 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition active:scale-95">
+                        <i class="fa-solid fa-rotate-right mr-2"></i>Nhập lại
+                    </button>
+                    <button type="button" id="btn-calc"
+                        class="flex items-center justify-center py-3 px-4 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition active:scale-95">
+                        <i class="fa-solid fa-calculator mr-2"></i>Tính điểm
+                    </button>
+                </div>
+
+                <div id="result-area" class="hidden mt-8 animate-fade-in-up">
+                    <div class="bg-indigo-50 rounded-xl border border-indigo-100 overflow-hidden">
+                        <div class="bg-indigo-600 px-4 py-3 text-white flex justify-between items-center">
+                            <span class="font-bold text-sm uppercase tracking-wider">Kết quả PBW</span>
+                            <i class="fa-solid fa-weight-scale opacity-75"></i>
+                        </div>
+
+                        <div class="p-6 text-center border-b border-indigo-100">
+                            <p class="text-sm text-gray-500 mb-1">Cân nặng dự đoán (Predicted Body Weight)</p>
+                            <div class="flex items-end justify-center gap-2">
+                                <span id="result-pbw"
+                                    class="text-4xl md:text-5xl font-extrabold text-indigo-700">--</span>
+                                <span class="text-xl font-bold text-indigo-400 mb-2">kg</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-white">
+                            <h4 class="font-bold text-gray-800 mb-3 text-sm flex items-center">
+                                <i class="fa-solid fa-lungs-virus text-indigo-500 mr-2"></i>
+                                Chiến lược bảo vệ phổi (6-8 ml/kg)
+                            </h4>
+
+                            <div class="space-y-3">
+                                <div
+                                    class="flex justify-between items-center p-3 bg-green-50 border border-green-200 rounded-lg">
+                                    <div>
+                                        <span class="block font-bold text-green-800 text-sm">Vt Mục tiêu (6
+                                            ml/kg)</span>
+                                        <span class="text-xs text-green-600">Khuyến cáo khởi đầu</span>
+                                    </div>
+                                    <span id="vt-6" class="text-xl font-bold text-green-700">-- ml</span>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+                                        <span class="block text-xs text-yellow-700 font-semibold mb-1">Giới hạn dưới (4
+                                            ml/kg)</span>
+                                        <span id="vt-4" class="text-lg font-bold text-yellow-800">--</span>
+                                    </div>
+                                    <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-center">
+                                        <span class="block text-xs text-red-700 font-semibold mb-1">Giới hạn trên (8
+                                            ml/kg)</span>
+                                        <span id="vt-8" class="text-lg font-bold text-red-800">--</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="bg-gray-50 p-3 text-xs text-gray-500 border-t border-gray-100">
-                        *Công thức ARDSnet:<br>
-                        Nam: 50 + 0.91 × (Chiều cao - 152.4)<br>
-                        Nữ: 45.5 + 0.91 × (Chiều cao - 152.4)
+
+                        <div class="bg-gray-50 p-3 text-xs text-gray-500 border-t border-gray-100">
+                            *Công thức ARDSnet:<br>
+                            Nam: 50 + 0.91 × (Chiều cao - 152.4)<br>
+                            Nữ: 45.5 + 0.91 × (Chiều cao - 152.4)
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<!-- DRAWER MENU -->
-<div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-<div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50"><h2 class="font-bold text-xl text-gray-800">Menu</h2><button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button></div>
-    <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-        <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div><span class="font-medium">Giới thiệu</span></a>
-        <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div><span class="font-medium">Liên hệ</span></a>
-        <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div><span class="font-medium">Điều khoản</span></a>
-        <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div><span class="font-medium">Chính sách</span></a>
-        <div class="my-2 border-t border-gray-100"></div>
-        <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700"><div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div><span class="font-medium">Ủng hộ</span></a>
-    </div>
-</div>
-
-<!-- MOBILE NAV -->
-<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-        <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600"><i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i><span class="text-[10px] group-hover:text-teal-600">Trang chủ</span></a>
-        <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group"><i class="fa-solid fa-calculator text-xl mb-1"></i><span class="text-[10px]">Công cụ</span></a>
-        <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600"><i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i><span class="text-[10px] group-hover:text-teal-600">Khác</span></button>
-    </div>
-</nav>
-
-<!-- MODAL -->
-<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
-    <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-    <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
-        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-            <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 mb-6">...</p>
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">Đóng</button>
         </div>
-        <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
-        <p id="modal-message" class="text-sm text-gray-500 mb-6">...</p>
-        <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">Đóng</button>
     </div>
-</div>
 
-<script>
-// --- 1. TIỆN ÍCH HỆ THỐNG ---
-function useTool(id, name, icon, color, url) {
-    let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-    recentTools = recentTools.filter(tool => tool.id !== id);
-    recentTools.unshift({ id, name, icon, color, url, timestamp: new Date().getTime() });
-    if (recentTools.length > 5) recentTools.pop();
-    localStorage.setItem('recentTools', JSON.stringify(recentTools));
-}
-function openDrawer(e) { if(e) e.preventDefault(); document.getElementById('drawer-overlay').classList.remove('hidden'); setTimeout(() => document.getElementById('drawer-overlay').classList.remove('opacity-0'), 10); document.getElementById('drawer-menu').classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; }
-function closeDrawer() { const d = document.getElementById('drawer-menu'); const o = document.getElementById('drawer-overlay'); d.classList.add('translate-x-full'); o.classList.add('opacity-0'); setTimeout(() => { o.classList.add('hidden'); document.body.style.overflow = ''; }, 300); }
-window.showModal = function(msg) { const m = document.getElementById('notification-modal'); if(m) { document.getElementById('modal-message').textContent = msg; m.classList.remove('hidden'); } };
-window.hideModal = function() { const m = document.getElementById('notification-modal'); if(m) m.classList.add('hidden'); };
+    <script>
+        // --- 1. TIỆN ÍCH HỆ THỐNG ---
+        function useTool(id, name, icon, color, url) {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            recentTools = recentTools.filter(tool => tool.id !== id);
+            recentTools.unshift({ id, name, icon, color, url, timestamp: new Date().getTime() });
+            if (recentTools.length > 5) recentTools.pop();
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
+        }
+        // Removed drawer functions as drawer is deleted
+        window.showModal = function (msg) { const m = document.getElementById('notification-modal'); if (m) { document.getElementById('modal-message').textContent = msg; m.classList.remove('hidden'); } };
+        window.hideModal = function () { const m = document.getElementById('notification-modal'); if (m) m.classList.add('hidden'); };
 
-// --- 2. BẢO MẬT (CHẶN COPY/F12) ---
-document.addEventListener('contextmenu', event => event.preventDefault());
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'F12' || (event.ctrlKey && (['u', 'U', 'c', 'C', 'a', 'A', 's', 'S', 'p', 'P'].includes(event.key)))) {
-        event.preventDefault(); return false;
-    }
-});
-
-// --- 3. LOGIC CÔNG CỤ PBW & Vt ---
-document.addEventListener('DOMContentLoaded', function() {
-    // Gọi hàm useTool để lưu lịch sử (nếu cần)
-    useTool('pbw_vt', 'PBW & Vt Mục Tiêu', 'fa-lungs', 'text-indigo-600', window.location.href);
-
-    const btnReset = document.getElementById('btn-reset');
-    const btnCalc = document.getElementById('btn-calc');
-    const resultArea = document.getElementById('result-area');
-    const heightInput = document.getElementById('height');
-    const radioInputs = document.querySelectorAll('input[name="gender"]');
-
-    // Focus input height khi load trang
-    setTimeout(() => { heightInput.focus(); }, 300);
-
-    // A. Xử lý nút RESET
-    btnReset.addEventListener('click', function() {
-        // Reset inputs
-        heightInput.value = '';
-        radioInputs.forEach(input => input.checked = false);
-        // Hide result
-        resultArea.classList.add('hidden');
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // B. Xử lý nút TÍNH ĐIỂM
-    btnCalc.addEventListener('click', function() {
-        // 1. Get values
-        const heightVal = heightInput.value.trim();
-        let selectedGender = null;
-        radioInputs.forEach(input => {
-            if(input.checked) selectedGender = input.value;
+        // --- 2. BẢO MẬT (CHẶN COPY/F12) ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'F12' || (event.ctrlKey && (['u', 'U', 'c', 'C', 'a', 'A', 's', 'S', 'p', 'P'].includes(event.key)))) {
+                event.preventDefault(); return false;
+            }
         });
 
-        // 2. Validate
-        if (!selectedGender) {
-            showModal('Vui lòng chọn giới tính!');
-            return;
-        }
-        if (!heightVal) {
-            showModal('Vui lòng nhập chiều cao!');
-            heightInput.focus();
-            return;
-        }
-        
-        const height = parseFloat(heightVal);
-        if (height < 50 || height > 280) {
-            showModal('Chiều cao không hợp lệ (50cm - 280cm)!');
-            return;
-        }
+        // --- 3. LOGIC CÔNG CỤ PBW & Vt ---
+        document.addEventListener('DOMContentLoaded', function () {
+            // Gọi hàm useTool để lưu lịch sử (nếu cần)
+            useTool('pbw_vt', 'PBW & Vt Mục Tiêu', 'fa-lungs', 'text-indigo-600', window.location.href);
 
-        // 3. Calculation (Formula: ARDSnet)
-        // PBW Male = 50 + 0.91 * (Height - 152.4)
-        // PBW Female = 45.5 + 0.91 * (Height - 152.4)
-        
-        let pbw = 0;
-        if (selectedGender === 'male') {
-            pbw = 50 + 0.91 * (height - 152.4);
-        } else {
-            pbw = 45.5 + 0.91 * (height - 152.4);
-        }
+            const btnReset = document.getElementById('btn-reset');
+            const btnCalc = document.getElementById('btn-calc');
+            const resultArea = document.getElementById('result-area');
+            const heightInput = document.getElementById('height');
+            const radioInputs = document.querySelectorAll('input[name="gender"]');
 
-        // Làm tròn 1 chữ số thập phân cho PBW
-        pbw = Math.round(pbw * 10) / 10;
-        
-        // Nếu PBW < 1 thì vô lý (trường hợp chiều cao quá thấp so với công thức)
-        if (pbw <= 0) {
-             showModal('Chiều cao quá thấp để tính PBW theo công thức này.');
-             return;
-        }
+            // Focus input height khi load trang
+            setTimeout(() => { heightInput.focus(); }, 300);
 
-        const vt4 = Math.round(pbw * 4);
-        const vt6 = Math.round(pbw * 6);
-        const vt8 = Math.round(pbw * 8);
+            // A. Xử lý nút RESET
+            btnReset.addEventListener('click', function () {
+                // Reset inputs
+                heightInput.value = '';
+                radioInputs.forEach(input => input.checked = false);
+                // Hide result
+                resultArea.classList.add('hidden');
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
 
-        // 4. Display Result
-        document.getElementById('result-pbw').textContent = pbw;
-        document.getElementById('vt-6').textContent = vt6 + ' ml';
-        document.getElementById('vt-4').textContent = vt4 + ' ml';
-        document.getElementById('vt-8').textContent = vt8 + ' ml';
+            // B. Xử lý nút TÍNH ĐIỂM
+            btnCalc.addEventListener('click', function () {
+                // 1. Get values
+                const heightVal = heightInput.value.trim();
+                let selectedGender = null;
+                radioInputs.forEach(input => {
+                    if (input.checked) selectedGender = input.value;
+                });
 
-        resultArea.classList.remove('hidden');
-        
-        // Scroll smooth tới kết quả
-        setTimeout(() => {
-            resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
-    });
-});
-</script>
+                // 2. Validate
+                if (!selectedGender) {
+                    showModal('Vui lòng chọn giới tính!');
+                    return;
+                }
+                if (!heightVal) {
+                    showModal('Vui lòng nhập chiều cao!');
+                    heightInput.focus();
+                    return;
+                }
+
+                const height = parseFloat(heightVal);
+                if (height < 50 || height > 280) {
+                    showModal('Chiều cao không hợp lệ (50cm - 280cm)!');
+                    return;
+                }
+
+                // 3. Calculation (Formula: ARDSnet)
+                // PBW Male = 50 + 0.91 * (Height - 152.4)
+                // PBW Female = 45.5 + 0.91 * (Height - 152.4)
+
+                let pbw = 0;
+                if (selectedGender === 'male') {
+                    pbw = 50 + 0.91 * (height - 152.4);
+                } else {
+                    pbw = 45.5 + 0.91 * (height - 152.4);
+                }
+
+                // Làm tròn 1 chữ số thập phân cho PBW
+                pbw = Math.round(pbw * 10) / 10;
+
+                // Nếu PBW < 1 thì vô lý (trường hợp chiều cao quá thấp so với công thức)
+                if (pbw <= 0) {
+                    showModal('Chiều cao quá thấp để tính PBW theo công thức này.');
+                    return;
+                }
+
+                const vt4 = Math.round(pbw * 4);
+                const vt6 = Math.round(pbw * 6);
+                const vt8 = Math.round(pbw * 8);
+
+                // 4. Display Result
+                document.getElementById('result-pbw').textContent = pbw;
+                document.getElementById('vt-6').textContent = vt6 + ' ml';
+                document.getElementById('vt-4').textContent = vt4 + ' ml';
+                document.getElementById('vt-8').textContent = vt8 + ' ml';
+
+                resultArea.classList.remove('hidden');
+
+                // Scroll smooth tới kết quả
+                setTimeout(() => {
+                    resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            });
+        });
+    </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

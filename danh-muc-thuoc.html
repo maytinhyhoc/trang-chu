@@ -1,53 +1,74 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Danh Mục Thuốc & Vật Tư Y Tế</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ICONS & PWA -->
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 80px; /* Space for Bottom Nav */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 80px;
+            /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
+            /* Ngăn chọn text toàn trang */
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
         /* Cho phép chọn text ở input và kết quả */
-        .result-text, input, textarea, td, th {
+        .result-text,
+        input,
+        textarea,
+        td,
+        th {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-        
+
         /* Tùy chỉnh thanh cuộn nếu cần */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
 
         /* Styles riêng cho bảng thuốc */
         .spinner {
@@ -58,444 +79,372 @@
             border-left-color: #4f46e5;
             animation: spin 1s ease infinite;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body>
 
-<!-- === DESKTOP HEADER === -->
-<header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-    <div class="flex items-center gap-3">
-        <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png'" alt="Logo" class="w-10 h-10 object-contain">
-        <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-    </div>
-    <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-        <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-        <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-        <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-    </nav>
-</header>
+    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
+        <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
+            <i class="fa-solid fa-chevron-left text-lg"></i>
+        </a>
+        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+            Danh Mục Thuốc
+        </h1>
+        <div class="w-8"></div>
+    </header>
 
-<!-- === MOBILE HEADER (App Style) === -->
-<header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-    <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
-        <i class="fa-solid fa-chevron-left text-lg"></i>
-    </a>
-    <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
-        Danh Mục Thuốc
-    </h1>
-    <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
-</header>
+    <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
 
-<!-- === MAIN CONTENT WRAPPER === -->
-<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-    <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-        
-        <!-- HEADER CỦA CARD (DESKTOP) -->
-        <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
-            <div class="flex items-center">
-                <!-- Nút Back Desktop -->
-                <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-                <div>
-                    <h1 class="text-2xl font-bold">Danh Mục Thuốc & VTYT</h1>
-                    <p class="text-indigo-100 mt-1 text-sm">Tra cứu mã thuốc, tên hoạt chất và quy cách đóng gói</p>
+            <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
+                <div class="flex items-center">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-2xl font-bold">Danh Mục Thuốc & VTYT</h1>
+                        <p class="text-indigo-100 mt-1 text-sm">Tra cứu mã thuốc, tên hoạt chất và quy cách đóng gói</p>
+                    </div>
                 </div>
+                <i class="fa-solid fa-pills text-4xl text-indigo-300 opacity-50"></i>
             </div>
-            <!-- Icon đại diện mờ -->
-            <i class="fa-solid fa-pills text-4xl text-indigo-300 opacity-50"></i>
+
+            <div class="p-4 md:p-8">
+
+                <div class="mb-6 relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" id="tableSearchInput"
+                        class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-sm"
+                        placeholder="Nhập mã, tên thuốc hoặc hoạt chất..." autocomplete="off">
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 items-center justify-between mb-4 text-sm">
+                    <div
+                        class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 w-full sm:w-auto justify-center sm:justify-start">
+                        <span id="connectionStatus" class="relative flex h-2.5 w-2.5">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-gray-500"></span>
+                        </span>
+                        <span id="connectionText" class="text-gray-500 font-medium">Đang kết nối...</span>
+                    </div>
+                    <span id="resultCount" class="font-medium text-indigo-600 hidden sm:inline"></span>
+                </div>
+
+                <div id="loadingState" class="hidden flex-col items-center justify-center py-10">
+                    <div class="spinner mb-4"></div>
+                    <p class="text-gray-500 font-medium animate-pulse">Đang tải dữ liệu từ hệ thống...</p>
+                </div>
+
+                <div id="searchPrompt"
+                    class="flex flex-col items-center justify-center py-10 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                    <div class="bg-indigo-100 rounded-full p-4 mb-3">
+                        <i class="fa-solid fa-magnifying-glass text-indigo-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-gray-900 font-semibold">Sẵn sàng tra cứu</h3>
+                    <p class="text-sm text-gray-500 mt-1 max-w-xs px-2">Nhập từ khóa vào ô tìm kiếm để xem thông tin
+                        thuốc.</p>
+                </div>
+
+                <div id="emptyState" class="hidden flex-col items-center justify-center py-10 text-center">
+                    <div class="bg-red-50 rounded-full p-4 mb-3">
+                        <i class="fa-solid fa-box-open text-red-400 text-2xl"></i>
+                    </div>
+                    <p class="text-gray-900 font-semibold" id="errorTitle">Không tìm thấy kết quả</p>
+                    <p class="text-sm text-gray-500 mt-1" id="errorMsg">Thử tìm kiếm với từ khóa khác.</p>
+                </div>
+
+                <div id="tableContainer" class="hidden overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition whitespace-nowrap"
+                                        onclick="sortTable(0)">
+                                        Mã <i class="fa-solid fa-sort ml-1 text-gray-300"></i>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition"
+                                        onclick="sortTable(1)">
+                                        Tên & Hàm lượng <i class="fa-solid fa-sort ml-1 text-gray-300"></i>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition"
+                                        onclick="sortTable(2)">
+                                        Hoạt Chất <i class="fa-solid fa-sort ml-1 text-gray-300"></i>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                                        ĐVT
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
         </div>
+    </main>
 
-        <!-- TOOL CONTENT -->
-        <div class="p-4 md:p-8">
-            
-            <!-- VÙNG TÌM KIẾM -->
-            <div class="mb-6 relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="fa-solid fa-search text-gray-400"></i>
-                </div>
-                <input type="text" id="tableSearchInput" 
-                    class="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-sm" 
-                    placeholder="Nhập mã, tên thuốc hoặc hoạt chất..." 
-                    autocomplete="off">
+    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
             </div>
-
-            <!-- TRẠNG THÁI KẾT NỐI -->
-            <div class="flex flex-col sm:flex-row gap-3 items-center justify-between mb-4 text-sm">
-                <div class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 w-full sm:w-auto justify-center sm:justify-start">
-                    <span id="connectionStatus" class="relative flex h-2.5 w-2.5">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-gray-500"></span>
-                    </span>
-                    <span id="connectionText" class="text-gray-500 font-medium">Đang kết nối...</span>
-                </div>
-                <span id="resultCount" class="font-medium text-indigo-600 hidden sm:inline"></span>
-            </div>
-
-            <!-- LOADING STATE -->
-            <div id="loadingState" class="hidden flex-col items-center justify-center py-10">
-                <div class="spinner mb-4"></div>
-                <p class="text-gray-500 font-medium animate-pulse">Đang tải dữ liệu từ hệ thống...</p>
-            </div>
-
-            <!-- SEARCH PROMPT STATE -->
-            <div id="searchPrompt" class="flex flex-col items-center justify-center py-10 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                <div class="bg-indigo-100 rounded-full p-4 mb-3">
-                    <i class="fa-solid fa-magnifying-glass text-indigo-500 text-2xl"></i>
-                </div>
-                <h3 class="text-gray-900 font-semibold">Sẵn sàng tra cứu</h3>
-                <p class="text-sm text-gray-500 mt-1 max-w-xs px-2">Nhập từ khóa vào ô tìm kiếm để xem thông tin thuốc.</p>
-            </div>
-
-            <!-- EMPTY/ERROR STATE -->
-            <div id="emptyState" class="hidden flex-col items-center justify-center py-10 text-center">
-                <div class="bg-red-50 rounded-full p-4 mb-3">
-                    <i class="fa-solid fa-box-open text-red-400 text-2xl"></i>
-                </div>
-                <p class="text-gray-900 font-semibold" id="errorTitle">Không tìm thấy kết quả</p>
-                <p class="text-sm text-gray-500 mt-1" id="errorMsg">Thử tìm kiếm với từ khóa khác.</p>
-            </div>
-
-            <!-- TABLE CONTAINER -->
-            <div id="tableContainer" class="hidden overflow-hidden rounded-xl border border-gray-200 shadow-sm">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition whitespace-nowrap" onclick="sortTable(0)">
-                                    Mã <i class="fa-solid fa-sort ml-1 text-gray-300"></i>
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition" onclick="sortTable(1)">
-                                    Tên & Hàm lượng <i class="fa-solid fa-sort ml-1 text-gray-300"></i>
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition" onclick="sortTable(2)">
-                                    Hoạt Chất <i class="fa-solid fa-sort ml-1 text-gray-300"></i>
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                    ĐVT
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
-                            <!-- Rows inserted by JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+                Đóng
+            </button>
         </div>
     </div>
-</main>
 
-<!-- === DRAWER, NAV & MODAL === -->
-<!-- DRAWER MENU -->
-<div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-<div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-        <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-        <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-    </div>
-    <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-        <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-            <span class="font-medium">Giới thiệu</span>
-        </a>
-        <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-            <span class="font-medium">Liên hệ</span>
-        </a>
-        <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-            <span class="font-medium">Điều khoản</span>
-        </a>
-        <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-            <span class="font-medium">Chính sách</span>
-        </a>
-        <div class="my-2 border-t border-gray-100"></div>
-        <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-            <span class="font-medium">Ủng hộ</span>
-        </a>
-    </div>
-</div>
-
-<!-- MOBILE BOTTOM NAV -->
-<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-        <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-        </a>
-        <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-            <i class="fa-solid fa-calculator text-xl mb-1"></i>
-            <span class="text-[10px]">Công cụ</span>
-        </a>
-        <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-        </button>
-    </div>
-</nav>
-
-<!-- NOTIFICATION MODAL -->
-<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
-    <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-    <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
-        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-            <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
-        </div>
-        <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
-        <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-        <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
-            Đóng
-        </button>
-    </div>
-</div>
-
-<!-- === JAVASCRIPT === -->
-<script>
-    // --- 1. LOGIC LƯU LỊCH SỬ ---
-    function useTool(id, name, icon, color, url) {
-        let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-        recentTools = recentTools.filter(tool => tool.id !== id);
-        recentTools.unshift({
-            id: id,
-            name: name,
-            icon: icon,
-            color: color,
-            url: url,
-            timestamp: new Date().getTime()
-        });
-        if (recentTools.length > 5) recentTools.pop();
-        localStorage.setItem('recentTools', JSON.stringify(recentTools));
-    }
-
-    // --- 2. LOGIC DRAWER MENU ---
-    function openDrawer(e) {
-        if(e) e.preventDefault();
-        const drawer = document.getElementById('drawer-menu');
-        const overlay = document.getElementById('drawer-overlay');
-        overlay.classList.remove('hidden');
-        setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-        drawer.classList.remove('translate-x-full');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeDrawer() {
-        const drawer = document.getElementById('drawer-menu');
-        const overlay = document.getElementById('drawer-overlay');
-        drawer.classList.add('translate-x-full');
-        overlay.classList.add('opacity-0');
-        setTimeout(() => {
-            overlay.classList.add('hidden');
-            document.body.style.overflow = '';
-        }, 300);
-    }
-
-    // --- 3. LOGIC MODAL ---
-    const modal = document.getElementById('notification-modal');
-    const modalMessage = document.getElementById('modal-message');
-
-    window.showModal = function(message) {
-        if(modal && modalMessage) {
-            modalMessage.textContent = message;
-            modal.classList.remove('hidden');
+    <script>
+        // --- 1. LOGIC LƯU LỊCH SỬ ---
+        function useTool(id, name, icon, color, url) {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            recentTools = recentTools.filter(tool => tool.id !== id);
+            recentTools.unshift({
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+                url: url,
+                timestamp: new Date().getTime()
+            });
+            if (recentTools.length > 5) recentTools.pop();
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
-    }
 
-    window.hideModal = function() {
-        if(modal) modal.classList.add('hidden');
-    }
-
-    // --- 4. CHẶN COPY (BẢO MẬT) ---
-    document.addEventListener("contextmenu", (e) => e.preventDefault());
-    document.addEventListener("keydown", (e) => {
-        if (
-            (e.ctrlKey && ["u", "U", "c", "C", "a", "A", "s", "S", "p", "P"].includes(e.key)) || 
-            e.key === "F12"
-        ) {
-            e.preventDefault();
+        // --- 2. LOGIC DRAWER MENU (Đã xóa HTML, giữ lại hàm để tránh lỗi JS) ---
+        function openDrawer(e) {
+            if (e) e.preventDefault();
+            // Drawer HTML has been removed, function kept for compatibility
         }
-    });
 
-    // --- 5. LOGIC TRA CỨU THUỐC ---
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTX-zpXLpeS6eKPt668fSZgDNqZSmLZI1BrzUiA9nDE-sUczgZRuJDLkQz4u8f_OAxPfZNOCI37g3d1/pub?output=csv';
-    let rawData = [];
-    let sortDirection = 1;
-
-    // Elements
-    const tableContainer = document.getElementById('tableContainer');
-    const tableBody = document.getElementById('tableBody');
-    const tableSearchInput = document.getElementById('tableSearchInput');
-    const resultCount = document.getElementById('resultCount');
-    const emptyState = document.getElementById('emptyState');
-    const loadingState = document.getElementById('loadingState');
-    const searchPrompt = document.getElementById('searchPrompt'); 
-    const errorTitle = document.getElementById('errorTitle');
-    const errorMsg = document.getElementById('errorMsg');
-    const connectionStatus = document.getElementById('connectionStatus');
-    const connectionText = document.getElementById('connectionText');
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Tải dữ liệu ngay khi vào trang
-        loadGoogleSheetData();
-        
-        // Gắn sự kiện tìm kiếm
-        if(tableSearchInput) {
-            tableSearchInput.addEventListener('keyup', filterTable);
-            tableSearchInput.focus();
+        function closeDrawer() {
+            // Drawer HTML has been removed, function kept for compatibility
         }
-    });
 
-    async function loadGoogleSheetData() {
-        showLoading(true);
-        updateStatus('loading');
-        
-        try {
-            const response = await fetch(SHEET_CSV_URL);
-            if (!response.ok) throw new Error('Không thể kết nối đến Google Sheets');
-            
-            const csvText = await response.text();
-            processCSV(csvText);
-        } catch (error) {
-            console.error('Lỗi tải dữ liệu:', error);
-            showLoading(false);
-            updateStatus('error');
-            showModal('Không thể tải dữ liệu danh mục thuốc. Vui lòng kiểm tra kết nối mạng.');
-        }
-    }
+        // --- 3. LOGIC MODAL ---
+        const modal = document.getElementById('notification-modal');
+        const modalMessage = document.getElementById('modal-message');
 
-    function updateStatus(status) {
-        const ping = connectionStatus.querySelector('.animate-ping');
-        const dot = connectionStatus.querySelector('.relative');
-        
-        if (status === 'success') {
-            ping.classList.add('hidden');
-            dot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500';
-            connectionText.innerText = 'Đã kết nối dữ liệu';
-            connectionText.className = 'text-green-600 font-medium text-xs';
-        } else if (status === 'loading') {
-            ping.classList.remove('hidden');
-            dot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500';
-            connectionText.innerText = 'Đang đồng bộ...';
-            connectionText.className = 'text-yellow-600 text-xs';
-        } else {
-            ping.classList.add('hidden');
-            dot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500';
-            connectionText.innerText = 'Mất kết nối';
-            connectionText.className = 'text-red-600 text-xs';
-        }
-    }
-
-    function showLoading(isLoading) {
-        if (isLoading) {
-            loadingState.classList.remove('hidden');
-            loadingState.classList.add('flex');
-            tableContainer.classList.add('hidden');
-            emptyState.classList.add('hidden');
-            searchPrompt.classList.add('hidden');
-        } else {
-            loadingState.classList.add('hidden');
-            loadingState.classList.remove('flex');
-        }
-    }
-
-    function resetToPromptState() {
-        tableContainer.classList.add('hidden');
-        emptyState.classList.add('hidden');
-        searchPrompt.classList.remove('hidden');
-        searchPrompt.classList.add('flex');
-        resultCount.innerText = `Đã tải ${rawData.length} mã thuốc`;
-    }
-
-    function processCSV(text) {
-        const lines = text.split('\n');
-        const newData = [];
-        
-        // Tìm dòng tiêu đề
-        let startIndex = 0;
-        for(let i=0; i < Math.min(lines.length, 10); i++) {
-            if (lines[i].toLowerCase().includes('mã thuốc')) {
-                startIndex = i + 1;
-                break;
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
+                modalMessage.textContent = message;
+                modal.classList.remove('hidden');
             }
         }
 
-        for (let i = startIndex; i < lines.length; i++) {
-            let line = lines[i].trim();
-            if (!line) continue;
-            // Xử lý CSV chuẩn (bao gồm dấu phẩy trong ngoặc kép)
-            const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            
-            if (parts.length >= 2) {
-                const clean = (str) => str ? str.replace(/^"|"$/g, '').trim() : '';
-                const code = clean(parts[0]);
-                const name = clean(parts[1]);
-                const active = clean(parts[2]);
-                const unit = clean(parts[3]);
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
+        }
 
-                if (code && name) {
-                    newData.push({ code, name, active, unit });
+        // --- 4. CHẶN COPY (BẢO MẬT) ---
+        document.addEventListener("contextmenu", (e) => e.preventDefault());
+        document.addEventListener("keydown", (e) => {
+            if (
+                (e.ctrlKey && ["u", "U", "c", "C", "a", "A", "s", "S", "p", "P"].includes(e.key)) ||
+                e.key === "F12"
+            ) {
+                e.preventDefault();
+            }
+        });
+
+        // --- 5. LOGIC TRA CỨU THUỐC ---
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTX-zpXLpeS6eKPt668fSZgDNqZSmLZI1BrzUiA9nDE-sUczgZRuJDLkQz4u8f_OAxPfZNOCI37g3d1/pub?output=csv';
+        let rawData = [];
+        let sortDirection = 1;
+
+        // Elements
+        const tableContainer = document.getElementById('tableContainer');
+        const tableBody = document.getElementById('tableBody');
+        const tableSearchInput = document.getElementById('tableSearchInput');
+        const resultCount = document.getElementById('resultCount');
+        const emptyState = document.getElementById('emptyState');
+        const loadingState = document.getElementById('loadingState');
+        const searchPrompt = document.getElementById('searchPrompt');
+        const errorTitle = document.getElementById('errorTitle');
+        const errorMsg = document.getElementById('errorMsg');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const connectionText = document.getElementById('connectionText');
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Tải dữ liệu ngay khi vào trang
+            loadGoogleSheetData();
+
+            // Gắn sự kiện tìm kiếm
+            if (tableSearchInput) {
+                tableSearchInput.addEventListener('keyup', filterTable);
+                tableSearchInput.focus();
+            }
+        });
+
+        async function loadGoogleSheetData() {
+            showLoading(true);
+            updateStatus('loading');
+
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                if (!response.ok) throw new Error('Không thể kết nối đến Google Sheets');
+
+                const csvText = await response.text();
+                processCSV(csvText);
+            } catch (error) {
+                console.error('Lỗi tải dữ liệu:', error);
+                showLoading(false);
+                updateStatus('error');
+                showModal('Không thể tải dữ liệu danh mục thuốc. Vui lòng kiểm tra kết nối mạng.');
+            }
+        }
+
+        function updateStatus(status) {
+            const ping = connectionStatus.querySelector('.animate-ping');
+            const dot = connectionStatus.querySelector('.relative');
+
+            if (status === 'success') {
+                ping.classList.add('hidden');
+                dot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500';
+                connectionText.innerText = 'Đã kết nối dữ liệu';
+                connectionText.className = 'text-green-600 font-medium text-xs';
+            } else if (status === 'loading') {
+                ping.classList.remove('hidden');
+                dot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500';
+                connectionText.innerText = 'Đang đồng bộ...';
+                connectionText.className = 'text-yellow-600 text-xs';
+            } else {
+                ping.classList.add('hidden');
+                dot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500';
+                connectionText.innerText = 'Mất kết nối';
+                connectionText.className = 'text-red-600 text-xs';
+            }
+        }
+
+        function showLoading(isLoading) {
+            if (isLoading) {
+                loadingState.classList.remove('hidden');
+                loadingState.classList.add('flex');
+                tableContainer.classList.add('hidden');
+                emptyState.classList.add('hidden');
+                searchPrompt.classList.add('hidden');
+            } else {
+                loadingState.classList.add('hidden');
+                loadingState.classList.remove('flex');
+            }
+        }
+
+        function resetToPromptState() {
+            tableContainer.classList.add('hidden');
+            emptyState.classList.add('hidden');
+            searchPrompt.classList.remove('hidden');
+            searchPrompt.classList.add('flex');
+            resultCount.innerText = `Đã tải ${rawData.length} mã thuốc`;
+        }
+
+        function processCSV(text) {
+            const lines = text.split('\n');
+            const newData = [];
+
+            // Tìm dòng tiêu đề
+            let startIndex = 0;
+            for (let i = 0; i < Math.min(lines.length, 10); i++) {
+                if (lines[i].toLowerCase().includes('mã thuốc')) {
+                    startIndex = i + 1;
+                    break;
                 }
             }
-        }
 
-        if (newData.length > 0) {
-            rawData = newData;
-            showLoading(false);
-            updateStatus('success');
-            
-            // Lưu lịch sử sử dụng tool khi tải dữ liệu thành công
-            useTool('danh-muc-thuoc', 'Danh Mục Thuốc', 'fa-pills', 'indigo', window.location.href);
+            for (let i = startIndex; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (!line) continue;
+                // Xử lý CSV chuẩn (bao gồm dấu phẩy trong ngoặc kép)
+                const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 
-            if (tableSearchInput.value.trim() !== "") {
-                filterTable();
-            } else {
-                resetToPromptState();
+                if (parts.length >= 2) {
+                    const clean = (str) => str ? str.replace(/^"|"$/g, '').trim() : '';
+                    const code = clean(parts[0]);
+                    const name = clean(parts[1]);
+                    const active = clean(parts[2]);
+                    const unit = clean(parts[3]);
+
+                    if (code && name) {
+                        newData.push({ code, name, active, unit });
+                    }
+                }
             }
-        } else {
-            showLoading(false);
-            updateStatus('error');
-            showModal('Dữ liệu tải về bị trống hoặc không đúng định dạng.');
-        }
-    }
 
-    function renderTable(data) {
-        tableBody.innerHTML = '';
-        
-        if (data.length === 0) {
-            tableContainer.classList.add('hidden');
-            searchPrompt.classList.add('hidden');
-            emptyState.classList.remove('hidden');
-            emptyState.classList.add('flex');
-            errorTitle.innerText = "Không tìm thấy kết quả";
-            errorMsg.innerText = `Không có thuốc nào khớp với "${tableSearchInput.value}"`;
-            return;
-        } else {
-            emptyState.classList.add('hidden');
-            emptyState.classList.remove('flex');
-            searchPrompt.classList.add('hidden');
-            tableContainer.classList.remove('hidden');
-            resultCount.innerText = `${data.length} kết quả`;
+            if (newData.length > 0) {
+                rawData = newData;
+                showLoading(false);
+                updateStatus('success');
+
+                // Lưu lịch sử sử dụng tool khi tải dữ liệu thành công
+                useTool('danh-muc-thuoc', 'Danh Mục Thuốc', 'fa-pills', 'indigo', window.location.href);
+
+                if (tableSearchInput.value.trim() !== "") {
+                    filterTable();
+                } else {
+                    resetToPromptState();
+                }
+            } else {
+                showLoading(false);
+                updateStatus('error');
+                showModal('Dữ liệu tải về bị trống hoặc không đúng định dạng.');
+            }
         }
 
-        const displayData = data.slice(0, 100);
+        function renderTable(data) {
+            tableBody.innerHTML = '';
 
-        displayData.forEach(item => {
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-indigo-50 transition-colors duration-150 group border-b last:border-b-0 border-gray-100';
-            
-            const activeIngredientHtml = item.active 
-                ? `<span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-700 border border-green-200">${item.active}</span>`
-                : '<span class="text-gray-300 italic text-xs">--</span>';
+            if (data.length === 0) {
+                tableContainer.classList.add('hidden');
+                searchPrompt.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                errorTitle.innerText = "Không tìm thấy kết quả";
+                errorMsg.innerText = `Không có thuốc nào khớp với "${tableSearchInput.value}"`;
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+                searchPrompt.classList.add('hidden');
+                tableContainer.classList.remove('hidden');
+                resultCount.innerText = `${data.length} kết quả`;
+            }
 
-            row.innerHTML = `
+            const displayData = data.slice(0, 100);
+
+            displayData.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-indigo-50 transition-colors duration-150 group border-b last:border-b-0 border-gray-100';
+
+                const activeIngredientHtml = item.active
+                    ? `<span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-700 border border-green-200">${item.active}</span>`
+                    : '<span class="text-gray-300 italic text-xs">--</span>';
+
+                row.innerHTML = `
                 <td class="px-4 py-3 whitespace-nowrap text-sm font-bold text-indigo-600 font-mono">
                     ${item.code}
                 </td>
@@ -509,59 +458,61 @@
                     ${item.unit}
                 </td>
             `;
-            tableBody.appendChild(row);
-        });
-        
-        if (data.length > 100) {
+                tableBody.appendChild(row);
+            });
+
+            if (data.length > 100) {
                 const row = document.createElement('tr');
                 row.innerHTML = `<td colspan="4" class="px-4 py-3 text-center text-xs text-gray-400 italic bg-gray-50">... và ${data.length - 100} kết quả khác ...</td>`;
                 tableBody.appendChild(row);
-        }
-    }
-
-    function filterTable() {
-        const query = tableSearchInput.value.toLowerCase().trim();
-        
-        if (!query) {
-            resetToPromptState();
-            return;
+            }
         }
 
-        const filteredData = rawData.filter(item => {
-            return (
-                item.code.toLowerCase().includes(query) ||
-                item.name.toLowerCase().includes(query) ||
-                (item.active && item.active.toLowerCase().includes(query))
-            );
-        });
-        
-        renderTable(filteredData);
-    }
+        function filterTable() {
+            const query = tableSearchInput.value.toLowerCase().trim();
 
-    window.sortTable = function(columnIndex) {
-        if (tableContainer.classList.contains('hidden')) return;
+            if (!query) {
+                resetToPromptState();
+                return;
+            }
 
-        const keys = ['code', 'name', 'active'];
-        const key = keys[columnIndex];
+            const filteredData = rawData.filter(item => {
+                return (
+                    item.code.toLowerCase().includes(query) ||
+                    item.name.toLowerCase().includes(query) ||
+                    (item.active && item.active.toLowerCase().includes(query))
+                );
+            });
 
-        rawData.sort((a, b) => {
-            const valA = (a[key] || '').toLowerCase();
-            const valB = (b[key] || '').toLowerCase();
-            if (valA < valB) return -1 * sortDirection;
-            if (valA > valB) return 1 * sortDirection;
-            return 0;
-        });
+            renderTable(filteredData);
+        }
 
-        sortDirection *= -1;
-        
-        const icons = document.querySelectorAll('th i');
-        icons.forEach(i => i.className = 'fa-solid fa-sort ml-1 text-gray-300');
-        icons[columnIndex].className = sortDirection === 1 
-            ? 'fa-solid fa-sort-up ml-1 text-indigo-600' 
-            : 'fa-solid fa-sort-down ml-1 text-indigo-600';
+        window.sortTable = function (columnIndex) {
+            if (tableContainer.classList.contains('hidden')) return;
 
-        filterTable(); 
-    }
-</script>
+            const keys = ['code', 'name', 'active'];
+            const key = keys[columnIndex];
+
+            rawData.sort((a, b) => {
+                const valA = (a[key] || '').toLowerCase();
+                const valB = (b[key] || '').toLowerCase();
+                if (valA < valB) return -1 * sortDirection;
+                if (valA > valB) return 1 * sortDirection;
+                return 0;
+            });
+
+            sortDirection *= -1;
+
+            const icons = document.querySelectorAll('th i');
+            icons.forEach(i => i.className = 'fa-solid fa-sort ml-1 text-gray-300');
+            icons[columnIndex].className = sortDirection === 1
+                ? 'fa-solid fa-sort-up ml-1 text-indigo-600'
+                : 'fa-solid fa-sort-down ml-1 text-indigo-600';
+
+            filterTable();
+        }
+    </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

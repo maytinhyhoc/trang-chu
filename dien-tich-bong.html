@@ -1,687 +1,793 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tính diện tích bỏng & Bù dịch - Công Cụ Y Học</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 70px; 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 70px;
             -webkit-tap-highlight-color: transparent;
             -webkit-user-select: none;
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
-        .result-text, input, textarea {
+        .result-text,
+        input,
+        textarea {
             -webkit-user-select: text;
             user-select: text;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 10px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 10px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.4s ease-out;
         }
-        
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
 
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
         @media screen and (max-width: 768px) {
-            input[type="number"] { font-size: 16px !important; }
+            input[type="number"] {
+                font-size: 16px !important;
+            }
         }
-        
+
         /* Body Map Configuration - UPDATED SIZES */
-        .body-container { 
-            position: relative; 
-            width: 100%; 
-            max-width: 220px; /* UPDATED: Adult Width 220px */
-            margin: 0 auto; 
+        .body-container {
+            position: relative;
+            width: 100%;
+            max-width: 220px;
+            /* UPDATED: Adult Width 220px */
+            margin: 0 auto;
         }
-        .body-container.child-view { 
+
+        .body-container.child-view {
             /* Calculation:
                Adult (220px width) -> Height approx 462px.
                Child needs Height 462px to match.
                Child Aspect Ratio (Height/Width) = 340/200 = 1.7.
                Child Width = 462 / 1.7 ≈ 271.7px -> Round to 272px.
             */
-            max-width: 272px; 
-        }
-        
-        @media (min-width: 768px) {
-            /* On tablet/desktop, keep them slightly uniform or let them grow */
-            .body-container { max-width: 260px; }
-            .body-container.child-view { max-width: 260px; }
+            max-width: 272px;
         }
 
-        .body-part { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1.2; transition: all 0.15s ease; cursor: pointer; vector-effect: non-scaling-stroke; }
-        .body-part:hover { fill: #e2e8f0; stroke: #64748b; }
-        .body-part.selected { fill: #ef4444; stroke: #991b1b; filter: drop-shadow(0 0 1px rgba(239, 68, 68, 0.5)); }
-        .hidden-map { display: none !important; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @media (min-width: 768px) {
+
+            /* On tablet/desktop, keep them slightly uniform or let them grow */
+            .body-container {
+                max-width: 260px;
+            }
+
+            .body-container.child-view {
+                max-width: 260px;
+            }
+        }
+
+        .body-part {
+            fill: #f1f5f9;
+            stroke: #94a3b8;
+            stroke-width: 1.2;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .body-part:hover {
+            fill: #e2e8f0;
+            stroke: #64748b;
+        }
+
+        .body-part.selected {
+            fill: #ef4444;
+            stroke: #991b1b;
+            filter: drop-shadow(0 0 1px rgba(239, 68, 68, 0.5));
+        }
+
+        .hidden-map {
+            display: none !important;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 
 <body>
 
-<!-- Header Desktop (Original Size) -->
-<header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-    <div class="flex items-center gap-3">
-        <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
-        <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-    </div>
-    <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-        <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-        <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-        <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-    </nav>
-</header>
+    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
+        <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
+            <i class="fa-solid fa-chevron-left text-lg"></i>
+        </a>
+        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+            Tính diện tích bỏng
+        </h1>
+        <div class="w-8"></div>
+    </header>
 
-<!-- Header Mobile (Original Size) -->
-<header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-    <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
-        <i class="fa-solid fa-chevron-left text-lg"></i>
-    </a>
-    <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
-        Tính diện tích bỏng
-    </h1>
-    <div class="w-8"></div>
-</header>
+    <main class="flex-grow container mx-auto px-2 md:px-4 pt-20 md:pt-24 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden animate-fade-in-up">
 
-<!-- Main Content -->
-<main class="flex-grow container mx-auto px-2 md:px-4 pt-20 md:pt-24 pb-2 max-w-4xl">
-    <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden animate-fade-in-up">
-        
-        <!-- Title Banner (Desktop only) -->
-        <div class="hidden md:flex bg-indigo-600 p-4 text-white items-center justify-between">
-            <div class="flex items-center">
-                <a href="cong-cu.html" class="hidden md:flex w-8 h-8 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-3">
-                    <i class="fa-solid fa-chevron-left text-sm"></i>
-                </a>
-                <div>
-                    <h1 class="text-xl font-bold">Tính Diện Tích Bỏng & Bù Dịch</h1>
-                </div>
-            </div>
-        </div>
-
-        <div class="p-2 md:p-6" id="tool-content">
-            <!-- INPUT AREA (Compact) -->
-            <div class="mb-2 bg-indigo-50/80 rounded-lg p-2 md:p-4 border border-indigo-100">
-                <div class="flex flex-row items-end gap-2 md:gap-6 overflow-x-auto md:overflow-visible no-scrollbar pb-1">
-                    <div class="shrink-0">
-                        <label class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Đối tượng</label>
-                        <div class="flex bg-white rounded-md p-0.5 border border-indigo-200 shadow-sm h-[32px] md:h-[38px]">
-                            <button type="button" id="mode-adult" class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold transition-all bg-indigo-600 text-white shadow-sm whitespace-nowrap leading-none flex items-center justify-center h-full">Người lớn</button>
-                            <button type="button" id="mode-child" class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap leading-none flex items-center justify-center h-full">Trẻ em</button>
-                        </div>
-                    </div>
-
-                    <div class="flex-1 min-w-[70px]">
-                        <label class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Cân nặng <span class="text-red-500">*</span></label>
-                        <div class="relative h-[32px] md:h-[38px]">
-                            <input type="number" id="weight" inputmode="decimal" placeholder="0" class="block w-full pl-2 pr-5 md:pr-8 h-full text-sm font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white border shadow-sm">
-                            <div class="absolute inset-y-0 right-0 pr-1.5 md:pr-3 flex items-center pointer-events-none text-gray-400 font-bold text-[10px] md:text-xs">kg</div>
-                        </div>
-                    </div>
-
-                    <div id="age-input-group" class="w-[60px] md:w-[120px] hidden opacity-0 transition-all duration-300">
-                        <label class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Tuổi</label>
-                        <div class="relative h-[32px] md:h-[38px]">
-                            <input type="number" id="age" inputmode="numeric" placeholder="0" value="0" min="0" max="15" class="block w-full px-1 md:px-2 h-full text-sm font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white border shadow-sm text-center">
-                            <div class="hidden md:flex absolute inset-y-0 right-0 pr-3 items-center pointer-events-none text-gray-400 font-bold text-xs">tuổi</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- MAP AREA -->
-            <div class="mb-2">
-                <!-- Sticky Control Bar (Compact) -->
-                <div class="flex justify-between items-center mb-1 sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-1 border-b border-gray-100 md:static md:bg-transparent md:border-none">
-                    <div class="flex flex-col gap-0.5">
-                        <div class="flex items-center gap-2">
-                            <div class="md:hidden flex bg-gray-100 rounded p-0.5 w-fit border border-gray-200">
-                                <button type="button" id="view-front-btn" class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-indigo-600 bg-white shadow-sm transition-all leading-none">Trước</button>
-                                <button type="button" id="view-back-btn" class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-gray-500 hover:text-indigo-600 transition-all leading-none">Sau</button>
-                            </div>
-                            <span id="chart-info" class="text-[10px] text-gray-400 font-medium leading-none hidden md:inline-block">Wallace (Người lớn)</span>
-                        </div>
-                    </div>
-                    <!-- Total Percentage Badge -->
-                    <div class="bg-red-50 text-red-600 px-2.5 py-1 rounded-lg text-base font-bold border border-red-100 shadow-sm flex items-center gap-1.5 min-w-[60px] justify-center">
-                        <span class="text-[9px] text-red-400 font-medium uppercase leading-none">Tổng</span>
-                        <div class="leading-none"><span id="total-tbsa">0</span>%</div>
-                    </div>
-                </div>
-                
-                <!-- SVG Map Container (Min-height updated to 462px to match new size) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 bg-white rounded-lg justify-items-center relative" style="min-height: 462px;">
-                    <div id="container-adult-front" class="body-container adult-view">
-                        <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT TRƯỚC</div>
-                        <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <path class="body-part" data-name="Đầu (Trước)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
-                            <path class="body-part" data-name="Cổ (Trước)" data-value="1" d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
-                            <path class="body-part" data-name="Ngực" data-value="9" d="M85,75 Q100,80 115,75 L135,85 L125,145 Q100,150 75,145 L65,85 Z" />
-                            <path class="body-part" data-name="Bụng" data-value="9" d="M75,145 Q100,150 125,145 L120,205 Q100,210 80,205 Z" />
-                            <circle class="body-part" data-name="Sinh dục" data-value="1" cx="100" cy="218" r="8" />
-                            <path class="body-part" data-name="C.Tay Phải (Trên)" data-value="2" d="M65,85 Q48,90 48,115 L50,140 Q60,135 68,130 Z" />
-                            <path class="body-part" data-name="C.Tay Phải (Dưới)" data-value="1.5" d="M50,140 L35,180 L55,185 L68,130 Z" />
-                            <path class="body-part" data-name="Bàn Tay Phải" data-value="1" d="M35,180 L55,185 L50,210 L30,205 Z" />
-                            <path class="body-part" data-name="C.Tay Trái (Trên)" data-value="2" d="M135,85 Q152,90 152,115 L150,140 Q140,135 132,130 Z" />
-                            <path class="body-part" data-name="C.Tay Trái (Dưới)" data-value="1.5" d="M150,140 L165,180 L145,185 L132,130 Z" />
-                            <path class="body-part" data-name="Bàn Tay Trái" data-value="1" d="M165,180 L145,185 L150,210 L170,205 Z" />
-                            <path class="body-part" data-name="Đùi Phải (Trước)" data-value="4.5" d="M80,205 Q65,225 60,260 L68,310 L95,310 L92,225 Z" />
-                            <path class="body-part" data-name="Cẳng Chân Phải (Trước)" data-value="3.5" d="M68,310 L95,310 Q92,350 90,390 L75,390 Q72,350 68,310 Z" />
-                            <path class="body-part" data-name="Bàn Chân Phải" data-value="1" d="M75,390 L90,390 L92,410 L65,410 Z" />
-                            <path class="body-part" data-name="Đùi Trái (Trước)" data-value="4.5" d="M120,205 Q135,225 140,260 L132,310 L105,310 L108,225 Z" />
-                            <path class="body-part" data-name="Cẳng Chân Trái (Trước)" data-value="3.5" d="M132,310 L105,310 Q108,350 110,390 L125,390 Q128,350 132,310 Z" />
-                            <path class="body-part" data-name="Bàn Chân Trái" data-value="1" d="M125,390 L110,390 L108,410 L135,410 Z" />
-                        </svg>
-                    </div>
-
-                    <div id="container-adult-back" class="body-container adult-view hidden md:block">
-                        <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT SAU</div>
-                        <svg viewBox="0 0 200 420" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <path class="body-part" data-name="Đầu (Sau)" data-value="3.5" d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
-                            <path class="body-part" data-name="Cổ (Sau)" data-value="1" d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
-                            <path class="body-part" data-name="Lưng Trên" data-value="9" d="M85,75 Q100,80 115,75 L135,85 L125,145 Q100,150 75,145 L65,85 Z" />
-                            <path class="body-part" data-name="Lưng Dưới" data-value="5" d="M75,145 Q100,150 125,145 L122,170 L78,170 Z" />
-                            <path class="body-part" data-name="Mông Trái" data-value="2" d="M78,170 L100,170 L100,210 Q80,215 75,190 Q73,175 78,170 Z" />
-                            <path class="body-part" data-name="Mông Phải" data-value="2" d="M100,170 L122,170 Q127,175 125,190 Q120,215 100,210 Z" />
-                            <path class="body-part" data-name="C.Tay Trái (Sau)" data-value="2" d="M65,85 Q48,90 48,115 L50,140 Q60,135 68,130 Z" />
-                            <path class="body-part" data-name="C.Tay Trái (Dưới)" data-value="1.5" d="M50,140 L35,180 L55,185 L68,130 Z" />
-                            <path class="body-part" data-name="Bàn Tay Trái" data-value="1" d="M35,180 L55,185 L50,210 L30,205 Z" />
-                            <path class="body-part" data-name="C.Tay Phải (Sau)" data-value="2" d="M135,85 Q152,90 152,115 L150,140 Q140,135 132,130 Z" />
-                            <path class="body-part" data-name="C.Tay Phải (Dưới)" data-value="1.5" d="M150,140 L165,180 L145,185 L132,130 Z" />
-                            <path class="body-part" data-name="Bàn Tay Phải" data-value="1" d="M165,180 L145,185 L150,210 L170,205 Z" />
-                            <path class="body-part" data-name="Đùi Trái (Sau)" data-value="4.5" d="M75,190 Q65,210 60,260 L68,310 L95,310 L98,210 L100,210 Q85,215 75,190 Z" />
-                            <path class="body-part" data-name="Cẳng Chân Trái (Sau)" data-value="3.5" d="M68,310 L95,310 Q92,350 90,390 L75,390 Q72,350 68,310 Z" />
-                            <path class="body-part" data-name="Bàn Chân Trái" data-value="1" d="M75,390 L90,390 L92,410 L65,410 Z" />
-                            <path class="body-part" data-name="Đùi Phải (Sau)" data-value="4.5" d="M125,190 Q135,210 140,260 L132,310 L105,310 L102,210 L100,210 Q115,215 125,190 Z" />
-                            <path class="body-part" data-name="Cẳng Chân Phải (Sau)" data-value="3.5" d="M132,310 L105,310 Q108,350 110,390 L125,390 Q128,350 132,310 Z" />
-                            <path class="body-part" data-name="Bàn Chân Phải" data-value="1" d="M125,390 L110,390 L108,410 L135,410 Z" />
-                        </svg>
-                    </div>
-
-                    <div id="container-child-front" class="body-container child-view hidden-map">
-                        <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT TRƯỚC</div>
-                        <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <path id="child-head-front" class="body-part" data-name="Đầu (Trước)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
-                            <path id="child-neck-front" class="body-part" data-name="Cổ (Trước)" data-value="1" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
-                            <path class="body-part" data-name="Ngực/Bụng" data-value="13" d="M85,92 Q100,95 115,92 L125,100 L120,175 Q100,185 80,175 L75,100 Z" />
-                            <circle class="body-part" data-name="Sinh dục" data-value="1" cx="100" cy="182" r="7" />
-                            <path class="body-part" data-name="Tay Phải" data-value="2.0" d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
-                            <path class="body-part" data-name="Cẳng Tay Phải" data-value="1.5" d="M60,145 L45,170 L60,175 L75,135 Z" />
-                            <path class="body-part" data-name="Bàn Tay Phải" data-value="1.25" d="M45,170 L60,175 L55,190 L40,185 Z" />
-                            <path class="body-part" data-name="Tay Trái" data-value="2.0" d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
-                            <path class="body-part" data-name="Cẳng Tay Trái" data-value="1.5" d="M140,145 L155,170 L140,175 L125,135 Z" />
-                            <path class="body-part" data-name="Bàn Tay Trái" data-value="1.25" d="M155,170 L140,175 L145,190 L160,185 Z" />
-                            <path id="child-thigh-right-front" class="body-part" data-name="Đùi Phải" data-value="2.75" d="M80,175 Q70,190 65,220 L72,255 L95,255 L92,185 Z" />
-                            <path id="child-leg-right-front" class="body-part" data-name="Cẳng Chân Phải" data-value="2.5" d="M72,255 L95,255 Q92,285 90,315 L78,315 Q75,285 72,255 Z" />
-                            <path class="body-part" data-name="Bàn Chân Phải" data-value="1.75" d="M78,315 L90,315 L92,330 L70,330 Z" />
-                            <path id="child-thigh-left-front" class="body-part" data-name="Đùi Trái" data-value="2.75" d="M120,175 Q130,190 135,220 L128,255 L105,255 L108,185 Z" />
-                            <path id="child-leg-left-front" class="body-part" data-name="Cẳng Chân Trái" data-value="2.5" d="M128,255 L105,255 Q108,285 110,315 L122,315 Q125,285 128,255 Z" />
-                            <path class="body-part" data-name="Bàn Chân Trái" data-value="1.75" d="M122,315 L110,315 L108,330 L130,330 Z" />
-                        </svg>
-                    </div>
-
-                    <div id="container-child-back" class="body-container child-view hidden-map hidden md:block">
-                        <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT SAU</div>
-                        <svg viewBox="0 0 200 340" class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
-                            <path id="child-head-back" class="body-part" data-name="Đầu (Sau)" data-value="8.5" d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
-                            <path id="child-neck-back" class="body-part" data-name="Cổ (Sau)" data-value="1" d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
-                            <path class="body-part" data-name="Lưng" data-value="13" d="M85,92 Q100,95 115,92 L125,100 L120,158 L80,158 L75,100 Z" />
-                            <path class="body-part" data-name="Mông Trái" data-value="2.5" d="M80,158 L100,158 L100,195 Q80,200 75,180 Q78,165 80,158 Z" />
-                            <path class="body-part" data-name="Mông Phải" data-value="2.5" d="M100,158 L120,158 Q122,165 125,180 Q120,200 100,195 Z" />
-                            <path class="body-part" data-name="Tay Trái" data-value="2.0" d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
-                            <path class="body-part" data-name="Cẳng Tay Trái" data-value="1.5" d="M60,145 L45,170 L60,175 L75,135 Z" />
-                            <path class="body-part" data-name="Bàn Tay Trái" data-value="1.25" d="M45,170 L60,175 L55,190 L40,185 Z" />
-                            <path class="body-part" data-name="Tay Phải" data-value="2.0" d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
-                            <path class="body-part" data-name="Cẳng Tay Phải" data-value="1.5" d="M140,145 L155,170 L140,175 L125,135 Z" />
-                            <path class="body-part" data-name="Bàn Tay Phải" data-value="1.25" d="M155,170 L140,175 L145,190 L160,185 Z" />
-                            <path id="child-thigh-left-back" class="body-part" data-name="Đùi Trái" data-value="2.75" d="M75,180 Q65,195 65,220 L72,255 L95,255 L98,190 L100,195 Q85,200 75,180 Z" />
-                            <path id="child-leg-left-back" class="body-part" data-name="Cẳng Chân Trái" data-value="2.5" d="M72,255 L95,255 Q92,285 90,315 L78,315 Q75,285 72,255 Z" />
-                            <path class="body-part" data-name="Bàn Chân Trái" data-value="1.75" d="M78,315 L90,315 L92,330 L70,330 Z" />
-                            <path id="child-thigh-right-back" class="body-part" data-name="Đùi Phải" data-value="2.75" d="M125,180 Q135,195 135,220 L128,255 L105,255 L102,190 L100,195 Q115,200 125,180 Z" />
-                            <path id="child-leg-right-back" class="body-part" data-name="Cẳng Chân Phải" data-value="2.5" d="M128,255 L105,255 Q108,285 110,315 L122,315 Q125,285 128,255 Z" />
-                            <path class="body-part" data-name="Bàn Chân Phải" data-value="1.75" d="M122,315 L110,315 L108,330 L130,330 Z" />
-                        </svg>
-                    </div>
-                </div>
-                
-                <div id="selected-part-name" class="h-5 text-center text-xs font-semibold text-indigo-600 mt-1 transition-opacity opacity-0">...</div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="mt-1 grid grid-cols-2 gap-3">
-                <button type="button" id="btn-reset" class="flex items-center justify-center py-2.5 px-3 rounded-lg border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition active:scale-95">
-                    <i class="fa-solid fa-rotate-right mr-1.5"></i>Nhập lại
-                </button>
-                <button type="button" id="btn-calc" class="flex items-center justify-center py-2.5 px-3 rounded-lg bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition active:scale-95">
-                    <i class="fa-solid fa-calculator mr-1.5"></i>Tính toán
-                </button>
-            </div>
-            
-            <!-- Result Area (Compact) -->
-            <div id="result-area" class="hidden mt-3 bg-white border border-indigo-100 rounded-lg overflow-hidden animate-fade-in-up shadow-sm">
-                <div class="bg-indigo-50 p-3 border-b border-indigo-100 flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                        <i class="fa-solid fa-prescription-bottle-medical text-sm"></i>
-                    </div>
+            <div class="hidden md:flex bg-indigo-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-8 h-8 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-3">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
+                    </a>
                     <div>
-                        <h4 class="font-bold text-sm text-gray-900">Kết quả & Phác đồ</h4>
-                        <p class="text-[10px] text-indigo-600 font-medium" id="result-subtitle">Parkland Formula</p>
+                        <h1 class="text-xl font-bold">Tính Diện Tích Bỏng & Bù Dịch</h1>
                     </div>
                 </div>
-                
-                <div class="p-3">
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="text-gray-600 text-xs">Tổng 24h:</span>
-                        <span class="text-lg font-bold text-indigo-700" id="res-total">0 ml</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-1.5 mb-3">
-                        <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 100%"></div>
-                    </div>
+            </div>
 
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="bg-blue-50 p-2.5 rounded border border-blue-100 relative overflow-hidden">
-                            <p class="text-[10px] font-bold text-blue-600 uppercase mb-0.5">8 giờ đầu</p>
-                            <div class="flex items-baseline gap-0.5">
-                                <span class="text-lg font-bold text-gray-800" id="res-first-8">0</span>
-                                <span class="text-[10px] text-gray-600">ml</span>
+            <div class="p-2 md:p-6" id="tool-content">
+                <div class="mb-2 bg-indigo-50/80 rounded-lg p-2 md:p-4 border border-indigo-100">
+                    <div
+                        class="flex flex-row items-end gap-2 md:gap-6 overflow-x-auto md:overflow-visible no-scrollbar pb-1">
+                        <div class="shrink-0">
+                            <label
+                                class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Đối
+                                tượng</label>
+                            <div
+                                class="flex bg-white rounded-md p-0.5 border border-indigo-200 shadow-sm h-[32px] md:h-[38px]">
+                                <button type="button" id="mode-adult"
+                                    class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold transition-all bg-indigo-600 text-white shadow-sm whitespace-nowrap leading-none flex items-center justify-center h-full">Người
+                                    lớn</button>
+                                <button type="button" id="mode-child"
+                                    class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap leading-none flex items-center justify-center h-full">Trẻ
+                                    em</button>
                             </div>
-                            <p class="text-[10px] text-gray-500 mt-0.5">Tốc độ: <span id="rate-first-8" class="font-semibold">0</span> ml/h</p>
                         </div>
 
-                        <div class="bg-teal-50 p-2.5 rounded border border-teal-100 relative overflow-hidden">
-                            <p class="text-[10px] font-bold text-teal-600 uppercase mb-0.5">16 giờ sau</p>
-                            <div class="flex items-baseline gap-0.5">
-                                <span class="text-lg font-bold text-gray-800" id="res-next-16">0</span>
-                                <span class="text-[10px] text-gray-600">ml</span>
+                        <div class="flex-1 min-w-[70px]">
+                            <label
+                                class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Cân
+                                nặng <span class="text-red-500">*</span></label>
+                            <div class="relative h-[32px] md:h-[38px]">
+                                <input type="number" id="weight" inputmode="decimal" placeholder="0"
+                                    class="block w-full pl-2 pr-5 md:pr-8 h-full text-sm font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white border shadow-sm">
+                                <div
+                                    class="absolute inset-y-0 right-0 pr-1.5 md:pr-3 flex items-center pointer-events-none text-gray-400 font-bold text-[10px] md:text-xs">
+                                    kg</div>
                             </div>
-                             <p class="text-[10px] text-gray-500 mt-0.5">Tốc độ: <span id="rate-next-16" class="font-semibold">0</span> ml/h</p>
+                        </div>
+
+                        <div id="age-input-group"
+                            class="w-[60px] md:w-[120px] hidden opacity-0 transition-all duration-300">
+                            <label
+                                class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Tuổi</label>
+                            <div class="relative h-[32px] md:h-[38px]">
+                                <input type="number" id="age" inputmode="numeric" placeholder="0" value="0" min="0"
+                                    max="15"
+                                    class="block w-full px-1 md:px-2 h-full text-sm font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white border shadow-sm text-center">
+                                <div
+                                    class="hidden md:flex absolute inset-y-0 right-0 pr-3 items-center pointer-events-none text-gray-400 font-bold text-xs">
+                                    tuổi</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <div
+                        class="flex justify-between items-center mb-1 sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-1 border-b border-gray-100 md:static md:bg-transparent md:border-none">
+                        <div class="flex flex-col gap-0.5">
+                            <div class="flex items-center gap-2">
+                                <div class="md:hidden flex bg-gray-100 rounded p-0.5 w-fit border border-gray-200">
+                                    <button type="button" id="view-front-btn"
+                                        class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-indigo-600 bg-white shadow-sm transition-all leading-none">Trước</button>
+                                    <button type="button" id="view-back-btn"
+                                        class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-gray-500 hover:text-indigo-600 transition-all leading-none">Sau</button>
+                                </div>
+                                <span id="chart-info"
+                                    class="text-[10px] text-gray-400 font-medium leading-none hidden md:inline-block">Wallace
+                                    (Người lớn)</span>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-red-50 text-red-600 px-2.5 py-1 rounded-lg text-base font-bold border border-red-100 shadow-sm flex items-center gap-1.5 min-w-[60px] justify-center">
+                            <span class="text-[9px] text-red-400 font-medium uppercase leading-none">Tổng</span>
+                            <div class="leading-none"><span id="total-tbsa">0</span>%</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 bg-white rounded-lg justify-items-center relative"
+                        style="min-height: 462px;">
+                        <div id="container-adult-front" class="body-container adult-view">
+                            <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT TRƯỚC
+                            </div>
+                            <svg viewBox="0 0 200 420"
+                                class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
+                                <path class="body-part" data-name="Đầu (Trước)" data-value="3.5"
+                                    d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
+                                <path class="body-part" data-name="Cổ (Trước)" data-value="1"
+                                    d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
+                                <path class="body-part" data-name="Ngực" data-value="9"
+                                    d="M85,75 Q100,80 115,75 L135,85 L125,145 Q100,150 75,145 L65,85 Z" />
+                                <path class="body-part" data-name="Bụng" data-value="9"
+                                    d="M75,145 Q100,150 125,145 L120,205 Q100,210 80,205 Z" />
+                                <circle class="body-part" data-name="Sinh dục" data-value="1" cx="100" cy="218" r="8" />
+                                <path class="body-part" data-name="C.Tay Phải (Trên)" data-value="2"
+                                    d="M65,85 Q48,90 48,115 L50,140 Q60,135 68,130 Z" />
+                                <path class="body-part" data-name="C.Tay Phải (Dưới)" data-value="1.5"
+                                    d="M50,140 L35,180 L55,185 L68,130 Z" />
+                                <path class="body-part" data-name="Bàn Tay Phải" data-value="1"
+                                    d="M35,180 L55,185 L50,210 L30,205 Z" />
+                                <path class="body-part" data-name="C.Tay Trái (Trên)" data-value="2"
+                                    d="M135,85 Q152,90 152,115 L150,140 Q140,135 132,130 Z" />
+                                <path class="body-part" data-name="C.Tay Trái (Dưới)" data-value="1.5"
+                                    d="M150,140 L165,180 L145,185 L132,130 Z" />
+                                <path class="body-part" data-name="Bàn Tay Trái" data-value="1"
+                                    d="M165,180 L145,185 L150,210 L170,205 Z" />
+                                <path class="body-part" data-name="Đùi Phải (Trước)" data-value="4.5"
+                                    d="M80,205 Q65,225 60,260 L68,310 L95,310 L92,225 Z" />
+                                <path class="body-part" data-name="Cẳng Chân Phải (Trước)" data-value="3.5"
+                                    d="M68,310 L95,310 Q92,350 90,390 L75,390 Q72,350 68,310 Z" />
+                                <path class="body-part" data-name="Bàn Chân Phải" data-value="1"
+                                    d="M75,390 L90,390 L92,410 L65,410 Z" />
+                                <path class="body-part" data-name="Đùi Trái (Trước)" data-value="4.5"
+                                    d="M120,205 Q135,225 140,260 L132,310 L105,310 L108,225 Z" />
+                                <path class="body-part" data-name="Cẳng Chân Trái (Trước)" data-value="3.5"
+                                    d="M132,310 L105,310 Q108,350 110,390 L125,390 Q128,350 132,310 Z" />
+                                <path class="body-part" data-name="Bàn Chân Trái" data-value="1"
+                                    d="M125,390 L110,390 L108,410 L135,410 Z" />
+                            </svg>
+                        </div>
+
+                        <div id="container-adult-back" class="body-container adult-view hidden md:block">
+                            <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT SAU
+                            </div>
+                            <svg viewBox="0 0 200 420"
+                                class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
+                                <path class="body-part" data-name="Đầu (Sau)" data-value="3.5"
+                                    d="M85,15 Q100,8 115,15 Q122,25 120,40 Q118,55 110,62 Q100,65 90,62 Q82,55 80,40 Q78,25 85,15 Z" />
+                                <path class="body-part" data-name="Cổ (Sau)" data-value="1"
+                                    d="M90,62 Q100,65 110,62 L115,75 Q100,80 85,75 Z" />
+                                <path class="body-part" data-name="Lưng Trên" data-value="9"
+                                    d="M85,75 Q100,80 115,75 L135,85 L125,145 Q100,150 75,145 L65,85 Z" />
+                                <path class="body-part" data-name="Lưng Dưới" data-value="5"
+                                    d="M75,145 Q100,150 125,145 L122,170 L78,170 Z" />
+                                <path class="body-part" data-name="Mông Trái" data-value="2"
+                                    d="M78,170 L100,170 L100,210 Q80,215 75,190 Q73,175 78,170 Z" />
+                                <path class="body-part" data-name="Mông Phải" data-value="2"
+                                    d="M100,170 L122,170 Q127,175 125,190 Q120,215 100,210 Z" />
+                                <path class="body-part" data-name="C.Tay Trái (Sau)" data-value="2"
+                                    d="M65,85 Q48,90 48,115 L50,140 Q60,135 68,130 Z" />
+                                <path class="body-part" data-name="C.Tay Trái (Dưới)" data-value="1.5"
+                                    d="M50,140 L35,180 L55,185 L68,130 Z" />
+                                <path class="body-part" data-name="Bàn Tay Trái" data-value="1"
+                                    d="M35,180 L55,185 L50,210 L30,205 Z" />
+                                <path class="body-part" data-name="C.Tay Phải (Sau)" data-value="2"
+                                    d="M135,85 Q152,90 152,115 L150,140 Q140,135 132,130 Z" />
+                                <path class="body-part" data-name="C.Tay Phải (Dưới)" data-value="1.5"
+                                    d="M150,140 L165,180 L145,185 L132,130 Z" />
+                                <path class="body-part" data-name="Bàn Tay Phải" data-value="1"
+                                    d="M165,180 L145,185 L150,210 L170,205 Z" />
+                                <path class="body-part" data-name="Đùi Trái (Sau)" data-value="4.5"
+                                    d="M75,190 Q65,210 60,260 L68,310 L95,310 L98,210 L100,210 Q85,215 75,190 Z" />
+                                <path class="body-part" data-name="Cẳng Chân Trái (Sau)" data-value="3.5"
+                                    d="M68,310 L95,310 Q92,350 90,390 L75,390 Q72,350 68,310 Z" />
+                                <path class="body-part" data-name="Bàn Chân Trái" data-value="1"
+                                    d="M75,390 L90,390 L92,410 L65,410 Z" />
+                                <path class="body-part" data-name="Đùi Phải (Sau)" data-value="4.5"
+                                    d="M125,190 Q135,210 140,260 L132,310 L105,310 L102,210 L100,210 Q115,215 125,190 Z" />
+                                <path class="body-part" data-name="Cẳng Chân Phải (Sau)" data-value="3.5"
+                                    d="M132,310 L105,310 Q108,350 110,390 L125,390 Q128,350 132,310 Z" />
+                                <path class="body-part" data-name="Bàn Chân Phải" data-value="1"
+                                    d="M125,390 L110,390 L108,410 L135,410 Z" />
+                            </svg>
+                        </div>
+
+                        <div id="container-child-front" class="body-container child-view hidden-map">
+                            <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT TRƯỚC
+                            </div>
+                            <svg viewBox="0 0 200 340"
+                                class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
+                                <path id="child-head-front" class="body-part" data-name="Đầu (Trước)" data-value="8.5"
+                                    d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
+                                <path id="child-neck-front" class="body-part" data-name="Cổ (Trước)" data-value="1"
+                                    d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
+                                <path class="body-part" data-name="Ngực/Bụng" data-value="13"
+                                    d="M85,92 Q100,95 115,92 L125,100 L120,175 Q100,185 80,175 L75,100 Z" />
+                                <circle class="body-part" data-name="Sinh dục" data-value="1" cx="100" cy="182" r="7" />
+                                <path class="body-part" data-name="Tay Phải" data-value="2.0"
+                                    d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
+                                <path class="body-part" data-name="Cẳng Tay Phải" data-value="1.5"
+                                    d="M60,145 L45,170 L60,175 L75,135 Z" />
+                                <path class="body-part" data-name="Bàn Tay Phải" data-value="1.25"
+                                    d="M45,170 L60,175 L55,190 L40,185 Z" />
+                                <path class="body-part" data-name="Tay Trái" data-value="2.0"
+                                    d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
+                                <path class="body-part" data-name="Cẳng Tay Trái" data-value="1.5"
+                                    d="M140,145 L155,170 L140,175 L125,135 Z" />
+                                <path class="body-part" data-name="Bàn Tay Trái" data-value="1.25"
+                                    d="M155,170 L140,175 L145,190 L160,185 Z" />
+                                <path id="child-thigh-right-front" class="body-part" data-name="Đùi Phải"
+                                    data-value="2.75" d="M80,175 Q70,190 65,220 L72,255 L95,255 L92,185 Z" />
+                                <path id="child-leg-right-front" class="body-part" data-name="Cẳng Chân Phải"
+                                    data-value="2.5" d="M72,255 L95,255 Q92,285 90,315 L78,315 Q75,285 72,255 Z" />
+                                <path class="body-part" data-name="Bàn Chân Phải" data-value="1.75"
+                                    d="M78,315 L90,315 L92,330 L70,330 Z" />
+                                <path id="child-thigh-left-front" class="body-part" data-name="Đùi Trái"
+                                    data-value="2.75" d="M120,175 Q130,190 135,220 L128,255 L105,255 L108,185 Z" />
+                                <path id="child-leg-left-front" class="body-part" data-name="Cẳng Chân Trái"
+                                    data-value="2.5"
+                                    d="M128,255 L105,255 Q108,285 110,315 L122,315 Q125,285 128,255 Z" />
+                                <path class="body-part" data-name="Bàn Chân Trái" data-value="1.75"
+                                    d="M122,315 L110,315 L108,330 L130,330 Z" />
+                            </svg>
+                        </div>
+
+                        <div id="container-child-back" class="body-container child-view hidden-map hidden md:block">
+                            <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT SAU
+                            </div>
+                            <svg viewBox="0 0 200 340"
+                                class="w-full h-auto drop-shadow-sm touch-manipulation select-none">
+                                <path id="child-head-back" class="body-part" data-name="Đầu (Sau)" data-value="8.5"
+                                    d="M75,25 Q100,15 125,25 Q135,40 130,65 Q128,80 115,85 Q100,88 85,85 Q68,80 70,65 Q65,40 75,25 Z" />
+                                <path id="child-neck-back" class="body-part" data-name="Cổ (Sau)" data-value="1"
+                                    d="M88,85 Q100,88 112,85 L115,92 Q100,95 85,92 Z" />
+                                <path class="body-part" data-name="Lưng" data-value="13"
+                                    d="M85,92 Q100,95 115,92 L125,100 L120,158 L80,158 L75,100 Z" />
+                                <path class="body-part" data-name="Mông Trái" data-value="2.5"
+                                    d="M80,158 L100,158 L100,195 Q80,200 75,180 Q78,165 80,158 Z" />
+                                <path class="body-part" data-name="Mông Phải" data-value="2.5"
+                                    d="M100,158 L120,158 Q122,165 125,180 Q120,200 100,195 Z" />
+                                <path class="body-part" data-name="Tay Trái" data-value="2.0"
+                                    d="M75,100 Q60,105 55,125 L60,145 Q68,140 75,135 Z" />
+                                <path class="body-part" data-name="Cẳng Tay Trái" data-value="1.5"
+                                    d="M60,145 L45,170 L60,175 L75,135 Z" />
+                                <path class="body-part" data-name="Bàn Tay Trái" data-value="1.25"
+                                    d="M45,170 L60,175 L55,190 L40,185 Z" />
+                                <path class="body-part" data-name="Tay Phải" data-value="2.0"
+                                    d="M125,100 Q140,105 145,125 L140,145 Q132,140 125,135 Z" />
+                                <path class="body-part" data-name="Cẳng Tay Phải" data-value="1.5"
+                                    d="M140,145 L155,170 L140,175 L125,135 Z" />
+                                <path class="body-part" data-name="Bàn Tay Phải" data-value="1.25"
+                                    d="M155,170 L140,175 L145,190 L160,185 Z" />
+                                <path id="child-thigh-left-back" class="body-part" data-name="Đùi Trái"
+                                    data-value="2.75"
+                                    d="M75,180 Q65,195 65,220 L72,255 L95,255 L98,190 L100,195 Q85,200 75,180 Z" />
+                                <path id="child-leg-left-back" class="body-part" data-name="Cẳng Chân Trái"
+                                    data-value="2.5" d="M72,255 L95,255 Q92,285 90,315 L78,315 Q75,285 72,255 Z" />
+                                <path class="body-part" data-name="Bàn Chân Trái" data-value="1.75"
+                                    d="M78,315 L90,315 L92,330 L70,330 Z" />
+                                <path id="child-thigh-right-back" class="body-part" data-name="Đùi Phải"
+                                    data-value="2.75"
+                                    d="M125,180 Q135,195 135,220 L128,255 L105,255 L102,190 L100,195 Q115,200 125,180 Z" />
+                                <path id="child-leg-right-back" class="body-part" data-name="Cẳng Chân Phải"
+                                    data-value="2.5"
+                                    d="M128,255 L105,255 Q108,285 110,315 L122,315 Q125,285 128,255 Z" />
+                                <path class="body-part" data-name="Bàn Chân Phải" data-value="1.75"
+                                    d="M122,315 L110,315 L108,330 L130,330 Z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div id="selected-part-name"
+                        class="h-5 text-center text-xs font-semibold text-indigo-600 mt-1 transition-opacity opacity-0">
+                        ...</div>
+                </div>
+
+                <div class="mt-1 grid grid-cols-2 gap-3">
+                    <button type="button" id="btn-reset"
+                        class="flex items-center justify-center py-2.5 px-3 rounded-lg border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition active:scale-95">
+                        <i class="fa-solid fa-rotate-right mr-1.5"></i>Nhập lại
+                    </button>
+                    <button type="button" id="btn-calc"
+                        class="flex items-center justify-center py-2.5 px-3 rounded-lg bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition active:scale-95">
+                        <i class="fa-solid fa-calculator mr-1.5"></i>Tính toán
+                    </button>
+                </div>
+
+                <div id="result-area"
+                    class="hidden mt-3 bg-white border border-indigo-100 rounded-lg overflow-hidden animate-fade-in-up shadow-sm">
+                    <div class="bg-indigo-50 p-3 border-b border-indigo-100 flex items-center gap-2">
+                        <div
+                            class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                            <i class="fa-solid fa-prescription-bottle-medical text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900">Kết quả & Phác đồ</h4>
+                            <p class="text-[10px] text-indigo-600 font-medium" id="result-subtitle">Parkland Formula</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3">
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="text-gray-600 text-xs">Tổng 24h:</span>
+                            <span class="text-lg font-bold text-indigo-700" id="res-total">0 ml</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-3">
+                            <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 100%"></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-blue-50 p-2.5 rounded border border-blue-100 relative overflow-hidden">
+                                <p class="text-[10px] font-bold text-blue-600 uppercase mb-0.5">8 giờ đầu</p>
+                                <div class="flex items-baseline gap-0.5">
+                                    <span class="text-lg font-bold text-gray-800" id="res-first-8">0</span>
+                                    <span class="text-[10px] text-gray-600">ml</span>
+                                </div>
+                                <p class="text-[10px] text-gray-500 mt-0.5">Tốc độ: <span id="rate-first-8"
+                                        class="font-semibold">0</span> ml/h</p>
+                            </div>
+
+                            <div class="bg-teal-50 p-2.5 rounded border border-teal-100 relative overflow-hidden">
+                                <p class="text-[10px] font-bold text-teal-600 uppercase mb-0.5">16 giờ sau</p>
+                                <div class="flex items-baseline gap-0.5">
+                                    <span class="text-lg font-bold text-gray-800" id="res-next-16">0</span>
+                                    <span class="text-[10px] text-gray-600">ml</span>
+                                </div>
+                                <p class="text-[10px] text-gray-500 mt-0.5">Tốc độ: <span id="rate-next-16"
+                                        class="font-semibold">0</span> ml/h</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-<div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-        <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-        <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-    </div>
-    <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-        <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-            <span class="font-medium">Giới thiệu</span>
-        </a>
-        <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-            <span class="font-medium">Liên hệ</span>
-        </a>
-        <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-            <span class="font-medium">Điều khoản</span>
-        </a>
-        <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-            <span class="font-medium">Chính sách</span>
-        </a>
-        <div class="my-2 border-t border-gray-100"></div>
-        <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-            <span class="font-medium">Ủng hộ</span>
-        </a>
-    </div>
-</div>
-
-<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-14 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-        <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-house text-lg mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[9px] group-hover:text-teal-600">Trang chủ</span>
-        </a>
-        <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-            <i class="fa-solid fa-calculator text-lg mb-1"></i>
-            <span class="text-[9px]">Công cụ</span>
-        </a>
-        <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-bars text-lg mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[9px] group-hover:text-teal-600">Khác</span>
-        </button>
-    </div>
-</nav>
-
-<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
-    <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-    <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
-        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-            <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+                Đóng
+            </button>
         </div>
-        <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
-        <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-        <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
-            Đóng
-        </button>
     </div>
-</div>
 
-<script>
-// --- 1. LOGIC LƯU LỊCH SỬ ---
-function useTool(id, name, icon, color, url) {
-    let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-    recentTools = recentTools.filter(tool => tool.id !== id);
-    recentTools.unshift({
-        id: id,
-        name: name,
-        icon: icon,
-        color: color,
-        url: url,
-        timestamp: new Date().getTime()
-    });
-    if (recentTools.length > 5) recentTools.pop();
-    localStorage.setItem('recentTools', JSON.stringify(recentTools));
-}
-
-// --- 2. LOGIC DRAWER MENU ---
-function openDrawer(e) {
-    if(e) e.preventDefault();
-    const drawer = document.getElementById('drawer-menu');
-    const overlay = document.getElementById('drawer-overlay');
-    overlay.classList.remove('hidden');
-    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-    drawer.classList.remove('translate-x-full');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeDrawer() {
-    const drawer = document.getElementById('drawer-menu');
-    const overlay = document.getElementById('drawer-overlay');
-    drawer.classList.add('translate-x-full');
-    overlay.classList.add('opacity-0');
-    setTimeout(() => {
-        overlay.classList.add('hidden');
-        document.body.style.overflow = '';
-    }, 300);
-}
-
-// --- 3. LOGIC MODAL ---
-const modal = document.getElementById('notification-modal');
-const modalMessage = document.getElementById('modal-message');
-
-window.showModal = function(message) {
-    if(modal && modalMessage) {
-        modalMessage.textContent = message;
-        modal.classList.remove('hidden');
-    }
-}
-
-window.hideModal = function() {
-    if(modal) modal.classList.add('hidden');
-}
-
-// --- 4. BẢO MẬT & CHẶN COPY ---
-document.addEventListener('contextmenu', event => event.preventDefault());
-document.addEventListener('keydown', function(event) {
-    if ((event.ctrlKey || event.metaKey) && (event.key === 'c' || event.key === 'u' || event.key === 'a')) {
-        event.preventDefault();
-    }
-});
-
-// --- 5. LOGIC TÍNH TOÁN DIỆN TÍCH BỎNG (GIỮ NGUYÊN) ---
-const lundBrowderData = {
-    0:  { head: 9.5, thigh: 2.75, leg: 2.5 },
-    1:  { head: 8.5, thigh: 3.25, leg: 2.5 },
-    5:  { head: 6.5, thigh: 4.00, leg: 3.0 },
-    10: { head: 5.5, thigh: 4.25, leg: 3.0 },
-    15: { head: 4.5, thigh: 4.50, leg: 3.5 },
-    adult: { head: 3.5, thigh: 4.75, leg: 3.5 }
-};
-
-function getLBValues(age) {
-    if (age >= 15) return lundBrowderData[15];
-    const points = [0, 1, 5, 10, 15];
-    let lower = 0, upper = 15;
-    for (let i = 0; i < points.length - 1; i++) {
-        if (age >= points[i] && age < points[i+1]) {
-            lower = points[i];
-            upper = points[i+1];
-            break;
-        }
-    }
-    const range = upper - lower;
-    const progress = (age - lower) / range;
-    const vLower = lundBrowderData[lower];
-    const vUpper = lundBrowderData[upper];
-    return {
-        head: vLower.head + (vUpper.head - vLower.head) * progress,
-        thigh: vLower.thigh + (vUpper.thigh - vLower.thigh) * progress,
-        leg: vLower.leg + (vUpper.leg - vLower.leg) * progress
-    };
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const btnReset = document.getElementById('btn-reset');
-    const btnCalc = document.getElementById('btn-calc');
-    const resultArea = document.getElementById('result-area');
-    const weightInput = document.getElementById('weight');
-    const ageInput = document.getElementById('age');
-    const ageGroup = document.getElementById('age-input-group');
-    const tbsaDisplay = document.getElementById('total-tbsa');
-    const partNameDisplay = document.getElementById('selected-part-name');
-    const chartInfo = document.getElementById('chart-info');
-    
-    const modeAdultBtn = document.getElementById('mode-adult');
-    const modeChildBtn = document.getElementById('mode-child');
-    
-    const viewFrontBtn = document.getElementById('view-front-btn');
-    const viewBackBtn = document.getElementById('view-back-btn');
-    
-    let isChildMode = false;
-    let currentSide = 'front';
-    let totalTBSA = 0;
-
-    const containerAdultFront = document.getElementById('container-adult-front');
-    const containerAdultBack = document.getElementById('container-adult-back');
-    const containerChildFront = document.getElementById('container-child-front');
-    const containerChildBack = document.getElementById('container-child-back');
-
-    function updateMapVisibility() {
-        if (isChildMode) {
-            containerAdultFront.classList.add('hidden-map');
-            containerAdultBack.classList.add('hidden-map');
-            containerChildFront.classList.remove('hidden-map');
-            containerChildBack.classList.remove('hidden-map');
-        } else {
-            containerChildFront.classList.add('hidden-map');
-            containerChildBack.classList.add('hidden-map');
-            containerAdultFront.classList.remove('hidden-map');
-            containerAdultBack.classList.remove('hidden-map');
+    <script>
+        // --- 1. LOGIC LƯU LỊCH SỬ ---
+        function useTool(id, name, icon, color, url) {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            recentTools = recentTools.filter(tool => tool.id !== id);
+            recentTools.unshift({
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+                url: url,
+                timestamp: new Date().getTime()
+            });
+            if (recentTools.length > 5) recentTools.pop();
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
 
-        const frontContainer = isChildMode ? containerChildFront : containerAdultFront;
-        const backContainer = isChildMode ? containerChildBack : containerAdultBack;
-
-        if (currentSide === 'front') {
-            frontContainer.classList.remove('hidden', 'md:block');
-            backContainer.classList.add('hidden', 'md:block');
-            
-            viewFrontBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
-            viewFrontBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
-            viewBackBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
-            viewBackBtn.classList.add('text-gray-500', 'hover:text-indigo-600');
-        } else {
-            backContainer.classList.remove('hidden', 'md:block');
-            frontContainer.classList.add('hidden', 'md:block');
-
-            viewBackBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
-            viewBackBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
-            viewFrontBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
-            viewFrontBtn.classList.add('text-gray-500', 'hover:text-indigo-600');
+        // --- 2. LOGIC DRAWER MENU ---
+        function openDrawer(e) {
+            if (e) e.preventDefault();
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            drawer.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
         }
-    }
 
-    viewFrontBtn.addEventListener('click', () => { currentSide = 'front'; updateMapVisibility(); });
-    viewBackBtn.addEventListener('click', () => { currentSide = 'back'; updateMapVisibility(); });
-
-    function setMode(child) {
-        isChildMode = child;
-        if(isChildMode) {
-            modeChildBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
-            modeChildBtn.classList.remove('text-gray-600', 'hover:bg-gray-50');
-            modeAdultBtn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
-            modeAdultBtn.classList.add('text-gray-600', 'hover:bg-gray-50');
-            
-            ageGroup.classList.remove('hidden');
-            setTimeout(() => ageGroup.classList.remove('opacity-0'), 10);
-            chartInfo.textContent = "Đang dùng: Lund-Browder (Trẻ em)";
-            
-            document.querySelectorAll('.body-part.selected').forEach(el => el.classList.remove('selected'));
-            totalTBSA = 0;
-            tbsaDisplay.textContent = '0';
-            resultArea.classList.add('hidden');
-            updateMapValues();
-        } else {
-            modeAdultBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
-            modeAdultBtn.classList.remove('text-gray-600', 'hover:bg-gray-50');
-            modeChildBtn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
-            modeChildBtn.classList.add('text-gray-600', 'hover:bg-gray-50');
-            
-            ageGroup.classList.add('opacity-0');
-            setTimeout(() => ageGroup.classList.add('hidden'), 300);
-            chartInfo.textContent = "Đang dùng: Wallace (Người lớn)";
-            
-            document.querySelectorAll('.body-part.selected').forEach(el => el.classList.remove('selected'));
-            totalTBSA = 0;
-            tbsaDisplay.textContent = '0';
-            resultArea.classList.add('hidden');
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
         }
-        updateMapVisibility();
-    }
 
-    modeAdultBtn.addEventListener('click', () => setMode(false));
-    modeChildBtn.addEventListener('click', () => setMode(true));
+        // --- 3. LOGIC MODAL ---
+        const modal = document.getElementById('notification-modal');
+        const modalMessage = document.getElementById('modal-message');
 
-    function updateElem(id, val) {
-        const el = document.getElementById(id);
-        const rounded = Math.round(val * 100) / 100;
-        if(el) el.setAttribute('data-value', rounded);
-    }
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
+                modalMessage.textContent = message;
+                modal.classList.remove('hidden');
+            }
+        }
 
-    function updateMapValues() {
-        if(!isChildMode) return;
-        let age = parseFloat(ageInput.value);
-        if (age > 15) { showModal('Trẻ trên 15 tuổi được tính như người lớn. Vui lòng chọn chế độ "Người lớn"!'); age = 15; ageInput.value = 15; }
-        if (isNaN(age) || age < 0) age = 0;
-        
-        const vals = getLBValues(age); 
-        const headVal = Math.max(0, vals.head - 1);
-        
-        updateElem('child-head-front', headVal);
-        updateElem('child-head-back', headVal);
-        updateElem('child-thigh-left-front', vals.thigh);
-        updateElem('child-thigh-right-front', vals.thigh);
-        updateElem('child-thigh-left-back', vals.thigh);
-        updateElem('child-thigh-right-back', vals.thigh);
-        updateElem('child-leg-left-front', vals.leg);
-        updateElem('child-leg-right-front', vals.leg);
-        updateElem('child-leg-left-back', vals.leg);
-        updateElem('child-leg-right-back', vals.leg);
-        
-        recalculateSelectedTBSA();
-    }
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
+        }
 
-    ageInput.addEventListener('input', updateMapValues);
-
-    const bodyParts = document.querySelectorAll('.body-part');
-    bodyParts.forEach(part => {
-        part.addEventListener('click', function() {
-            if(this.closest('.hidden-map')) return; 
-
-            this.classList.toggle('selected');
-            
-            const name = this.getAttribute('data-name');
-            const val = parseFloat(this.getAttribute('data-value'));
-            partNameDisplay.textContent = this.classList.contains('selected') 
-                ? `Đã chọn: ${name} (+${val}%)` 
-                : `Đã bỏ chọn: ${name}`;
-            partNameDisplay.classList.remove('opacity-0');
-            clearTimeout(window.nameTimeout);
-            window.nameTimeout = setTimeout(() => partNameDisplay.classList.add('opacity-0'), 2000);
-
-            recalculateSelectedTBSA();
+        // --- 4. BẢO MẬT & CHẶN COPY ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function (event) {
+            if ((event.ctrlKey || event.metaKey) && (event.key === 'c' || event.key === 'u' || event.key === 'a')) {
+                event.preventDefault();
+            }
         });
-    });
 
-    function recalculateSelectedTBSA() {
-        totalTBSA = 0;
-        const activeContainerQuery = isChildMode ? '.child-view' : '.adult-view';
-        document.querySelectorAll(`${activeContainerQuery} .body-part.selected`).forEach(p => {
-            totalTBSA += parseFloat(p.getAttribute('data-value'));
+        // --- 5. LOGIC TÍNH TOÁN DIỆN TÍCH BỎNG (GIỮ NGUYÊN) ---
+        const lundBrowderData = {
+            0: { head: 9.5, thigh: 2.75, leg: 2.5 },
+            1: { head: 8.5, thigh: 3.25, leg: 2.5 },
+            5: { head: 6.5, thigh: 4.00, leg: 3.0 },
+            10: { head: 5.5, thigh: 4.25, leg: 3.0 },
+            15: { head: 4.5, thigh: 4.50, leg: 3.5 },
+            adult: { head: 3.5, thigh: 4.75, leg: 3.5 }
+        };
+
+        function getLBValues(age) {
+            if (age >= 15) return lundBrowderData[15];
+            const points = [0, 1, 5, 10, 15];
+            let lower = 0, upper = 15;
+            for (let i = 0; i < points.length - 1; i++) {
+                if (age >= points[i] && age < points[i + 1]) {
+                    lower = points[i];
+                    upper = points[i + 1];
+                    break;
+                }
+            }
+            const range = upper - lower;
+            const progress = (age - lower) / range;
+            const vLower = lundBrowderData[lower];
+            const vUpper = lundBrowderData[upper];
+            return {
+                head: vLower.head + (vUpper.head - vLower.head) * progress,
+                thigh: vLower.thigh + (vUpper.thigh - vLower.thigh) * progress,
+                leg: vLower.leg + (vUpper.leg - vLower.leg) * progress
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnReset = document.getElementById('btn-reset');
+            const btnCalc = document.getElementById('btn-calc');
+            const resultArea = document.getElementById('result-area');
+            const weightInput = document.getElementById('weight');
+            const ageInput = document.getElementById('age');
+            const ageGroup = document.getElementById('age-input-group');
+            const tbsaDisplay = document.getElementById('total-tbsa');
+            const partNameDisplay = document.getElementById('selected-part-name');
+            const chartInfo = document.getElementById('chart-info');
+
+            const modeAdultBtn = document.getElementById('mode-adult');
+            const modeChildBtn = document.getElementById('mode-child');
+
+            const viewFrontBtn = document.getElementById('view-front-btn');
+            const viewBackBtn = document.getElementById('view-back-btn');
+
+            let isChildMode = false;
+            let currentSide = 'front';
+            let totalTBSA = 0;
+
+            const containerAdultFront = document.getElementById('container-adult-front');
+            const containerAdultBack = document.getElementById('container-adult-back');
+            const containerChildFront = document.getElementById('container-child-front');
+            const containerChildBack = document.getElementById('container-child-back');
+
+            function updateMapVisibility() {
+                if (isChildMode) {
+                    containerAdultFront.classList.add('hidden-map');
+                    containerAdultBack.classList.add('hidden-map');
+                    containerChildFront.classList.remove('hidden-map');
+                    containerChildBack.classList.remove('hidden-map');
+                } else {
+                    containerChildFront.classList.add('hidden-map');
+                    containerChildBack.classList.add('hidden-map');
+                    containerAdultFront.classList.remove('hidden-map');
+                    containerAdultBack.classList.remove('hidden-map');
+                }
+
+                const frontContainer = isChildMode ? containerChildFront : containerAdultFront;
+                const backContainer = isChildMode ? containerChildBack : containerAdultBack;
+
+                if (currentSide === 'front') {
+                    frontContainer.classList.remove('hidden', 'md:block');
+                    backContainer.classList.add('hidden', 'md:block');
+
+                    viewFrontBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
+                    viewFrontBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
+                    viewBackBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
+                    viewBackBtn.classList.add('text-gray-500', 'hover:text-indigo-600');
+                } else {
+                    backContainer.classList.remove('hidden', 'md:block');
+                    frontContainer.classList.add('hidden', 'md:block');
+
+                    viewBackBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
+                    viewBackBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
+                    viewFrontBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
+                    viewFrontBtn.classList.add('text-gray-500', 'hover:text-indigo-600');
+                }
+            }
+
+            viewFrontBtn.addEventListener('click', () => { currentSide = 'front'; updateMapVisibility(); });
+            viewBackBtn.addEventListener('click', () => { currentSide = 'back'; updateMapVisibility(); });
+
+            function setMode(child) {
+                isChildMode = child;
+                if (isChildMode) {
+                    modeChildBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+                    modeChildBtn.classList.remove('text-gray-600', 'hover:bg-gray-50');
+                    modeAdultBtn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
+                    modeAdultBtn.classList.add('text-gray-600', 'hover:bg-gray-50');
+
+                    ageGroup.classList.remove('hidden');
+                    setTimeout(() => ageGroup.classList.remove('opacity-0'), 10);
+                    chartInfo.textContent = "Đang dùng: Lund-Browder (Trẻ em)";
+
+                    document.querySelectorAll('.body-part.selected').forEach(el => el.classList.remove('selected'));
+                    totalTBSA = 0;
+                    tbsaDisplay.textContent = '0';
+                    resultArea.classList.add('hidden');
+                    updateMapValues();
+                } else {
+                    modeAdultBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+                    modeAdultBtn.classList.remove('text-gray-600', 'hover:bg-gray-50');
+                    modeChildBtn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
+                    modeChildBtn.classList.add('text-gray-600', 'hover:bg-gray-50');
+
+                    ageGroup.classList.add('opacity-0');
+                    setTimeout(() => ageGroup.classList.add('hidden'), 300);
+                    chartInfo.textContent = "Đang dùng: Wallace (Người lớn)";
+
+                    document.querySelectorAll('.body-part.selected').forEach(el => el.classList.remove('selected'));
+                    totalTBSA = 0;
+                    tbsaDisplay.textContent = '0';
+                    resultArea.classList.add('hidden');
+                }
+                updateMapVisibility();
+            }
+
+            modeAdultBtn.addEventListener('click', () => setMode(false));
+            modeChildBtn.addEventListener('click', () => setMode(true));
+
+            function updateElem(id, val) {
+                const el = document.getElementById(id);
+                const rounded = Math.round(val * 100) / 100;
+                if (el) el.setAttribute('data-value', rounded);
+            }
+
+            function updateMapValues() {
+                if (!isChildMode) return;
+                let age = parseFloat(ageInput.value);
+                if (age > 15) { showModal('Trẻ trên 15 tuổi được tính như người lớn. Vui lòng chọn chế độ "Người lớn"!'); age = 15; ageInput.value = 15; }
+                if (isNaN(age) || age < 0) age = 0;
+
+                const vals = getLBValues(age);
+                const headVal = Math.max(0, vals.head - 1);
+
+                updateElem('child-head-front', headVal);
+                updateElem('child-head-back', headVal);
+                updateElem('child-thigh-left-front', vals.thigh);
+                updateElem('child-thigh-right-front', vals.thigh);
+                updateElem('child-thigh-left-back', vals.thigh);
+                updateElem('child-thigh-right-back', vals.thigh);
+                updateElem('child-leg-left-front', vals.leg);
+                updateElem('child-leg-right-front', vals.leg);
+                updateElem('child-leg-left-back', vals.leg);
+                updateElem('child-leg-right-back', vals.leg);
+
+                recalculateSelectedTBSA();
+            }
+
+            ageInput.addEventListener('input', updateMapValues);
+
+            const bodyParts = document.querySelectorAll('.body-part');
+            bodyParts.forEach(part => {
+                part.addEventListener('click', function () {
+                    if (this.closest('.hidden-map')) return;
+
+                    this.classList.toggle('selected');
+
+                    const name = this.getAttribute('data-name');
+                    const val = parseFloat(this.getAttribute('data-value'));
+                    partNameDisplay.textContent = this.classList.contains('selected')
+                        ? `Đã chọn: ${name} (+${val}%)`
+                        : `Đã bỏ chọn: ${name}`;
+                    partNameDisplay.classList.remove('opacity-0');
+                    clearTimeout(window.nameTimeout);
+                    window.nameTimeout = setTimeout(() => partNameDisplay.classList.add('opacity-0'), 2000);
+
+                    recalculateSelectedTBSA();
+                });
+            });
+
+            function recalculateSelectedTBSA() {
+                totalTBSA = 0;
+                const activeContainerQuery = isChildMode ? '.child-view' : '.adult-view';
+                document.querySelectorAll(`${activeContainerQuery} .body-part.selected`).forEach(p => {
+                    totalTBSA += parseFloat(p.getAttribute('data-value'));
+                });
+                totalTBSA = Math.round(totalTBSA * 100) / 100;
+                tbsaDisplay.textContent = totalTBSA;
+            }
+
+            btnReset.addEventListener('click', function () {
+                weightInput.value = '';
+                ageInput.value = '0';
+                setMode(false);
+                currentSide = 'front';
+                updateMapVisibility();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                resultArea.classList.add('hidden');
+            });
+
+            btnCalc.addEventListener('click', function () {
+                const weight = parseFloat(weightInput.value);
+                if (!weight || weight <= 0) { showModal('Vui lòng nhập cân nặng hợp lệ!'); return; }
+                if (totalTBSA <= 0) { showModal('Vui lòng chọn vùng bị bỏng!'); return; }
+
+                const mlPerKg = isChildMode ? 3 : 4;
+                const totalFluid = mlPerKg * weight * totalTBSA;
+
+                document.getElementById('res-total').textContent = Math.round(totalFluid).toLocaleString();
+                document.getElementById('res-first-8').textContent = Math.round(totalFluid / 2).toLocaleString();
+                document.getElementById('res-next-16').textContent = Math.round(totalFluid / 2).toLocaleString();
+                document.getElementById('rate-first-8').textContent = Math.round((totalFluid / 2) / 8);
+                document.getElementById('rate-next-16').textContent = Math.round((totalFluid / 2) / 16);
+                document.getElementById('result-subtitle').textContent = isChildMode
+                    ? `Parkland (Trẻ em: 3ml x ${weight}kg x ${totalTBSA}%)`
+                    : `Parkland (Người lớn: 4ml x ${weight}kg x ${totalTBSA}%)`;
+
+                resultArea.classList.remove('hidden');
+                resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // Lưu lịch sử
+                useTool('tinh-dien-tich-bong', 'Diện Tích Bỏng', 'fa-fire-flame-curved', 'text-orange-500', window.location.href);
+            });
+
+            updateMapVisibility();
         });
-        totalTBSA = Math.round(totalTBSA * 100) / 100;
-        tbsaDisplay.textContent = totalTBSA;
-    }
-
-    btnReset.addEventListener('click', function() {
-        weightInput.value = '';
-        ageInput.value = '0';
-        setMode(false);
-        currentSide = 'front';
-        updateMapVisibility();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        resultArea.classList.add('hidden');
-    });
-
-    btnCalc.addEventListener('click', function() {
-        const weight = parseFloat(weightInput.value);
-        if (!weight || weight <= 0) { showModal('Vui lòng nhập cân nặng hợp lệ!'); return; }
-        if (totalTBSA <= 0) { showModal('Vui lòng chọn vùng bị bỏng!'); return; }
-        
-        const mlPerKg = isChildMode ? 3 : 4; 
-        const totalFluid = mlPerKg * weight * totalTBSA;
-        
-        document.getElementById('res-total').textContent = Math.round(totalFluid).toLocaleString();
-        document.getElementById('res-first-8').textContent = Math.round(totalFluid / 2).toLocaleString();
-        document.getElementById('res-next-16').textContent = Math.round(totalFluid / 2).toLocaleString();
-        document.getElementById('rate-first-8').textContent = Math.round((totalFluid / 2) / 8);
-        document.getElementById('rate-next-16').textContent = Math.round((totalFluid / 2) / 16);
-        document.getElementById('result-subtitle').textContent = isChildMode 
-            ? `Parkland (Trẻ em: 3ml x ${weight}kg x ${totalTBSA}%)` 
-            : `Parkland (Người lớn: 4ml x ${weight}kg x ${totalTBSA}%)`;
-
-        resultArea.classList.remove('hidden');
-        resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        // Lưu lịch sử
-        useTool('tinh-dien-tich-bong', 'Diện Tích Bỏng', 'fa-fire-flame-curved', 'text-orange-500', window.location.href);
-    });
-    
-    updateMapVisibility();
-});
-</script>
+    </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

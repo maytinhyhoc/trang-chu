@@ -1,312 +1,244 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ủng Hộ - Công Cụ Y Học</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ICONS & PWA -->
+
     <meta name="theme-color" content="#e11d48">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 80px; 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 80px;
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Chặn bôi đen bằng CSS (cơ bản) */
+            -webkit-user-select: none;
+            /* Chặn bôi đen bằng CSS (cơ bản) */
             user-select: none;
             touch-action: pan-x pan-y;
         }
+
         /* Ghi đè: Vẫn cho phép bôi đen input/textarea nếu cần nhập liệu, 
            nhưng script JS bên dưới sẽ chặn Ctrl+C/Ctrl+A */
-        .result-text, input, textarea, .selectable-text {
+        .result-text,
+        input,
+        textarea,
+        .selectable-text {
             -webkit-user-select: text;
             user-select: text;
         }
+
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
 
         /* Custom Styles cho trang Ủng hộ */
-        .copy-btn:active { transform: scale(0.95); }
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
-<body oncontextmenu="return false;"> <!-- Cách 1: Chặn chuột phải ngay tại thẻ body -->
 
-<!-- HEADER DESKTOP -->
-<header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-    <div class="flex items-center gap-3">
-        <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png'" alt="Logo" class="w-10 h-10 object-contain">
-        <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-    </div>
-    <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-        <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-        <a href="cong-cu.html" class="hover:text-teal-600 transition">Công cụ</a>
-        <a href="#" onclick="openDrawer(event)" class="text-teal-600 font-bold">Khác</a>
-    </nav>
-</header>
+<body oncontextmenu="return false;">
+    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
+        <a href="#" onclick="history.back()" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
+            <i class="fa-solid fa-chevron-left text-lg"></i>
+        </a>
+        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+            Ủng Hộ Dự Án
+        </h1>
+        <div class="w-8"></div>
+    </header>
 
-<!-- HEADER MOBILE -->
-<header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-    <a href="#" onclick="history.back()" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
-        <i class="fa-solid fa-chevron-left text-lg"></i>
-    </a>
-    <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
-        Ủng Hộ Dự Án
-    </h1>
-    <div class="w-8"></div>
-</header>
+    <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
 
-<!-- MAIN CONTENT WRAPPER -->
-<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-    
-    <!-- HERO SECTION -->
-    <div class="text-center mb-8 animate-fade-in-up">
-        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-rose-100 mb-4 shadow-sm">
-            <i class="fa-solid fa-heart text-4xl text-rose-500 animate-pulse"></i>
-        </div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">Cảm ơn bạn đã đồng hành!</h2>
-        <p class="text-gray-600 text-sm md:text-base max-w-lg mx-auto">
-            Máy Tính Y Học là dự án phi lợi nhuận. Sự ủng hộ của bạn là động lực lớn để chúng tôi duy trì máy chủ và phát triển thêm nhiều công cụ miễn phí.
-        </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up" style="animation-delay: 0.1s;">
-        
-        <!-- CARD NGÂN HÀNG (TPBank) -->
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative">
-            <!-- Màu tím đặc trưng của TPBank -->
-            <div class="bg-[#73308a] p-4 text-white text-center">
-                <h3 class="font-bold text-lg"><i class="fa-solid fa-building-columns mr-2"></i>Chuyển khoản Ngân hàng</h3>
+        <div class="text-center mb-8 animate-fade-in-up">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-rose-100 mb-4 shadow-sm">
+                <i class="fa-solid fa-heart text-4xl text-rose-500 animate-pulse"></i>
             </div>
-            <div class="p-6 flex flex-col items-center">
-                <!-- QR CODE TPBANK -->
-                <div class="w-48 h-48 bg-gray-50 rounded-xl mb-2 flex items-center justify-center border-2 border-dashed border-gray-200 p-1">
-                    <img src="https://img.vietqr.io/image/TPB-toannguyen284-compact.jpg?amount=0&addInfo=Ung ho May Tinh Y Hoc" 
-                         onerror="this.src='https://placehold.co/200x200?text=QR+TPBank'"
-                         alt="QR Code TPBank" 
-                         class="w-full h-full object-contain rounded-lg">
-                </div>
-                <!-- Nút Tải Ảnh -->
-                <a href="https://img.vietqr.io/image/TPB-toannguyen284-compact.jpg?amount=0&addInfo=Ung ho May Tinh Y Hoc" 
-                   download="QR_TPBank_ToanNguyen.jpg" 
-                   target="_blank"
-                   class="text-xs font-medium text-gray-500 hover:text-[#73308a] mb-4 flex items-center gap-1 transition">
-                    <i class="fa-solid fa-download"></i> Tải ảnh QR
-                </a>
-                
-                <div class="w-full space-y-3">
-                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-500 uppercase">Ngân hàng</p>
-                            <p class="font-bold text-gray-800 text-sm">TPBank (Tiền Phong)</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center justify-between group cursor-pointer" onclick="copyToClipboard('toannguyen284', 'stk')">
-                        <div>
-                            <p class="text-xs text-gray-500 uppercase">Số tài khoản</p>
-                            <p class="font-bold text-[#73308a] text-lg selectable-text">toannguyen284</p>
-                        </div>
-                        <button class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 group-hover:text-[#73308a] transition copy-btn" id="btn-copy-stk">
-                            <i class="fa-regular fa-copy"></i>
-                        </button>
-                    </div>
-
-                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                        <p class="text-xs text-gray-500 uppercase">Chủ tài khoản</p>
-                        <p class="font-bold text-gray-800 text-sm uppercase">NGUYEN DUY TOAN</p>
-                    </div>
-                </div>
-            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Cảm ơn bạn đã đồng hành!</h2>
+            <p class="text-gray-600 text-sm md:text-base max-w-lg mx-auto">
+                Máy Tính Y Học là dự án phi lợi nhuận. Sự ủng hộ của bạn là động lực lớn để chúng tôi duy trì máy chủ và
+                phát triển thêm nhiều công cụ miễn phí.
+            </p>
         </div>
 
-        <!-- CARD ZALOPAY -->
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative">
-            <!-- Màu xanh dương của ZaloPay -->
-            <div class="bg-[#0068ff] p-4 text-white text-center">
-                <h3 class="font-bold text-lg"><i class="fa-solid fa-wallet mr-2"></i>Ví ZaloPay</h3>
-            </div>
-            <div class="p-6 flex flex-col items-center">
-                <!-- QR ZALOPAY -->
-                <div class="w-48 h-48 bg-gray-50 rounded-xl mb-2 flex items-center justify-center border-2 border-dashed border-gray-200 p-1">
-                    <img src="zalopay.jpg" 
-                         onerror="this.src='https://placehold.co/200x200?text=QR+ZaloPay'"
-                         alt="QR Code ZaloPay" 
-                         class="w-full h-full object-contain rounded-lg">
-                </div>
-                <!-- Nút Tải Ảnh -->
-                <a href="zalopay.jpg" 
-                   download="QR_ZaloPay_ToanNguyen.jpg" 
-                   class="text-xs font-medium text-gray-500 hover:text-[#0068ff] mb-4 flex items-center gap-1 transition">
-                    <i class="fa-solid fa-download"></i> Tải ảnh QR
-                </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up" style="animation-delay: 0.1s;">
 
-                <div class="w-full space-y-3">
-                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-500 uppercase">ZALO</p>
-                            <p class="font-bold text-[#0068ff] text-lg selectable-text">Toàn Nguyễn</p>
-                        </div>
-                        <!-- Đã xóa nút copy ở đây -->
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative">
+                <div class="bg-[#73308a] p-4 text-white text-center">
+                    <h3 class="font-bold text-lg"><i class="fa-solid fa-building-columns mr-2"></i>Chuyển khoản Ngân
+                        hàng</h3>
+                </div>
+                <div class="p-6 flex flex-col items-center">
+                    <div
+                        class="w-48 h-48 bg-gray-50 rounded-xl mb-2 flex items-center justify-center border-2 border-dashed border-gray-200 p-1">
+                        <img src="https://img.vietqr.io/image/TPB-toannguyen284-compact.jpg?amount=0&addInfo=Ung ho May Tinh Y Hoc"
+                            onerror="this.src='https://placehold.co/200x200?text=QR+TPBank'" alt="QR Code TPBank"
+                            class="w-full h-full object-contain rounded-lg">
                     </div>
-                    
-                    <a href="https://zalopay.vn" target="_blank" class="block w-full text-center py-3 bg-[#0068ff] hover:bg-[#0054cc] text-white rounded-xl font-bold transition shadow-sm">
-                        Mở ZaloPay
+                    <a href="https://img.vietqr.io/image/TPB-toannguyen284-compact.jpg?amount=0&addInfo=Ung ho May Tinh Y Hoc"
+                        download="QR_TPBank_ToanNguyen.jpg" target="_blank"
+                        class="text-xs font-medium text-gray-500 hover:text-[#73308a] mb-4 flex items-center gap-1 transition">
+                        <i class="fa-solid fa-download"></i> Tải ảnh QR
                     </a>
+
+                    <div class="w-full space-y-3">
+                        <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Ngân hàng</p>
+                                <p class="font-bold text-gray-800 text-sm">TPBank (Tiền Phong)</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center justify-between group cursor-pointer"
+                            onclick="copyToClipboard('toannguyen284', 'stk')">
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">Số tài khoản</p>
+                                <p class="font-bold text-[#73308a] text-lg selectable-text">toannguyen284</p>
+                            </div>
+                            <button
+                                class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 group-hover:text-[#73308a] transition copy-btn"
+                                id="btn-copy-stk">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                            <p class="text-xs text-gray-500 uppercase">Chủ tài khoản</p>
+                            <p class="font-bold text-gray-800 text-sm uppercase">NGUYEN DUY TOAN</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative">
+                <div class="bg-[#0068ff] p-4 text-white text-center">
+                    <h3 class="font-bold text-lg"><i class="fa-solid fa-wallet mr-2"></i>Ví ZaloPay</h3>
+                </div>
+                <div class="p-6 flex flex-col items-center">
+                    <div
+                        class="w-48 h-48 bg-gray-50 rounded-xl mb-2 flex items-center justify-center border-2 border-dashed border-gray-200 p-1">
+                        <img src="zalopay.jpg" onerror="this.src='https://placehold.co/200x200?text=QR+ZaloPay'"
+                            alt="QR Code ZaloPay" class="w-full h-full object-contain rounded-lg">
+                    </div>
+                    <a href="zalopay.jpg" download="QR_ZaloPay_ToanNguyen.jpg"
+                        class="text-xs font-medium text-gray-500 hover:text-[#0068ff] mb-4 flex items-center gap-1 transition">
+                        <i class="fa-solid fa-download"></i> Tải ảnh QR
+                    </a>
+
+                    <div class="w-full space-y-3">
+                        <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase">ZALO</p>
+                                <p class="font-bold text-[#0068ff] text-lg selectable-text">Toàn Nguyễn</p>
+                            </div>
+                        </div>
+
+                        <a href="https://zalopay.vn" target="_blank"
+                            class="block w-full text-center py-3 bg-[#0068ff] hover:bg-[#0054cc] text-white rounded-xl font-bold transition shadow-sm">
+                            Mở ZaloPay
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="mt-8 text-center text-gray-400 text-xs md:text-sm">
+            <p>Mọi khoản đóng góp dù nhỏ nhất đều rất quý giá.</p>
+            <p class="mt-1">Chúc bạn một ngày làm việc hiệu quả! ❤️</p>
+        </div>
+
+    </main>
+
+    <div id="toast-notification"
+        class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-full shadow-lg z-[90] flex items-center gap-2 opacity-0 pointer-events-none transition-opacity duration-300">
+        <i class="fa-solid fa-circle-check text-green-400"></i>
+        <span class="text-sm font-medium">Đã sao chép!</span>
     </div>
 
-    <!-- Note Footer -->
-    <div class="mt-8 text-center text-gray-400 text-xs md:text-sm">
-        <p>Mọi khoản đóng góp dù nhỏ nhất đều rất quý giá.</p>
-        <p class="mt-1">Chúc bạn một ngày làm việc hiệu quả! ❤️</p>
-    </div>
+    <script>
+        // --- LOGIC COPY CLIPBOARD ---
+        function copyToClipboard(text, type) {
+            // Copy text
+            navigator.clipboard.writeText(text).then(() => {
+                // Show Visual Feedback on Button
+                const btnId = type === 'stk' ? 'btn-copy-stk' : 'btn-copy-zalopay';
+                const btn = document.getElementById(btnId);
 
-</main>
+                if (btn) {
+                    const originalIcon = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-check text-green-500"></i>';
+                    setTimeout(() => {
+                        btn.innerHTML = originalIcon;
+                    }, 2000);
+                }
 
-<!-- DRAWER MENU & BOTTOM NAV -->
-<div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-<div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-        <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-        <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-    </div>
-    <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-        <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-            <span class="font-medium">Giới thiệu</span>
-        </a>
-        <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-            <span class="font-medium">Liên hệ</span>
-        </a>
-        <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-            <span class="font-medium">Điều khoản</span>
-        </a>
-        <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-            <span class="font-medium">Chính sách</span>
-        </a>
-        <div class="my-2 border-t border-gray-100"></div>
-        <a href="ung-ho.html" class="flex items-center gap-4 p-3 bg-rose-50 text-rose-600 rounded-xl transition group font-bold">
-            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600"><i class="fa-solid fa-heart"></i></div>
-            <span class="font-medium">Ủng hộ</span>
-        </a>
-    </div>
-</div>
+                // Show Toast
+                const toast = document.getElementById('toast-notification');
+                toast.classList.remove('opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('opacity-0');
+                }, 2000);
 
-<!-- MOBILE BOTTOM NAV -->
-<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-        <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-        </a>
-        <a href="cong-cu.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-calculator text-xl mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[10px] group-hover:text-teal-600">Công cụ</span>
-        </a>
-        <button type="button" onclick="openDrawer(event)" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-            <i class="fa-solid fa-bars text-xl mb-1"></i>
-            <span class="text-[10px]">Khác</span>
-        </button>
-    </div>
-</nav>
-
-<!-- TOAST NOTIFICATION -->
-<div id="toast-notification" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-full shadow-lg z-[90] flex items-center gap-2 opacity-0 pointer-events-none transition-opacity duration-300">
-    <i class="fa-solid fa-circle-check text-green-400"></i>
-    <span class="text-sm font-medium">Đã sao chép!</span>
-</div>
-
-<script>
-// --- LOGIC DRAWER MENU ---
-function openDrawer(e) {
-    if(e) e.preventDefault();
-    const drawer = document.getElementById('drawer-menu');
-    const overlay = document.getElementById('drawer-overlay');
-    overlay.classList.remove('hidden');
-    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-    drawer.classList.remove('translate-x-full');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeDrawer() {
-    const drawer = document.getElementById('drawer-menu');
-    const overlay = document.getElementById('drawer-overlay');
-    drawer.classList.add('translate-x-full');
-    overlay.classList.add('opacity-0');
-    setTimeout(() => {
-        overlay.classList.add('hidden');
-        document.body.style.overflow = '';
-    }, 300);
-}
-
-// --- LOGIC COPY CLIPBOARD ---
-function copyToClipboard(text, type) {
-    // Copy text
-    navigator.clipboard.writeText(text).then(() => {
-        // Show Visual Feedback on Button
-        const btnId = type === 'stk' ? 'btn-copy-stk' : 'btn-copy-zalopay';
-        const btn = document.getElementById(btnId);
-        
-        if(btn) {
-            const originalIcon = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-check text-green-500"></i>';
-            setTimeout(() => {
-                btn.innerHTML = originalIcon;
-            }, 2000);
+            }).catch(err => {
+                console.error('Không thể copy: ', err);
+            });
         }
 
-        // Show Toast
-        const toast = document.getElementById('toast-notification');
-        toast.classList.remove('opacity-0');
-        setTimeout(() => {
-            toast.classList.add('opacity-0');
-        }, 2000);
+        // --- BẢO VỆ NỘI DUNG (CHẶN COPY, MENU, SOURCE) ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
 
-    }).catch(err => {
-        console.error('Không thể copy: ', err);
-    });
-}
+        document.onkeydown = function (e) {
+            // Chặn F12
+            if (e.key === 'F12') return false;
 
-// --- BẢO VỆ NỘI DUNG (CHẶN COPY, MENU, SOURCE) ---
-document.addEventListener('contextmenu', event => event.preventDefault());
+            // Chặn Ctrl + (C, A, U, S, P)
+            if (e.ctrlKey || e.metaKey) {
+                const key = e.key.toLowerCase();
+                if (key === 'c' || key === 'a' || key === 'u') {
+                    return false;
+                }
+            }
+        };
+    </script>
 
-document.onkeydown = function(e) {
-    // Chặn F12
-    if(e.key === 'F12') return false;
-
-    // Chặn Ctrl + (C, A, U, S, P)
-    if (e.ctrlKey || e.metaKey) {
-        const key = e.key.toLowerCase();
-        if (key === 'c' || key === 'a' || key === 'u') {
-            return false;
-        }
-    }
-};
-</script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

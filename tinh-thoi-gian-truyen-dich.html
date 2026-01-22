@@ -1,53 +1,73 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tính Dịch Truyền</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ICONS & PWA -->
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 80px; /* Space for Bottom Nav */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 80px;
+            /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
+            /* Ngăn chọn text toàn trang */
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
         /* Cho phép chọn text ở input và kết quả */
-        .result-text, input, textarea, select {
+        .result-text,
+        input,
+        textarea,
+        select {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 10px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 10px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
         /* Tùy chỉnh thanh cuộn */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
 
         /* --- CUSTOM INPUT STYLES (COMPACT) --- */
         .input-group-text {
@@ -59,10 +79,12 @@
             border-right: none;
             border-top-left-radius: 0.5rem;
             border-bottom-left-radius: 0.5rem;
-            padding: 0 0.75rem; /* Compact padding */
+            padding: 0 0.75rem;
+            /* Compact padding */
             color: #6b7280;
             width: 2.75rem;
-            flex-shrink: 0; /* Prevent icon shrinking */
+            flex-shrink: 0;
+            /* Prevent icon shrinking */
         }
 
         /* Tab Styles */
@@ -70,6 +92,7 @@
             transition: all 0.2s ease-in-out;
             border-bottom: 2px solid transparent;
         }
+
         .tab-btn.active {
             color: #4f46e5;
             border-bottom-color: #4f46e5;
@@ -78,424 +101,395 @@
 
         /* --- MOBILE INPUT FIX (CRITICAL) --- */
         @media (max-width: 768px) {
-            input[type="number"], 
-            input[type="time"], 
+
+            input[type="number"],
+            input[type="time"],
             input[type="text"],
-            select { 
-                font-size: 16px !important; /* Chặn auto-zoom iOS */
+            select {
+                font-size: 16px !important;
+                /* Chặn auto-zoom iOS */
             }
         }
     </style>
 </head>
+
 <body>
 
-<!-- HEADER DESKTOP -->
-<header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-    <div class="flex items-center gap-3">
-        <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.style.display='none'">
-        <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-    </div>
-    <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-        <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-        <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-        <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-    </nav>
-</header>
+    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
+        <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
+            <i class="fa-solid fa-chevron-left text-lg"></i>
+        </a>
+        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+            Tính Dịch Truyền
+        </h1>
+        <div class="w-8"></div>
+    </header>
 
-<!-- HEADER MOBILE -->
-<header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-    <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
-        <i class="fa-solid fa-chevron-left text-lg"></i>
-    </a>
-    <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
-        Tính Dịch Truyền
-    </h1>
-    <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
-</header>
+    <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-2xl">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
 
-<!-- MAIN CONTENT -->
-<!-- Changed max-w-6xl to max-w-2xl for a cleaner, centered single-column layout -->
-<main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-2xl">
-    <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-        
-        <!-- HEADER CỦA CARD (DESKTOP) -->
-        <div class="hidden md:flex bg-indigo-600 p-5 text-white items-center justify-between">
-            <div class="flex items-center">
-                <a href="cong-cu.html" class="hidden md:flex w-9 h-9 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
-                    <i class="fa-solid fa-chevron-left text-sm"></i>
-                </a>
+            <div class="hidden md:flex bg-indigo-600 p-5 text-white items-center justify-between">
+                <div class="flex items-center">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-9 h-9 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-xl font-bold">Tính Thời Gian Truyền Dịch</h1>
+                        <p class="text-indigo-100 text-sm opacity-90">Tính toán & kiểm soát dịch truyền</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-flask-half-stroke text-3xl text-indigo-300 opacity-50"></i>
+            </div>
+
+            <div class="p-4 md:p-6">
+
+                <div class="flex mb-5 border-b border-gray-200">
+                    <button id="tab-btn-time"
+                        class="tab-btn active w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg focus:outline-none"
+                        onclick="switchTab('time')">
+                        <i class="fa-solid fa-clock mr-2"></i>Tính Thời Gian
+                    </button>
+                    <button id="tab-btn-remain"
+                        class="tab-btn w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg text-gray-500 hover:text-indigo-500 focus:outline-none"
+                        onclick="switchTab('remain')">
+                        <i class="fa-solid fa-flask mr-2"></i>Dịch Còn Lại
+                    </button>
+                </div>
+
                 <div>
-                    <h1 class="text-xl font-bold">Tính Thời Gian Truyền Dịch</h1>
-                    <p class="text-indigo-100 text-sm opacity-90">Tính toán & kiểm soát dịch truyền</p>
-                </div>
-            </div>
-            <i class="fa-solid fa-flask-half-stroke text-3xl text-indigo-300 opacity-50"></i>
-        </div>
 
-        <!-- FORM TÍNH TOÁN -->
-        <div class="p-4 md:p-6">
-            
-            <!-- TABS -->
-            <div class="flex mb-5 border-b border-gray-200">
-                <button id="tab-btn-time" class="tab-btn active w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg focus:outline-none" onclick="switchTab('time')">
-                    <i class="fa-solid fa-clock mr-2"></i>Tính Thời Gian
-                </button>
-                <button id="tab-btn-remain" class="tab-btn w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg text-gray-500 hover:text-indigo-500 focus:outline-none" onclick="switchTab('remain')">
-                    <i class="fa-solid fa-flask mr-2"></i>Dịch Còn Lại
-                </button>
-            </div>
-
-            <!-- INPUT FORMS (Stacked Vertically) -->
-            <div>
-                
-                <!-- TAB 1: TÍNH THỜI GIAN -->
-                <div id="tab-content-time">
-                    <form id="tool-form-time" class="space-y-4 md:space-y-5" novalidate>
-                        <!-- 1. Thể tích dịch (mL) -->
-                        <div>
-                            <label for="volume" class="block text-sm font-medium text-gray-700 mb-1">Thể tích dịch (mL)</label>
-                            <div class="flex rounded-lg shadow-sm group">
-                                <span class="input-group-text group-focus-within:border-indigo-500 group-focus-within:text-indigo-500 transition-colors"><i class="fa-solid fa-flask text-sm"></i></span>
-                                <input type="number" inputmode="decimal" step="any" id="volume" placeholder="VD: 500" min="0" 
-                                    class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
-                            </div>
-                        </div>
-
-                        <!-- 2. Tốc độ truyền -->
-                        <div>
-                            <label for="rate" class="block text-sm font-medium text-gray-700 mb-1">Tốc độ (giọt/phút)</label>
-                            <div class="flex rounded-lg shadow-sm group">
-                                <span class="input-group-text group-focus-within:border-indigo-500 group-focus-within:text-indigo-500 transition-colors"><i class="fa-solid fa-tint text-sm"></i></span>
-                                <input type="number" inputmode="decimal" step="any" id="rate" placeholder="VD: 30" min="0" 
-                                    class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
-                            </div>
-                        </div>
-
-                        <!-- 3. Hệ số dây -->
-                        <div>
-                            <label for="factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số dây</label>
-                            <div class="flex rounded-lg shadow-sm group">
-                                <span class="input-group-text group-focus-within:border-indigo-500 group-focus-within:text-indigo-500 transition-colors"><i class="fa-solid fa-ruler-vertical text-sm"></i></span>
-                                <select id="factor" class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 bg-white text-gray-900 outline-none text-base">
-                                    <option value="20" selected>20 giọt/mL (Thường)</option>
-                                    <option value="15">15 giọt/mL (Máu)</option>
-                                    <option value="60">60 giọt/mL (Micro)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- 4. Giờ bắt đầu -->
-                        <div>
-                            <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">Bắt đầu (Tùy chọn)</label>
-                            <div class="flex rounded-lg shadow-sm group">
-                                <span class="input-group-text group-focus-within:border-indigo-500 group-focus-within:text-indigo-500 transition-colors"><i class="fa-regular fa-clock text-sm"></i></span>
-                                <input type="time" id="startTime" class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- TAB 2: TÍNH DỊCH CÒN LẠI -->
-                <div id="tab-content-remain" class="hidden">
-                    <form id="tool-form-remain" class="space-y-4 md:space-y-5" novalidate>
-                        <!-- 1. Tổng Thể tích -->
-                        <div>
-                            <label for="r_volume" class="block text-sm font-medium text-gray-700 mb-1">Tổng thể tích (mL)</label>
-                            <div class="flex rounded-lg shadow-sm group">
-                                <span class="input-group-text group-focus-within:border-green-500 group-focus-within:text-green-600 transition-colors"><i class="fa-solid fa-flask text-sm text-green-600"></i></span>
-                                <input type="number" inputmode="decimal" step="any" id="r_volume" placeholder="VD: 1000" min="0" 
-                                    class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
-                            </div>
-                        </div>
-
-                        <!-- 2. Tốc độ -->
-                        <div>
-                            <label for="r_rate" class="block text-sm font-medium text-gray-700 mb-1">Tốc độ (giọt/phút)</label>
-                            <div class="flex rounded-lg shadow-sm group">
-                                <span class="input-group-text group-focus-within:border-green-500 group-focus-within:text-green-600 transition-colors"><i class="fa-solid fa-tint text-sm text-green-600"></i></span>
-                                <input type="number" inputmode="decimal" step="any" id="r_rate" placeholder="VD: 40" min="0"
-                                    class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
-                            </div>
-                        </div>
-
-                        <!-- 3. Hệ số dây -->
-                        <div>
-                            <label for="r_factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số dây</label>
-                            <div class="flex rounded-lg shadow-sm group">
-                                <span class="input-group-text group-focus-within:border-green-500 group-focus-within:text-green-600 transition-colors"><i class="fa-solid fa-ruler-vertical text-sm text-green-600"></i></span>
-                                <select id="r_factor" class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-white text-gray-900 outline-none text-base">
-                                    <option value="20" selected>20 giọt/mL (Thường)</option>
-                                    <option value="15">15 giọt/mL (Máu)</option>
-                                    <option value="60">60 giọt/mL (Micro)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- 4. Thời gian (Row - Keep 2 columns for time inputs) -->
-                        <div class="grid grid-cols-2 gap-4">
+                    <div id="tab-content-time">
+                        <form id="tool-form-time" class="space-y-4 md:space-y-5" novalidate>
                             <div>
-                                <label for="r_startTime" class="block text-sm font-medium text-gray-700 mb-1">Bắt đầu</label>
+                                <label for="volume" class="block text-sm font-medium text-gray-700 mb-1">Thể tích dịch
+                                    (mL)</label>
                                 <div class="flex rounded-lg shadow-sm group">
-                                    <span class="input-group-text px-2 group-focus-within:border-green-500 transition-colors"><i class="fa-regular fa-clock text-sm text-green-600"></i></span>
-                                    <input type="time" id="r_startTime" required class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 outline-none text-base">
+                                    <span
+                                        class="input-group-text group-focus-within:border-indigo-500 group-focus-within:text-indigo-500 transition-colors"><i
+                                            class="fa-solid fa-flask text-sm"></i></span>
+                                    <input type="number" inputmode="decimal" step="any" id="volume"
+                                        placeholder="VD: 500" min="0"
+                                        class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
                                 </div>
                             </div>
+
                             <div>
-                                <label for="r_endTime" class="block text-sm font-medium text-gray-700 mb-1">Hiện tại/Kiểm tra</label>
+                                <label for="rate" class="block text-sm font-medium text-gray-700 mb-1">Tốc độ
+                                    (giọt/phút)</label>
                                 <div class="flex rounded-lg shadow-sm group">
-                                    <span class="input-group-text px-2 group-focus-within:border-green-500 transition-colors"><i class="fa-solid fa-stopwatch text-sm text-green-600"></i></span>
-                                    <input type="time" id="r_endTime" required class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 outline-none text-base">
+                                    <span
+                                        class="input-group-text group-focus-within:border-indigo-500 group-focus-within:text-indigo-500 transition-colors"><i
+                                            class="fa-solid fa-tint text-sm"></i></span>
+                                    <input type="number" inputmode="decimal" step="any" id="rate" placeholder="VD: 30"
+                                        min="0"
+                                        class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
 
-                <!-- BUTTONS ACTION -->
-                <div class="mt-8 flex gap-3">
-                    <button id="calculateBtn" type="button" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow hover:shadow-lg hover:bg-indigo-700 active:scale-[0.98] transition-all flex items-center justify-center text-base">
-                        <i class="fa-solid fa-calculator mr-2"></i> Tính
-                    </button>
-                    <button type="button" id="clearBtn" class="w-1/3 bg-white text-gray-500 border border-gray-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:text-red-500 hover:border-red-200 hover:bg-red-50 active:scale-[0.98] transition-all flex items-center justify-center text-base">
-                        <i class="fa-solid fa-rotate-right mr-2 md:mr-0 lg:mr-2"></i> <span class="hidden md:hidden lg:inline">Làm mới</span>
-                    </button>
-                </div>
-            </div>
+                            <div>
+                                <label for="factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số
+                                    dây</label>
+                                <div class="flex rounded-lg shadow-sm group">
+                                    <span
+                                        class="input-group-text group-focus-within:border-indigo-500 group-focus-within:text-indigo-500 transition-colors"><i
+                                            class="fa-solid fa-ruler-vertical text-sm"></i></span>
+                                    <select id="factor"
+                                        class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 bg-white text-gray-900 outline-none text-base">
+                                        <option value="20" selected>20 giọt/mL (Thường)</option>
+                                        <option value="15">15 giọt/mL (Máu)</option>
+                                        <option value="60">60 giọt/mL (Micro)</option>
+                                    </select>
+                                </div>
+                            </div>
 
-            <!-- RESULTS (Stacked below buttons) -->
-            <div class="mt-8">
-                <!-- KẾT QUẢ TAB 1 -->
-                <div id="result-container-time" class="hidden animate-fade-in-up">
-                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-5 text-center shadow-sm relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-2 opacity-10"><i class="fa-solid fa-clock text-6xl text-indigo-600"></i></div>
-                        <h3 class="text-xs font-bold text-indigo-500 uppercase tracking-wider mb-2">Thời gian truyền</h3>
-                        <div id="main-result-time" class="text-3xl lg:text-4xl font-bold text-indigo-700 break-words mb-3 leading-tight">--</div>
-                        <div id="sub-result-time" class="result-text text-gray-600 text-sm">...</div>
+                            <div>
+                                <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">Bắt đầu (Tùy
+                                    chọn)</label>
+                                <div class="flex rounded-lg shadow-sm group">
+                                    <span
+                                        class="input-group-text group-focus-within:border-indigo-500 group-focus-within:text-indigo-500 transition-colors"><i
+                                            class="fa-regular fa-clock text-sm"></i></span>
+                                    <input type="time" id="startTime"
+                                        class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="tab-content-remain" class="hidden">
+                        <form id="tool-form-remain" class="space-y-4 md:space-y-5" novalidate>
+                            <div>
+                                <label for="r_volume" class="block text-sm font-medium text-gray-700 mb-1">Tổng thể tích
+                                    (mL)</label>
+                                <div class="flex rounded-lg shadow-sm group">
+                                    <span
+                                        class="input-group-text group-focus-within:border-green-500 group-focus-within:text-green-600 transition-colors"><i
+                                            class="fa-solid fa-flask text-sm text-green-600"></i></span>
+                                    <input type="number" inputmode="decimal" step="any" id="r_volume"
+                                        placeholder="VD: 1000" min="0"
+                                        class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="r_rate" class="block text-sm font-medium text-gray-700 mb-1">Tốc độ
+                                    (giọt/phút)</label>
+                                <div class="flex rounded-lg shadow-sm group">
+                                    <span
+                                        class="input-group-text group-focus-within:border-green-500 group-focus-within:text-green-600 transition-colors"><i
+                                            class="fa-solid fa-tint text-sm text-green-600"></i></span>
+                                    <input type="number" inputmode="decimal" step="any" id="r_rate" placeholder="VD: 40"
+                                        min="0"
+                                        class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 transition-colors outline-none text-base">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="r_factor" class="block text-sm font-medium text-gray-700 mb-1">Hệ số
+                                    dây</label>
+                                <div class="flex rounded-lg shadow-sm group">
+                                    <span
+                                        class="input-group-text group-focus-within:border-green-500 group-focus-within:text-green-600 transition-colors"><i
+                                            class="fa-solid fa-ruler-vertical text-sm text-green-600"></i></span>
+                                    <select id="r_factor"
+                                        class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-white text-gray-900 outline-none text-base">
+                                        <option value="20" selected>20 giọt/mL (Thường)</option>
+                                        <option value="15">15 giọt/mL (Máu)</option>
+                                        <option value="60">60 giọt/mL (Micro)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="r_startTime" class="block text-sm font-medium text-gray-700 mb-1">Bắt
+                                        đầu</label>
+                                    <div class="flex rounded-lg shadow-sm group">
+                                        <span
+                                            class="input-group-text px-2 group-focus-within:border-green-500 transition-colors"><i
+                                                class="fa-regular fa-clock text-sm text-green-600"></i></span>
+                                        <input type="time" id="r_startTime" required
+                                            class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 outline-none text-base">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="r_endTime" class="block text-sm font-medium text-gray-700 mb-1">Hiện
+                                        tại/Kiểm tra</label>
+                                    <div class="flex rounded-lg shadow-sm group">
+                                        <span
+                                            class="input-group-text px-2 group-focus-within:border-green-500 transition-colors"><i
+                                                class="fa-solid fa-stopwatch text-sm text-green-600"></i></span>
+                                        <input type="time" id="r_endTime" required
+                                            class="flex-1 block w-full rounded-r-lg border-gray-300 border focus:border-green-500 focus:ring-green-500 py-2.5 px-3 bg-gray-50 focus:bg-white text-gray-900 outline-none text-base">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="mt-8 flex gap-3">
+                        <button id="calculateBtn" type="button"
+                            class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow hover:shadow-lg hover:bg-indigo-700 active:scale-[0.98] transition-all flex items-center justify-center text-base">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính
+                        </button>
+                        <button type="button" id="clearBtn"
+                            class="w-1/3 bg-white text-gray-500 border border-gray-200 font-bold py-3 px-6 rounded-lg shadow-sm hover:text-red-500 hover:border-red-200 hover:bg-red-50 active:scale-[0.98] transition-all flex items-center justify-center text-base">
+                            <i class="fa-solid fa-rotate-right mr-2 md:mr-0 lg:mr-2"></i> <span
+                                class="hidden md:hidden lg:inline">Làm mới</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- KẾT QUẢ TAB 2 -->
-                <div id="result-container-remain" class="hidden animate-fade-in-up">
-                    <div class="bg-green-50 border border-green-100 rounded-xl p-5 text-center shadow-sm relative overflow-hidden">
-                        <div class="absolute top-0 left-0 p-2 opacity-10"><i class="fa-solid fa-flask text-6xl text-green-600"></i></div>
-                        <div class="grid grid-cols-2 gap-3 relative z-10">
-                            <!-- Đã vào -->
-                            <div class="bg-white/80 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-gray-100">
-                                <div class="text-[10px] font-bold text-gray-400 uppercase mb-1">Đã vào</div>
-                                <div id="result-infused" class="text-xl font-bold text-gray-700">--</div>
+                <div class="mt-8">
+                    <div id="result-container-time" class="hidden animate-fade-in-up">
+                        <div
+                            class="bg-indigo-50 border border-indigo-100 rounded-xl p-5 text-center shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-2 opacity-10"><i
+                                    class="fa-solid fa-clock text-6xl text-indigo-600"></i></div>
+                            <h3 class="text-xs font-bold text-indigo-500 uppercase tracking-wider mb-2">Thời gian truyền
+                            </h3>
+                            <div id="main-result-time"
+                                class="text-3xl lg:text-4xl font-bold text-indigo-700 break-words mb-3 leading-tight">--
                             </div>
-                            <!-- Còn lại -->
-                            <div class="bg-white p-3 rounded-lg shadow-sm border border-green-200 ring-1 ring-green-400">
-                                <div class="text-[10px] font-bold text-green-600 uppercase mb-1">Còn lại</div>
-                                <div id="result-remaining" class="text-xl font-bold text-green-600">--</div>
-                            </div>
+                            <div id="sub-result-time" class="result-text text-gray-600 text-sm">...</div>
                         </div>
-                        <div id="sub-result-remain" class="mt-4 pt-3 border-t border-green-200 text-sm text-gray-600 text-left relative z-10">
-                            ...
+                    </div>
+
+                    <div id="result-container-remain" class="hidden animate-fade-in-up">
+                        <div
+                            class="bg-green-50 border border-green-100 rounded-xl p-5 text-center shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 left-0 p-2 opacity-10"><i
+                                    class="fa-solid fa-flask text-6xl text-green-600"></i></div>
+                            <div class="grid grid-cols-2 gap-3 relative z-10">
+                                <div
+                                    class="bg-white/80 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-gray-100">
+                                    <div class="text-[10px] font-bold text-gray-400 uppercase mb-1">Đã vào</div>
+                                    <div id="result-infused" class="text-xl font-bold text-gray-700">--</div>
+                                </div>
+                                <div
+                                    class="bg-white p-3 rounded-lg shadow-sm border border-green-200 ring-1 ring-green-400">
+                                    <div class="text-[10px] font-bold text-green-600 uppercase mb-1">Còn lại</div>
+                                    <div id="result-remaining" class="text-xl font-bold text-green-600">--</div>
+                                </div>
+                            </div>
+                            <div id="sub-result-remain"
+                                class="mt-4 pt-3 border-t border-green-200 text-sm text-gray-600 text-left relative z-10">
+                                ...
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
+        </div>
+    </main>
 
+    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+                Đóng
+            </button>
         </div>
     </div>
-</main>
 
-<!-- DRAWER MENU -->
-<div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-<div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-    <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-        <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-        <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-    </div>
-    <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-        <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-            <span class="font-medium">Giới thiệu</span>
-        </a>
-        <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-            <span class="font-medium">Liên hệ</span>
-        </a>
-        <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-            <span class="font-medium">Điều khoản</span>
-        </a>
-        <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-            <span class="font-medium">Chính sách</span>
-        </a>
-        <div class="my-2 border-t border-gray-100"></div>
-        <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-            <span class="font-medium">Ủng hộ</span>
-        </a>
-    </div>
-</div>
-
-<!-- MOBILE BOTTOM NAV -->
-<nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-        <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-        </a>
-        <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-            <i class="fa-solid fa-calculator text-xl mb-1"></i>
-            <span class="text-[10px]">Công cụ</span>
-        </a>
-        <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-            <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-            <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-        </button>
-    </div>
-</nav>
-
-<!-- NOTIFICATION MODAL -->
-<div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
-    <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-    <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
-        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-            <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
-        </div>
-        <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
-        <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-        <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
-            Đóng
-        </button>
-    </div>
-</div>
-
-<script>
-// --- 1. LOGIC LƯU LỊCH SỬ ---
-function useTool(id, name, icon, color, url) {
-    let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-    recentTools = recentTools.filter(tool => tool.id !== id);
-    recentTools.unshift({
-        id: id,
-        name: name,
-        icon: icon,
-        color: color,
-        url: url,
-        timestamp: new Date().getTime()
-    });
-    if (recentTools.length > 5) recentTools.pop();
-    localStorage.setItem('recentTools', JSON.stringify(recentTools));
-}
-
-// --- 2. LOGIC DRAWER MENU ---
-function openDrawer(e) {
-    if(e) e.preventDefault();
-    const drawer = document.getElementById('drawer-menu');
-    const overlay = document.getElementById('drawer-overlay');
-    overlay.classList.remove('hidden');
-    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-    drawer.classList.remove('translate-x-full');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeDrawer() {
-    const drawer = document.getElementById('drawer-menu');
-    const overlay = document.getElementById('drawer-overlay');
-    drawer.classList.add('translate-x-full');
-    overlay.classList.add('opacity-0');
-    setTimeout(() => {
-        overlay.classList.add('hidden');
-        document.body.style.overflow = '';
-    }, 300);
-}
-
-// --- 3. LOGIC MODAL ---
-const modal = document.getElementById('notification-modal');
-const modalMessage = document.getElementById('modal-message');
-
-window.showModal = function(message) {
-    if(modal && modalMessage) {
-        modalMessage.textContent = message;
-        modal.classList.remove('hidden');
-    }
-}
-
-window.hideModal = function() {
-    if(modal) modal.classList.add('hidden');
-}
-
-// --- 4. KHỞI TẠO CÔNG CỤ & LOGIC TÍNH TOÁN ---
-document.addEventListener('DOMContentLoaded', function() {
-    // --- TAB LOGIC ---
-    let currentTab = 'time'; // 'time' or 'remain'
-    // REMOVED PLACEHOLDER LOGIC
-
-    window.switchTab = function(tabName) {
-        currentTab = tabName;
-        // Buttons
-        document.getElementById('tab-btn-time').className = tabName === 'time' 
-            ? 'tab-btn active w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg focus:outline-none'
-            : 'tab-btn w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg text-gray-500 hover:text-indigo-500 focus:outline-none';
-        
-        document.getElementById('tab-btn-remain').className = tabName === 'remain'
-            ? 'tab-btn active w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg focus:outline-none'
-            : 'tab-btn w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg text-gray-500 hover:text-indigo-500 focus:outline-none';
-
-        // Content
-        if(tabName === 'time') {
-            document.getElementById('tab-content-time').classList.remove('hidden');
-            document.getElementById('tab-content-remain').classList.add('hidden');
-            document.getElementById('result-container-remain').classList.add('hidden');
-            // Hide result if switch tab, user must calculate again
-            document.getElementById('result-container-time').classList.add('hidden');
-        } else {
-            document.getElementById('tab-content-time').classList.add('hidden');
-            document.getElementById('tab-content-remain').classList.remove('hidden');
-            document.getElementById('result-container-time').classList.add('hidden');
-            document.getElementById('result-container-remain').classList.add('hidden');
+    <script>
+        // --- 1. LOGIC LƯU LỊCH SỬ ---
+        function useTool(id, name, icon, color, url) {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            recentTools = recentTools.filter(tool => tool.id !== id);
+            recentTools.unshift({
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+                url: url,
+                timestamp: new Date().getTime()
+            });
+            if (recentTools.length > 5) recentTools.pop();
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
-    }
 
-    // --- MAIN HANDLERS ---
-    const calculateBtn = document.getElementById('calculateBtn');
-    const clearBtn = document.getElementById('clearBtn');
+        // --- 2. LOGIC DRAWER MENU ---
+        function openDrawer(e) {
+            if (e) e.preventDefault();
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            drawer.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
 
-    // 1. Logic Tính Thời Gian (Tab 1)
-    function calculateTime() {
-        const volume = parseFloat(document.getElementById('volume').value);
-        const rate = parseFloat(document.getElementById('rate').value);
-        const factor = parseFloat(document.getElementById('factor').value);
-        const startTimeInput = document.getElementById('startTime').value;
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
 
-        if (!volume || isNaN(volume) || volume <= 0) { showModal("Vui lòng nhập thể tích dịch hợp lệ (mL)."); return; }
-        if (!rate || isNaN(rate) || rate <= 0) { showModal("Vui lòng nhập tốc độ truyền hợp lệ (giọt/phút)."); return; }
+        // --- 3. LOGIC MODAL ---
+        const modal = document.getElementById('notification-modal');
+        const modalMessage = document.getElementById('modal-message');
 
-        const totalMinutes = Math.round((volume * factor) / rate);
-        const hours = Math.floor(totalMinutes / 60);
-        const minutes = totalMinutes % 60;
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
+                modalMessage.textContent = message;
+                modal.classList.remove('hidden');
+            }
+        }
 
-        let durationText = "";
-        if (hours > 0) durationText += `${hours} giờ `;
-        durationText += `${minutes} phút`;
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
+        }
 
-        document.getElementById('main-result-time').textContent = durationText;
-        
-        let additionalInfo = `<span class="text-gray-500 text-sm block mb-2 font-medium">Tổng thời gian: ${totalMinutes} phút</span>`;
-        if (startTimeInput) {
-            const [startHour, startMinute] = startTimeInput.split(':').map(Number);
-            const now = new Date();
-            now.setHours(startHour, startMinute, 0, 0);
-            const endDate = new Date(now.getTime() + totalMinutes * 60000);
-            const endHour = endDate.getHours().toString().padStart(2, '0');
-            const endMinute = endDate.getMinutes().toString().padStart(2, '0');
-            
-            // Check day diff
-            const date1 = new Date(now); date1.setHours(0,0,0,0);
-            const date2 = new Date(endDate); date2.setHours(0,0,0,0);
-            const diffDays = Math.ceil(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24)); 
-            
-            let dayText = "";
-            if (diffDays === 1) dayText = " (Hôm sau)";
-            else if (diffDays > 1) dayText = ` (+${diffDays} ngày)`;
+        // --- 4. KHỞI TẠO CÔNG CỤ & LOGIC TÍNH TOÁN ---
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- TAB LOGIC ---
+            let currentTab = 'time'; // 'time' or 'remain'
+            // REMOVED PLACEHOLDER LOGIC
 
-            additionalInfo += `
+            window.switchTab = function (tabName) {
+                currentTab = tabName;
+                // Buttons
+                document.getElementById('tab-btn-time').className = tabName === 'time'
+                    ? 'tab-btn active w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg focus:outline-none'
+                    : 'tab-btn w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg text-gray-500 hover:text-indigo-500 focus:outline-none';
+
+                document.getElementById('tab-btn-remain').className = tabName === 'remain'
+                    ? 'tab-btn active w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg focus:outline-none'
+                    : 'tab-btn w-1/2 py-2.5 text-center font-medium text-sm sm:text-base rounded-t-lg text-gray-500 hover:text-indigo-500 focus:outline-none';
+
+                // Content
+                if (tabName === 'time') {
+                    document.getElementById('tab-content-time').classList.remove('hidden');
+                    document.getElementById('tab-content-remain').classList.add('hidden');
+                    document.getElementById('result-container-remain').classList.add('hidden');
+                    // Hide result if switch tab, user must calculate again
+                    document.getElementById('result-container-time').classList.add('hidden');
+                } else {
+                    document.getElementById('tab-content-time').classList.add('hidden');
+                    document.getElementById('tab-content-remain').classList.remove('hidden');
+                    document.getElementById('result-container-time').classList.add('hidden');
+                    document.getElementById('result-container-remain').classList.add('hidden');
+                }
+            }
+
+            // --- MAIN HANDLERS ---
+            const calculateBtn = document.getElementById('calculateBtn');
+            const clearBtn = document.getElementById('clearBtn');
+
+            // 1. Logic Tính Thời Gian (Tab 1)
+            function calculateTime() {
+                const volume = parseFloat(document.getElementById('volume').value);
+                const rate = parseFloat(document.getElementById('rate').value);
+                const factor = parseFloat(document.getElementById('factor').value);
+                const startTimeInput = document.getElementById('startTime').value;
+
+                if (!volume || isNaN(volume) || volume <= 0) { showModal("Vui lòng nhập thể tích dịch hợp lệ (mL)."); return; }
+                if (!rate || isNaN(rate) || rate <= 0) { showModal("Vui lòng nhập tốc độ truyền hợp lệ (giọt/phút)."); return; }
+
+                const totalMinutes = Math.round((volume * factor) / rate);
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+
+                let durationText = "";
+                if (hours > 0) durationText += `${hours} giờ `;
+                durationText += `${minutes} phút`;
+
+                document.getElementById('main-result-time').textContent = durationText;
+
+                let additionalInfo = `<span class="text-gray-500 text-sm block mb-2 font-medium">Tổng thời gian: ${totalMinutes} phút</span>`;
+                if (startTimeInput) {
+                    const [startHour, startMinute] = startTimeInput.split(':').map(Number);
+                    const now = new Date();
+                    now.setHours(startHour, startMinute, 0, 0);
+                    const endDate = new Date(now.getTime() + totalMinutes * 60000);
+                    const endHour = endDate.getHours().toString().padStart(2, '0');
+                    const endMinute = endDate.getMinutes().toString().padStart(2, '0');
+
+                    // Check day diff
+                    const date1 = new Date(now); date1.setHours(0, 0, 0, 0);
+                    const date2 = new Date(endDate); date2.setHours(0, 0, 0, 0);
+                    const diffDays = Math.ceil(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
+
+                    let dayText = "";
+                    if (diffDays === 1) dayText = " (Hôm sau)";
+                    else if (diffDays > 1) dayText = ` (+${diffDays} ngày)`;
+
+                    additionalInfo += `
                 <div class="mt-4 pt-3 border-t border-indigo-200">
                     <span class="text-gray-600 text-xs uppercase font-bold">Dự kiến kết thúc:</span>
                     <div class="text-2xl font-bold text-indigo-600 mt-1">
@@ -503,105 +497,107 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-        }
-        document.getElementById('sub-result-time').innerHTML = additionalInfo;
-        
-        // UI Handling
-        const resultDiv = document.getElementById('result-container-time');
-        resultDiv.classList.remove('hidden');
-        scrollToResult(resultDiv);
+                }
+                document.getElementById('sub-result-time').innerHTML = additionalInfo;
 
-        // Lưu lịch sử
-        useTool('tinh-thoi-gian-truyen-dich', 'Tính Dịch Truyền', 'fa-flask-half-stroke', 'indigo', window.location.href);
-    }
+                // UI Handling
+                const resultDiv = document.getElementById('result-container-time');
+                resultDiv.classList.remove('hidden');
+                scrollToResult(resultDiv);
 
-    // 2. Logic Tính Dịch Còn Lại (Tab 2)
-    function calculateRemaining() {
-        const volume = parseFloat(document.getElementById('r_volume').value);
-        const rate = parseFloat(document.getElementById('r_rate').value);
-        const factor = parseFloat(document.getElementById('r_factor').value);
-        const startStr = document.getElementById('r_startTime').value;
-        const endStr = document.getElementById('r_endTime').value;
+                // Lưu lịch sử
+                useTool('tinh-thoi-gian-truyen-dich', 'Tính Dịch Truyền', 'fa-flask-half-stroke', 'indigo', window.location.href);
+            }
 
-        if (!volume || volume <= 0) { showModal("Vui lòng nhập tổng thể tích (mL)."); return; }
-        if (!rate || rate <= 0) { showModal("Vui lòng nhập tốc độ (giọt/phút)."); return; }
-        if (!startStr) { showModal("Vui lòng chọn giờ bắt đầu."); return; }
-        if (!endStr) { showModal("Vui lòng chọn giờ kết thúc/kiểm tra."); return; }
+            // 2. Logic Tính Dịch Còn Lại (Tab 2)
+            function calculateRemaining() {
+                const volume = parseFloat(document.getElementById('r_volume').value);
+                const rate = parseFloat(document.getElementById('r_rate').value);
+                const factor = parseFloat(document.getElementById('r_factor').value);
+                const startStr = document.getElementById('r_startTime').value;
+                const endStr = document.getElementById('r_endTime').value;
 
-        // Tính số phút đã trôi qua
-        const [h1, m1] = startStr.split(':').map(Number);
-        const [h2, m2] = endStr.split(':').map(Number);
-        
-        let minutesPassed = (h2 * 60 + m2) - (h1 * 60 + m1);
-        // Xử lý qua đêm (VD: bắt đầu 23:00, kết thúc 01:00)
-        if (minutesPassed < 0) {
-            minutesPassed += 24 * 60;
-        }
+                if (!volume || volume <= 0) { showModal("Vui lòng nhập tổng thể tích (mL)."); return; }
+                if (!rate || rate <= 0) { showModal("Vui lòng nhập tốc độ (giọt/phút)."); return; }
+                if (!startStr) { showModal("Vui lòng chọn giờ bắt đầu."); return; }
+                if (!endStr) { showModal("Vui lòng chọn giờ kết thúc/kiểm tra."); return; }
 
-        // Tính lượng dịch đã vào: (Số phút * Tốc độ) / Hệ số dây
-        const infused = Math.round(((minutesPassed * rate) / factor) * 10) / 10;
-        const remaining = Math.round((volume - infused) * 10) / 10;
+                // Tính số phút đã trôi qua
+                const [h1, m1] = startStr.split(':').map(Number);
+                const [h2, m2] = endStr.split(':').map(Number);
 
-        document.getElementById('result-infused').textContent = `${infused} mL`;
-        document.getElementById('result-remaining').textContent = `${remaining} mL`;
+                let minutesPassed = (h2 * 60 + m2) - (h1 * 60 + m1);
+                // Xử lý qua đêm (VD: bắt đầu 23:00, kết thúc 01:00)
+                if (minutesPassed < 0) {
+                    minutesPassed += 24 * 60;
+                }
 
-        let msg = "";
-        
-        if (remaining <= 0) {
-            document.getElementById('result-remaining').textContent = "0 mL";
-            // Tính số phút quá hạn
-            const excessMinutes = Math.abs(Math.round(remaining / (rate/factor)));
-            msg = `<div class="flex items-center gap-2 text-red-600 font-bold">
+                // Tính lượng dịch đã vào: (Số phút * Tốc độ) / Hệ số dây
+                const infused = Math.round(((minutesPassed * rate) / factor) * 10) / 10;
+                const remaining = Math.round((volume - infused) * 10) / 10;
+
+                document.getElementById('result-infused').textContent = `${infused} mL`;
+                document.getElementById('result-remaining').textContent = `${remaining} mL`;
+
+                let msg = "";
+
+                if (remaining <= 0) {
+                    document.getElementById('result-remaining').textContent = "0 mL";
+                    // Tính số phút quá hạn
+                    const excessMinutes = Math.abs(Math.round(remaining / (rate / factor)));
+                    msg = `<div class="flex items-center gap-2 text-red-600 font-bold">
                     <i class="fa-solid fa-triangle-exclamation"></i> 
                     <span>Cảnh báo: Dịch đã hết!</span>
                    </div>
                    <div class="text-xs text-red-500 mt-1">(Dự kiến đã hết cách đây ${excessMinutes} phút)</div>`;
-        } else {
-            msg = `<div class="font-medium text-gray-700 text-xs uppercase">Đã truyền trong:</div> 
-                   <div class="text-lg font-bold text-indigo-600">${Math.floor(minutesPassed/60)} giờ ${minutesPassed%60} phút</div>`;
-        }
+                } else {
+                    msg = `<div class="font-medium text-gray-700 text-xs uppercase">Đã truyền trong:</div> 
+                   <div class="text-lg font-bold text-indigo-600">${Math.floor(minutesPassed / 60)} giờ ${minutesPassed % 60} phút</div>`;
+                }
 
-        const subRes = document.getElementById('sub-result-remain');
-        subRes.innerHTML = msg;
+                const subRes = document.getElementById('sub-result-remain');
+                subRes.innerHTML = msg;
 
-        // UI Handling
-        const resultDiv = document.getElementById('result-container-remain');
-        resultDiv.classList.remove('hidden');
-        scrollToResult(resultDiv);
+                // UI Handling
+                const resultDiv = document.getElementById('result-container-remain');
+                resultDiv.classList.remove('hidden');
+                scrollToResult(resultDiv);
 
-        // Lưu lịch sử
-        useTool('tinh-thoi-gian-truyen-dich', 'Tính Dịch Truyền', 'fa-flask-half-stroke', 'indigo', window.location.href);
-    }
+                // Lưu lịch sử
+                useTool('tinh-thoi-gian-truyen-dich', 'Tính Dịch Truyền', 'fa-flask-half-stroke', 'indigo', window.location.href);
+            }
 
-    function scrollToResult(element) {
-        // Cuộn xuống kết quả (cả mobile và PC vì giờ layout dọc)
-        setTimeout(() => {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
-    }
+            function scrollToResult(element) {
+                // Cuộn xuống kết quả (cả mobile và PC vì giờ layout dọc)
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            }
 
-    calculateBtn.addEventListener('click', function() {
-        if (currentTab === 'time') calculateTime();
-        else calculateRemaining();
-    });
+            calculateBtn.addEventListener('click', function () {
+                if (currentTab === 'time') calculateTime();
+                else calculateRemaining();
+            });
 
-    clearBtn.addEventListener('click', function() {
-        document.getElementById('tool-form-time').reset();
-        document.getElementById('tool-form-remain').reset();
-        document.getElementById('result-container-time').classList.add('hidden');
-        document.getElementById('result-container-remain').classList.add('hidden');
-        document.getElementById('main-result-time').textContent = "--";
-        document.getElementById('sub-result-time').textContent = "...";
-    });
+            clearBtn.addEventListener('click', function () {
+                document.getElementById('tool-form-time').reset();
+                document.getElementById('tool-form-remain').reset();
+                document.getElementById('result-container-time').classList.add('hidden');
+                document.getElementById('result-container-remain').classList.add('hidden');
+                document.getElementById('main-result-time').textContent = "--";
+                document.getElementById('sub-result-time').textContent = "...";
+            });
 
-    // Prevent Security
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.addEventListener('keydown', function(event) {
-        if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A')) {
-            event.preventDefault();
-        }
-    });
-});
-</script>
+            // Prevent Security
+            document.addEventListener('contextmenu', event => event.preventDefault());
+            document.addEventListener('keydown', function (event) {
+                if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A')) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

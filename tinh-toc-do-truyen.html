@@ -1,85 +1,97 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tính Tốc Độ Bơm Tiêm Điện</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ICONS & PWA -->
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 80px; /* Space for Bottom Nav */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 80px;
+            /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
+            /* Ngăn chọn text toàn trang */
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
         /* Cho phép chọn text ở input và kết quả */
-        .result-text, input, textarea, select {
+        .result-text,
+        input,
+        textarea,
+        select {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-        
+
         /* Tùy chỉnh thanh cuộn */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
 
         /* --- MOBILE OPTIMIZATION (Yêu cầu 1 & 3) --- */
         @media (max-width: 768px) {
-            input[type="number"], input[type="text"], select, textarea {
-                font-size: 16px !important; /* Chặn auto-zoom iOS */
+
+            input[type="number"],
+            input[type="text"],
+            select,
+            textarea {
+                font-size: 16px !important;
+                /* Chặn auto-zoom iOS */
             }
         }
-        
+
         /* Ẩn nút tăng giảm số mặc định của input number */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- HEADER DESKTOP (GIỮ NGUYÊN) -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png'">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
-
-    <!-- HEADER MOBILE (GIỮ NGUYÊN) -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -90,66 +102,72 @@
         <div class="w-8"></div>
     </header>
 
-    <!-- MAIN CONTENT (ĐÃ TỐI ƯU HÓA) -->
-    <!-- Thay đổi: max-w-4xl -> max-w-6xl -->
     <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-6xl">
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            
-            <!-- CARD HEADER -->
+
             <div class="hidden md:flex bg-indigo-600 p-5 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <div>
                         <h1 class="text-2xl font-bold">Tính Tốc độ Truyền Bơm Tiêm Điện</h1>
-                        <p class="text-indigo-100 mt-1 text-sm">Hỗ trợ tính toán chính xác liều lượng và tốc độ truyền</p>
+                        <p class="text-indigo-100 mt-1 text-sm">Hỗ trợ tính toán chính xác liều lượng và tốc độ truyền
+                        </p>
                     </div>
                 </div>
                 <i class="fa-solid fa-syringe text-4xl text-indigo-300 opacity-50"></i>
             </div>
-    
-            <!-- FORM TÍNH TOÁN -->
+
             <div class="p-4 md:p-6 lg:p-8">
                 <form id="tool-form" class="block" novalidate>
-                    
-                    <!-- GRID CONTAINER CHO DESKTOP (Chia 2 cột) -->
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 mb-6">
-                        
-                        <!-- CỘT TRÁI: THÔNG TIN PHA THUỐC -->
+
                         <div class="space-y-4">
                             <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 h-full">
                                 <h3 class="text-base font-semibold text-indigo-800 mb-3 flex items-center">
-                                    <span class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-2 text-xs font-bold shrink-0">1</span>
+                                    <span
+                                        class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-2 text-xs font-bold shrink-0">1</span>
                                     Thông tin pha thuốc
                                 </h3>
-                                
+
                                 <div class="space-y-3">
-                                    <!-- Hàm lượng -->
                                     <div class="flex flex-col">
-                                        <label for="mgPerAmp" class="text-sm font-medium text-gray-700 mb-1">Hàm lượng 1 ống (mg)</label>
+                                        <label for="mgPerAmp" class="text-sm font-medium text-gray-700 mb-1">Hàm lượng 1
+                                            ống (mg)</label>
                                         <div class="relative">
-                                            <!-- Tối ưu input: text-base trên PC, py-2.5 -->
-                                            <input type="number" id="mgPerAmp" step="0.01" inputmode="decimal" class="w-full pl-3 pr-10 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" placeholder="VD: 50">
-                                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">mg</span>
+                                            <input type="number" id="mgPerAmp" step="0.01" inputmode="decimal"
+                                                class="w-full pl-3 pr-10 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                                placeholder="VD: 50">
+                                            <span
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">mg</span>
                                         </div>
                                     </div>
 
                                     <div class="grid grid-cols-2 gap-3">
-                                        <!-- Số ống -->
                                         <div class="flex flex-col">
-                                            <label for="ampCount" class="text-sm font-medium text-gray-700 mb-1">Số ống</label>
+                                            <label for="ampCount" class="text-sm font-medium text-gray-700 mb-1">Số
+                                                ống</label>
                                             <div class="relative">
-                                                <input type="number" id="ampCount" step="0.5" inputmode="decimal" class="w-full pl-3 pr-8 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" placeholder="VD: 1">
-                                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">ống</span>
+                                                <input type="number" id="ampCount" step="0.5" inputmode="decimal"
+                                                    class="w-full pl-3 pr-8 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                                    placeholder="VD: 1">
+                                                <span
+                                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">ống</span>
                                             </div>
                                         </div>
-                                        <!-- Thể tích -->
                                         <div class="flex flex-col">
-                                            <label for="totalVol" class="text-sm font-medium text-gray-700 mb-1">Thể tích pha</label>
+                                            <label for="totalVol" class="text-sm font-medium text-gray-700 mb-1">Thể
+                                                tích pha</label>
                                             <div class="relative">
-                                                <input type="number" id="totalVol" step="0.1" inputmode="decimal" value="50" class="w-full pl-3 pr-8 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" placeholder="VD: 50">
-                                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">mL</span>
+                                                <input type="number" id="totalVol" step="0.1" inputmode="decimal"
+                                                    value="50"
+                                                    class="w-full pl-3 pr-8 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                                    placeholder="VD: 50">
+                                                <span
+                                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">mL</span>
                                             </div>
                                         </div>
                                     </div>
@@ -157,20 +175,21 @@
                             </div>
                         </div>
 
-                        <!-- CỘT PHẢI: Y LỆNH -->
                         <div class="space-y-4">
                             <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 h-full">
                                 <h3 class="text-base font-semibold text-indigo-800 mb-3 flex items-center">
-                                    <span class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-2 text-xs font-bold shrink-0">2</span>
+                                    <span
+                                        class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-2 text-xs font-bold shrink-0">2</span>
                                     Y lệnh (Liều dùng)
                                 </h3>
-                                
+
                                 <div class="space-y-3">
-                                    <!-- Đơn vị -->
                                     <div class="flex flex-col">
-                                        <label for="doseUnit" class="text-sm font-medium text-gray-700 mb-1">Đơn vị liều</label>
+                                        <label for="doseUnit" class="text-sm font-medium text-gray-700 mb-1">Đơn vị
+                                            liều</label>
                                         <div class="relative">
-                                            <select id="doseUnit" class="w-full pl-10 pr-8 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition appearance-none cursor-pointer">
+                                            <select id="doseUnit"
+                                                class="w-full pl-10 pr-8 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition appearance-none cursor-pointer">
                                                 <option value="ug_kg_min">µg/kg/phút (mcg/kg/min)</option>
                                                 <option value="ug_kg_hr">µg/kg/giờ (mcg/kg/hr)</option>
                                                 <option value="mg_hr">mg/giờ (mg/hr)</option>
@@ -178,31 +197,38 @@
                                                 <option value="ug_min">µg/phút (mcg/min)</option>
                                                 <option value="ug_hr">µg/giờ (mcg/hr)</option>
                                             </select>
-                                            <!-- Icon Absolute nhưng căn giữa chuẩn -->
-                                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-indigo-500">
+                                            <div
+                                                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-indigo-500">
                                                 <i class="fa-solid fa-ruler-combined"></i>
                                             </div>
-                                            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
+                                            <div
+                                                class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
                                                 <i class="fa-solid fa-chevron-down text-xs"></i>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        <!-- Cân nặng -->
                                         <div class="flex flex-col">
-                                            <label for="weight" class="text-sm font-medium text-gray-700 mb-1">Cân nặng</label>
+                                            <label for="weight" class="text-sm font-medium text-gray-700 mb-1">Cân
+                                                nặng</label>
                                             <div class="relative">
-                                                <input type="number" id="weight" step="0.1" inputmode="decimal" class="w-full pl-3 pr-10 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" placeholder="Nhập số">
-                                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">kg</span>
+                                                <input type="number" id="weight" step="0.1" inputmode="decimal"
+                                                    class="w-full pl-3 pr-10 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                                    placeholder="Nhập số">
+                                                <span
+                                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">kg</span>
                                             </div>
-                                            <p id="weight-hint" class="text-[11px] text-gray-400 mt-1 hidden italic">Không cần nhập cân nặng</p>
+                                            <p id="weight-hint" class="text-[11px] text-gray-400 mt-1 hidden italic">
+                                                Không cần nhập cân nặng</p>
                                         </div>
 
-                                        <!-- Liều -->
                                         <div class="flex flex-col">
-                                            <label for="dose" class="text-sm font-medium text-gray-700 mb-1">Liều cần dùng</label>
-                                            <input type="number" id="dose" step="0.01" inputmode="decimal" class="w-full px-3 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" placeholder="VD: 0.1">
+                                            <label for="dose" class="text-sm font-medium text-gray-700 mb-1">Liều cần
+                                                dùng</label>
+                                            <input type="number" id="dose" step="0.01" inputmode="decimal"
+                                                class="w-full px-3 py-3 lg:py-2.5 text-[16px] lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                                placeholder="VD: 0.1">
                                         </div>
                                     </div>
                                 </div>
@@ -210,36 +236,40 @@
                         </div>
 
                     </div>
-                    
-                    <!-- BUTTON GROUP -->
+
                     <div class="flex flex-col sm:flex-row gap-3">
-                        <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:bg-indigo-700 transition transform active:scale-95 flex items-center justify-center gap-2 text-base">
+                        <button type="submit"
+                            class="flex-1 bg-indigo-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:bg-indigo-700 transition transform active:scale-95 flex items-center justify-center gap-2 text-base">
                             <i class="fa-solid fa-calculator"></i> Tính toán
                         </button>
-                        <button type="button" id="clearBtn" class="flex-1 bg-gray-100 text-gray-600 font-semibold py-3.5 px-6 rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-2 text-base">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-gray-100 text-gray-600 font-semibold py-3.5 px-6 rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-2 text-base">
                             <i class="fa-solid fa-rotate-left"></i> Làm mới
                         </button>
                     </div>
                 </form>
-        
-                <!-- KẾT QUẢ -->
+
                 <div id="result-container" class="mt-6 hidden animate-fade-in-up">
-                    <div class="relative bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 text-white shadow-lg overflow-hidden">
-                        <!-- Decorative circles -->
-                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white opacity-10 blur-xl"></div>
-                        <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 rounded-full bg-white opacity-10 blur-xl"></div>
+                    <div
+                        class="relative bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 text-white shadow-lg overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white opacity-10 blur-xl">
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 rounded-full bg-white opacity-10 blur-xl">
+                        </div>
 
                         <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                            <!-- Kết quả chính -->
                             <div class="text-center md:text-left">
-                                <h3 class="text-indigo-100 text-sm font-medium uppercase tracking-wider mb-1">Tốc độ truyền (mL/giờ)</h3>
+                                <h3 class="text-indigo-100 text-sm font-medium uppercase tracking-wider mb-1">Tốc độ
+                                    truyền (mL/giờ)</h3>
                                 <div class="flex justify-center md:justify-start items-baseline gap-2">
-                                    <span id="main-result" class="text-6xl lg:text-7xl font-bold tracking-tight">--</span>
+                                    <span id="main-result"
+                                        class="text-6xl lg:text-7xl font-bold tracking-tight">--</span>
                                     <span class="text-xl text-indigo-200">mL/h</span>
                                 </div>
                             </div>
 
-                            <!-- Chi tiết -->
                             <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 space-y-3 text-sm">
                                 <div class="flex justify-between items-center border-b border-white/10 pb-2">
                                     <span class="text-indigo-100">Tổng lượng thuốc</span>
@@ -261,66 +291,17 @@
         </div>
     </main>
 
-    <!-- DRAWER MENU (GIỮ NGUYÊN) -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- MOBILE BOTTOM NAV (GIỮ NGUYÊN) -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- NOTIFICATION MODAL (GIỮ NGUYÊN) -->
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
@@ -343,58 +324,36 @@
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
 
-        // --- 2. LOGIC DRAWER MENU ---
-        function openDrawer(e) {
-            if(e) e.preventDefault();
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            drawer.classList.remove('translate-x-full');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDrawer() {
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            drawer.classList.add('translate-x-full');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
         // --- 3. LOGIC MODAL ---
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
 
-        window.showModal = function(message) {
-            if(modal && modalMessage) {
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
                 modalMessage.textContent = message;
                 modal.classList.remove('hidden');
             }
         }
 
-        window.hideModal = function() {
-            if(modal) modal.classList.add('hidden');
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
         }
 
         // --- 4. BẢO MẬT & CHỐNG SAO CHÉP ---
         document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A')) {
                 event.preventDefault();
             }
         });
 
         // --- 5. LOGIC CHÍNH CỦA CÔNG CỤ ---
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('tool-form');
             const resultContainer = document.getElementById('result-container');
             const mainResult = document.getElementById('main-result');
             const clearBtn = document.getElementById('clearBtn');
-            
+
             // Elements for result details
             const totalDrugDisplay = document.getElementById('total-drug-display');
             const concentrationDisplay = document.getElementById('concentration-display');
@@ -409,7 +368,7 @@
             function checkWeightRequirement() {
                 const unit = doseUnitSelect.value;
                 const needsWeight = unit.includes('kg');
-                
+
                 if (needsWeight) {
                     weightInput.disabled = false;
                     weightInput.classList.remove('bg-gray-100', 'cursor-not-allowed');
@@ -417,7 +376,7 @@
                 } else {
                     weightInput.disabled = true;
                     weightInput.classList.add('bg-gray-100', 'cursor-not-allowed');
-                    weightInput.value = ''; 
+                    weightInput.value = '';
                     weightHint.classList.remove('hidden');
                 }
             }
@@ -426,9 +385,9 @@
             doseUnitSelect.addEventListener('change', checkWeightRequirement);
             checkWeightRequirement();
 
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
                 // 1. Lấy dữ liệu
                 const mgPerAmp = parseFloat(document.getElementById('mgPerAmp').value);
                 const ampCount = parseFloat(document.getElementById('ampCount').value);
@@ -450,11 +409,11 @@
                     showModal("Vui lòng nhập thể tích pha đủ hợp lệ (> 0).");
                     return;
                 }
-                if (isNaN(dose) || dose < 0) { 
+                if (isNaN(dose) || dose < 0) {
                     showModal("Vui lòng nhập liều chỉ định hợp lệ.");
                     return;
                 }
-                
+
                 // Chỉ check cân nặng nếu đơn vị cần
                 if (unit.includes('kg') && (isNaN(weight) || weight <= 0)) {
                     showModal("Đơn vị này yêu cầu nhập cân nặng hợp lệ.");
@@ -462,7 +421,7 @@
                 }
 
                 // 3. TÍNH TOÁN
-                
+
                 // Bước 1: Tính tổng lượng thuốc (Total Drug) ra mg và mcg
                 const totalMg = mgPerAmp * ampCount;
                 const totalMcg = totalMg * 1000;
@@ -505,7 +464,7 @@
                 convertedDoseDisplay.textContent = `${targetMcgPerHour.toFixed(1)} µg/giờ`;
 
                 resultContainer.classList.remove('hidden');
-                
+
                 // Lưu lịch sử
                 useTool('tinh-toc-do-truyen', 'Tốc Độ Bơm Tiêm', 'fa-syringe', 'text-indigo-600', window.location.href);
 
@@ -515,13 +474,15 @@
                 window.scrollTo({ top: targetPos, behavior: 'smooth' });
             });
 
-            clearBtn.addEventListener('click', function() {
+            clearBtn.addEventListener('click', function () {
                 form.reset();
-                checkWeightRequirement(); 
+                checkWeightRequirement();
                 resultContainer.classList.add('hidden');
                 mainResult.textContent = "--";
             });
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

@@ -1,52 +1,63 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tra cứu Chế độ ăn</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- LIB: PapaParse for CSV -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
-    <!-- ICONS & PWA -->
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 80px; /* Space for Bottom Nav */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 80px;
+            /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
+            /* Ngăn chọn text toàn trang */
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
         /* Cho phép chọn text ở input và kết quả */
-        .result-text, input, textarea, pre, .selectable-text {
+        .result-text,
+        input,
+        textarea,
+        pre,
+        .selectable-text {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-        
+
         /* Loading Spinner */
         .spinner {
             border: 3px solid #f3f3f3;
@@ -54,39 +65,41 @@
             border-top: 3px solid #4f46e5;
             width: 20px;
             height: 20px;
-            -webkit-animation: spin 1s linear infinite; /* Safari */
+            -webkit-animation: spin 1s linear infinite;
+            /* Safari */
             animation: spin 1s linear infinite;
             display: inline-block;
             vertical-align: middle;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
-        
+
         /* Tùy chỉnh thanh cuộn nếu cần */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
     </style>
 </head>
+
 <body>
 
-    <!-- 2. HEADER & NAVIGATION -->
-    <!-- A. Desktop Header -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://via.placeholder.com/40?text=Logo'">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
-
-    <!-- B. Mobile Header (App Style) -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -94,19 +107,16 @@
         <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
             Tra cứu Chế độ ăn
         </h1>
-        <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
+        <div class="w-8"></div>
     </header>
 
-    <!-- 3. CẤU TRÚC MAIN CONTENT -->
     <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-        <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            
-            <!-- HEADER CỦA CARD (DESKTOP) -->
+
             <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <!-- Nút Back Desktop -->
-                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <div>
@@ -114,120 +124,122 @@
                         <p class="text-indigo-100 mt-1 text-sm">Dựa theo Quyết định số 2879/QĐ-BYT của Bộ Y tế</p>
                     </div>
                 </div>
-                <!-- Icon đại diện mờ -->
                 <i class="fa-solid fa-utensils text-4xl text-indigo-300 opacity-50"></i>
             </div>
 
-            <!-- FORM TÍNH TOÁN & HIỂN THỊ -->
             <div class="p-4 md:p-8">
-                
-                <!-- Info Mobile (chỉ hiện trên mobile vì desktop đã có header card) -->
+
                 <div class="md:hidden mb-4 text-center">
                     <p class="text-xs text-gray-500 italic">
                         Dựa theo Quyết định số 2879/QĐ-BYT ngày 10/08/2006 của Bộ Y tế.
                     </p>
                 </div>
 
-                <!-- Loading Status -->
-                <div id="loadingStatus" class="hidden mb-6 bg-indigo-50 border border-indigo-100 rounded-lg p-3 flex items-center justify-center text-indigo-700 text-sm font-medium">
+                <div id="loadingStatus"
+                    class="hidden mb-6 bg-indigo-50 border border-indigo-100 rounded-lg p-3 flex items-center justify-center text-indigo-700 text-sm font-medium">
                     <div class="spinner mr-3"></div> Đang tải dữ liệu...
                 </div>
 
-                <!-- INPUTS -->
                 <div class="space-y-5">
-                    <!-- 1. Chọn đối tượng -->
                     <div>
                         <label for="targetGroupSelect" class="block text-sm font-bold text-gray-700 mb-2">
                             <i class="fa-solid fa-users mr-2 text-indigo-500"></i>Chọn đối tượng
                         </label>
                         <div class="relative">
-                            <select id="targetGroupSelect" class="w-full pl-4 pr-10 py-3 border-2 border-indigo-100 rounded-xl bg-white text-indigo-900 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none transition shadow-sm">
+                            <select id="targetGroupSelect"
+                                class="w-full pl-4 pr-10 py-3 border-2 border-indigo-100 rounded-xl bg-white text-indigo-900 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none transition shadow-sm">
                                 <option value="adult">Người lớn</option>
                                 <option value="child">Trẻ em</option>
                             </select>
-                            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-indigo-500">
+                            <div
+                                class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-indigo-500">
                                 <i class="fa-solid fa-chevron-down"></i>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 2. Chọn nhóm & Chế độ ăn -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Nhóm bệnh -->
                         <div>
                             <label for="mainDietSelect" class="block text-sm font-bold text-gray-700 mb-2">
                                 <i class="fa-solid fa-layer-group mr-2 text-indigo-500"></i>Nhóm bệnh
                             </label>
                             <div class="relative">
-                                <select id="mainDietSelect" class="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none disabled:bg-gray-100 disabled:text-gray-400 transition" disabled>
+                                <select id="mainDietSelect"
+                                    class="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none disabled:bg-gray-100 disabled:text-gray-400 transition"
+                                    disabled>
                                     <option value="">-- Đang tải... --</option>
                                 </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
+                                <div
+                                    class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
                                     <i class="fa-solid fa-chevron-down"></i>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Chế độ ăn cụ thể -->
                         <div>
                             <label for="subDietSelect" class="block text-sm font-bold text-gray-700 mb-2">
                                 <i class="fa-solid fa-list-ul mr-2 text-indigo-500"></i>Chế độ ăn cụ thể
                             </label>
                             <div class="relative">
-                                <select id="subDietSelect" class="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none disabled:bg-gray-100 disabled:text-gray-400 transition" disabled>
+                                <select id="subDietSelect"
+                                    class="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none disabled:bg-gray-100 disabled:text-gray-400 transition"
+                                    disabled>
                                     <option value="">-- Chọn nhóm trước --</option>
                                 </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
+                                <div
+                                    class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
                                     <i class="fa-solid fa-chevron-down"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- KẾT QUẢ HIỂN THỊ -->
+
                 <div id="dietDetailsDisplay" class="mt-8 hidden animate-fade-in-up">
                     <div class="border-t border-gray-100 pt-6"></div>
-                    
-                    <!-- Tiêu đề & Mã số -->
+
                     <div class="text-center mb-6">
-                        <h3 id="detailsTitle" class="text-xl md:text-2xl font-bold text-indigo-700 mb-2 result-text"></h3>
-                        <div class="inline-flex items-center bg-indigo-50 border border-indigo-100 rounded-full px-4 py-1.5 shadow-sm">
+                        <h3 id="detailsTitle" class="text-xl md:text-2xl font-bold text-indigo-700 mb-2 result-text">
+                        </h3>
+                        <div
+                            class="inline-flex items-center bg-indigo-50 border border-indigo-100 rounded-full px-4 py-1.5 shadow-sm">
                             <span class="text-xs md:text-sm text-gray-500 font-medium mr-2">MÃ SỐ:</span>
-                            <span id="detailsSymbol" class="text-lg md:text-xl font-bold text-indigo-700 selectable-text"></span>
+                            <span id="detailsSymbol"
+                                class="text-lg md:text-xl font-bold text-indigo-700 selectable-text"></span>
                         </div>
                     </div>
-                    
+
                     <div class="space-y-6 text-gray-700">
-                        <!-- Nguyên tắc -->
                         <div>
                             <h4 class="text-base md:text-lg font-bold text-gray-800 mb-2 flex items-center">
                                 <i class="fa-solid fa-scale-balanced mr-2 text-indigo-500"></i>Nguyên tắc chế độ ăn
                             </h4>
                             <div class="bg-gray-50 p-4 rounded-xl border-l-4 border-indigo-500 shadow-sm">
-                                <pre id="detailsPrinciple" class="whitespace-pre-line font-sans text-sm md:text-base leading-relaxed selectable-text text-gray-700"></pre>
+                                <pre id="detailsPrinciple"
+                                    class="whitespace-pre-line font-sans text-sm md:text-base leading-relaxed selectable-text text-gray-700"></pre>
                             </div>
                         </div>
 
-                        <!-- Cơ cấu khẩu phần -->
                         <div>
                             <h4 class="text-base md:text-lg font-bold text-gray-800 mb-2 flex items-center">
                                 <i class="fa-solid fa-chart-pie mr-2 text-green-600"></i>Cơ cấu khẩu phần
                             </h4>
                             <div class="bg-green-50 p-4 rounded-xl border-l-4 border-green-500 shadow-sm">
-                                <pre id="detailsComposition" class="whitespace-pre-line font-sans text-sm md:text-base font-medium text-gray-800 leading-relaxed selectable-text"></pre>
+                                <pre id="detailsComposition"
+                                    class="whitespace-pre-line font-sans text-sm md:text-base font-medium text-gray-800 leading-relaxed selectable-text"></pre>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Ghi chú legend -->
-                    <div class="mt-8 p-4 bg-yellow-50 text-yellow-900 rounded-xl border border-yellow-200 shadow-sm text-sm">
+                    <div
+                        class="mt-8 p-4 bg-yellow-50 text-yellow-900 rounded-xl border border-yellow-200 shadow-sm text-sm">
                         <h5 class="font-bold mb-3 flex items-center text-yellow-800 border-b border-yellow-200 pb-2">
                             <i class="fa-solid fa-circle-info mr-2"></i>Ghi chú ký hiệu
                         </h5>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <h6 class="font-bold mb-1 text-yellow-800 text-xs uppercase tracking-wider">1. Dinh dưỡng</h6>
+                                <h6 class="font-bold mb-1 text-yellow-800 text-xs uppercase tracking-wider">1. Dinh
+                                    dưỡng</h6>
                                 <ul class="space-y-1 ml-1 text-xs md:text-sm">
                                     <li><span class="font-bold w-6 inline-block">E:</span> Năng lượng (Kcal)</li>
                                     <li><span class="font-bold w-6 inline-block">P:</span> Protein (Đạm - g)</li>
@@ -236,7 +248,8 @@
                                 </ul>
                             </div>
                             <div>
-                                <h6 class="font-bold mb-1 text-yellow-800 text-xs uppercase tracking-wider">2. Chế biến (Ký tự cuối mã)</h6>
+                                <h6 class="font-bold mb-1 text-yellow-800 text-xs uppercase tracking-wider">2. Chế biến
+                                    (Ký tự cuối mã)</h6>
                                 <ul class="space-y-1 ml-1 text-xs md:text-sm">
                                     <li><span class="font-bold w-6 inline-block">C:</span> Cơm</li>
                                     <li><span class="font-bold w-6 inline-block">M:</span> Mềm (Cháo/Phở/Miến)</li>
@@ -250,73 +263,22 @@
         </div>
     </main>
 
-    <!-- 4. DRAWER, NAV & MODAL -->
-    <!-- DRAWER MENU -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- MOBILE BOTTOM NAV -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- NOTIFICATION MODAL -->
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
     </div>
 
-    <!-- 5. JAVASCRIPT LOGIC -->
     <script>
         // --- 1. LOGIC LƯU LỊCH SỬ ---
         function useTool(id, name, icon, color, url) {
@@ -336,7 +298,7 @@
 
         // --- 2. LOGIC DRAWER MENU ---
         function openDrawer(e) {
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
             const drawer = document.getElementById('drawer-menu');
             const overlay = document.getElementById('drawer-overlay');
             overlay.classList.remove('hidden');
@@ -360,20 +322,20 @@
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
 
-        window.showModal = function(message) {
-            if(modal && modalMessage) {
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
                 modalMessage.textContent = message;
                 modal.classList.remove('hidden');
             }
         }
 
-        window.hideModal = function() {
-            if(modal) modal.classList.add('hidden');
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
         }
 
         // --- BẢO MẬT: CHẶN RIGHT CLICK & SHORTCUTS ---
         document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 's' || event.key === 'S')) {
                 event.preventDefault();
             }
@@ -384,8 +346,8 @@
         });
 
         // --- 4. KHỞI TẠO CÔNG CỤ (Logic Tra Cứu Chế Độ Ăn) ---
-        document.addEventListener('DOMContentLoaded', function() {
-            
+        document.addEventListener('DOMContentLoaded', function () {
+
             // --- CẤU HÌNH DATA GOOGLE SHEETS ---
             // Link 1: Sheet Người lớn
             const adultSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpYBjf_Qhly-6xP1yZa91J5z5pqCdDF5llzgH7TczVYLh_EUaSJeWmY1N7BmsmCZUrcZ8Q39iJASrT/pub?output=csv';
@@ -396,7 +358,7 @@
             const targetGroupSelect = document.getElementById('targetGroupSelect');
             const mainDietSelect = document.getElementById('mainDietSelect');
             const subDietSelect = document.getElementById('subDietSelect');
-            
+
             const dietDetailsDisplay = document.getElementById('dietDetailsDisplay');
             const detailsTitle = document.getElementById('detailsTitle');
             const detailsSymbol = document.getElementById('detailsSymbol');
@@ -412,13 +374,13 @@
                 const rawData = csvData.data;
                 const processedDiets = [];
                 const groupsMap = {};
-                
+
                 let currentGroupKey = null;
                 let currentGroupTitle = null;
 
                 rawData.forEach((row, index) => {
                     let groupName = (row[0] || "").trim(); // Cột A
-                    
+
                     // Bỏ qua tiêu đề
                     if (groupName.toLowerCase() === 'nhóm bệnh lý' || groupName.toLowerCase() === 'tên nhóm bệnh') {
                         return;
@@ -426,12 +388,12 @@
                     if (index === 0) {
                         const firstCell = groupName.toLowerCase();
                         if (firstCell.includes('nhóm') || firstCell.includes('group') || firstCell.includes('stt')) {
-                            return; 
+                            return;
                         }
                     }
 
-                    let dietName  = (row[1] || "").trim(); // Cột B
-                    let dietCode  = (row[2] || "").trim(); // Cột C
+                    let dietName = (row[1] || "").trim(); // Cột B
+                    let dietCode = (row[2] || "").trim(); // Cột C
                     let principle = (row[3] || "").trim(); // Cột D
                     let composition = (row[4] || "").trim(); // Cột E
 
@@ -443,7 +405,7 @@
                         if (dietName && currentGroupKey) {
                             // Giữ nguyên group cũ
                         } else {
-                            return; 
+                            return;
                         }
                     }
 
@@ -488,11 +450,11 @@
 
                 Papa.parse(url, {
                     download: true,
-                    header: false, 
+                    header: false,
                     skipEmptyLines: true,
-                    complete: function(results) {
+                    complete: function (results) {
                         loadingStatus.classList.add('hidden');
-                        
+
                         if (results.errors.length > 0) {
                             showModal("Lỗi đọc dữ liệu CSV!");
                             mainDietSelect.innerHTML = '<option>Lỗi tải file!</option>';
@@ -500,14 +462,14 @@
                         }
 
                         diets = processData(results);
-                        
+
                         if (diets.length === 0) {
-                             mainDietSelect.innerHTML = '<option>Không tìm thấy dữ liệu!</option>';
+                            mainDietSelect.innerHTML = '<option>Không tìm thấy dữ liệu!</option>';
                         } else {
-                             renderMainSelect();
+                            renderMainSelect();
                         }
                     },
-                    error: function(err) {
+                    error: function (err) {
                         loadingStatus.classList.add('hidden');
                         showModal("Lỗi kết nối Server! Vui lòng kiểm tra mạng.");
                         mainDietSelect.innerHTML = '<option>Lỗi kết nối Server!</option>';
@@ -518,11 +480,11 @@
             function renderMainSelect() {
                 mainDietSelect.disabled = false;
                 mainDietSelect.innerHTML = '<option value="">-- Chọn nhóm bệnh --</option>';
-                
+
                 diets.forEach((group, index) => {
                     const option = document.createElement('option');
                     option.value = index;
-                    option.textContent = group.groupTitle; 
+                    option.textContent = group.groupTitle;
                     mainDietSelect.appendChild(option);
                 });
             }
@@ -530,7 +492,7 @@
             // --- EVENT LISTENERS ---
 
             // 1. Thay đổi Đối tượng
-            targetGroupSelect.addEventListener('change', function() {
+            targetGroupSelect.addEventListener('change', function () {
                 const target = this.value;
                 if (target === 'adult') {
                     loadDietData(adultSheetUrl);
@@ -540,7 +502,7 @@
             });
 
             // 2. Thay đổi Nhóm bệnh
-            mainDietSelect.addEventListener('change', function() {
+            mainDietSelect.addEventListener('change', function () {
                 subDietSelect.innerHTML = '<option value="">-- Chọn chế độ ăn --</option>';
                 subDietSelect.disabled = true;
                 dietDetailsDisplay.classList.add('hidden');
@@ -548,12 +510,12 @@
                 if (this.value !== "") {
                     const groupIndex = this.value;
                     const group = diets[groupIndex];
-                    
+
                     if (group && group.subDiets) {
                         group.subDiets.forEach((subDiet, subIndex) => {
                             const option = document.createElement('option');
                             option.value = `${groupIndex}-${subIndex}`;
-                            option.textContent = subDiet.title; 
+                            option.textContent = subDiet.title;
                             subDietSelect.appendChild(option);
                         });
                         subDietSelect.disabled = false;
@@ -562,33 +524,33 @@
             });
 
             // 3. Thay đổi Chế độ ăn cụ thể -> HIỂN THỊ KẾT QUẢ
-            subDietSelect.addEventListener('change', function() {
+            subDietSelect.addEventListener('change', function () {
                 const selectedValue = this.value;
                 if (selectedValue !== "") {
                     const [groupIndex, subIndex] = selectedValue.split('-').map(Number);
-                    
+
                     if (diets[groupIndex] && diets[groupIndex].subDiets[subIndex]) {
                         const selectedSubDiet = diets[groupIndex].subDiets[subIndex];
-                        
+
                         // Cập nhật hiển thị
                         detailsTitle.textContent = selectedSubDiet.title;
                         detailsSymbol.textContent = selectedSubDiet.symbol || "Chưa có mã";
                         detailsPrinciple.textContent = selectedSubDiet.principle || "Đang cập nhật...";
                         detailsComposition.textContent = selectedSubDiet.composition || "Đang cập nhật...";
-                        
+
                         dietDetailsDisplay.classList.remove('hidden');
-                        
+
                         // Lưu lịch sử sử dụng
                         useTool(
-                            'tra-cuu-che-do-an', 
-                            'Tra cứu Chế độ ăn', 
-                            'fa-utensils', 
-                            'text-indigo-600', 
+                            'tra-cuu-che-do-an',
+                            'Tra cứu Chế độ ăn',
+                            'fa-utensils',
+                            'text-indigo-600',
                             window.location.href
                         );
 
                         // Scroll nhẹ xuống kết quả (Mobile UX)
-                        if(window.innerWidth < 768) {
+                        if (window.innerWidth < 768) {
                             setTimeout(() => {
                                 const headerHeight = document.querySelector('header').offsetHeight || 60;
                                 const targetPos = dietDetailsDisplay.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
@@ -605,5 +567,7 @@
             loadDietData(adultSheetUrl);
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

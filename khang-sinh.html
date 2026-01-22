@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tra cứu Liều Dùng Kháng Sinh - Máy Tính Y Học</title>
-    
-    <!-- Favicon -->
+
     <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
     <link rel="manifest" href="manifest.json">
-    
-    <!-- Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Fonts -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
@@ -21,8 +19,10 @@
         /* --- APP FEEL OPTIMIZATIONS (MATCHING GLASGOW) --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Gray-100 match */
-            padding-bottom: 80px; /* Space for Bottom Nav */
+            background-color: #f3f4f6;
+            /* Gray-100 match */
+            padding-bottom: 80px;
+            /* Space for Bottom Nav */
             touch-action: manipulation;
             /* Chặn bôi đen mặc định trên toàn trang */
             -webkit-user-select: none;
@@ -33,16 +33,18 @@
         }
 
         /* Vẫn cho phép nhập liệu vào ô tìm kiếm */
-        input, textarea {
+        input,
+        textarea {
             -webkit-user-select: text;
             -ms-user-select: text;
             user-select: text;
         }
-        
+
         /* Cập nhật: Nếu muốn chặn copy triệt để thì cũng nên chặn bôi đen ở kết quả.
            Tuy nhiên, tôi giữ lại class này để người dùng có thể click/tap vào xem cho dễ,
            nhưng Javascript phía dưới sẽ chặn lệnh Copy (Ctrl+C) */
-        [contenteditable], .selectable-text {
+        [contenteditable],
+        .selectable-text {
             -webkit-user-select: text;
             -ms-user-select: text;
             user-select: text;
@@ -57,44 +59,61 @@
             border-left-color: #4f46e5;
             animation: spin 1s ease infinite;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
-        .whitespace-pre-line { white-space: pre-line; }
-        
+
+        .whitespace-pre-line {
+            white-space: pre-line;
+        }
+
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
 
         /* Scrollbar for suggestions */
-        #searchSuggestions::-webkit-scrollbar { width: 6px; }
-        #searchSuggestions::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        #searchSuggestions::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        #searchSuggestions::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        #searchSuggestions::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #searchSuggestions::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        #searchSuggestions::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        #searchSuggestions::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
     </style>
 </head>
+
 <body class="text-gray-800 flex flex-col min-h-screen">
 
-    <!-- === A. DESKTOP HEADER (Fixed Top) === -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
-
-    <!-- === MOBILE HEADER (Fixed Top - NEW ADDITION) === -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -102,20 +121,18 @@
         <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
             Tra cứu Liều Dùng
         </h1>
-        <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
+        <div class="w-8"></div>
     </header>
 
-    <!-- === MAIN CONTENT === -->
     <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-5xl">
-        
-        <!-- Main Card Wrapper (Matching Glasgow Style) -->
+
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            
-            <!-- Desktop Inner Header (Blue Banner) -->
+
             <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <!-- Desktop Back Button -->
-                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-2" title="Quay lại">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-2"
+                        title="Quay lại">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <div>
@@ -127,30 +144,29 @@
             </div>
 
             <div class="p-4 md:p-8">
-                
-                <!-- Search Input Area -->
-                <div class="mb-4 md:mb-6 relative z-30"> 
+
+                <div class="mb-4 md:mb-6 relative z-30">
                     <div class="relative w-full max-w-3xl mx-auto">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <i class="fa-solid fa-magnifying-glass text-indigo-400"></i>
                         </div>
-                        <input type="text" id="tableSearchInput" 
-                            class="block w-full pl-11 pr-10 py-3.5 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-base shadow-sm transition duration-200" 
-                            placeholder="Nhập tên thuốc (VD: Meropenem, Vancomycin)..." 
-                            autocomplete="off"
+                        <input type="text" id="tableSearchInput"
+                            class="block w-full pl-11 pr-10 py-3.5 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-base shadow-sm transition duration-200"
+                            placeholder="Nhập tên thuốc (VD: Meropenem, Vancomycin)..." autocomplete="off"
                             onkeyup="handleInputKeyUp()">
-                        
-                        <button id="clearSearchBtn" class="absolute inset-y-0 right-0 pr-3 flex items-center hidden text-gray-400 hover:text-gray-600" onclick="clearSearch()">
+
+                        <button id="clearSearchBtn"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center hidden text-gray-400 hover:text-gray-600"
+                            onclick="clearSearch()">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </button>
 
-                        <ul id="searchSuggestions" class="absolute z-40 w-full bg-white border border-gray-200 rounded-xl shadow-xl mt-2 max-h-64 overflow-y-auto hidden">
-                            <!-- Suggestions will be injected here -->
+                        <ul id="searchSuggestions"
+                            class="absolute z-40 w-full bg-white border border-gray-200 rounded-xl shadow-xl mt-2 max-h-64 overflow-y-auto hidden">
                         </ul>
                     </div>
                 </div>
 
-                <!-- Connection Status -->
                 <div class="flex justify-between items-center mb-4 text-xs md:text-sm border-b border-gray-50 pb-2">
                     <div class="flex items-center gap-2">
                         <span id="connectionStatus" class="w-2.5 h-2.5 rounded-full bg-gray-300"></span>
@@ -159,29 +175,26 @@
                     <span id="resultCount" class="font-medium text-indigo-600 hidden sm:inline"></span>
                 </div>
 
-                <!-- STATE: Loading -->
                 <div id="loadingState" class="hidden flex-col items-center justify-center py-12">
                     <div class="spinner mb-4"></div>
                     <p class="text-gray-500 font-medium animate-pulse">Đang tải dữ liệu dược thư...</p>
                 </div>
 
-                <!-- STATE: Initial Prompt -->
-                <div id="searchPrompt" class="hidden flex-col items-center justify-center py-10 md:py-16 text-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 mx-auto max-w-2xl">
+                <div id="searchPrompt"
+                    class="hidden flex-col items-center justify-center py-10 md:py-16 text-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 mx-auto max-w-2xl">
                     <div class="bg-indigo-100 rounded-full w-16 h-16 flex items-center justify-center mb-4">
                         <i class="fa-solid fa-prescription-bottle-medical text-indigo-500 text-3xl"></i>
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">Sẵn sàng tra cứu</h3>
-                    <p class="text-gray-500 mt-2 max-w-xs mx-auto">Nhập tên hoạt chất để xem liều dùng chi tiết cho người lớn và trẻ em.</p>
+                    <p class="text-gray-500 mt-2 max-w-xs mx-auto">Nhập tên hoạt chất để xem liều dùng chi tiết cho
+                        người lớn và trẻ em.</p>
                 </div>
 
-                <!-- STATE: Results List -->
                 <div id="resultsContainer" class="hidden">
                     <div id="resultsList" class="space-y-4 md:space-y-6">
-                        <!-- Cards will be injected here -->
                     </div>
                 </div>
 
-                <!-- STATE: Empty/Error -->
                 <div id="emptyState" class="hidden text-center py-12">
                     <div class="inline-block p-4 rounded-full bg-gray-50 mb-4">
                         <i class="fa-solid fa-file-circle-xmark text-gray-300 text-4xl"></i>
@@ -190,20 +203,23 @@
                     <p class="text-gray-500 mt-1" id="errorMsg">Thử tìm kiếm với tên thuốc khác.</p>
                 </div>
 
-                <!-- Footer Notes -->
                 <div class="mt-8 pt-6 border-t border-gray-100">
                     <h4 class="text-sm font-bold text-gray-700 mb-3 flex items-center">
                         <i class="fa-solid fa-circle-info text-indigo-500 mr-2"></i> Ghi chú & Viết tắt:
                     </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-100">
                         <p><span class="font-bold text-indigo-700">LD / MD:</span> Liều tải / Liều duy trì</p>
                         <p><span class="font-bold text-indigo-700">CrCl:</span> Độ thanh thải creatinin (mL/phút)</p>
                         <p><span class="font-bold text-indigo-700">GFR:</span> Mức lọc cầu thận (mL/phút/1.73m²)</p>
-                        <p><span class="font-bold text-indigo-700">RRT:</span> Liệu pháp thay thế thận (CRRT, lọc máu...)</p>
+                        <p><span class="font-bold text-indigo-700">RRT:</span> Liệu pháp thay thế thận (CRRT, lọc
+                            máu...)</p>
                         <p><span class="font-bold text-indigo-700">PNCT:</span> Phụ nữ có thai (Phân loại FDA)</p>
-                        <p><span class="font-bold text-indigo-700">IBW / AdjBW:</span> Cân nặng lý tưởng / hiệu chỉnh</p>
+                        <p><span class="font-bold text-indigo-700">IBW / AdjBW:</span> Cân nặng lý tưởng / hiệu chỉnh
+                        </p>
                         <p><span class="font-bold text-indigo-700">TDM:</span> Theo dõi nồng độ thuốc trong máu</p>
-                        <p><span class="font-bold text-indigo-700">ARC:</span> Tăng thanh thải thận (Augmented Renal Clearance)</p>
+                        <p><span class="font-bold text-indigo-700">ARC:</span> Tăng thanh thải thận (Augmented Renal
+                            Clearance)</p>
                         <p><span class="font-bold text-indigo-700">CCĐ:</span> Chống chỉ định</p>
                     </div>
                 </div>
@@ -212,59 +228,6 @@
         </div>
     </main>
 
-    <!-- === C. DRAWER MENU === -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- === B. MOBILE BOTTOM NAVIGATION === -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- === JAVASCRIPT === -->
     <script>
         // --- LOGIC LƯU LỊCH SỬ (Đồng bộ với Index) ---
         function useTool(id, name, icon, color, url) {
@@ -288,50 +251,28 @@
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
 
-        // --- DRAWER MENU LOGIC ---
-        function openDrawer(e) {
-            if(e) e.preventDefault();
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            drawer.classList.remove('translate-x-full');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDrawer() {
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            drawer.classList.add('translate-x-full');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
         // --- CORE DATA LOGIC (ANTIBIOTICS) ---
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Kích hoạt lưu lịch sử
             useTool(
-                'tra-cuu-khang-sinh', 
-                'Tra cứu Kháng Sinh', 
-                'fa-solid fa-pills', 
-                'text-indigo-600', 
+                'tra-cuu-khang-sinh',
+                'Tra cứu Kháng Sinh',
+                'fa-solid fa-pills',
+                'text-indigo-600',
                 window.location.href
             );
 
             // Load Data
             loadGoogleSheetData();
-            
+
             // Focus Search
             const tableSearchInput = document.getElementById('tableSearchInput');
-            if(tableSearchInput) tableSearchInput.focus();
+            if (tableSearchInput) tableSearchInput.focus();
 
             // Click outside to hide suggestions
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 const suggestions = document.getElementById('searchSuggestions');
-                const searchContainer = document.querySelector('.relative.z-30'); 
+                const searchContainer = document.querySelector('.relative.z-30');
                 if (searchContainer && !searchContainer.contains(e.target)) {
                     suggestions.classList.add('hidden');
                 }
@@ -352,7 +293,7 @@
         const resultCount = document.getElementById('resultCount');
         const emptyState = document.getElementById('emptyState');
         const loadingState = document.getElementById('loadingState');
-        const searchPrompt = document.getElementById('searchPrompt'); 
+        const searchPrompt = document.getElementById('searchPrompt');
         const errorTitle = document.getElementById('errorTitle');
         const errorMsg = document.getElementById('errorMsg');
         const connectionStatus = document.getElementById('connectionStatus');
@@ -361,11 +302,11 @@
         async function loadGoogleSheetData() {
             showLoading(true);
             updateStatus('loading');
-            
+
             try {
                 const response = await fetch(SHEET_CSV_URL);
                 if (!response.ok) throw new Error('Không thể kết nối đến Google Sheets');
-                
+
                 const csvText = await response.text();
                 processCSV(csvText);
             } catch (error) {
@@ -432,11 +373,11 @@
 
             for (let i = 0; i < text.length; i++) {
                 const char = text[i];
-                const nextChar = text[i+1];
+                const nextChar = text[i + 1];
                 if (char === '"') {
                     if (inQuote && nextChar === '"') {
                         currentField += '"';
-                        i++; 
+                        i++;
                     } else {
                         inQuote = !inQuote;
                     }
@@ -464,25 +405,25 @@
             const rows = parseCSVRaw(text);
             const newData = [];
             const nameSet = new Set();
-            
+
             let headerIndex = -1;
             let colMap = { name: -1, adult: -1, loading: -1, renal: -1, pediatric: -1, pediatric_renal: -1, note: -1, group: -1 };
 
             // Heuristic Header Detection
             let maxScore = 0;
-            for(let i=0; i < Math.min(rows.length, 25); i++) {
+            for (let i = 0; i < Math.min(rows.length, 25); i++) {
                 const row = rows[i];
                 let score = 0;
                 let tempMap = { name: -1, adult: -1, renal: -1 };
-                
+
                 row.forEach((cell, idx) => {
                     const pLow = cell.toLowerCase();
-                    if(pLow.includes('tên') || pLow.includes('thuốc') || pLow.includes('hoạt chất')) { score += 2; tempMap.name = idx; }
-                    if(pLow.includes('người lớn') || pLow.includes('adult')) { score += 2; tempMap.adult = idx; }
-                    if((pLow.includes('suy thận') || pLow.includes('thận') || pLow.includes('crcl') || pLow.includes('renal')) && !pLow.includes('gfr') && !pLow.includes('trẻ')) { 
-                        score += 2; tempMap.renal = idx; 
+                    if (pLow.includes('tên') || pLow.includes('thuốc') || pLow.includes('hoạt chất')) { score += 2; tempMap.name = idx; }
+                    if (pLow.includes('người lớn') || pLow.includes('adult')) { score += 2; tempMap.adult = idx; }
+                    if ((pLow.includes('suy thận') || pLow.includes('thận') || pLow.includes('crcl') || pLow.includes('renal')) && !pLow.includes('gfr') && !pLow.includes('trẻ')) {
+                        score += 2; tempMap.renal = idx;
                     }
-                    if(pLow.includes('trẻ em') || pLow.includes('pediatric')) score += 1;
+                    if (pLow.includes('trẻ em') || pLow.includes('pediatric')) score += 1;
                 });
 
                 if (tempMap.name !== -1 && tempMap.adult !== -1) {
@@ -496,26 +437,26 @@
             }
 
             if (headerIndex === -1) {
-                 for(let i=0; i < Math.min(rows.length, 25); i++) {
+                for (let i = 0; i < Math.min(rows.length, 25); i++) {
                     const str = rows[i].join(' ').toLowerCase();
-                    if(str.includes('thuốc') || str.includes('hoạt chất')) {
+                    if (str.includes('thuốc') || str.includes('hoạt chất')) {
                         headerIndex = i;
                         break;
                     }
-                 }
+                }
             }
-            
+
             if (headerIndex !== -1) {
                 rows[headerIndex].forEach((cell, idx) => {
                     const pLow = cell.toLowerCase();
-                    if(pLow.includes('tên') || pLow.includes('thuốc') || pLow.includes('hoạt chất') || pLow.includes('dược chất')) colMap.name = idx;
-                    else if((pLow.includes('người lớn') || pLow.includes('adult'))) colMap.adult = idx;
-                    else if(pLow.includes('liều tải') || pLow.includes('loading') || pLow.includes('ld')) { if (!pLow.includes('người lớn')) colMap.loading = idx; }
-                    else if(pLow.includes('trẻ em') || pLow.includes('pediatric') || pLow.includes('child')) { colMap.pediatric = idx; }
-                    else if(pLow.includes('gfr')) { colMap.pediatric_renal = idx; }
-                    else if(pLow.includes('suy thận') || pLow.includes('thận') || pLow.includes('crcl') || pLow.includes('renal')) { colMap.renal = idx; }
-                    else if(pLow.includes('lưu ý') || pLow.includes('ghi chú') || pLow.includes('rrt') || pLow.includes('gan')) colMap.note = idx;
-                    else if(pLow.includes('nhóm') || pLow.includes('phân loại')) colMap.group = idx;
+                    if (pLow.includes('tên') || pLow.includes('thuốc') || pLow.includes('hoạt chất') || pLow.includes('dược chất')) colMap.name = idx;
+                    else if ((pLow.includes('người lớn') || pLow.includes('adult'))) colMap.adult = idx;
+                    else if (pLow.includes('liều tải') || pLow.includes('loading') || pLow.includes('ld')) { if (!pLow.includes('người lớn')) colMap.loading = idx; }
+                    else if (pLow.includes('trẻ em') || pLow.includes('pediatric') || pLow.includes('child')) { colMap.pediatric = idx; }
+                    else if (pLow.includes('gfr')) { colMap.pediatric_renal = idx; }
+                    else if (pLow.includes('suy thận') || pLow.includes('thận') || pLow.includes('crcl') || pLow.includes('renal')) { colMap.renal = idx; }
+                    else if (pLow.includes('lưu ý') || pLow.includes('ghi chú') || pLow.includes('rrt') || pLow.includes('gan')) colMap.note = idx;
+                    else if (pLow.includes('nhóm') || pLow.includes('phân loại')) colMap.group = idx;
                 });
             } else {
                 colMap = { name: 0, adult: 1, renal: 2, pediatric: 3, note: 4, group: -1 };
@@ -531,7 +472,7 @@
 
                 const name = getVal(colMap.name);
                 const adult = getVal(colMap.adult);
-                const loading = getVal(colMap.loading); 
+                const loading = getVal(colMap.loading);
                 const renal = getVal(colMap.renal);
                 const pediatric = getVal(colMap.pediatric);
                 const pediatric_renal = getVal(colMap.pediatric_renal);
@@ -540,17 +481,17 @@
 
                 const nameUp = name.toUpperCase().trim();
                 const isHeader = (name.toLowerCase().includes('thuốc') && name.toLowerCase().includes('liều')) || name.toLowerCase() === 'thuốc';
-                const isCategory = /^\d+\.\s*KHÁNG/.test(nameUp) || 
-                                   nameUp === 'KHÁNG NẤM' || 
-                                   nameUp.includes('KHÁNG VIRUS') ||
-                                   nameUp.includes('KHÁNG LAO') ||
-                                   nameUp.includes('KÝ SINH TRÙNG') ||
-                                   nameUp === 'KHÁNG SINH';
+                const isCategory = /^\d+\.\s*KHÁNG/.test(nameUp) ||
+                    nameUp === 'KHÁNG NẤM' ||
+                    nameUp.includes('KHÁNG VIRUS') ||
+                    nameUp.includes('KHÁNG LAO') ||
+                    nameUp.includes('KÝ SINH TRÙNG') ||
+                    nameUp === 'KHÁNG SINH';
 
                 const hasData = isContentValid(adult) || isContentValid(renal) || isContentValid(pediatric);
 
                 if (isHeader || isCategory || (!hasData && !name)) {
-                    continue; 
+                    continue;
                 }
 
                 let finalAdultDose = adult;
@@ -618,7 +559,7 @@
 
             const lowerQuery = query.toLowerCase();
             const matches = uniqueDrugNames.filter(name => name.toLowerCase().includes(lowerQuery));
-            
+
             matches.sort((a, b) => {
                 const startA = a.toLowerCase().startsWith(lowerQuery);
                 const startB = b.toLowerCase().startsWith(lowerQuery);
@@ -662,7 +603,7 @@
 
         function renderResults(data) {
             resultsList.innerHTML = '';
-            
+
             if (data.length === 0) {
                 showError('Không tìm thấy kết quả', `Không có dữ liệu cho từ khóa "${tableSearchInput.value}"`);
                 return;
@@ -673,14 +614,14 @@
                 resultCount.innerText = `Tìm thấy ${data.length} kết quả`;
             }
 
-            const displayData = data.slice(0, 50); 
+            const displayData = data.slice(0, 50);
 
             displayData.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6 hover:shadow-md transition-shadow duration-200';
-                
-                const groupBadge = item.group 
-                    ? `<span class="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded-full border border-indigo-100 ml-2 align-middle font-normal">${item.group}</span>` 
+
+                const groupBadge = item.group
+                    ? `<span class="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded-full border border-indigo-100 ml-2 align-middle font-normal">${item.group}</span>`
                     : '';
 
                 card.innerHTML = `
@@ -741,10 +682,10 @@
             });
 
             if (data.length > 50) {
-                 const moreInfo = document.createElement('div');
-                 moreInfo.className = "text-center text-sm text-gray-500 italic py-2";
-                 moreInfo.innerText = `... và ${data.length - 50} kết quả khác ...`;
-                 resultsList.appendChild(moreInfo);
+                const moreInfo = document.createElement('div');
+                moreInfo.className = "text-center text-sm text-gray-500 italic py-2";
+                moreInfo.innerText = `... và ${data.length - 50} kết quả khác ...`;
+                resultsList.appendChild(moreInfo);
             }
         }
 
@@ -757,7 +698,7 @@
                 const searchStr = (item.name + ' ' + item.group + ' ' + item.adult + ' ' + item.renal + ' ' + item.pediatric + ' ' + item.note).toLowerCase();
                 return searchStr.includes(query);
             });
-            
+
             filteredData.sort((a, b) => {
                 const nameA = a.name.toLowerCase();
                 const nameB = b.name.toLowerCase();
@@ -774,14 +715,14 @@
         // ============================================
         // === BẢO VỆ NỘI DUNG (NEW ADDITION) ===
         // ============================================
-        
+
         // 1. Chặn chuột phải (Context Menu)
-        document.addEventListener('contextmenu', function(event) {
+        document.addEventListener('contextmenu', function (event) {
             event.preventDefault();
         });
 
         // 2. Chặn phím tắt (Ctrl+C, Ctrl+A, Ctrl+U)
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             // Kiểm tra phím Ctrl (Windows) hoặc Command/Meta (Mac)
             if (event.ctrlKey || event.metaKey) {
                 switch (event.key.toLowerCase()) {
@@ -794,5 +735,7 @@
             }
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

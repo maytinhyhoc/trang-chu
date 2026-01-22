@@ -1,79 +1,84 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thang điểm CHA₂DS₂-VA</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ICONS & PWA -->
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 70px; /* Space for Bottom Nav */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 70px;
+            /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
             -webkit-user-select: none;
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
-        .result-text, input, textarea {
+        .result-text,
+        input,
+        textarea {
             -webkit-user-select: text;
             user-select: text;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 10px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 10px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.4s ease-out;
         }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-        .custom-radio:checked + div {
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .custom-radio:checked+div {
             border-color: #4f46e5;
             background-color: #eef2ff;
             color: #4f46e5;
         }
-        .custom-radio:checked + div .radio-dot {
+
+        .custom-radio:checked+div .radio-dot {
             background-color: #4f46e5;
             border-color: #4f46e5;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- 2. HEADER & NAVIGATION -->
-    <!-- A. Desktop Header -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" onerror="this.src='https://via.placeholder.com/40?text=Logo'" alt="Logo" class="w-10 h-10 object-contain">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
-
-    <!-- B. Mobile Header -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -84,15 +89,13 @@
         <div class="w-8"></div>
     </header>
 
-    <!-- 3. CẤU TRÚC MAIN CONTENT -->
     <main class="flex-grow container mx-auto px-3 pt-[68px] md:pt-20 pb-4 max-w-4xl">
-        <!-- KHỐI CARD CHÍNH -->
         <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            
-            <!-- HEADER CỦA CARD (DESKTOP) -->
+
             <div class="hidden md:flex bg-indigo-600 p-4 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <a href="cong-cu.html" class="hidden md:flex w-8 h-8 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-3">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-8 h-8 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-3">
                         <i class="fa-solid fa-chevron-left text-sm"></i>
                     </a>
                     <div>
@@ -103,26 +106,28 @@
                 <i class="fa-solid fa-heart-pulse text-3xl text-indigo-300 opacity-50"></i>
             </div>
 
-            <!-- FORM TÍNH TOÁN -->
             <div class="p-3 md:p-6">
                 <form id="chads-vasc-form" class="space-y-3">
-                    
-                    <!-- Loại thang điểm Toggle -->
+
                     <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                        <label class="block text-xs font-bold text-gray-700 mb-2 flex items-center uppercase tracking-wide">
+                        <label
+                            class="block text-xs font-bold text-gray-700 mb-2 flex items-center uppercase tracking-wide">
                             <i class="fa-solid fa-sliders mr-2 text-indigo-600"></i>Chọn loại thang điểm
                         </label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <label class="cursor-pointer relative">
-                                <input type="radio" name="scoreType" value="CHA2DS2-VA" checked class="custom-radio sr-only">
-                                <div class="p-2.5 rounded border border-gray-300 bg-white hover:bg-gray-50 transition-all flex items-center">
+                                <input type="radio" name="scoreType" value="CHA2DS2-VA" checked
+                                    class="custom-radio sr-only">
+                                <div
+                                    class="p-2.5 rounded border border-gray-300 bg-white hover:bg-gray-50 transition-all flex items-center">
                                     <div class="radio-dot w-3.5 h-3.5 rounded-full border border-gray-400 mr-2"></div>
                                     <span class="font-medium text-gray-700 text-sm">CHA₂DS₂-VA (ESC 2024)</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative">
                                 <input type="radio" name="scoreType" value="CHA2DS2-VASc" class="custom-radio sr-only">
-                                <div class="p-2.5 rounded border border-gray-300 bg-white hover:bg-gray-50 transition-all flex items-center">
+                                <div
+                                    class="p-2.5 rounded border border-gray-300 bg-white hover:bg-gray-50 transition-all flex items-center">
                                     <div class="radio-dot w-3.5 h-3.5 rounded-full border border-gray-400 mr-2"></div>
                                     <span class="font-medium text-gray-700 text-sm">CHA₂DS₂-VASc (Cũ)</span>
                                 </div>
@@ -131,222 +136,208 @@
                     </div>
 
                     <div class="space-y-1">
-                        <!-- 1. Suy tim -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
-                            <label class="text-gray-800 font-medium text-sm sm:text-base">1. Suy tim sung huyết (C)</label>
+                        <div
+                            class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
+                            <label class="text-gray-800 font-medium text-sm sm:text-base">1. Suy tim sung huyết
+                                (C)</label>
                             <div class="flex gap-2 w-full sm:w-auto">
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="C" value="1" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Có</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Có</div>
                                 </label>
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="C" value="0" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Không</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Không</div>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- 2. Tăng huyết áp -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
+                        <div
+                            class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
                             <label class="text-gray-800 font-medium text-sm sm:text-base">2. Tăng huyết áp (H)</label>
                             <div class="flex gap-2 w-full sm:w-auto">
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="H" value="1" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Có</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Có</div>
                                 </label>
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="H" value="0" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Không</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Không</div>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- 3. Tuổi -->
                         <div class="py-2 border-b border-gray-100">
                             <label class="block text-gray-800 font-medium text-sm sm:text-base mb-2">3. Tuổi (A)</label>
                             <div class="grid grid-cols-3 gap-2">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="A" value="0" class="custom-radio sr-only">
-                                    <div class="py-1.5 px-1 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium">&lt; 65</div>
+                                    <div
+                                        class="py-1.5 px-1 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium">
+                                        &lt; 65</div>
                                 </label>
                                 <label class="cursor-pointer">
                                     <input type="radio" name="A" value="1" class="custom-radio sr-only">
-                                    <div class="py-1.5 px-1 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium">65 - 74</div>
+                                    <div
+                                        class="py-1.5 px-1 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium">
+                                        65 - 74</div>
                                 </label>
                                 <label class="cursor-pointer">
                                     <input type="radio" name="A" value="2" class="custom-radio sr-only">
-                                    <div class="py-1.5 px-1 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium">≥ 75</div>
+                                    <div
+                                        class="py-1.5 px-1 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium">
+                                        ≥ 75</div>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- 4. Đái tháo đường -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
+                        <div
+                            class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
                             <label class="text-gray-800 font-medium text-sm sm:text-base">4. Đái tháo đường (D)</label>
                             <div class="flex gap-2 w-full sm:w-auto">
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="D" value="1" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Có</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Có</div>
                                 </label>
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="D" value="0" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Không</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Không</div>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- 5. Đột quỵ/TIA -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
-                            <label class="text-gray-800 font-medium text-sm sm:text-base">5. Đột quỵ/TIA/Huyết khối (S)</label>
+                        <div
+                            class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
+                            <label class="text-gray-800 font-medium text-sm sm:text-base">5. Đột quỵ/TIA/Huyết khối
+                                (S)</label>
                             <div class="flex gap-2 w-full sm:w-auto">
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="S" value="2" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Có</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Có</div>
                                 </label>
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="S" value="0" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Không</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Không</div>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- 6. Bệnh mạch máu -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
+                        <div
+                            class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2">
                             <label class="text-gray-800 font-medium text-sm sm:text-base">6. Bệnh mạch máu (V)</label>
                             <div class="flex gap-2 w-full sm:w-auto">
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="V" value="1" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Có</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Có</div>
                                 </label>
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="V" value="0" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Không</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Không</div>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- 7. Giới tính (Sc) - Hidden by default -->
-                        <div id="sex-input-group" class="hidden flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2 transition-all duration-300">
+                        <div id="sex-input-group"
+                            class="hidden flex-col sm:flex-row justify-between items-start sm:items-center py-2 border-b border-gray-100 gap-2 transition-all duration-300">
                             <label class="text-gray-800 font-medium text-sm sm:text-base">7. Giới tính (Sc)</label>
                             <div class="flex gap-2 w-full sm:w-auto">
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="Sex" value="0" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Nam</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Nam</div>
                                 </label>
                                 <label class="flex-1 sm:flex-none cursor-pointer">
                                     <input type="radio" name="Sex" value="1" class="custom-radio sr-only">
-                                    <div class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">Nữ</div>
+                                    <div
+                                        class="px-3 py-1.5 rounded-md border border-gray-200 text-center hover:bg-gray-50 text-sm transition-all font-medium min-w-[80px]">
+                                        Nữ</div>
                                 </label>
                             </div>
                         </div>
                     </div>
-                
-                    <!-- Nút hành động -->
+
                     <div class="grid grid-cols-2 gap-3 mt-4">
-                        <button type="button" id="clearBtn" class="bg-gray-100 text-gray-600 font-semibold py-2.5 px-4 rounded-lg hover:bg-gray-200 transition active:scale-95 flex items-center justify-center text-sm">
+                        <button type="button" id="clearBtn"
+                            class="bg-gray-100 text-gray-600 font-semibold py-2.5 px-4 rounded-lg hover:bg-gray-200 transition active:scale-95 flex items-center justify-center text-sm">
                             <i class="fa-solid fa-rotate-left mr-2"></i> Làm lại
                         </button>
-                        <button type="submit" id="calculateBtn" class="bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition transform active:scale-95 flex items-center justify-center text-sm">
+                        <button type="submit" id="calculateBtn"
+                            class="bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition transform active:scale-95 flex items-center justify-center text-sm">
                             <i class="fa-solid fa-calculator mr-2"></i> Tính điểm
                         </button>
                     </div>
                 </form>
 
-                <!-- KẾT QUẢ -->
                 <div id="result-container" class="mt-5 hidden animate-fade-in-up">
-                    <div class="bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 rounded-xl p-4 text-center shadow-sm relative overflow-hidden">
+                    <div
+                        class="bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 rounded-xl p-4 text-center shadow-sm relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-2 opacity-10">
                             <i class="fa-solid fa-clipboard-check text-5xl text-indigo-600"></i>
                         </div>
-                        
-                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Tổng Điểm</p>
-                        
-                        <div id="chads-vasc-score-display" class="text-4xl font-extrabold text-indigo-600 mb-3 tracking-tight">0</div>
 
-                        <div class="bg-white/90 p-3 rounded-lg border border-indigo-50 shadow-sm backdrop-blur-sm text-left">
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Tổng Điểm</p>
+
+                        <div id="chads-vasc-score-display"
+                            class="text-4xl font-extrabold text-indigo-600 mb-3 tracking-tight">0</div>
+
+                        <div
+                            class="bg-white/90 p-3 rounded-lg border border-indigo-50 shadow-sm backdrop-blur-sm text-left">
                             <p class="text-[10px] font-bold text-gray-400 mb-0.5 uppercase">Đánh giá & Khuyến cáo</p>
-                            <p id="evaluation-text" class="result-text text-gray-800 font-medium text-sm leading-relaxed">
+                            <p id="evaluation-text"
+                                class="result-text text-gray-800 font-medium text-sm leading-relaxed">
                                 Vui lòng nhập đầy đủ thông tin.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- GIẢI THÍCH -->
-                <div id="explanation-container" class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-xs sm:text-sm leading-relaxed">
-                    <!-- JS sẽ điền nội dung vào đây -->
+                <div id="explanation-container"
+                    class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-xs sm:text-sm leading-relaxed">
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- 4. DRAWER, NAV & MODAL -->
-    <!-- DRAWER MENU -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-4 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-lg text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-3 flex flex-col gap-1 overflow-y-auto flex-1 text-sm">
-            <a href="gioi-thieu.html" class="flex items-center gap-3 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-lg transition group text-gray-700">
-                <div class="w-7 h-7 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-3 p-3 hover:bg-green-50 hover:text-green-600 rounded-lg transition group text-gray-700">
-                <div class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-3 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition group text-gray-700">
-                <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-3 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition group text-gray-700">
-                <div class="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-3 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition group text-gray-700">
-                <div class="w-7 h-7 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
 
-    <!-- MOBILE BOTTOM NAV -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- NOTIFICATION MODAL -->
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div class="bg-white rounded-xl shadow-xl p-5 relative z-10 w-11/12 max-w-xs text-center transform transition-all scale-100 animate-fade-in-up">
+        <div
+            class="bg-white rounded-xl shadow-xl p-5 relative z-10 w-11/12 max-w-xs text-center transform transition-all scale-100 animate-fade-in-up">
             <div class="mx-auto flex items-center justify-center h-10 w-10 rounded-full bg-red-100 mb-3">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 text-lg"></i>
             </div>
             <h3 class="text-base font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-5">Nội dung thông báo...</p>
-            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
     </div>
 
-    <!-- 5. JAVASCRIPT LOGIC -->
     <script>
         // --- 1. LOGIC LƯU LỊCH SỬ ---
         function useTool(id, name, icon, color, url) {
@@ -366,7 +357,7 @@
 
         // --- 2. LOGIC DRAWER MENU ---
         function openDrawer(e) {
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
             const drawer = document.getElementById('drawer-menu');
             const overlay = document.getElementById('drawer-overlay');
             overlay.classList.remove('hidden');
@@ -390,19 +381,19 @@
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
 
-        window.showModal = function(message) {
-            if(modal && modalMessage) {
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
                 modalMessage.textContent = message;
                 modal.classList.remove('hidden');
             }
         }
 
-        window.hideModal = function() {
-            if(modal) modal.classList.add('hidden');
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
         }
 
         // --- 4. KHỞI TẠO CÔNG CỤ (Logic riêng của trang) ---
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const scoreTypeRadios = document.querySelectorAll('input[name="scoreType"]');
             const sexInputGroup = document.getElementById('sex-input-group');
             const explanationContainer = document.getElementById('explanation-container');
@@ -414,7 +405,7 @@
             // Cập nhật giao diện theo loại thang điểm
             function updateUIBasedOnScoreType() {
                 const selectedScoreType = document.querySelector('input[name="scoreType"]:checked').value;
-                
+
                 if (selectedScoreType === 'CHA2DS2-VA') {
                     sexInputGroup.classList.add('hidden');
                     explanationContainer.innerHTML = `
@@ -456,7 +447,7 @@
             updateUIBasedOnScoreType();
 
             // Xử lý nút xóa
-            clearBtn.addEventListener('click', function() {
+            clearBtn.addEventListener('click', function () {
                 const currentScoreType = document.querySelector('input[name="scoreType"]:checked').value;
                 form.reset();
                 document.querySelector(`input[name="scoreType"][value="${currentScoreType}"]`).checked = true;
@@ -464,14 +455,14 @@
             });
 
             // Xử lý tính toán
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function (event) {
                 event.preventDefault();
 
                 let score = 0;
                 let allAnswered = true;
                 const selectedScoreType = document.querySelector('input[name="scoreType"]:checked').value;
                 const radioGroupNames = ['C', 'H', 'A', 'D', 'S', 'V'];
-                
+
                 if (selectedScoreType === 'CHA2DS2-VASc') {
                     radioGroupNames.push('Sex');
                 }
@@ -506,14 +497,14 @@
                     } else if (finalScore === 1) {
                         evaluation = "Nguy cơ trung bình. Cân nhắc điều trị.";
                         colorClass = "text-orange-500";
-                    } else { 
+                    } else {
                         evaluation = "Nguy cơ cao. Khuyến cáo điều trị chống đông.";
                         colorClass = "text-red-600";
                     }
-                } else { 
+                } else {
                     const sex = document.querySelector('input[name="Sex"]:checked').value;
                     if (sex === '1') finalScore += 1;
-                    
+
                     if (sex === '0') {
                         if (finalScore === 0) {
                             evaluation = "Nguy cơ thấp. Không cần dùng thuốc.";
@@ -538,25 +529,25 @@
                         }
                     }
                 }
-                
+
                 scoreDisplay.textContent = finalScore;
                 scoreDisplay.className = `text-4xl font-extrabold mb-3 tracking-tight ${colorClass}`;
                 evaluationText.textContent = evaluation;
-                
+
                 resultContainer.classList.remove('hidden');
-                
+
                 // --- FIX SCROLL BEHAVIOR ---
                 // Sử dụng block: "center" để đưa kết quả vào giữa màn hình.
                 // Vừa đảm bảo người dùng thấy kết quả, vừa thấy nội dung bên dưới, không bị trượt quá đà.
                 setTimeout(() => {
-                     resultContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+                    resultContainer.scrollIntoView({ behavior: "smooth", block: "center" });
                 }, 100);
 
                 useTool(
-                    'chads-vasc', 
-                    'Thang điểm CHA₂DS₂-VA', 
-                    'fa-heart-pulse', 
-                    'text-indigo-600', 
+                    'chads-vasc',
+                    'Thang điểm CHA₂DS₂-VA',
+                    'fa-heart-pulse',
+                    'text-indigo-600',
                     window.location.href
                 );
             });
@@ -565,14 +556,16 @@
         document.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         });
-        
+
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'F12' || 
+            if (e.key === 'F12' ||
                 (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A'))) {
                 e.preventDefault();
                 return false;
             }
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

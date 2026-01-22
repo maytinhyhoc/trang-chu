@@ -1,72 +1,78 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thang điểm SOFA</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ICONS & PWA -->
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 80px; /* Space for Bottom Nav */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 80px;
+            /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
+            /* Ngăn chọn text toàn trang */
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
         /* Cho phép chọn text ở input và kết quả */
-        .result-text, input, textarea, select {
+        .result-text,
+        input,
+        textarea,
+        select {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-        
+
         /* Tùy chỉnh thanh cuộn nếu cần */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
     </style>
 </head>
+
 <body>
 
-    <!-- 2. HEADER & NAVIGATION -->
-    <!-- A. Desktop Header -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://via.placeholder.com/40'">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
-
-    <!-- B. Mobile Header (App Style) -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -74,19 +80,16 @@
         <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
             Thang điểm SOFA
         </h1>
-        <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
+        <div class="w-8"></div>
     </header>
 
-    <!-- 3. CẤU TRÚC MAIN CONTENT (Wrapper) -->
     <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-        <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            
-            <!-- HEADER CỦA CARD (DESKTOP) -->
+
             <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <!-- Nút Back Desktop -->
-                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <div>
@@ -94,20 +97,19 @@
                         <p class="text-indigo-100 mt-1 text-sm">Đánh giá suy đa tạng liên quan đến nhiễm trùng</p>
                     </div>
                 </div>
-                <!-- Icon đại diện mờ -->
                 <i class="fa-solid fa-lungs-virus text-4xl text-indigo-300 opacity-50"></i>
             </div>
 
-            <!-- FORM TÍNH TOÁN -->
             <div class="p-4 md:p-8">
                 <form id="tool-form" class="space-y-6" novalidate>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Hô hấp -->
                         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
                             <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                                <i class="fa-solid fa-lungs text-indigo-500 mr-2 w-6 text-center"></i> Hô hấp (PaO2/FiO2)
+                                <i class="fa-solid fa-lungs text-indigo-500 mr-2 w-6 text-center"></i> Hô hấp
+                                (PaO2/FiO2)
                             </label>
-                            <select id="respiration" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <select id="respiration"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                                 <option value="" disabled selected>Chọn chỉ số PaO2/FiO2</option>
                                 <option value="0">≥ 400 mmHg</option>
                                 <option value="1">&lt; 400 mmHg</option>
@@ -117,12 +119,13 @@
                             </select>
                         </div>
 
-                        <!-- Đông máu -->
                         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
                             <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                                <i class="fa-solid fa-droplet text-red-500 mr-2 w-6 text-center"></i> Đông máu (Tiểu cầu)
+                                <i class="fa-solid fa-droplet text-red-500 mr-2 w-6 text-center"></i> Đông máu (Tiểu
+                                cầu)
                             </label>
-                            <select id="coagulation" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <select id="coagulation"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                                 <option value="" disabled selected>Chọn số lượng tiểu cầu</option>
                                 <option value="0">≥ 150 (×10³/µL)</option>
                                 <option value="1">&lt; 150 (×10³/µL)</option>
@@ -132,12 +135,12 @@
                             </select>
                         </div>
 
-                        <!-- Gan -->
                         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
                             <label class="block text-gray-700 font-bold mb-2 flex items-center">
                                 <i class="fa-solid fa-flask text-yellow-500 mr-2 w-6 text-center"></i> Gan (Bilirubin)
                             </label>
-                            <select id="liver" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <select id="liver"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                                 <option value="" disabled selected>Chọn mức Bilirubin</option>
                                 <option value="0">&lt; 1.2 mg/dL (&lt; 20 µmol/L)</option>
                                 <option value="1">1.2 - 1.9 mg/dL (20-32 µmol/L)</option>
@@ -147,12 +150,13 @@
                             </select>
                         </div>
 
-                        <!-- Tim mạch -->
                         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
                             <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                                <i class="fa-solid fa-heart-pulse text-pink-500 mr-2 w-6 text-center"></i> Tim mạch (Vận mạch)
+                                <i class="fa-solid fa-heart-pulse text-pink-500 mr-2 w-6 text-center"></i> Tim mạch (Vận
+                                mạch)
                             </label>
-                            <select id="cardiovascular" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <select id="cardiovascular"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                                 <option value="" disabled selected>Chọn tình trạng huyết áp/vận mạch</option>
                                 <option value="0">Không tụt huyết áp</option>
                                 <option value="1">MAP &lt; 70 mmHg</option>
@@ -163,12 +167,12 @@
                             <p class="text-xs text-gray-500 mt-1 italic pl-1">*Liều vận mạch tính theo µg/kg/phút</p>
                         </div>
 
-                        <!-- Thần kinh -->
                         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
                             <label class="block text-gray-700 font-bold mb-2 flex items-center">
                                 <i class="fa-solid fa-brain text-purple-500 mr-2 w-6 text-center"></i> Thần kinh (GCS)
                             </label>
-                            <select id="cns" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <select id="cns"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                                 <option value="" disabled selected>Chọn điểm Glasgow</option>
                                 <option value="0">15 điểm</option>
                                 <option value="1">13 - 14 điểm</option>
@@ -178,12 +182,13 @@
                             </select>
                         </div>
 
-                        <!-- Thận -->
                         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
                             <label class="block text-gray-700 font-bold mb-2 flex items-center">
-                                <i class="fa-solid fa-prescription-bottle text-blue-500 mr-2 w-6 text-center"></i> Thận (Creatinine/Niệu)
+                                <i class="fa-solid fa-prescription-bottle text-blue-500 mr-2 w-6 text-center"></i> Thận
+                                (Creatinine/Niệu)
                             </label>
-                            <select id="renal" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                            <select id="renal"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                                 <option value="" disabled selected>Chọn Creatinine hoặc V nước tiểu</option>
                                 <option value="0">Cr &lt; 1.2 mg/dL (&lt; 110 µmol/L)</option>
                                 <option value="1">Cr 1.2 - 1.9 mg/dL (110-170 µmol/L)</option>
@@ -193,115 +198,71 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                        <button type="submit" class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
+                        <button type="submit"
+                            class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5 hover:bg-indigo-700 flex items-center justify-center">
                             <i class="fa-solid fa-calculator mr-2"></i> Tính điểm SOFA
                         </button>
-                        <button type="button" id="clearBtn" class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-red-500 border border-red-200 font-bold py-3 px-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 hover:bg-red-50 flex items-center justify-center">
                             <i class="fa-solid fa-trash-can mr-2"></i> Xóa Dữ Liệu
                         </button>
                     </div>
                 </form>
 
-                <!-- KẾT QUẢ -->
                 <div id="result-container" class="mt-8 hidden animate-fade-in-up">
                     <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center shadow-inner">
                         <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Tổng điểm SOFA</h3>
-                        <div id="main-result" class="text-5xl font-extrabold text-indigo-700 mb-4 drop-shadow-sm">--</div>
+                        <div id="main-result" class="text-5xl font-extrabold text-indigo-700 mb-4 drop-shadow-sm">--
+                        </div>
                         <div class="bg-white rounded-lg p-4 border border-indigo-100 text-left md:text-center">
-                            <p id="sub-result" class="result-text text-indigo-700 text-lg font-semibold leading-relaxed mb-2">...</p>
+                            <p id="sub-result"
+                                class="result-text text-indigo-700 text-lg font-semibold leading-relaxed mb-2">...</p>
                             <p id="mortality-result" class="text-gray-600 text-sm">...</p>
                         </div>
-                        <div class="mt-4 text-xs text-gray-500 text-left bg-yellow-50 p-3 rounded border border-yellow-200">
+                        <div
+                            class="mt-4 text-xs text-gray-500 text-left bg-yellow-50 p-3 rounded border border-yellow-200">
                             <i class="fa-solid fa-triangle-exclamation text-yellow-500 mr-1"></i>
-                            <strong>Lưu ý:</strong> Sự gia tăng điểm SOFA (ΔSOFA) ≥ 2 điểm so với mức nền gợi ý tình trạng rối loạn chức năng cơ quan hoặc nhiễm khuẩn huyết (Sepsis).
+                            <strong>Lưu ý:</strong> Sự gia tăng điểm SOFA (ΔSOFA) ≥ 2 điểm so với mức nền gợi ý tình
+                            trạng rối loạn chức năng cơ quan hoặc nhiễm khuẩn huyết (Sepsis).
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- MÔ TẢ NGẮN GỌN (Mới thêm) -->
             <div class="bg-gray-50 border-t border-gray-100 p-5 text-sm text-gray-500">
-                <h4 class="font-bold text-gray-700 mb-2"><i class="fa-solid fa-circle-info mr-2 text-indigo-500"></i>Thông tin thang điểm</h4>
+                <h4 class="font-bold text-gray-700 mb-2"><i
+                        class="fa-solid fa-circle-info mr-2 text-indigo-500"></i>Thông tin thang điểm</h4>
                 <p class="leading-relaxed text-justify">
-                    Thang điểm SOFA (Sequential Organ Failure Assessment) được sử dụng để theo dõi tình trạng suy đa tạng và tiên lượng nguy cơ tử vong ở bệnh nhân hồi sức tích cực (ICU). Điểm SOFA đánh giá chức năng của 6 hệ cơ quan: Hô hấp, Đông máu, Gan, Tim mạch, Thần kinh và Thận.
+                    Thang điểm SOFA (Sequential Organ Failure Assessment) được sử dụng để theo dõi tình trạng suy đa
+                    tạng và tiên lượng nguy cơ tử vong ở bệnh nhân hồi sức tích cực (ICU). Điểm SOFA đánh giá chức năng
+                    của 6 hệ cơ quan: Hô hấp, Đông máu, Gan, Tim mạch, Thần kinh và Thận.
                 </p>
             </div>
         </div>
     </main>
 
-    <!-- 4. DRAWER, NAV & MODAL -->
-    <!-- DRAWER MENU -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- MOBILE BOTTOM NAV -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- NOTIFICATION MODAL -->
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
     </div>
 
-    <!-- 5. JAVASCRIPT LOGIC -->
     <script>
         // --- SECURITY: PREVENT RIGHT CLICK & COPY ---
         document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A')) {
                 event.preventDefault();
             }
@@ -323,46 +284,50 @@
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
 
-        // --- 2. LOGIC DRAWER MENU ---
+        // --- 2. LOGIC DRAWER MENU (Đã xóa HTML, nhưng giữ logic để tránh lỗi script nếu có gọi thừa) ---
         function openDrawer(e) {
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
             const drawer = document.getElementById('drawer-menu');
             const overlay = document.getElementById('drawer-overlay');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            drawer.classList.remove('translate-x-full');
+            if (overlay) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            }
+            if (drawer) drawer.classList.remove('translate-x-full');
             document.body.style.overflow = 'hidden';
         }
 
         function closeDrawer() {
             const drawer = document.getElementById('drawer-menu');
             const overlay = document.getElementById('drawer-overlay');
-            drawer.classList.add('translate-x-full');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
+            if (drawer) drawer.classList.add('translate-x-full');
+            if (overlay) {
+                overlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 300);
+            }
         }
 
         // --- 3. LOGIC MODAL ---
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
 
-        window.showModal = function(message) {
-            if(modal && modalMessage) {
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
                 modalMessage.textContent = message;
                 modal.classList.remove('hidden');
             }
         }
 
-        window.hideModal = function() {
-            if(modal) modal.classList.add('hidden');
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
         }
 
         // --- 4. KHỞI TẠO CÔNG CỤ (Logic riêng của trang) ---
-        document.addEventListener('DOMContentLoaded', function() {
-            
+        document.addEventListener('DOMContentLoaded', function () {
+
             const form = document.getElementById('tool-form');
             const resultContainer = document.getElementById('result-container');
             const mainResult = document.getElementById('main-result');
@@ -370,13 +335,13 @@
             const mortalityResult = document.getElementById('mortality-result');
             const clearBtn = document.getElementById('clearBtn');
 
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
                 // 1. VALIDATION
                 const ids = ['respiration', 'coagulation', 'liver', 'cardiovascular', 'cns', 'renal'];
                 const values = {};
-                
+
                 for (const id of ids) {
                     const el = document.getElementById(id);
                     if (!el.value || el.value === "") {
@@ -416,7 +381,7 @@
                 mortalityResult.textContent = mortality;
 
                 resultContainer.classList.remove('hidden');
-                
+
                 // Lưu lịch sử
                 useTool('sofa-score', 'Thang điểm SOFA', 'fa-lungs-virus', 'text-indigo-600', window.location.href);
 
@@ -426,7 +391,7 @@
                 window.scrollTo({ top: targetPos, behavior: 'smooth' });
             });
 
-            clearBtn.addEventListener('click', function() {
+            clearBtn.addEventListener('click', function () {
                 form.reset();
                 resultContainer.classList.add('hidden');
                 mainResult.textContent = "--";
@@ -435,5 +400,7 @@
             });
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

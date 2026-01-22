@@ -1,72 +1,78 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Phân Tích Khí Máu Động Mạch</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONTS & ICONS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ICONS & PWA -->
+
     <meta name="theme-color" content="#4f46e5">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         /* --- APP FEEL OPTIMIZATIONS (CHUẨN) --- */
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; 
-            padding-bottom: 80px; /* Space for Bottom Nav */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 80px;
+            /* Space for Bottom Nav */
             -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none; /* Ngăn chọn text toàn trang */
+            -webkit-user-select: none;
+            /* Ngăn chọn text toàn trang */
             user-select: none;
             touch-action: pan-x pan-y;
         }
 
         /* Cho phép chọn text ở input và kết quả */
-        .result-text, input, textarea, #results {
+        .result-text,
+        input,
+        textarea,
+        #results {
             -webkit-user-select: text;
             user-select: text;
         }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-        
+
         /* Tùy chỉnh thanh cuộn nếu cần */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
     </style>
 </head>
+
 <body>
 
-    <!-- 2. HEADER & NAVIGATION -->
-    <!-- A. Desktop Header -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" onerror="this.src='https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png'" alt="Logo" class="w-10 h-10 object-contain">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="index.html" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="text-teal-600 font-bold">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
-
-    <!-- B. Mobile Header (App Style) -->
     <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
         <a href="cong-cu.html" class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -74,36 +80,30 @@
         <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
             Phân Tích Khí Máu
         </h1>
-        <div class="w-8"></div> <!-- Spacer để căn giữa tiêu đề -->
+        <div class="w-8"></div>
     </header>
 
-    <!-- 3. CẤU TRÚC MAIN CONTENT -->
     <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
-        <!-- KHỐI CARD CHÍNH CỦA CÔNG CỤ -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            
-            <!-- HEADER CỦA CARD (DESKTOP) -->
+
             <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <!-- Nút Back Desktop -->
-                    <a href="cong-cu.html" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
+                    <a href="cong-cu.html"
+                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <div>
                         <h1 class="text-2xl font-bold">Phân Tích Khí Máu Động Mạch</h1>
-                        <p class="text-indigo-100 mt-1 text-sm">Công cụ hỗ trợ chẩn đoán rối loạn thăng bằng kiềm toan</p>
+                        <p class="text-indigo-100 mt-1 text-sm">Công cụ hỗ trợ chẩn đoán rối loạn thăng bằng kiềm toan
+                        </p>
                     </div>
                 </div>
-                <!-- Icon đại diện mờ -->
                 <i class="fa-solid fa-lungs text-4xl text-indigo-300 opacity-50"></i>
             </div>
-    
-            <!-- FORM TÍNH TOÁN -->
+
             <div class="p-4 md:p-8">
-                
-                <!-- Input Section -->
+
                 <div class="space-y-6">
-                    <!-- Nhóm Chính -->
                     <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                         <h3 class="text-sm font-bold text-blue-800 uppercase mb-3 flex items-center">
                             <i class="fa-solid fa-star text-blue-500 mr-2"></i> Thông số cơ bản
@@ -111,20 +111,24 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label for="ph" class="block text-sm font-medium text-gray-700 mb-1">pH</label>
-                                <input type="number" step="0.01" inputmode="decimal" id="ph" placeholder="VD: 7.40" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm">
+                                <input type="number" step="0.01" inputmode="decimal" id="ph" placeholder="VD: 7.40"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm">
                             </div>
                             <div>
-                                <label for="pco2" class="block text-sm font-medium text-gray-700 mb-1">PCO2 (mmHg)</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="pco2" placeholder="VD: 40" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm">
+                                <label for="pco2" class="block text-sm font-medium text-gray-700 mb-1">PCO2
+                                    (mmHg)</label>
+                                <input type="number" step="0.1" inputmode="decimal" id="pco2" placeholder="VD: 40"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm">
                             </div>
                             <div>
-                                <label for="hco3" class="block text-sm font-medium text-gray-700 mb-1">HCO3- (mEq/L)</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="hco3" placeholder="VD: 24" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm">
+                                <label for="hco3" class="block text-sm font-medium text-gray-700 mb-1">HCO3-
+                                    (mEq/L)</label>
+                                <input type="number" step="0.1" inputmode="decimal" id="hco3" placeholder="VD: 24"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Nhóm Mở Rộng -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <h3 class="text-sm font-bold text-gray-600 uppercase mb-3 flex items-center">
                             <i class="fa-solid fa-flask text-gray-400 mr-2"></i> Thông số mở rộng (Tùy chọn)
@@ -132,46 +136,57 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                             <div>
                                 <label for="na" class="block text-sm font-medium text-gray-700 mb-1">Na+ (mEq/L)</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="na" placeholder="VD: 140" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
+                                <input type="number" step="0.1" inputmode="decimal" id="na" placeholder="VD: 140"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
                             </div>
                             <div>
                                 <label for="cl" class="block text-sm font-medium text-gray-700 mb-1">Cl- (mEq/L)</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="cl" placeholder="VD: 100" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
+                                <input type="number" step="0.1" inputmode="decimal" id="cl" placeholder="VD: 100"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
                             </div>
                             <div>
-                                <label for="albumin" class="block text-sm font-medium text-gray-700 mb-1">Albumin (g/dL)</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="albumin" placeholder="VD: 4.5" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
+                                <label for="albumin" class="block text-sm font-medium text-gray-700 mb-1">Albumin
+                                    (g/dL)</label>
+                                <input type="number" step="0.1" inputmode="decimal" id="albumin" placeholder="VD: 4.5"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
                             </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <label for="glucose" class="block text-sm font-medium text-gray-700 mb-1">Glucose (mg/dL)</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="glucose" placeholder="VD: 100" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
+                                <label for="glucose" class="block text-sm font-medium text-gray-700 mb-1">Glucose
+                                    (mg/dL)</label>
+                                <input type="number" step="0.1" inputmode="decimal" id="glucose" placeholder="VD: 100"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
                             </div>
                             <div>
-                                <label for="ure" class="block text-sm font-medium text-gray-700 mb-1">Ure (mmol/L)</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="ure" placeholder="VD: 5.0" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
+                                <label for="ure" class="block text-sm font-medium text-gray-700 mb-1">Ure
+                                    (mmol/L)</label>
+                                <input type="number" step="0.1" inputmode="decimal" id="ure" placeholder="VD: 5.0"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
                             </div>
                             <div>
-                                <label for="osm" class="block text-sm font-medium text-gray-700 mb-1">Osm Đo Được</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="osm" placeholder="VD: 290" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
+                                <label for="osm" class="block text-sm font-medium text-gray-700 mb-1">Osm Đo
+                                    Được</label>
+                                <input type="number" step="0.1" inputmode="decimal" id="osm" placeholder="VD: 290"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition shadow-sm bg-white">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="mt-8 grid grid-cols-2 gap-4">
-                    <button onclick="clearInputs()" class="col-span-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 active:scale-95 transition duration-200 flex items-center justify-center gap-2">
+                    <button onclick="clearInputs()"
+                        class="col-span-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 active:scale-95 transition duration-200 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-rotate-left"></i> Xóa
                     </button>
-                    <button onclick="analyzeABG()" class="col-span-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-indigo-700 active:scale-95 transition duration-200 flex items-center justify-center gap-2">
+                    <button onclick="analyzeABG()"
+                        class="col-span-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-indigo-700 active:scale-95 transition duration-200 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-calculator"></i> Phân Tích
                     </button>
                 </div>
 
-                <!-- Results Area -->
-                <div id="results" class="mt-8 min-h-[120px] bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center p-6 text-gray-500 transition-all duration-300">
+                <div id="results"
+                    class="mt-8 min-h-[120px] bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center p-6 text-gray-500 transition-all duration-300">
                     <div class="text-center">
                         <i class="fa-solid fa-chart-simple text-3xl mb-2 text-gray-300"></i>
                         <p>Nhập thông số và bấm phân tích</p>
@@ -182,73 +197,22 @@
         </div>
     </main>
 
-    <!-- 4. DRAWER, NAV & MODAL -->
-    <!-- DRAWER MENU -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- MOBILE BOTTOM NAV -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <a href="index.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </a>
-            <a href="cong-cu.html" class="nav-item active text-teal-600 inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-calculator text-xl mb-1"></i>
-                <span class="text-[10px]">Công cụ</span>
-            </a>
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- NOTIFICATION MODAL -->
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
-            <button onclick="hideModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
     </div>
 
-    <!-- 5. JAVASCRIPT LOGIC -->
     <script>
         // --- 1. LOGIC LƯU LỊCH SỬ ---
         function useTool(id, name, icon, color, url) {
@@ -266,51 +230,29 @@
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
 
-        // --- 2. LOGIC DRAWER MENU ---
-        function openDrawer(e) {
-            if(e) e.preventDefault();
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            drawer.classList.remove('translate-x-full');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDrawer() {
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            drawer.classList.add('translate-x-full');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
         // --- 3. LOGIC MODAL ---
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
 
-        window.showModal = function(message) {
-            if(modal && modalMessage) {
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
                 modalMessage.textContent = message;
                 modal.classList.remove('hidden');
             }
         }
 
-        window.hideModal = function() {
-            if(modal) modal.classList.add('hidden');
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
         }
 
         // --- 4. BẢO MẬT & CHỐNG SAO CHÉP ---
         document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             // Chặn Ctrl+U, Ctrl+C, Ctrl+A, F12
             if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A')) {
                 event.preventDefault();
             }
-            if(event.key === 'F12') {
+            if (event.key === 'F12') {
                 event.preventDefault();
             }
         });
@@ -328,11 +270,11 @@
             const osm = parseFloat(document.getElementById('osm').value) || 0;
 
             let resultsDiv = document.getElementById('results');
-            
+
             // Xóa style placeholder, thêm style kết quả
             resultsDiv.className = "mt-6 animate-fade-in-up bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-gray-700 shadow-inner";
             resultsDiv.innerHTML = '';
-            
+
             // Validate input cơ bản
             if (pH === 0 || pco2 === 0 || hco3 === 0) {
                 showModal("Vui lòng nhập đầy đủ các thông số cơ bản: pH, PCO2 và HCO3.");
@@ -409,9 +351,9 @@
                         <h3 class="text-indigo-700 font-bold text-lg mb-3 flex items-center">
                             <i class="fa-solid fa-scale-balanced mr-2"></i> Bước 2: Bù trừ
                         </h3>`;
-            
+
             let expectedValue = '', secondaryDisorder = '';
-            
+
             if (primaryDisorder === 'Toan Chuyển Hóa') {
                 const deltaHCO3 = 24 - hco3;
                 const expectedPCO2 = 40 - (1.2 * deltaHCO3);
@@ -457,10 +399,10 @@
                 const ag = na - (cl + hco3);
                 let correctedAG = null;
                 if (albumin !== 0) correctedAG = ag + (2.5 * (4.5 - albumin));
-                
+
                 let agStatus = '';
                 let deltaGapText = '';
-                
+
                 if (ag > 12) {
                     agStatus = '<span class="text-red-600 font-bold">Cao</span>';
                     const deltaGap = (ag - 12) / (24 - hco3);
@@ -487,7 +429,7 @@
             if (na !== 0 && glucose !== 0 && ure !== 0 && osm !== 0) {
                 const osmCalculated = (2 * na) + (glucose / 18) + (ure / 2.8);
                 const osmGap = osm - osmCalculated;
-                
+
                 html += `<div class="border-t border-gray-200 pt-4">
                             <h3 class="text-indigo-700 font-bold text-lg mb-2 flex items-center">
                                 <i class="fa-solid fa-droplet mr-2"></i> Osmolal Gap
@@ -518,9 +460,9 @@
                 </div>`;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
+
         // Init Input Double Click to Clear
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('input').forEach(input => {
                 input.addEventListener('dblclick', () => {
                     input.value = '';
@@ -528,5 +470,7 @@
             });
         });
     </script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>
