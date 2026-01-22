@@ -1,11 +1,49 @@
 /**
- * APP.JS - PHIÊN BẢN TỔNG HỢP (FINAL)
+ * APP.JS - PHIÊN BẢN TỔNG HỢP (FINAL + SECURITY + FAVORITES)
  * 1. Chống giật layout bằng LocalStorage Cache
  * 2. Cập nhật Firebase SDK 11.6.1 & Logic Auth
  * 3. Tính năng Yêu thích & Bỏ tim (Firestore)
+ * 4. BẢO MẬT: Domain Lock & Anti-Debugging
+ * 5. MENU: Đã thêm mục Yêu thích (Desktop & Mobile)
  */
 
+// ==========================================
+// 0. BẢO MẬT NÂNG CAO (SECURITY LAYER)
+// ==========================================
+(function () {
+    // A. KHÓA TÊN MIỀN (DOMAIN LOCK)
+    const allowedDomains = ['localhost', '127.0.0.1', 'maytinhyhoc.github.io', 'may-tinh-y-hoc.firebaseapp.com'];
+    const currentDomain = window.location.hostname;
+
+    if (!allowedDomains.some(d => currentDomain.includes(d)) && currentDomain !== '') {
+        document.body.innerHTML = `
+            <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;font-family:sans-serif;background:#f8fafc;color:#334155;">
+                <h1 style="font-size:24px;margin-bottom:10px;">⚠️ Truy cập không hợp lệ</h1>
+                <p>Website này chỉ hoạt động trên tên miền chính thức.</p>
+            </div>
+        `;
+        throw new Error("Domain restricted: " + currentDomain);
+    }
+
+    // B. CHỐNG DEBUGGER (ANTI-DEBUG)
+    setInterval(function () {
+        const start = performance.now();
+        (function () { }.constructor("debugger")());
+        const end = performance.now();
+        if (end - start > 100) {
+            document.body.innerHTML = `
+                <div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;background:#fff;">
+                    <h2 style="color:#ef4444;">Vui lòng đóng Developer Tools để tiếp tục.</h2>
+                </div>
+            `;
+        }
+    }, 1000);
+})();
+
+
+// ==========================================
 // 1. CHUỖI HTML GIAO DIỆN
+// ==========================================
 const appInterface = `
     <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
         <div class="flex items-center gap-3">
@@ -19,7 +57,8 @@ const appInterface = `
             <nav id="desktop-nav" class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
                 <a href="index.html" class="nav-link hover:text-teal-600 transition" data-page="home">Trang chủ</a>
                 <a href="cong-cu.html" class="nav-link hover:text-teal-600 transition" data-page="tools">Công cụ</a>
-                <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
+                <a href="yeu-thich.html" class="nav-link hover:text-teal-600 transition" data-page="favorites">Yêu thích</a>
+                <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Thêm</a>
             </nav>
 
             <div class="pl-6 border-l border-gray-200 min-w-[210px] flex justify-end">
@@ -63,7 +102,7 @@ const appInterface = `
                         <img id="mobile-avatar" src="" class="w-12 h-12 rounded-full bg-gray-200 border-2 border-white shadow-sm">
                         <div class="flex-1 min-w-0">
                             <p class="text-xs text-gray-500 mb-0.5">Xin chào,</p>
-                            <p id="mobile-name" class="font-bold text-gray-800 text-sm truncate">Bác sĩ</p>
+                            <p id="mobile-name" class="font-bold text-gray-800 text-sm truncate">Người dùng</p>
                         </div>
                     </div>
                     <button id="logout-btn-mobile" class="w-full text-sm text-red-500 bg-white border border-red-100 py-2 rounded-lg font-medium hover:bg-red-50 transition flex items-center justify-center gap-2">
@@ -98,7 +137,7 @@ const appInterface = `
         </div>
     </div>
     <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+        <div class="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
             <a href="index.html" class="nav-item-mobile text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600" data-page="home">
                 <i class="fa-solid fa-house text-xl mb-1 transition-transform group-hover:-translate-y-1"></i>
                 <span class="text-[10px]">Trang chủ</span>
@@ -107,9 +146,13 @@ const appInterface = `
                 <i class="fa-solid fa-calculator text-xl mb-1 transition-transform group-hover:-translate-y-1"></i>
                 <span class="text-[10px]">Công cụ</span>
             </a>
+            <a href="yeu-thich.html" class="nav-item-mobile text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600" data-page="favorites">
+                <i class="fa-solid fa-heart text-xl mb-1 transition-transform group-hover:-translate-y-1"></i>
+                <span class="text-[10px]">Yêu thích</span>
+            </a>
             <button onclick="openDrawer(event)" class="text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
                 <i class="fa-solid fa-bars text-xl mb-1 transition-transform group-hover:-translate-y-1"></i>
-                <span class="text-[10px]">Khác</span>
+                <span class="text-[10px]">Thêm</span>
             </button>
         </div>
     </nav>
@@ -117,7 +160,9 @@ const appInterface = `
 
 document.body.insertAdjacentHTML('afterbegin', appInterface);
 
+// ==========================================
 // 2. LOGIC UI ELEMENTS & CACHE
+// ==========================================
 const ui = {
     d: { login: document.getElementById('login-btn-desktop'), info: document.getElementById('user-info-desktop'), avt: document.getElementById('user-avatar'), name: document.getElementById('user-name'), out: document.getElementById('logout-btn') },
     m: { login: document.getElementById('login-btn-mobile'), info: document.getElementById('user-info-mobile'), avt: document.getElementById('mobile-avatar'), name: document.getElementById('mobile-name'), out: document.getElementById('logout-btn-mobile') }
@@ -132,13 +177,13 @@ function updateUI(user) {
         if (ui.d.info) {
             ui.d.info.classList.remove('hidden'); ui.d.info.classList.add('flex');
             ui.d.avt.src = user.photoURL || 'https://placehold.co/40x40?text=BS';
-            ui.d.name.textContent = user.displayName || 'Bác sĩ';
+            ui.d.name.textContent = user.displayName || 'Người dùng';
         }
         if (ui.m.login) ui.m.login.classList.add('hidden');
         if (ui.m.info) {
             ui.m.info.classList.remove('hidden'); ui.m.info.classList.add('flex');
             ui.m.avt.src = user.photoURL || 'https://placehold.co/40x40?text=BS';
-            ui.m.name.textContent = user.displayName || 'Bác sĩ';
+            ui.m.name.textContent = user.displayName || 'Người dùng';
         }
 
         // Cập nhật danh sách yêu thích khi đăng nhập xong
@@ -165,18 +210,32 @@ function updateUI(user) {
     } catch (e) { console.log(e); }
 })();
 
+// ==========================================
 // 3. DRAWER & NAVIGATION
+// ==========================================
 window.openDrawer = function (e) { if (e) e.preventDefault(); const d = document.getElementById('drawer-menu'); const o = document.getElementById('drawer-overlay'); o.classList.remove('hidden'); setTimeout(() => o.classList.remove('opacity-0'), 10); d.classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; }
 window.closeDrawer = function () { const d = document.getElementById('drawer-menu'); const o = document.getElementById('drawer-overlay'); d.classList.add('translate-x-full'); o.classList.add('opacity-0'); setTimeout(() => { o.classList.add('hidden'); document.body.style.overflow = ''; }, 300); }
 
 document.addEventListener("DOMContentLoaded", () => {
     const path = window.location.pathname;
-    const page = path.includes("cong-cu") || path.includes("tinh") || path.includes("khang-sinh") || path.includes("che-do-an") || path.includes("dem-giot") ? "tools" : (path.includes("index") || path === "/" || path.endsWith("/") ? "home" : "other");
+
+    // LOGIC XÁC ĐỊNH TRANG HIỆN TẠI (ĐÃ THÊM LOGIC CHO FAVORITES)
+    let page = "other";
+    if (path.includes("yeu-thich")) {
+        page = "favorites";
+    } else if (path.includes("cong-cu") || path.includes("tinh") || path.includes("khang-sinh") || path.includes("che-do-an") || path.includes("dem-giot")) {
+        page = "tools";
+    } else if (path.includes("index") || path === "/" || path.endsWith("/")) {
+        page = "home";
+    }
+
     document.querySelectorAll('#desktop-nav a').forEach(link => { if (link.dataset.page === page) link.classList.add('text-teal-600', 'font-bold'); });
     document.querySelectorAll('.nav-item-mobile').forEach(link => { if (link.dataset.page === page) link.classList.add('active', 'text-teal-600'); });
 });
 
+// ==========================================
 // 4. FIREBASE SDK 11.6.1 & LOGIC
+// ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -199,8 +258,8 @@ const provider = new GoogleAuthProvider();
 // HÀM: BẬT/TẮT YÊU THÍCH (THẢ TIM & BỎ TIM)
 window.toggleFavorite = async function (id, name, url, icon, color) {
     if (!currentUser) {
-        alert("Bác sĩ cần đăng nhập để lưu công cụ này!");
-        return handleLogin();
+        alert("Bạn cần đăng nhập để sử dụng tính năng Yêu thích!");
+        throw new Error("Người dùng chưa đăng nhập");
     }
 
     try {
@@ -211,21 +270,19 @@ window.toggleFavorite = async function (id, name, url, icon, color) {
 
         const index = favorites.findIndex(t => t.id === id);
         if (index > -1) {
-            // Đã có -> Bỏ tim
             favorites.splice(index, 1);
         } else {
-            // Chưa có -> Thêm vào đầu danh sách
             favorites.unshift({ id, name, url, icon, color });
         }
 
         await setDoc(userRef, { favorites }, { merge: true });
 
-        // Gọi hàm cập nhật UI tại trang (nếu có)
         if (typeof window.loadFavorites === 'function') window.loadFavorites(currentUser.uid);
         if (typeof window.checkFavoriteStatus === 'function') window.checkFavoriteStatus(id);
 
     } catch (e) {
         console.error("Lỗi Firestore:", e);
+        throw e;
     }
 };
 

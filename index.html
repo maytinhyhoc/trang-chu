@@ -1,501 +1,513 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Máy tính Y học</title>
-    
-    <!-- TAILWIND CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FONT AWESOME (ICONS) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-    <!-- GOOGLE FONTS -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- === PWA & SEO META TAGS === -->
     <meta name="description" content="Công cụ tính toán y khoa dành cho bác sĩ và sinh viên y dược.">
     <meta name="theme-color" content="#0d9488">
-    
-    <!-- === OPEN GRAPH === -->
-    <meta property="og:title" content="Máy tính Y học">
-    <meta property="og:description" content="Công cụ tính toán y khoa miễn phí, hỗ trợ PWA offline.">
-    <meta property="og:image" content="logo.png">
-    <meta property="og:type" content="website">
-
-    <!-- iOS Specific -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Máy Tính Y Học">
-    <meta name="application-name" content="Máy Tính Y Học">
-    
-    <!-- Icons -->
-    <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
-    <link rel="shortcut icon" href="logo.png">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="logo.png">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0ea5e9', // Sky 500
+                        secondary: '#14b8a6', // Teal 500
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        body, .content-text {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+        body {
             -webkit-tap-highlight-color: transparent;
+            touch-action: pan-x pan-y;
+            /* Chặn bôi đen văn bản */
             -webkit-user-select: none;
+            -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            touch-action: pan-x pan-y;
         }
-        .nav-item { transition: all 0.2s ease; }
-        .nav-item.active { color: #0d9488; }
-        .nav-item.active i { transform: translateY(-2px); }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        input, textarea { -webkit-user-select: text; user-select: text; }
+
+        /* Nền họa tiết chấm bi mờ */
+        .bg-pattern {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Animation cho mục gần đây */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
+
+    <script>
+        // Chặn Menu Chuột phải
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Chặn Phím tắt (Ctrl+C, Ctrl+A, F12...)
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && (['c', 'u', 'a', 's'].includes(e.key.toLowerCase()))) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.keyCode == 123) { e.preventDefault(); return false; } // F12
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i') { e.preventDefault(); return false; }
+        });
+
+        // Chặn Zoom trên Desktop
+        document.addEventListener('wheel', function (e) {
+            if (e.ctrlKey) { e.preventDefault(); }
+        }, { passive: false });
+    </script>
 </head>
-<body class="text-gray-800 pb-20 md:pb-0 overflow-x-hidden">
 
-    <!-- ============================================ -->
-    <!-- DESKTOP HEADER -->
-    <!-- ============================================ -->
-    <header class="hidden md:flex fixed top-0 w-full bg-white shadow-sm z-50 h-16 items-center px-8 justify-between">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://placehold.co/40x40?text=Logo'">
-            <h1 class="text-xl md:text-3xl font-bold text-blue-600">Máy Tính Y Học</h1>
-        </div>
-        <nav class="flex gap-8 text-sm md:text-lg font-medium text-gray-600">
-            <a href="#" class="hover:text-teal-600 transition">Trang chủ</a>
-            <a href="cong-cu.html" class="hover:text-teal-600 transition">Công cụ</a>
-            <a href="#" onclick="openDrawer(event)" class="hover:text-teal-600 transition">Khác</a>
-        </nav>
-    </header>
+<body
+    class="text-slate-800 bg-pattern min-h-screen pb-24 md:pb-0 overflow-x-hidden selection:bg-primary selection:text-white">
 
-    <!-- ============================================ -->
-    <!-- MAIN CONTENT -->
-    <!-- ============================================ -->
-    <main class="md:pt-24 p-4 max-w-5xl mx-auto min-h-screen flex flex-col">
-        
-        <!-- Mobile Header -->
-        <div class="md:hidden mb-6 pt-2 flex items-center justify-between">
+    <div
+        class="fixed top-0 left-0 w-full h-96 bg-gradient-to-b from-blue-50/80 to-transparent -z-10 pointer-events-none">
+    </div>
+    <div
+        class="fixed -top-20 -right-20 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl -z-10 pointer-events-none mix-blend-multiply animate-float">
+    </div>
+    <div class="fixed top-40 -left-20 w-72 h-72 bg-teal-100/50 rounded-full blur-3xl -z-10 pointer-events-none mix-blend-multiply animate-float"
+        style="animation-delay: 2s;"></div>
+
+    <main class="md:pt-20 p-5 max-w-6xl mx-auto flex flex-col min-h-screen">
+
+        <div class="md:hidden mb-8 flex items-center justify-between relative z-10">
             <div>
-                <h2 class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Chào mừng đến với</h2>
-                <h1 class="text-2xl font-bold text-blue-600">Máy tính Y học</h1>
+                <h2 class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Chào mừng bạn đến với</h2>
+                <h1
+                    class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+                    Máy tính Y học</h1>
             </div>
-            <img src="logo.png" alt="Logo" class="w-12 h-12 object-contain bg-white rounded-lg shadow-sm p-1" onerror="this.src='https://placehold.co/48x48?text=Logo'">
+            <div class="relative group">
+                <div
+                    class="absolute -inset-1 bg-gradient-to-r from-blue-400 to-teal-400 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200">
+                </div>
+                <img src="logo.png" alt="Logo"
+                    class="relative w-12 h-12 object-contain bg-white rounded-xl shadow-sm p-1.5 ring-1 ring-slate-100"
+                    onerror="this.src='https://placehold.co/48x48/e0f2fe/0284c7?text=YHS'">
+            </div>
         </div>
 
-        <!-- Mobile Install Guide -->
-        <div id="install-guide" class="hidden mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-4 text-white shadow-lg relative overflow-hidden">
+        <div id="install-guide"
+            class="hidden mb-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-5 text-white shadow-xl shadow-blue-200/50 relative overflow-hidden group">
+
+            <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white/10 blur-xl"></div>
+            <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 rounded-full bg-white/10 blur-lg"></div>
+
             <div class="relative z-10">
                 <div class="flex items-start justify-between">
                     <div>
-                        <h3 class="font-bold text-lg mb-1"><i class="fa-solid fa-download mr-2"></i>Cài đặt ứng dụng</h3>
-                        <p class="text-blue-100 text-sm mb-3">Sử dụng offline & truy cập nhanh hơn.</p>
+                        <h3 class="font-bold text-xl mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-down"></i> Cài đặt ứng dụng
+                        </h3>
+                        <p class="text-blue-50 text-sm mb-4 opacity-90">Truy cập nhanh hơn, hoạt động offline.</p>
                     </div>
-                    <button onclick="document.getElementById('install-guide').style.display='none'" class="text-white opacity-70 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
+                    <button onclick="document.getElementById('install-guide').style.display='none'"
+                        class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition text-white">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
-                <div id="ios-instructions" class="hidden text-sm bg-white/20 rounded-lg p-3 backdrop-blur-sm">
-                    <ol class="list-decimal list-inside space-y-1">
-                        <li>Nhấn vào nút <strong>Chia sẻ</strong> <i class="fa-solid fa-arrow-up-from-bracket mx-1"></i> trên thanh công cụ.</li>
-                        <li>Chọn <strong>"Thêm vào MH chính"</strong> (Add to Home Screen).</li>
-                    </ol>
-                </div>
-                <div id="android-instructions" class="hidden text-sm bg-white/20 rounded-lg p-3 backdrop-blur-sm">
-                    <ol class="list-decimal list-inside space-y-1">
-                        <li>Nhấn vào menu <strong>3 chấm</strong> <i class="fa-solid fa-ellipsis-vertical mx-1"></i> ở góc phải.</li>
-                        <li>Chọn <strong>"Cài đặt ứng dụng"</strong> hoặc <strong>"Thêm vào màn hình chính"</strong>.</li>
-                    </ol>
-                </div>
-            </div>
-            <div class="absolute -right-6 -bottom-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
-        </div>
 
-        <!-- ============================================ -->
-        <!-- TOOLS GRID -->
-        <!-- ============================================ -->
-        <h3 class="font-bold text-gray-800 text-lg md:text-2xl mb-4 md:mb-6">Công cụ phổ biến</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-            
-            <!-- Tool 1: Kháng sinh (Cập nhật icon full class: fa-solid fa-capsules) -->
-            <div onclick="useTool('antibiotic', 'Kháng sinh, Kháng nấm & Virus', 'fa-solid fa-capsules', 'blue', 'khang-sinh.html')" 
-                 class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
-                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-blue-200 transition">
-                    <i class="fa-solid fa-capsules"></i>
-                </div>
-                <span class="font-medium text-sm md:text-lg text-gray-700">Kháng sinh, Kháng nấm & Virus</span>
-            </div>
-
-            <!-- Tool 2: Thời gian truyền dịch (Cập nhật icon full class: fa-regular fa-clock cho đồng bộ) -->
-            <div onclick="useTool('infusion-time', 'Tính thời gian truyền dịch', 'fa-regular fa-clock', 'cyan', 'tinh-thoi-gian-truyen-dich.html')"
-                 class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
-                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-cyan-200 transition">
-                    <i class="fa-regular fa-clock"></i>
-                </div>
-                <span class="font-medium text-sm md:text-lg text-gray-700">Tính thời gian truyền dịch</span>
-            </div>
-
-            <!-- Tool 3: Đếm giọt (Cập nhật icon full class: fa-solid fa-droplet) -->
-            <div onclick="useTool('drip-rate', 'Đếm giọt dịch truyền', 'fa-solid fa-droplet', 'cyan', 'dem-giot-dich-truyen.html')"
-                 class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
-                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-cyan-200 transition">
-                    <i class="fa-solid fa-droplet"></i>
-                </div>
-                <span class="font-medium text-sm md:text-lg text-gray-700">Đếm giọt dịch truyền</span>
-            </div>
-
-            <!-- Tool 4: Chế độ ăn (Cập nhật icon full class: fa-solid fa-utensils) -->
-            <div onclick="useTool('diet', 'Tra cứu chế độ ăn', 'fa-solid fa-utensils', 'green', 'tra-cuu-che-do-an.html')"
-                 class="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center gap-3 active:scale-95 duration-100 group">
-                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-green-200 transition">
-                    <i class="fa-solid fa-utensils"></i>
-                </div>
-                <span class="font-medium text-sm md:text-lg text-gray-700">Tra cứu chế độ ăn</span>
-            </div>
-        </div>
-
-        <!-- Recent Activity Section -->
-        <div class="flex justify-between items-center mb-4 md:mb-6">
-            <h3 class="font-bold text-gray-800 text-lg md:text-2xl">Gần đây</h3>
-            <button onclick="clearRecent()" class="text-teal-600 text-xs md:text-base font-medium hover:underline">Xóa lịch sử</button>
-        </div>
-        
-        <!-- Container for Recent Tools -->
-        <div id="recent-container" class="space-y-3 mb-8 min-h-[100px]">
-            <div id="empty-state" class="text-center py-8 text-gray-400 text-sm md:text-lg italic border-2 border-dashed border-gray-200 rounded-xl">
-                Chưa có công cụ nào được sử dụng gần đây.
-            </div>
-        </div>
-
-        <!-- Desktop Install Guide -->
-        <div id="desktop-install-guide" class="hidden md:block mt-auto pt-8 border-t border-gray-200">
-            <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
-                <h3 class="font-bold text-gray-800 text-lg md:text-2xl mb-3 flex items-center">
-                    <i class="fa-solid fa-desktop mr-3 text-blue-600"></i>
-                    Cài đặt trên Máy tính
-                </h3>
-                <p class="text-sm md:text-lg text-gray-600 mb-6 leading-relaxed">
-                    Ứng dụng hỗ trợ công nghệ PWA, cho phép cài đặt trực tiếp lên máy tính Windows hoặc macOS để truy cập nhanh chóng.
-                </p>
-                <div class="grid grid-cols-2 gap-6 text-sm md:text-base">
-                    <div class="bg-white p-5 rounded-lg shadow-sm border border-blue-50">
-                        <strong class="block text-gray-800 text-base md:text-lg mb-2 flex items-center">
-                            <i class="fa-brands fa-chrome mr-2 text-red-500 text-xl"></i> Google Chrome
-                        </strong>
-                        <span class="text-gray-500 text-xs md:text-base leading-relaxed">
-                            Nhìn lên thanh địa chỉ (bên phải), tìm biểu tượng <i class="fa-solid fa-download inline-block mx-1"></i> <strong>Install</strong> và nhấn vào để cài đặt.
-                        </span>
+                <div id="ios-instructions" class="hidden text-sm bg-black/10 rounded-xl p-3 border border-white/10">
+                    <div class="flex items-center gap-3">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-white text-blue-600 rounded-full font-bold text-xs shrink-0">1</span>
+                        <span>Nhấn nút <strong>Chia sẻ</strong> <i
+                                class="fa-solid fa-arrow-up-from-bracket mx-1"></i></span>
                     </div>
-                    <div class="bg-white p-5 rounded-lg shadow-sm border border-blue-50">
-                        <strong class="block text-gray-800 text-base md:text-lg mb-2 flex items-center">
-                            <i class="fa-brands fa-edge mr-2 text-blue-500 text-xl"></i> Microsoft Edge
-                        </strong>
-                        <span class="text-gray-500 text-xs md:text-base leading-relaxed">
-                            Nhìn lên thanh địa chỉ, tìm biểu tượng <i class="fa-brands fa-windows inline-block mx-1"></i> <strong>App available</strong> và chọn Install.
+                    <div class="w-0.5 h-3 bg-white/20 ml-3 my-1"></div>
+                    <div class="flex items-center gap-3">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-white text-blue-600 rounded-full font-bold text-xs shrink-0">2</span>
+                        <span>Chọn <strong>"Thêm vào MH chính"</strong></span>
+                    </div>
+                </div>
+
+                <div id="android-instructions" class="hidden text-sm bg-black/10 rounded-xl p-3 border border-white/10">
+                    <div class="flex items-center gap-3">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-white text-blue-600 rounded-full font-bold text-xs shrink-0">1</span>
+                        <span>Nhấn menu <strong>3 chấm</strong> <i
+                                class="fa-solid fa-ellipsis-vertical mx-1"></i></span>
+                    </div>
+                    <div class="w-0.5 h-3 bg-white/20 ml-3 my-1"></div>
+                    <div class="flex items-center gap-3">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-white text-blue-600 rounded-full font-bold text-xs shrink-0">2</span>
+                        <span>Chọn <strong>"Cài đặt ứng dụng"</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-10">
+            <h3 class="font-bold text-slate-800 text-xl md:text-2xl mb-5 flex items-center gap-2">
+                <span class="w-1.5 h-6 bg-blue-500 rounded-full block"></span>
+                Công cụ phổ biến
+            </h3>
+
+            <div id="popular-tools-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 h-40 animate-pulse"></div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 h-40 animate-pulse"></div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 h-40 animate-pulse"></div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 h-40 animate-pulse"></div>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-end mb-5">
+            <h3 class="font-bold text-slate-800 text-xl md:text-2xl flex items-center gap-2">
+                <span class="w-1.5 h-6 bg-teal-500 rounded-full block"></span>
+                Gần đây
+            </h3>
+            <button onclick="clearRecent()"
+                class="text-slate-400 text-xs md:text-sm font-medium hover:text-red-500 transition-colors flex items-center gap-1 py-1 px-2 rounded-lg hover:bg-red-50">
+                <i class="fa-regular fa-trash-can"></i> Xóa lịch sử
+            </button>
+        </div>
+
+        <div id="recent-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10 min-h-[100px]">
+        </div>
+
+        <div id="desktop-install-guide" class="hidden md:block mt-auto pt-8 border-t border-slate-200">
+            <div
+                class="bg-gradient-to-r from-slate-50 to-white p-8 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="font-bold text-slate-800 text-2xl mb-2 flex items-center">
+                        <span
+                            class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-3 text-lg">
+                            <i class="fa-solid fa-desktop"></i>
                         </span>
+                        Cài đặt trên Máy tính
+                    </h3>
+                    <p class="text-slate-500 text-lg mb-6 ml-14 max-w-2xl">Ứng dụng hỗ trợ công nghệ PWA (Progressive
+                        Web App), cho phép cài đặt trực tiếp lên máy tính để làm việc tập trung hơn.</p>
+
+                    <div class="grid grid-cols-2 gap-6 ml-14">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-brands fa-chrome"></i>
+                            </div>
+                            <div>
+                                <strong class="block text-slate-800 text-sm">Google Chrome</strong>
+                                <span class="text-slate-400 text-xs">Tìm biểu tượng <i
+                                        class="fa-solid fa-download mx-1 text-slate-600"></i> trên thanh địa chỉ.</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-brands fa-edge"></i>
+                            </div>
+                            <div>
+                                <strong class="block text-slate-800 text-sm">Microsoft Edge</strong>
+                                <span class="text-slate-400 text-xs">Tìm biểu tượng <i
+                                        class="fa-brands fa-windows mx-1 text-slate-600"></i> App available.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- ============================================ -->
-    <!-- SIDE DRAWER & MENU -->
-    <!-- ============================================ -->
-    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
-    <div id="drawer-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[70] transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col">
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-gray-50">
-            <h2 class="font-bold text-xl text-gray-800">Menu</h2>
-            <button onclick="closeDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="p-4 flex flex-col gap-2 overflow-y-auto flex-1">
-            <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 group-hover:scale-110 transition"><i class="fa-solid fa-circle-info"></i></div>
-                <span class="font-medium">Giới thiệu</span>
-            </a>
-            <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition"><i class="fa-solid fa-envelope"></i></div>
-                <span class="font-medium">Liên hệ</span>
-            </a>
-            <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition"><i class="fa-solid fa-file-contract"></i></div>
-                <span class="font-medium">Điều khoản</span>
-            </a>
-            <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="font-medium">Chính sách</span>
-            </a>
-            <div class="my-2 border-t border-gray-100"></div>
-            <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition"><i class="fa-solid fa-heart"></i></div>
-                <span class="font-medium">Ủng hộ</span>
-            </a>
-        </div>
-    </div>
+    <script src="tools-data.js"></script>
 
-    <!-- Mobile Bottom Nav -->
-    <nav class="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-            <button type="button" class="nav-item active inline-flex flex-col items-center justify-center px-5 group">
-                <i class="fa-solid fa-house text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Trang chủ</span>
-            </button>
-            <a href="cong-cu.html" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-calculator text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Công cụ</span>
-            </a>
-            <button type="button" onclick="openDrawer(event)" class="nav-item text-gray-500 inline-flex flex-col items-center justify-center px-5 group hover:text-teal-600">
-                <i class="fa-solid fa-bars text-xl mb-1 group-hover:text-teal-600"></i>
-                <span class="text-[10px] group-hover:text-teal-600">Khác</span>
-            </button>
-        </div>
-    </nav>
+    <script type="module" src="app.js"></script>
 
-    <!-- ============================================ -->
-    <!-- SCRIPT XỬ LÝ -->
-    <!-- ============================================ -->
     <script>
-        // --- 1. CONTENT PROTECTION ---
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', e => {
-            if (e.ctrlKey && ['c','a','u'].includes(e.key.toLowerCase())) e.preventDefault();
-        });
+        // --- CẤU HÌNH ---
+        // Danh sách ID các công cụ muốn hiển thị ở mục "Phổ biến"
+        const FEATURED_IDS = ['antibiotic', 'infusion-time', 'drip-rate', 'diet'];
 
-        // --- 2. DRAWER LOGIC ---
-        function openDrawer(e) {
-            if(e) e.preventDefault();
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            drawer.classList.remove('translate-x-full');
-            document.body.style.overflow = 'hidden';
-        }
+        // Biến toàn cục chứa danh sách tất cả công cụ (phẳng hóa từ toolsLibrary)
+        let ALL_TOOLS_FLAT = [];
 
-        function closeDrawer() {
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            drawer.classList.add('translate-x-full');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
+        // --- HÀM HỖ TRỢ ---
 
-        // --- 3. RECENT TOOLS LOGIC (FIX: DATA SYNCHRONIZATION & ICON DISPLAY) ---
-        // DANH SÁCH CHUẨN: Dùng để ép buộc tên/icon đúng ngay cả khi trang con ghi đè sai
-        const TOOLS_CONFIG = [
-            {
-                id: 'antibiotic',
-                url: 'khang-sinh.html',
-                name: 'Kháng sinh, Kháng nấm & Virus',
-                icon: 'fa-solid fa-capsules',
-                color: 'blue'
-            },
-            {
-                id: 'infusion-time',
-                url: 'tinh-thoi-gian-truyen-dich.html',
-                name: 'Tính thời gian truyền dịch',
-                icon: 'fa-regular fa-clock',
-                color: 'cyan'
-            },
-            {
-                id: 'drip-rate',
-                url: 'dem-giot-dich-truyen.html',
-                name: 'Đếm giọt dịch truyền',
-                icon: 'fa-solid fa-droplet',
-                color: 'cyan'
-            },
-            {
-                id: 'diet',
-                url: 'tra-cuu-che-do-an.html',
-                name: 'Tra cứu chế độ ăn',
-                icon: 'fa-solid fa-utensils',
-                color: 'green'
-            }
-        ];
-
-        let isNavigating = false;
-
-        window.addEventListener('pageshow', (event) => {
-            if (event.persisted) {
-                isNavigating = false;
-            }
-        });
-
+        // Lấy tên file từ URL để so sánh (giống old.html)
         function getFileName(url) {
             if (!url) return '';
-            try {
-                if (url.startsWith('http')) {
-                    const urlObj = new URL(url);
-                    const path = urlObj.pathname;
-                    return path.substring(path.lastIndexOf('/') + 1);
-                }
-                let cleanUrl = url.split('?')[0].split('#')[0];
-                return cleanUrl.split('/').pop();
-            } catch (e) {
-                return url; 
+            try { return url.split('?')[0].split('#')[0].split('/').pop(); } catch (e) { return url; }
+        }
+
+        // 1. Phẳng hóa dữ liệu từ tools-data.js để dễ tra cứu
+        function flattenToolsLibrary() {
+            let lib = window.toolsLibrary;
+            if (!lib && typeof toolsLibrary !== 'undefined') {
+                lib = toolsLibrary;
+            }
+
+            if (lib && Array.isArray(lib)) {
+                ALL_TOOLS_FLAT = lib.reduce((acc, category) => {
+                    return acc.concat(category.items);
+                }, []);
             }
         }
+
+        // 2. Tìm thông tin công cụ theo ID hoặc URL
+        function findToolInfo(idOrUrl) {
+            if (!ALL_TOOLS_FLAT.length) flattenToolsLibrary();
+
+            // Tìm theo ID chính xác trước
+            let tool = ALL_TOOLS_FLAT.find(t => t.id === idOrUrl);
+
+            // Nếu không thấy, tìm theo tên file trong URL (Logic từ old.html)
+            if (!tool) {
+                const searchFileName = getFileName(idOrUrl);
+                if (searchFileName) {
+                    tool = ALL_TOOLS_FLAT.find(t => getFileName(t.url) === searchFileName);
+                }
+            }
+            return tool;
+        }
+
+        // --- RENDER CÔNG CỤ PHỔ BIẾN ---
+        function renderFeaturedTools() {
+            const container = document.getElementById('popular-tools-container');
+            if (!container) return;
+
+            if (!ALL_TOOLS_FLAT.length) flattenToolsLibrary();
+            if (!ALL_TOOLS_FLAT.length) return;
+
+            let html = '';
+            FEATURED_IDS.forEach(id => {
+                const tool = findToolInfo(id);
+                if (tool) {
+                    const hasStyle = /\b(fa-solid|fa-regular|fa-brands|fas|far|fab)\b/.test(tool.icon);
+                    let iconClass = tool.icon;
+                    if (!hasStyle) iconClass = `fa-solid ${tool.icon}`;
+
+                    html += `
+                    <div onclick="useTool('${tool.id}', '${tool.name}', '${tool.icon}', '${tool.color}', '${tool.url}')"
+                        class="group bg-white rounded-2xl p-5 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_-5px_rgba(6,81,237,0.2)] border border-slate-100 transition-all duration-300 cursor-pointer flex flex-col items-center text-center gap-4 hover:-translate-y-1 relative overflow-hidden">
+                        
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-${tool.color}-50 rounded-bl-full -mr-8 -mt-8 transition-all group-hover:scale-150 group-hover:bg-${tool.color}-100"></div>
+
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-${tool.color}-50 to-${tool.color}-100 text-${tool.color}-600 flex items-center justify-center text-2xl md:text-3xl shadow-inner group-hover:scale-110 transition-transform duration-300 ring-1 ring-${tool.color}-100">
+                            <i class="${iconClass} drop-shadow-sm"></i>
+                        </div>
+                        <span class="font-semibold text-slate-700 text-sm md:text-base group-hover:text-${tool.color}-700 transition-colors">
+                            ${tool.name}
+                        </span>
+                    </div>`;
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        // --- HÀM TỰ ĐỘNG LÀM SẠCH VÀ CHUẨN HÓA DỮ LIỆU (Logic từ old.html) ---
+        function cleanToolsList() {
+            if (!ALL_TOOLS_FLAT.length) flattenToolsLibrary();
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            if (!recentTools.length) return;
+
+            const uniqueTools = [];
+            const seenKeys = new Set(); // Dùng key này để lọc trùng (ưu tiên ID, fallback là Filename)
+
+            for (let tool of recentTools) {
+                // Tìm bản chuẩn trong thư viện
+                let standardTool = findToolInfo(tool.id) || findToolInfo(tool.url);
+
+                // Nếu tìm thấy bản chuẩn, ép dữ liệu về bản chuẩn
+                if (standardTool) {
+                    tool.id = standardTool.id;
+                    tool.name = standardTool.name;
+                    tool.icon = standardTool.icon;
+                    tool.color = standardTool.color;
+                    tool.url = standardTool.url;
+                }
+
+                // Tạo key duy nhất: Ưu tiên Filename để lọc các URL trùng nhưng khác query string
+                const key = getFileName(tool.url) || tool.id;
+
+                if (!seenKeys.has(key)) {
+                    uniqueTools.push(tool);
+                    seenKeys.add(key);
+                }
+            }
+
+            // Lưu lại danh sách đã làm sạch
+            localStorage.setItem('recentTools', JSON.stringify(uniqueTools.slice(0, 6)));
+        }
+
+        // --- LOGIC ĐIỀU HƯỚNG & LỊCH SỬ ---
+        let isNavigating = false;
+        window.addEventListener('pageshow', (event) => { if (event.persisted) isNavigating = false; });
 
         function useTool(id, name, icon, color, url) {
             if (isNavigating) return;
             isNavigating = true;
 
+            // Tìm thông tin chuẩn nhất
+            const freshTool = findToolInfo(id) || findToolInfo(url) || { id, name, icon, color, url };
+
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-            
+
             const newItem = {
-                id: String(id).trim(),
-                name: name,
-                icon: icon,
-                color: color,
-                url: String(url).trim(),
+                id: String(freshTool.id).trim(),
+                name: freshTool.name,
+                icon: freshTool.icon,
+                color: freshTool.color,
+                url: String(freshTool.url).trim(),
                 timestamp: new Date().getTime()
             };
 
             recentTools.unshift(newItem);
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
 
-            // LOGIC LỌC & ĐỒNG BỘ HÓA
-            const uniqueTools = [];
-            const seenIds = new Set();
-            const seenFiles = new Set();
+            // Gọi hàm làm sạch để lọc trùng ngay lập tức
+            cleanToolsList();
 
-            for (let tool of recentTools) {
-                const tId = String(tool.id || '').trim();
-                const tUrl = String(tool.url || '').trim();
-                const tFileName = getFileName(tUrl);
-
-                // Nếu URL khớp với danh sách chuẩn, ta ÉP DỮ LIỆU hiển thị theo danh sách chuẩn
-                // Điều này giúp khắc phục lỗi trang con ghi đè tên/icon sai
-                const config = TOOLS_CONFIG.find(c => getFileName(c.url) === tFileName);
-                if (config) {
-                    tool = {
-                        ...tool,
-                        id: config.id, // Dùng ID chuẩn
-                        name: config.name, // Dùng tên chuẩn
-                        icon: config.icon, // Dùng icon chuẩn
-                        color: config.color // Dùng màu chuẩn
-                    };
-                }
-
-                const isIdDuplicate = tId && seenIds.has(tId);
-                const isFileDuplicate = tFileName && seenFiles.has(tFileName);
-
-                if (!isIdDuplicate && !isFileDuplicate) {
-                    uniqueTools.push(tool);
-                    if (tId) seenIds.add(tId);
-                    if (tFileName) seenFiles.add(tFileName);
-                }
-            }
-
-            const finalList = uniqueTools.slice(0, 5);
-            localStorage.setItem('recentTools', JSON.stringify(finalList));
-            
             if (url) {
-                window.location.href = url;
+                document.body.style.opacity = '0.5';
+                document.body.style.transition = 'opacity 0.2s';
+                setTimeout(() => window.location.href = url, 100);
             } else {
-                setTimeout(() => {
-                    isNavigating = false;
-                    renderRecentTools();
-                }, 500);
+                setTimeout(() => { isNavigating = false; renderRecentTools(); }, 500);
             }
         }
 
-        // TỰ ĐỘNG SỬA DỮ LIỆU SAI KHI TẢI TRANG
-        function cleanToolsList() {
-            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-            if (!recentTools.length) return;
+        // --- XỬ LÝ THẢ TIM ---
+        async function handleHeartClick(btn, id, name, url, icon, color) {
+            event.stopPropagation();
+            const iconEl = btn.querySelector('i');
+            const isFav = iconEl.classList.contains('fa-solid');
+            const oldClass = iconEl.className;
 
-            const uniqueTools = [];
-            const seenIds = new Set();
-            const seenFiles = new Set();
-            let hasChanges = false;
-
-            for (let tool of recentTools) {
-                const tId = String(tool.id || '').trim();
-                const tUrl = String(tool.url || '').trim();
-                const tFileName = getFileName(tUrl);
-
-                // --- LOGIC QUAN TRỌNG: TỰ ĐỘNG SỬA LỖI TÊN/ICON ---
-                // Kiểm tra xem tool này có trong danh sách chuẩn không
-                const config = TOOLS_CONFIG.find(c => getFileName(c.url) === tFileName);
-                if (config) {
-                    // Nếu dữ liệu hiện tại khác với dữ liệu chuẩn, đánh dấu là có thay đổi
-                    if (tool.name !== config.name || tool.icon !== config.icon || tool.color !== config.color) {
-                        hasChanges = true;
-                        // Ghi đè dữ liệu chuẩn vào
-                        tool = { ...tool, ...config };
-                    }
-                }
-                // ------------------------------------------------
-
-                const isIdDuplicate = tId && seenIds.has(tId);
-                const isFileDuplicate = tFileName && seenFiles.has(tFileName);
-
-                if (!isIdDuplicate && !isFileDuplicate) {
-                    uniqueTools.push(tool);
-                    if (tId) seenIds.add(tId);
-                    if (tFileName) seenFiles.add(tFileName);
-                } else {
-                    hasChanges = true; // Có trùng lặp
-                }
+            if (isFav) {
+                iconEl.className = 'fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors';
+            } else {
+                iconEl.className = 'fa-solid fa-heart text-red-500 transition-colors';
             }
 
-            if (hasChanges) {
-                localStorage.setItem('recentTools', JSON.stringify(uniqueTools));
+            if (window.toggleFavorite) {
+                try {
+                    await window.toggleFavorite(id, name, url, icon, color);
+                } catch (error) {
+                    iconEl.className = oldClass;
+                    console.log("Lỗi:", error.message);
+                }
             }
         }
 
+        // --- RENDER DANH SÁCH GẦN ĐÂY ---
         function renderRecentTools() {
             const container = document.getElementById('recent-container');
-            cleanToolsList(); // Tự sửa lỗi trước khi render
-            
+            if (!container) return;
+
+            // BƯỚC QUAN TRỌNG: Làm sạch dữ liệu trước khi vẽ
+            cleanToolsList();
+
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
 
             if (recentTools.length === 0) {
-                container.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm md:text-lg italic border-2 border-dashed border-gray-200 rounded-xl">Chưa có công cụ nào được sử dụng gần đây.</div>`;
+                container.innerHTML = `
+                    <div class="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-10 bg-white/50 rounded-2xl border-2 border-dashed border-slate-200 text-center">
+                        <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-3">
+                            <i class="fa-regular fa-folder-open text-xl"></i>
+                        </div>
+                        <p class="text-slate-500 text-sm font-medium">Chưa có công cụ nào được sử dụng</p>
+                    </div>`;
                 return;
             }
 
             let html = '';
-            recentTools.forEach(tool => {
+            recentTools.forEach((tool, index) => {
                 const timeDiff = Math.floor((new Date().getTime() - tool.timestamp) / 60000);
-                let timeString = 'Vừa xong';
-                if (timeDiff > 0) timeString = `${timeDiff} phút trước`;
-                if (timeDiff > 60) timeString = `${Math.floor(timeDiff/60)} giờ trước`;
-                const toolUrl = tool.url || '#';
-                const safeName = (tool.name || '').replace(/'/g, "\\'");
-                
-                // Fallback màu sắc nếu thiếu
-                const color = tool.color || 'gray'; 
+                let timeString = timeDiff > 60 ? `Xem ${Math.floor(timeDiff / 60)} giờ trước` : (timeDiff > 0 ? `Xem ${timeDiff} phút trước` : 'Vừa mới xem');
 
-                // XỬ LÝ ICON THÔNG MINH (NÂNG CẤP):
-                // Kiểm tra xem chuỗi icon đã chứa bất kỳ class định dạng nào chưa (bao gồm cả fas, far, fab...)
-                // Regex tìm kiếm các từ khóa: fa-solid, fa-regular, fa-brands, fas, far, fab
                 const hasStyle = /\b(fa-solid|fa-regular|fa-brands|fas|far|fab)\b/.test(tool.icon);
-                
                 let iconClass = tool.icon;
-                if (!hasStyle) {
-                    // Nếu không tìm thấy style nào, mặc định thêm fa-solid
-                    // (Điều này sửa lỗi cho các công cụ lạ chỉ gửi tên 'fa-user' mà thiếu style)
-                    iconClass = `fa-solid ${iconClass}`;
-                }
+                if (!hasStyle) iconClass = `fa-solid ${tool.icon}`;
 
                 html += `
-                    <div onclick="useTool('${tool.id}', '${safeName}', '${tool.icon}', '${color}', '${toolUrl}')" class="bg-white p-4 rounded-xl shadow-sm flex items-center gap-4 cursor-pointer hover:bg-gray-50 active:scale-95 transition">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-${color}-100 flex items-center justify-center text-${color}-600 md:text-xl">
+                    <div onclick="useTool('${tool.id}', '${tool.name}', '${tool.icon}', '${tool.color}', '${tool.url}')"
+                        class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden animate-[fadeIn_0.3s_ease-out_forwards]" style="animation-delay: ${index * 50}ms">
+                        
+                        <button onclick="handleHeartClick(this, '${tool.id}', '${tool.name}', '${tool.url}', '${tool.icon}', '${tool.color}')"
+                            class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
+                            data-id="${tool.id}">
+                            <i class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                        </button>
+
+                        <div class="absolute top-0 right-0 w-12 h-12 bg-${tool.color}-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-${tool.color}-100"></div>
+                        
+                        <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-${tool.color}-50 to-${tool.color}-100 flex items-center justify-center text-${tool.color}-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
                             <i class="${iconClass}"></i>
                         </div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-gray-800 text-sm md:text-lg">${tool.name}</h4>
-                            <p class="text-xs md:text-sm text-gray-500">Đã mở • ${timeString}</p>
+                        
+                        <div class="overflow-hidden relative z-10 flex-1 min-w-0 pr-6">
+                            <h4 class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-${tool.color}-600 transition-colors">
+                                ${tool.name}
+                            </h4>
+                            <p class="text-xs text-slate-400 truncate flex items-center gap-1">
+                                <i class="fa-regular fa-clock text-[10px]"></i> ${timeString}
+                            </p>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-gray-300 text-xs md:text-base"></i>
                     </div>
                 `;
             });
             container.innerHTML = html;
+
+            if (window.auth && window.auth.currentUser) {
+                if (window.loadFavorites) window.loadFavorites(window.auth.currentUser.uid);
+            }
         }
 
         function clearRecent() {
@@ -503,42 +515,51 @@
             renderRecentTools();
         }
 
-        // --- 4. APP INIT ---
+        // --- KHỞI CHẠY ---
         document.addEventListener('DOMContentLoaded', () => {
-            renderRecentTools();
+            flattenToolsLibrary(); // Chuẩn bị dữ liệu
+            renderFeaturedTools(); // Vẽ mục Phổ biến
+            renderRecentTools();   // Vẽ mục Gần đây
 
-            // Device detection logic
+            // Logic Install Guide
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const mobileGuide = document.getElementById('install-guide');
-            const desktopGuide = document.getElementById('desktop-install-guide');
-            const isMobileOrTablet = /iPad|iPhone|iPod|android/i.test(userAgent);
-            
-            if (isMobileOrTablet) {
-                if (desktopGuide) desktopGuide.classList.add('hidden');
-                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-                if (!isStandalone) {
-                    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                        mobileGuide.classList.remove('hidden');
-                        document.getElementById('ios-instructions').classList.remove('hidden');
-                    } else if (/android/i.test(userAgent)) {
-                        mobileGuide.classList.remove('hidden');
-                        document.getElementById('android-instructions').classList.remove('hidden');
-                    }
-                }
-            }
+            const isMobile = /iPad|iPhone|iPod|android/i.test(userAgent);
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-            // Nav active state
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelectorAll('.nav-item').forEach(nav => {
-                        nav.classList.remove('active', 'text-teal-600');
-                        nav.classList.add('text-gray-500');
-                    });
-                    this.classList.add('active', 'text-teal-600');
-                    this.classList.remove('text-gray-500');
-                });
-            });
+            if (isMobile && !isStandalone) {
+                const guide = document.getElementById('install-guide');
+                if (guide) guide.classList.remove('hidden');
+
+                if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                    const ios = document.getElementById('ios-instructions');
+                    if (ios) ios.classList.remove('hidden');
+                } else if (/android/i.test(userAgent)) {
+                    const android = document.getElementById('android-instructions');
+                    if (android) android.classList.remove('hidden');
+                }
+            } else {
+                const desktopGuide = document.getElementById('desktop-install-guide');
+                if (desktopGuide) desktopGuide.classList.remove('hidden');
+            }
         });
+
+        // Cầu nối cho app.js gọi lại khi đăng nhập xong
+        window.loadFavorites = function (uid) {
+            if (window.getUserFavorites) {
+                window.getUserFavorites(function (favorites) {
+                    document.querySelectorAll('.fav-btn i').forEach(i => {
+                        i.className = 'fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors';
+                    });
+                    favorites.forEach(item => {
+                        const btn = document.querySelector(`.fav-btn[data-id="${item.id}"]`);
+                        if (btn) {
+                            btn.querySelector('i').className = 'fa-solid fa-heart text-red-500 transition-colors';
+                        }
+                    });
+                });
+            }
+        }
     </script>
 </body>
+
 </html>
