@@ -223,7 +223,7 @@
         <div id="recent-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10 min-h-[100px]">
         </div>
 
-        <div id="desktop-install-guide" class="hidden md:block mt-auto pt-8 border-t border-slate-200">
+        <div id="desktop-install-guide" class="hidden mt-auto pt-8 border-t border-slate-200">
             <div
                 class="bg-gradient-to-r from-slate-50 to-white p-8 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
                 <div class="relative z-10">
@@ -537,7 +537,7 @@
                     const android = document.getElementById('android-instructions');
                     if (android) android.classList.remove('hidden');
                 }
-            } else {
+            } else if (!isMobile) { // THAY ĐỔI 2: Chỉ hiện trên Desktop
                 const desktopGuide = document.getElementById('desktop-install-guide');
                 if (desktopGuide) desktopGuide.classList.remove('hidden');
             }
