@@ -12,7 +12,7 @@
 // ==========================================
 (function () {
     // A. KHÓA TÊN MIỀN (DOMAIN LOCK)
-    const allowedDomains = ['localhost', '127.0.0.1', 'maytinhyhoc.github.io', 'may-tinh-y-hoc.firebaseapp.com'];
+    const allowedDomains = ['maytinhyhoc.github.io', 'may-tinh-y-hoc.firebaseapp.com'];
     const currentDomain = window.location.hostname;
 
     if (!allowedDomains.some(d => currentDomain.includes(d)) && currentDomain !== '') {
@@ -340,4 +340,5 @@ onAuthStateChanged(auth, (user) => {
         localStorage.removeItem('mtyh_user_cache');
         updateUI(null);
     }
+
 });
