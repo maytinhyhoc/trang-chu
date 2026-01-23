@@ -96,6 +96,11 @@ function createToolCard(tool) {
     // Tạo chuỗi tìm kiếm không dấu sẵn để tối ưu tốc độ search
     const searchString = removeVietnameseTones((tool.name + " " + tool.id).toLowerCase());
 
+    // CẬP NHẬT: Điều chỉnh class để đồng bộ kích thước với index.html (Gần đây)
+    // 1. Icon: w-12 h-12 -> w-14 h-14, text-xl -> text-2xl
+    // 2. Title: text-sm -> text-base
+    // 3. Desc: text-xs -> text-sm md:text-xs
+
     return `
     <div onclick="useTool('${tool.id}', '${tool.name}', '${tool.icon}', '${tool.color}', '${tool.url}')"
         class="tool-item group bg-white p-4 rounded-2xl shadow-sm hover:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.1)] border border-slate-100 cursor-pointer flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
@@ -109,15 +114,15 @@ function createToolCard(tool) {
 
         <div class="absolute top-0 right-0 w-12 h-12 bg-${tool.color}-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-${tool.color}-100"></div>
         
-        <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-${tool.color}-50 to-${tool.color}-100 flex items-center justify-center text-${tool.color}-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+        <div class="w-14 h-14 flex-shrink-0 rounded-xl bg-gradient-to-br from-${tool.color}-50 to-${tool.color}-100 flex items-center justify-center text-${tool.color}-500 text-2xl shadow-inner group-hover:scale-110 transition-transform">
             <i class="fa-solid ${tool.icon}"></i>
         </div>
         
-        <div class="overflow-hidden relative z-10">
-            <h4 class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-${tool.color}-600 transition-colors">
+        <div class="overflow-hidden relative z-10 pr-6">
+            <h4 class="font-semibold text-slate-700 text-base md:text-base truncate group-hover:text-${tool.color}-600 transition-colors">
                 ${tool.name}
             </h4>
-            <p class="text-xs text-slate-400 truncate">${tool.desc}</p>
+            <p class="text-sm md:text-xs text-slate-400 truncate mt-0.5">${tool.desc}</p>
         </div>
     </div>
     `;
