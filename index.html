@@ -113,7 +113,7 @@
 </head>
 
 <body
-    class="text-slate-800 bg-pattern min-h-screen pb-24 md:pb-0 overflow-x-hidden selection:bg-primary selection:text-white">
+    class="text-slate-800 bg-pattern min-h-screen pb-24 md:pb-0 overflow-x-hidden selection:bg-primary selection:text-white text-base">
 
     <div
         class="fixed top-0 left-0 w-full h-96 bg-gradient-to-b from-blue-50/80 to-transparent -z-10 pointer-events-none">
@@ -128,7 +128,8 @@
 
         <div class="md:hidden mb-8 flex items-center justify-between relative z-10">
             <div>
-                <h2 class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Chào mừng bạn đến với</h2>
+                <!-- Tăng kích thước chữ từ text-xs lên text-sm -->
+                <h2 class="text-sm text-slate-500 font-bold uppercase tracking-widest mb-1">Chào mừng bạn đến với</h2>
                 <h1
                     class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
                     Máy tính Y học</h1>
@@ -155,7 +156,8 @@
                         <h3 class="font-bold text-xl mb-1 flex items-center gap-2">
                             <i class="fa-solid fa-cloud-arrow-down"></i> Cài đặt ứng dụng
                         </h3>
-                        <p class="text-blue-50 text-sm mb-4 opacity-90">Truy cập nhanh hơn, hoạt động offline.</p>
+                        <!-- Tăng size chữ mô tả -->
+                        <p class="text-blue-50 text-base opacity-90 mb-4">Truy cập nhanh hơn, hoạt động offline.</p>
                     </div>
                     <button onclick="document.getElementById('install-guide').style.display='none'"
                         class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition text-white">
@@ -163,7 +165,7 @@
                     </button>
                 </div>
 
-                <div id="ios-instructions" class="hidden text-sm bg-black/10 rounded-xl p-3 border border-white/10">
+                <div id="ios-instructions" class="hidden text-base bg-black/10 rounded-xl p-3 border border-white/10">
                     <div class="flex items-center gap-3">
                         <span
                             class="w-6 h-6 flex items-center justify-center bg-white text-blue-600 rounded-full font-bold text-xs shrink-0">1</span>
@@ -178,7 +180,7 @@
                     </div>
                 </div>
 
-                <div id="android-instructions" class="hidden text-sm bg-black/10 rounded-xl p-3 border border-white/10">
+                <div id="android-instructions" class="hidden text-base bg-black/10 rounded-xl p-3 border border-white/10">
                     <div class="flex items-center gap-3">
                         <span
                             class="w-6 h-6 flex items-center justify-center bg-white text-blue-600 rounded-full font-bold text-xs shrink-0">1</span>
@@ -214,8 +216,9 @@
                 <span class="w-1.5 h-6 bg-teal-500 rounded-full block"></span>
                 Gần đây
             </h3>
+            <!-- Tăng kích thước nút xóa -->
             <button onclick="clearRecent()"
-                class="text-slate-400 text-xs md:text-sm font-medium hover:text-red-500 transition-colors flex items-center gap-1 py-1 px-2 rounded-lg hover:bg-red-50">
+                class="text-slate-500 text-sm md:text-base font-medium hover:text-red-500 transition-colors flex items-center gap-1 py-2 px-3 rounded-lg hover:bg-red-50">
                 <i class="fa-regular fa-trash-can"></i> Xóa lịch sử
             </button>
         </div>
@@ -244,8 +247,8 @@
                                 <i class="fa-brands fa-chrome"></i>
                             </div>
                             <div>
-                                <strong class="block text-slate-800 text-sm">Google Chrome</strong>
-                                <span class="text-slate-400 text-xs">Tìm biểu tượng <i
+                                <strong class="block text-slate-800 text-base">Google Chrome</strong>
+                                <span class="text-slate-400 text-sm">Tìm biểu tượng <i
                                         class="fa-solid fa-download mx-1 text-slate-600"></i> trên thanh địa chỉ.</span>
                             </div>
                         </div>
@@ -255,8 +258,8 @@
                                 <i class="fa-brands fa-edge"></i>
                             </div>
                             <div>
-                                <strong class="block text-slate-800 text-sm">Microsoft Edge</strong>
-                                <span class="text-slate-400 text-xs">Tìm biểu tượng <i
+                                <strong class="block text-slate-800 text-base">Microsoft Edge</strong>
+                                <span class="text-slate-400 text-sm">Tìm biểu tượng <i
                                         class="fa-brands fa-windows mx-1 text-slate-600"></i> App available.</span>
                             </div>
                         </div>
@@ -272,21 +275,16 @@
 
     <script>
         // --- CẤU HÌNH ---
-        // Danh sách ID các công cụ muốn hiển thị ở mục "Phổ biến"
         const FEATURED_IDS = ['antibiotic', 'infusion-time', 'drip-rate', 'diet'];
-
-        // Biến toàn cục chứa danh sách tất cả công cụ (phẳng hóa từ toolsLibrary)
         let ALL_TOOLS_FLAT = [];
 
         // --- HÀM HỖ TRỢ ---
 
-        // Lấy tên file từ URL để so sánh (giống old.html)
         function getFileName(url) {
             if (!url) return '';
             try { return url.split('?')[0].split('#')[0].split('/').pop(); } catch (e) { return url; }
         }
 
-        // 1. Phẳng hóa dữ liệu từ tools-data.js để dễ tra cứu
         function flattenToolsLibrary() {
             let lib = window.toolsLibrary;
             if (!lib && typeof toolsLibrary !== 'undefined') {
@@ -300,14 +298,9 @@
             }
         }
 
-        // 2. Tìm thông tin công cụ theo ID hoặc URL
         function findToolInfo(idOrUrl) {
             if (!ALL_TOOLS_FLAT.length) flattenToolsLibrary();
-
-            // Tìm theo ID chính xác trước
             let tool = ALL_TOOLS_FLAT.find(t => t.id === idOrUrl);
-
-            // Nếu không thấy, tìm theo tên file trong URL (Logic từ old.html)
             if (!tool) {
                 const searchFileName = getFileName(idOrUrl);
                 if (searchFileName) {
@@ -342,7 +335,8 @@
                         <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-${tool.color}-50 to-${tool.color}-100 text-${tool.color}-600 flex items-center justify-center text-2xl md:text-3xl shadow-inner group-hover:scale-110 transition-transform duration-300 ring-1 ring-${tool.color}-100">
                             <i class="${iconClass} drop-shadow-sm"></i>
                         </div>
-                        <span class="font-semibold text-slate-700 text-sm md:text-base group-hover:text-${tool.color}-700 transition-colors">
+                        <!-- Tăng size chữ tên công cụ: text-base (16px) thay vì text-sm -->
+                        <span class="font-semibold text-slate-700 text-base md:text-lg group-hover:text-${tool.color}-700 transition-colors leading-tight">
                             ${tool.name}
                         </span>
                     </div>`;
@@ -351,20 +345,18 @@
             container.innerHTML = html;
         }
 
-        // --- HÀM TỰ ĐỘNG LÀM SẠCH VÀ CHUẨN HÓA DỮ LIỆU (Logic từ old.html) ---
+        // --- HÀM TỰ ĐỘNG LÀM SẠCH VÀ CHUẨN HÓA DỮ LIỆU ---
         function cleanToolsList() {
             if (!ALL_TOOLS_FLAT.length) flattenToolsLibrary();
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             if (!recentTools.length) return;
 
             const uniqueTools = [];
-            const seenKeys = new Set(); // Dùng key này để lọc trùng (ưu tiên ID, fallback là Filename)
+            const seenKeys = new Set(); 
 
             for (let tool of recentTools) {
-                // Tìm bản chuẩn trong thư viện
                 let standardTool = findToolInfo(tool.id) || findToolInfo(tool.url);
 
-                // Nếu tìm thấy bản chuẩn, ép dữ liệu về bản chuẩn
                 if (standardTool) {
                     tool.id = standardTool.id;
                     tool.name = standardTool.name;
@@ -373,7 +365,6 @@
                     tool.url = standardTool.url;
                 }
 
-                // Tạo key duy nhất: Ưu tiên Filename để lọc các URL trùng nhưng khác query string
                 const key = getFileName(tool.url) || tool.id;
 
                 if (!seenKeys.has(key)) {
@@ -382,7 +373,6 @@
                 }
             }
 
-            // Lưu lại danh sách đã làm sạch
             localStorage.setItem('recentTools', JSON.stringify(uniqueTools.slice(0, 6)));
         }
 
@@ -394,9 +384,7 @@
             if (isNavigating) return;
             isNavigating = true;
 
-            // Tìm thông tin chuẩn nhất
             const freshTool = findToolInfo(id) || findToolInfo(url) || { id, name, icon, color, url };
-
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
 
             const newItem = {
@@ -411,7 +399,6 @@
             recentTools.unshift(newItem);
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
 
-            // Gọi hàm làm sạch để lọc trùng ngay lập tức
             cleanToolsList();
 
             if (url) {
@@ -451,7 +438,6 @@
             const container = document.getElementById('recent-container');
             if (!container) return;
 
-            // BƯỚC QUAN TRỌNG: Làm sạch dữ liệu trước khi vẽ
             cleanToolsList();
 
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
@@ -460,9 +446,9 @@
                 container.innerHTML = `
                     <div class="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-10 bg-white/50 rounded-2xl border-2 border-dashed border-slate-200 text-center">
                         <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-3">
-                            <i class="fa-regular fa-folder-open text-xl"></i>
+                            <i class="fa-regular fa-folder-open text-2xl"></i>
                         </div>
-                        <p class="text-slate-500 text-sm font-medium">Chưa có công cụ nào được sử dụng</p>
+                        <p class="text-slate-500 text-base font-medium">Chưa có công cụ nào được sử dụng</p>
                     </div>`;
                 return;
             }
@@ -483,21 +469,23 @@
                         <button onclick="handleHeartClick(this, '${tool.id}', '${tool.name}', '${tool.url}', '${tool.icon}', '${tool.color}')"
                             class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all"
                             data-id="${tool.id}">
-                            <i class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors"></i>
+                            <i class="fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors text-lg"></i>
                         </button>
 
                         <div class="absolute top-0 right-0 w-12 h-12 bg-${tool.color}-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-${tool.color}-100"></div>
                         
-                        <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-${tool.color}-50 to-${tool.color}-100 flex items-center justify-center text-${tool.color}-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                        <div class="w-14 h-14 flex-shrink-0 rounded-xl bg-gradient-to-br from-${tool.color}-50 to-${tool.color}-100 flex items-center justify-center text-${tool.color}-500 text-2xl shadow-inner group-hover:scale-110 transition-transform">
                             <i class="${iconClass}"></i>
                         </div>
                         
                         <div class="overflow-hidden relative z-10 flex-1 min-w-0 pr-6">
-                            <h4 class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-${tool.color}-600 transition-colors">
+                            <!-- Tăng size tên công cụ gần đây lên text-base -->
+                            <h4 class="font-semibold text-slate-700 text-base md:text-lg truncate group-hover:text-${tool.color}-600 transition-colors">
                                 ${tool.name}
                             </h4>
-                            <p class="text-xs text-slate-400 truncate flex items-center gap-1">
-                                <i class="fa-regular fa-clock text-[10px]"></i> ${timeString}
+                            <!-- Tăng size thời gian lên text-sm -->
+                            <p class="text-sm text-slate-400 truncate flex items-center gap-1.5 mt-0.5">
+                                <i class="fa-regular fa-clock text-xs"></i> ${timeString}
                             </p>
                         </div>
                     </div>
@@ -517,11 +505,10 @@
 
         // --- KHỞI CHẠY ---
         document.addEventListener('DOMContentLoaded', () => {
-            flattenToolsLibrary(); // Chuẩn bị dữ liệu
-            renderFeaturedTools(); // Vẽ mục Phổ biến
-            renderRecentTools();   // Vẽ mục Gần đây
+            flattenToolsLibrary(); 
+            renderFeaturedTools(); 
+            renderRecentTools();   
 
-            // Logic Install Guide
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
             const isMobile = /iPad|iPhone|iPod|android/i.test(userAgent);
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
@@ -537,23 +524,22 @@
                     const android = document.getElementById('android-instructions');
                     if (android) android.classList.remove('hidden');
                 }
-            } else if (!isMobile) { // THAY ĐỔI 2: Chỉ hiện trên Desktop
+            } else if (!isMobile) { 
                 const desktopGuide = document.getElementById('desktop-install-guide');
                 if (desktopGuide) desktopGuide.classList.remove('hidden');
             }
         });
 
-        // Cầu nối cho app.js gọi lại khi đăng nhập xong
         window.loadFavorites = function (uid) {
             if (window.getUserFavorites) {
                 window.getUserFavorites(function (favorites) {
                     document.querySelectorAll('.fav-btn i').forEach(i => {
-                        i.className = 'fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors';
+                        i.className = 'fa-regular fa-heart text-slate-400 group-hover/btn:text-red-500 transition-colors text-lg';
                     });
                     favorites.forEach(item => {
                         const btn = document.querySelector(`.fav-btn[data-id="${item.id}"]`);
                         if (btn) {
-                            btn.querySelector('i').className = 'fa-solid fa-heart text-red-500 transition-colors';
+                            btn.querySelector('i').className = 'fa-solid fa-heart text-red-500 transition-colors text-lg';
                         }
                     });
                 });
@@ -563,3 +549,4 @@
 </body>
 
 </html>
+
