@@ -281,14 +281,14 @@
 
             let iconHtml = '';
             if (iconVal.includes('/') || iconVal.includes('.')) {
-                iconHtml = `<img src="${iconVal}" class="w-7 h-7 object-contain" alt="icon">`;
+                iconHtml = `<img src="${iconVal}" class="w-8 h-8 object-contain" alt="icon">`;
             } else if (iconVal.includes('fa-')) {
                 iconHtml = `<i class="fa-solid ${iconVal}"></i>`;
             } else {
-                iconHtml = `<span class="text-xl">${iconVal}</span>`;
+                iconHtml = `<span class="text-2xl">${iconVal}</span>`;
             }
 
-            // UPDATE HTML STRUCTURE: Đồng bộ với tools-data.js
+            // UPDATE HTML STRUCTURE: Đồng bộ với tools-data.js (Icon to hơn, chữ to hơn)
             card.innerHTML = `
                 <button onclick="handleLocalHeartClick(this, '${tool.id}', '${tool.name}', '${tool.url}', '${tool.icon}', '${tool.color}')" 
                     class="fav-btn absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-white/60 backdrop-blur-sm hover:bg-white shadow-sm border border-white/50 flex items-center justify-center group/btn transition-all">
@@ -297,15 +297,15 @@
 
                 <div class="absolute top-0 right-0 w-12 h-12 bg-${color}-50 rounded-bl-full -mr-6 -mt-6 transition-all group-hover:bg-${color}-100"></div>
 
-                <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-${color}-50 to-${color}-100 flex items-center justify-center text-${color}-500 text-xl shadow-inner group-hover:scale-110 transition-transform">
+                <div class="w-14 h-14 flex-shrink-0 rounded-xl bg-gradient-to-br from-${color}-50 to-${color}-100 flex items-center justify-center text-${color}-500 text-2xl shadow-inner group-hover:scale-110 transition-transform">
                     ${iconHtml}
                 </div>
                 
-                <div class="overflow-hidden relative z-10 flex-1">
-                    <h4 class="font-semibold text-slate-700 text-sm md:text-base truncate group-hover:text-${color}-600 transition-colors">
+                <div class="overflow-hidden relative z-10 flex-1 pr-6">
+                    <h4 class="font-semibold text-slate-700 text-base md:text-base truncate group-hover:text-${color}-600 transition-colors">
                         ${tool.name}
                     </h4>
-                    <p class="text-xs text-slate-400 truncate">${tool.desc || tool.description || 'Công cụ tính toán y học'}</p>
+                    <p class="text-sm md:text-xs text-slate-400 truncate mt-0.5">${tool.desc || tool.description || 'Công cụ tính toán y học'}</p>
                 </div>
             `;
             container.appendChild(card);
