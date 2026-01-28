@@ -88,6 +88,13 @@
                 transform: translateY(0);
             }
         }
+
+        .search-glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
     </style>
 
 
@@ -127,14 +134,18 @@
         </div>
 
         <!-- SEARCH BAR (NEW) -->
-        <div class="mb-8 relative group z-30">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                <i
-                    class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+        <!-- SEARCH BAR (NEW) -->
+        <div class="sticky top-0 md:top-20 z-40 -mx-3 px-3 md:mx-0 md:px-0 py-3 mb-6 transition-all duration-300"
+            id="search-container">
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                    <i
+                        class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                </div>
+                <input type="text" id="home-search-input" placeholder="Tìm bệnh, công cụ (VD: sxh, glasgow...)"
+                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border-none shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] search-glass focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-slate-700 text-base placeholder:text-slate-400 transition-all"
+                    onkeydown="if(event.key === 'Enter') window.location.href = 'cong-cu.html?q=' + encodeURIComponent(this.value)">
             </div>
-            <input type="text" id="home-search-input" placeholder="Tìm bệnh, công cụ (VD: sxh, glasgow...)"
-                class="w-full pl-11 pr-4 py-4 rounded-2xl border-none shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] bg-white/80 backdrop-blur-xl focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-slate-700 text-base placeholder:text-slate-400 transition-all"
-                onkeydown="if(event.key === 'Enter') window.location.href = 'cong-cu.html?q=' + encodeURIComponent(this.value)">
         </div>
 
         <div id="install-guide"
@@ -508,6 +519,18 @@
             flattenToolsLibrary();
             renderFeaturedTools();
             renderRecentTools();
+
+            // Search bar scroll effect
+            const searchContainer = document.getElementById('search-container');
+            if (searchContainer) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 10) {
+                        searchContainer.classList.add('shadow-sm');
+                    } else {
+                        searchContainer.classList.remove('shadow-sm');
+                    }
+                });
+            }
 
             // --- PHÁT HIỆN THIẾT BỊ (Đã cập nhật để bao gồm iPadOS mới) ---
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
