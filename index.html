@@ -375,7 +375,10 @@
 
         // --- LOGIC ĐIỀU HƯỚNG & LỊCH SỬ ---
         let isNavigating = false;
-        window.addEventListener('pageshow', (event) => { if (event.persisted) isNavigating = false; });
+        window.addEventListener('pageshow', (event) => {
+            isNavigating = false;
+            document.body.style.opacity = '1';
+        });
 
         function useTool(id, name, icon, color, url) {
             if (isNavigating) return;

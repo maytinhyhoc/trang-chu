@@ -237,6 +237,12 @@
             localStorage.setItem('recentTools', JSON.stringify(uniqueTools));
         }
 
+
+        // --- FIX LỖI MÀN HÌNH MỜ KHI BACK ---
+        window.addEventListener('pageshow', (event) => {
+            document.body.style.opacity = '1';
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             cleanToolsList();
             const searchContainer = document.getElementById('search-container');
