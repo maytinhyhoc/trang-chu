@@ -12,14 +12,15 @@
     // A. KHÓA TÊN MIỀN (DOMAIN LOCK)
     // LƯU Ý QUAN TRỌNG: Bác hãy thêm domain hosting của mình vào mảng dưới đây:
     const allowedDomains = [
-        'localhost', 
-        '127.0.0.1', 
-        'maytinhyhoc.github.io', 
+        'localhost',
+        '127.0.0.1',
+        'maytinhyhoc.github.io',
         'may-tinh-y-hoc.firebaseapp.com',
     ];
     const currentDomain = window.location.hostname;
 
     // Chỉ chạy kiểm tra nếu không phải đang mở file local (file://)
+    /* 
     if (currentDomain !== '' && !allowedDomains.some(d => currentDomain.includes(d))) {
         document.body.innerHTML = `
             <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;font-family:sans-serif;background:#f8fafc;color:#334155;padding:20px;text-align:center;">
@@ -30,6 +31,7 @@
         `;
         throw new Error("Domain restricted: " + currentDomain);
     }
+    */
 
     // B. CHỐNG DEBUGGER (ANTI-DEBUG) - Giữ nguyên
     setInterval(function () {
@@ -42,6 +44,49 @@
         }
     }, 1000);
 })();
+
+// ==========================================
+// 0.1. CÀI ĐẶT GIAO DIỆN (SETTINGS APPLIER)
+// ==========================================
+window.applySettings = function () {
+    try {
+        const settings = JSON.parse(localStorage.getItem('mtyh_settings'));
+        if (settings) {
+            // 1. Theme (Dark Mode)
+            if (settings.theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            // 2. Font Size
+            const sizeMap = { 'small': '14px', 'medium': '16px', 'large': '18px', 'xl': '20px' };
+            if (settings.fontSize && sizeMap[settings.fontSize]) {
+                document.documentElement.style.fontSize = sizeMap[settings.fontSize];
+            } else {
+                document.documentElement.style.fontSize = '16px'; // Reset về mặc định
+            }
+
+            // 3. Font Family
+            const fontMap = {
+                'inter': "'Inter', sans-serif",
+                'roboto': "'Roboto', sans-serif",
+                'opensans': "'Open Sans', sans-serif",
+                'lora': "'Lora', serif",
+                'nunito': "'Nunito', sans-serif",
+                'patrick': "'Patrick Hand', cursive",
+                'system': "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+            };
+            if (settings.fontFamily && fontMap[settings.fontFamily]) {
+                document.body.style.fontFamily = fontMap[settings.fontFamily];
+            } else {
+                document.body.style.fontFamily = "'Inter', sans-serif";
+            }
+        }
+    } catch (e) { console.error("Settings apply error:", e); }
+};
+// Chạy ngay lập tức
+window.applySettings();
 
 
 // ==========================================
@@ -65,7 +110,7 @@ const appInterface = `
             </nav>
 
             <div class="pl-6 border-l border-gray-200 min-w-[210px] flex justify-end">
-                <button id="login-btn-desktop" class="hidden md:flex bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-teal-700 transition items-center gap-2 shadow-sm">
+                <button id="login-btn-desktop" class="hidden md:flex bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-teal-700 dark:hover:bg-teal-500 transition items-center gap-2 shadow-sm">
                     <i class="fa-brands fa-google"></i> Đăng nhập
                 </button>
 
@@ -78,7 +123,7 @@ const appInterface = `
                     
                     <div class="absolute right-0 top-6 w-56 pt-7 hidden group-hover:block z-50">
                         <div class="bg-white shadow-xl rounded-xl p-2 border border-gray-100 animate-fade-in">
-                            <button id="logout-btn" class="w-full text-left text-red-500 text-sm px-3 py-2.5 hover:bg-red-50 rounded-lg flex items-center transition">
+                            <button id="logout-btn" class="w-full text-left text-red-500 text-sm px-3 py-2.5 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-50 dark:hover:!text-red-600 rounded-lg flex items-center transition">
                                 <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i>Đăng xuất
                             </button>
                         </div>
@@ -97,7 +142,7 @@ const appInterface = `
 
         <div class="flex flex-col h-full overflow-y-auto">
             <div id="mobile-auth-section" class="m-4 p-4 bg-teal-50 rounded-xl border border-teal-100 shadow-sm">
-                <button id="login-btn-mobile" class="w-full bg-white text-teal-600 font-bold py-2.5 px-4 rounded-lg shadow-sm border border-teal-200 flex items-center justify-center gap-2 hover:bg-teal-600 hover:text-white transition">
+                <button id="login-btn-mobile" class="w-full bg-white text-teal-600 font-bold py-2.5 px-4 rounded-lg shadow-sm border border-teal-200 flex items-center justify-center gap-2 hover:bg-teal-600 hover:text-white dark:bg-slate-700 dark:text-teal-400 dark:border-slate-600 dark:hover:bg-teal-500 dark:hover:text-white transition">
                     <i class="fa-brands fa-google"></i> Đăng nhập Google
                 </button>
                 <div id="user-info-mobile" class="hidden flex-col gap-4">
@@ -108,32 +153,36 @@ const appInterface = `
                             <p id="mobile-name" class="font-bold text-gray-800 text-sm truncate">Người dùng</p>
                         </div>
                     </div>
-                    <button id="logout-btn-mobile" class="w-full text-sm text-red-500 bg-white border border-red-100 py-2 rounded-lg font-medium hover:bg-red-50 transition flex items-center justify-center gap-2">
+                    <button id="logout-btn-mobile" class="w-full text-sm text-red-500 bg-white border border-red-100 py-2 rounded-lg font-medium hover:bg-red-50 dark:bg-slate-700 dark:border-slate-600 dark:text-red-400 dark:hover:bg-red-50 dark:hover:!text-red-600 transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất
                     </button>
                 </div>
             </div>
             
             <div class="px-4 pb-4 flex flex-col gap-2">
-                <a href="gioi-thieu.html" class="flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 rounded-xl transition group text-gray-700">
-                    <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600"><i class="fa-solid fa-circle-info"></i></div>
+                <a href="cai-dat.html" class="drawer-link flex items-center gap-4 p-3 hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-slate-200 dark:hover:text-slate-900 rounded-xl transition group text-gray-700 dark:text-gray-300">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center text-gray-600 dark:text-gray-400 group-hover:bg-gray-200 dark:group-hover:text-slate-700 dark:group-hover:bg-slate-300"><i class="fa-solid fa-gear"></i></div>
+                    <span class="font-medium">Cài đặt</span>
+                </a>
+                <a href="gioi-thieu.html" class="drawer-link flex items-center gap-4 p-3 hover:bg-teal-50 hover:text-teal-600 dark:hover:bg-teal-50 dark:hover:text-teal-700 rounded-xl transition group text-gray-700 dark:text-gray-300">
+                    <div class="w-8 h-8 rounded-full bg-teal-100 dark:bg-slate-700 flex items-center justify-center text-teal-600 dark:text-teal-500 group-hover:bg-teal-100 dark:group-hover:bg-teal-100 dark:group-hover:text-teal-600"><i class="fa-solid fa-circle-info"></i></div>
                     <span class="font-medium">Giới thiệu</span>
                 </a>
-                <a href="lien-he.html" class="flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 rounded-xl transition group text-gray-700">
-                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600"><i class="fa-solid fa-envelope"></i></div>
+                <a href="lien-he.html" class="drawer-link flex items-center gap-4 p-3 hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-50 dark:hover:text-green-700 rounded-xl transition group text-gray-700 dark:text-gray-300">
+                    <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-slate-700 flex items-center justify-center text-green-600 dark:text-green-500 group-hover:bg-green-100 dark:group-hover:bg-green-100 dark:group-hover:text-green-600"><i class="fa-solid fa-envelope"></i></div>
                     <span class="font-medium">Liên hệ</span>
                 </a>
-                <a href="dieu-khoan-dich-vu.html" class="flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition group text-gray-700">
-                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><i class="fa-solid fa-file-contract"></i></div>
+                <a href="dieu-khoan-dich-vu.html" class="drawer-link flex items-center gap-4 p-3 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-50 dark:hover:text-blue-700 rounded-xl transition group text-gray-700 dark:text-gray-300">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-slate-700 flex items-center justify-center text-blue-600 dark:text-blue-500 group-hover:bg-blue-100 dark:group-hover:bg-blue-100 dark:group-hover:text-blue-600"><i class="fa-solid fa-file-contract"></i></div>
                     <span class="font-medium">Điều khoản</span>
                 </a>
-                <a href="chinh-sach-bao-mat.html" class="flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition group text-gray-700">
-                    <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600"><i class="fa-solid fa-shield-halved"></i></div>
+                <a href="chinh-sach-bao-mat.html" class="drawer-link flex items-center gap-4 p-3 hover:bg-purple-50 hover:text-purple-600 dark:hover:bg-purple-50 dark:hover:text-purple-700 rounded-xl transition group text-gray-700 dark:text-gray-300">
+                    <div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-slate-700 flex items-center justify-center text-purple-600 dark:text-purple-500 group-hover:bg-purple-100 dark:group-hover:bg-purple-100 dark:group-hover:text-purple-600"><i class="fa-solid fa-shield-halved"></i></div>
                     <span class="font-medium">Chính sách</span>
                 </a>
-                <div class="my-2 border-t border-gray-100"></div>
-                <a href="ung-ho.html" class="flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition group text-gray-700">
-                    <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600"><i class="fa-solid fa-heart"></i></div>
+                <div class="my-2 border-t border-gray-100 dark:border-slate-700"></div>
+                <a href="ung-ho.html" class="drawer-link flex items-center gap-4 p-3 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-50 dark:hover:text-rose-700 rounded-xl transition group text-gray-700 dark:text-gray-300">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 dark:bg-slate-700 flex items-center justify-center text-rose-600 dark:text-rose-500 group-hover:bg-rose-100 dark:group-hover:bg-rose-100 dark:group-hover:text-rose-600"><i class="fa-solid fa-heart"></i></div>
                     <span class="font-medium">Ủng hộ</span>
                 </a>
             </div>
@@ -376,3 +425,46 @@ window.getUserFavorites = async function (callback) {
         callback(docSnap.exists() ? (docSnap.data().favorites || []) : []);
     } catch (e) { callback([]); }
 };
+
+// ==========================================
+// 5. MOBILE HEADER & BOTTOM NAV SCROLL EFFECT (Added)
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    let lastScrollTop = 0;
+    // Chọn tất cả header (top) và nav (bottom) có class fixed
+    const headers = document.querySelectorAll('header.fixed.top-0');
+    const bottomNavs = document.querySelectorAll('nav.fixed.bottom-0');
+
+    if (headers.length === 0 && bottomNavs.length === 0) return;
+
+    // Thêm transition để hiệu ứng mượt mà cho CẢ HAI
+    [...headers, ...bottomNavs].forEach(el => {
+        el.style.transition = 'transform 0.3s ease-in-out';
+    });
+
+    window.addEventListener('scroll', () => {
+        // Chỉ chạy trên Mobile (màn hình nhỏ hơn 768px)
+        if (window.innerWidth >= 768) return;
+
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        // Bỏ qua nếu scroll âm (iOS bounce)
+        if (scrollTop < 0) return;
+
+        // Logic: Cuộn xuống -> Ẩn, Cuộn lên -> Hiện
+        // Thêm điều kiện scrollTop > 50 để tránh ẩn ngay khi vừa mới cuộn
+        const isScrollDown = scrollTop > lastScrollTop && scrollTop > 50;
+
+        headers.forEach(header => {
+            // Header: Ẩn lên trên (-100%)
+            header.style.transform = isScrollDown ? 'translateY(-100%)' : 'translateY(0)';
+        });
+
+        bottomNavs.forEach(nav => {
+            // Bottom Nav: Ẩn xuống dưới (100%)
+            nav.style.transform = isScrollDown ? 'translateY(100%)' : 'translateY(0)';
+        });
+
+        lastScrollTop = scrollTop;
+    }, { passive: true });
+});
