@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ARDS Berlin 2012 - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .input-label {
+            font-size: 0.875rem;
+            color: #374151;
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .dark .input-label {
+            color: #e2e8f0;
+        }
+
+        .input-field {
+            background-color: #fff;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .score-box {
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fee2e2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">ARDS Berlin 2012</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">ARDS Berlin 2012</h1>
+                        <p class="text-red-100 text-xs">Tiêu chuẩn chẩn đoán & Phân độ ARDS</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-lungs-virus text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-3 md:p-6">
+                <!-- FORM -->
+                <form id="tool-form" class="space-y-4">
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-slate-700 mb-3"><i class="fa-solid fa-clipboard-list mr-2"></i>Tiêu
+                            chuẩn chẩn đoán</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-start">
+                                <input type="checkbox" id="time"
+                                    class="mt-1 mr-2 w-4 h-4 text-red-600 focus:ring-red-500 rounded">
+                                <label for="time" class="text-sm text-gray-700"><b>Thời gian:</b> Khởi phát trong vòng 1
+                                    tuần sau tổn thương lâm sàng hoặc triệu chứng hô hấp mới/nặng lên.</label>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" id="cxr"
+                                    class="mt-1 mr-2 w-4 h-4 text-red-600 focus:ring-red-500 rounded">
+                                <label for="cxr" class="text-sm text-gray-700"><b>X-quang:</b> Mờ 2 phế trường, không
+                                    giải thích được bởi tràn dịch màng phổi, xẹp phổi thùy/phổi, hoặc u cục.</label>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" id="origin"
+                                    class="mt-1 mr-2 w-4 h-4 text-red-600 focus:ring-red-500 rounded">
+                                <label for="origin" class="text-sm text-gray-700"><b>Nguồn gốc phù:</b> Suy hô hấp không
+                                    giải thích được hoàn toàn do suy tim hoặc quá tải dịch. (Cần siêu âm tim nếu không
+                                    có yếu tố nguy cơ).</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-slate-700 mb-3"><i class="fa-solid fa-gauge-high mr-2"></i>Phân độ Oxy
+                            hóa máu</h3>
+
+                        <div><label class="input-label">Mức PEEP / CPAP (cmH2O)</label>
+                            <select id="peep" class="input-field mb-3">
+                                <option value="0">
+                                    < 5 cmH2O (Không đạt tiêu chuẩn ARDS)</option>
+                                <option value="1">≥ 5 cmH2O</option>
+                            </select>
+                        </div>
+
+                        <div><label class="input-label">Chỉ số PaO₂/FiO₂</label>
+                            <input type="number" id="pf" class="input-field" placeholder="VD: 150">
+                        </div>
+                    </div>
+
+                    <div id="action-buttons" class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-rotate-right mr-2"></i> Nhập lại</button>
+                        <button type="submit"
+                            class="flex-1 bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-red-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-calculator mr-2"></i> Chẩn đoán</button>
+                    </div>
+                </form>
+
+                <!-- RESULT -->
+                <div id="result-container" class="mt-6 hidden animate-fade-in-up">
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Kết quả</h3>
+                        <div class="bg-white p-3 rounded-lg border border-red-100 inline-block w-full">
+                            <p id="level" class="result-text text-red-700 leading-relaxed font-bold text-lg">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <script type="module" src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const levelEl = document.getElementById('level');
+            const clearBtn = document.getElementById('clearBtn');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const time = document.getElementById('time').checked;
+                const cxr = document.getElementById('cxr').checked;
+                const origin = document.getElementById('origin').checked;
+                const peep = document.getElementById('peep').value;
+                const pf = parseInt(document.getElementById('pf').value);
+
+                if (!pf) { alert("Vui lòng nhập P/F Ratio"); return; }
+
+                if (!time || !cxr || !origin) {
+                    levelEl.innerText = "Chưa đủ tiêu chuẩn chẩn đoán ARDS (Cần thỏa mãn 3 tiêu chuẩn lâm sàng trên)";
+                    levelEl.className = "result-text text-gray-600 leading-relaxed font-bold text-lg";
+                    resultContainer.classList.remove('hidden');
+                    return;
+                }
+
+                if (peep == '0') {
+                    levelEl.innerText = "Không phải ARDS (Yêu cầu PEEP ≥ 5 cmH2O)";
+                    levelEl.className = "result-text text-gray-600 leading-relaxed font-bold text-lg";
+                    resultContainer.classList.remove('hidden');
+                    return;
+                }
+
+                if (pf > 300) {
+                    levelEl.innerText = "Không phải ARDS (P/F > 300)";
+                    levelEl.className = "result-text text-green-600 leading-relaxed font-bold text-lg";
+                } else if (pf > 200) {
+                    levelEl.innerText = "ARDS nhẹ (Mild)";
+                    levelEl.className = "result-text text-orange-500 leading-relaxed font-bold text-lg";
+                } else if (pf > 100) {
+                    levelEl.innerText = "ARDS trung bình (Moderate)";
+                    levelEl.className = "result-text text-orange-600 leading-relaxed font-bold text-lg";
+                } else {
+                    levelEl.innerText = "ARDS nặng (Severe)";
+                    levelEl.className = "result-text text-red-700 leading-relaxed font-bold text-lg";
+                }
+
+                resultContainer.classList.remove('hidden');
+            });
+
+            clearBtn.addEventListener('click', function () {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

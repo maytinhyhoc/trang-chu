@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 
 <head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Danh sách công cụ - Máy tính Y học</title>
@@ -41,15 +43,7 @@
             touch-action: pan-x pan-y;
             overscroll-behavior-y: none;
 
-            /* Thêm các dòng này để chặn bôi đen */
-            -webkit-user-select: none;
-            /* Safari */
-            -moz-user-select: none;
-            /* Firefox */
-            -ms-user-select: none;
-            /* IE10+/Edge */
-            user-select: none;
-            /* Standard */
+            overscroll-behavior-y: none;
         }
 
         .bg-pattern {
@@ -121,7 +115,8 @@
 
         <div class="md:hidden pt-2 pb-4 flex items-center justify-between relative z-20">
             <div>
-                <h2 class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Thư viện</h2>
+                <h2 class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1 text-dark-muted">Thư viện
+                </h2>
                 <h1
                     class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
                     Tất cả công cụ</h1>
@@ -145,7 +140,7 @@
                 </div>
                 <input type="text" id="search-input" onkeyup="filterTools()"
                     placeholder="Tìm nhanh (VD: bỏng, gcs, liều...)"
-                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border-none shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] bg-white/95 backdrop-blur-xl focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-slate-700 text-base placeholder:text-slate-400 transition-all">
+                    class="w-full pl-11 pr-4 py-3.5 rounded-2xl border-none shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] search-glass focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-slate-700 text-base placeholder:text-slate-400 transition-all">
             </div>
         </div>
 
@@ -252,42 +247,21 @@
                 }
             });
 
-            // ==========================================
-            // === PHẦN BẢO MẬT & CHỐNG SAO CHÉP ===
-            // ==========================================
-
-            // 1. Chặn chuột phải (Context Menu)
-            document.addEventListener('contextmenu', e => e.preventDefault());
-
-            // 2. Chặn các phím tắt và F12
-            document.addEventListener('keydown', e => {
-                // Chặn F12
-                if (e.key === 'F12') {
-                    e.preventDefault();
+            // --- TỰ ĐỘNG TÌM KIẾM TỪ URL PARAMS ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q') || urlParams.get('search');
+            if (query) {
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) {
+                    searchInput.value = query;
+                    // Đợi 1 chút để tools-data.js render xong (dù đã gọi ở cuối body, nhưng an toàn hơn)
+                    setTimeout(() => {
+                        if (typeof filterTools === 'function') filterTools();
+                    }, 100);
                 }
+            }
 
-                // Chặn Ctrl kèm các phím: U (View Source), S (Save), P (Print), A (Select All), C (Copy)
-                if (e.ctrlKey && ['u', 's', 'p', 'a', 'c'].includes(e.key.toLowerCase())) {
-                    e.preventDefault();
-                }
 
-                // Chặn Ctrl + Shift + I (DevTools)
-                if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i') {
-                    e.preventDefault();
-                }
-
-                // Chặn Ctrl + Zoom (+, -, =)
-                if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=')) {
-                    e.preventDefault();
-                }
-            });
-
-            // 3. Chặn Zoom bằng chuột (Ctrl + Scroll)
-            document.addEventListener('wheel', function (e) {
-                if (e.ctrlKey) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
         });
     </script>
 

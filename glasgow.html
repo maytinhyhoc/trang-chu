@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 
 <head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thang điểm Glasgow - Công Cụ Y Học</title>
@@ -84,27 +86,19 @@
 
 <body class="text-gray-800 flex flex-col min-h-screen">
 
-    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-        <a href="#" onclick="history.back(); return false;"
-            class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
-            <i class="fa-solid fa-chevron-left text-lg"></i>
-        </a>
-        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">
             Thang điểm Glasgow
         </h1>
-        <div class="w-8"></div>
     </header>
 
     <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
 
         <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+
             <div class="hidden md:flex bg-indigo-600 p-4 text-white items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <a href="cong-cu.html"
-                        class="hidden md:flex w-8 h-8 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-2"
-                        title="Quay lại">
-                        <i class="fa-solid fa-chevron-left text-sm"></i>
-                    </a>
                     <div>
                         <h1 class="text-xl font-bold">Thang điểm Hôn mê Glasgow (GCS)</h1>
                         <p class="text-indigo-100 text-xs">Đánh giá tri giác và mức độ tổn thương não bộ</p>
@@ -360,13 +354,13 @@
                     </div>
 
                     <div id="action-buttons" class="mt-5 flex flex-col sm:flex-row gap-3">
-                        <button type="submit"
-                            class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-indigo-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
-                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
-                        </button>
                         <button type="button" id="clearBtn"
                             class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
                             <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-indigo-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
                         </button>
                     </div>
                 </form>
@@ -412,12 +406,10 @@
         });
 
         document.addEventListener('keydown', function (e) {
-            if (e.ctrlKey || e.metaKey) {
-                if (e.key === 'c' || e.key === 'C' ||
-                    e.key === 'a' || e.key === 'A' ||
-                    e.key === 'u' || e.key === 'U') {
-                    e.preventDefault();
-                }
+            if (e.key === 'F12' ||
+                (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A'))) {
+                e.preventDefault();
+                return false;
             }
         });
 

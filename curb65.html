@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CURB-65 - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .abc-checkbox:checked+label {
+            background-color: #fef2f2;
+            border-color: #dc2626;
+            color: #b91c1c;
+        }
+
+        .abc-checkbox:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+            width: 1.25rem;
+            margin-left: 0.5rem;
+        }
+
+        .check-icon {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-box {
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fee2e2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">CURB-65</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Thang điểm CURB-65</h1>
+                        <p class="text-red-100 text-xs">Phân tầng nguy cơ viêm phổi mắc phải tại cộng đồng (CAP)</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-lungs-virus text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-3 md:p-6">
+                <!-- FORM -->
+                <form id="tool-form" class="space-y-4">
+                    <div class="space-y-3">
+                        <div class="relative">
+                            <input class="sr-only abc-checkbox" type="checkbox" id="c">
+                            <label
+                                class="flex items-center p-3 md:p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                for="c">
+                                <div class="flex-1 font-medium text-gray-700 text-base"><b>C</b> - Confusion (Rối loạn ý
+                                    thức)</div>
+                                <div class="text-red-600 font-bold text-sm whitespace-nowrap">+1</div>
+                                <div
+                                    class="check-icon w-0 opacity-0 transform scale-50 text-red-600 overflow-hidden flex-shrink-0">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="relative">
+                            <input class="sr-only abc-checkbox" type="checkbox" id="u">
+                            <label
+                                class="flex items-center p-3 md:p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                for="u">
+                                <div class="flex-1 font-medium text-gray-700 text-base"><b>U</b> - Urea máu > 7 mmol/L
+                                </div>
+                                <div class="text-red-600 font-bold text-sm whitespace-nowrap">+1</div>
+                                <div
+                                    class="check-icon w-0 opacity-0 transform scale-50 text-red-600 overflow-hidden flex-shrink-0">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="relative">
+                            <input class="sr-only abc-checkbox" type="checkbox" id="r">
+                            <label
+                                class="flex items-center p-3 md:p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                for="r">
+                                <div class="flex-1 font-medium text-gray-700 text-base"><b>R</b> - Respiration (Nhịp thở
+                                    ≥ 30/phút)</div>
+                                <div class="text-red-600 font-bold text-sm whitespace-nowrap">+1</div>
+                                <div
+                                    class="check-icon w-0 opacity-0 transform scale-50 text-red-600 overflow-hidden flex-shrink-0">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="relative">
+                            <input class="sr-only abc-checkbox" type="checkbox" id="b">
+                            <label
+                                class="flex items-center p-3 md:p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                for="b">
+                                <div class="flex-1 font-medium text-gray-700 text-base"><b>B</b> - Blood Pressure (HA
+                                    tâm thu < 90 hoặc tâm trương ≤ 60)</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">+1</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-600 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                            </label>
+                        </div>
+                        <div class="relative">
+                            <input class="sr-only abc-checkbox" type="checkbox" id="a65">
+                            <label
+                                class="flex items-center p-3 md:p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                for="a65">
+                                <div class="flex-1 font-medium text-gray-700 text-base"><b>65</b> - Tuổi ≥ 65</div>
+                                <div class="text-red-600 font-bold text-sm whitespace-nowrap">+1</div>
+                                <div
+                                    class="check-icon w-0 opacity-0 transform scale-50 text-red-600 overflow-hidden flex-shrink-0">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="action-buttons" class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-rotate-right mr-2"></i> Nhập lại</button>
+                    </div>
+                </form>
+
+                <!-- RESULT -->
+                <div id="result-container" class="mt-6 hidden animate-fade-in-up">
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Tổng điểm</h3>
+                        <div id="result" class="score-box mb-3 bg-white text-4xl text-red-600">--</div>
+                        <div class="bg-white p-3 rounded-lg border border-red-100 inline-block w-full">
+                            <p id="risk" class="result-text text-red-700 leading-relaxed font-bold text-lg">...</p>
+                            <p id="mort" class="text-sm text-gray-600 mt-1">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <script type="module" src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const resultEl = document.getElementById('result');
+            const riskEl = document.getElementById('risk');
+            const mortEl = document.getElementById('mort');
+            const clearBtn = document.getElementById('clearBtn');
+
+            function calculate() {
+                let score = 0;
+                ['c', 'u', 'r', 'b', 'a65'].forEach(id => {
+                    if (document.getElementById(id).checked) score++;
+                });
+
+                resultEl.innerText = score;
+                let riskMsg = "";
+                let mortMsg = "";
+
+                if (score <= 1) {
+                    riskMsg = "Nguy cơ THẤP. Điều trị ngoại trú.";
+                    mortMsg = "Tỷ lệ tử vong: 1.5%";
+                    riskEl.className = "result-text text-green-600 leading-relaxed font-bold text-lg";
+                } else if (score == 2) {
+                    riskMsg = "Nguy cơ TRUNG BÌNH. Nhập viện.";
+                    mortMsg = "Tỷ lệ tử vong: 9.2%";
+                    riskEl.className = "result-text text-orange-600 leading-relaxed font-bold text-lg";
+                } else {
+                    riskMsg = "Nguy cơ CAO. Nhập ICU.";
+                    mortMsg = "Tỷ lệ tử vong: 22%";
+                    riskEl.className = "result-text text-red-700 leading-relaxed font-bold text-lg";
+                }
+
+                riskEl.innerText = riskMsg;
+                mortEl.innerText = mortMsg;
+                resultContainer.classList.remove('hidden');
+            }
+
+            // Event Listeners
+            const inputs = form.querySelectorAll('input[type="checkbox"]');
+            inputs.forEach(input => {
+                input.addEventListener('change', calculate);
+            });
+
+            clearBtn.addEventListener('click', function () {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                resultEl.innerText = "--";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+
+
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

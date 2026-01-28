@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Phân độ Killip - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .result-text,
+        input,
+        textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Pink Theme Radios */
+        .killip-option:checked+label {
+            background-color: #fce7f3;
+            border-color: #ec4899;
+            color: #be185d;
+        }
+
+        .killip-option:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .check-icon {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-box {
+            background-color: #fce7f3;
+            color: #be185d;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fbcfe8;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">
+            Phân độ Killip
+        </h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+
+            <!-- Header -->
+            <div class="hidden md:flex bg-pink-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Phân độ Killip (NMCT cấp)</h1>
+                        <p class="text-pink-100 text-xs">Đánh giá mức độ suy tim và tiên lượng tử vong trong nhồi máu cơ
+                            tim</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-heart-pulse text-3xl text-pink-300 opacity-50"></i>
+            </div>
+
+            <div class="p-3 md:p-6">
+                <form id="tool-form" class="space-y-4" novalidate>
+                    <div class="space-y-3">
+                        <label class="block text-sm font-bold text-gray-700 uppercase tracking-wide">Triệu chứng lâm
+                            sàng</label>
+
+                        <!-- Class I -->
+                        <div class="relative">
+                            <input class="sr-only killip-option" type="radio" name="killip" id="k1" value="1" checked>
+                            <label
+                                class="flex items-center p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all shadow-sm"
+                                for="k1">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <span class="font-bold">I</span>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-bold text-gray-800 text-base">Không có biểu hiện suy tim</div>
+                                    <p class="text-sm text-gray-500 mt-0.5">Không ran phổi, không T3 ngựa phi.</p>
+                                </div>
+                                <div class="check-icon w-0 opacity-0 transform scale-50"><i
+                                        class="fas fa-check-circle text-pink-500 text-xl"></i></div>
+                            </label>
+                        </div>
+
+                        <!-- Class II -->
+                        <div class="relative">
+                            <input class="sr-only killip-option" type="radio" name="killip" id="k2" value="2">
+                            <label
+                                class="flex items-center p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all shadow-sm"
+                                for="k2">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <span class="font-bold">II</span>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-bold text-gray-800 text-base">Suy tim nhẹ / trung bình</div>
+                                    <p class="text-sm text-gray-500 mt-0.5">Ran ẩm < 50% phổi, T3 ngựa phi, tĩnh mạch cổ
+                                            nổi.</p>
+                                </div>
+                                <div class="check-icon w-0 opacity-0 transform scale-50"><i
+                                        class="fas fa-check-circle text-pink-500 text-xl"></i></div>
+                            </label>
+                        </div>
+
+                        <!-- Class III -->
+                        <div class="relative">
+                            <input class="sr-only killip-option" type="radio" name="killip" id="k3" value="3">
+                            <label
+                                class="flex items-center p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all shadow-sm"
+                                for="k3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <span class="font-bold">III</span>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-bold text-gray-800 text-base">Phù phổi cấp</div>
+                                    <p class="text-sm text-gray-500 mt-0.5">Ran ẩm > 50% phế trường.</p>
+                                </div>
+                                <div class="check-icon w-0 opacity-0 transform scale-50"><i
+                                        class="fas fa-check-circle text-pink-500 text-xl"></i></div>
+                            </label>
+                        </div>
+
+                        <!-- Class IV -->
+                        <div class="relative">
+                            <input class="sr-only killip-option" type="radio" name="killip" id="k4" value="4">
+                            <label
+                                class="flex items-center p-4 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all shadow-sm"
+                                for="k4">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mr-4 flex-shrink-0">
+                                    <span class="font-bold">IV</span>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-bold text-gray-800 text-base">Sốc tim</div>
+                                    <p class="text-sm text-gray-500 mt-0.5">Tụt huyết áp (HA tâm thu < 90mmHg), thiểu
+                                            niệu, tím tái, vã mồ hôi.</p>
+                                </div>
+                                <div class="check-icon w-0 opacity-0 transform scale-50"><i
+                                        class="fas fa-check-circle text-pink-500 text-xl"></i></div>
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div id="action-buttons" class="mt-5 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-pink-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-pink-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-calculator mr-2"></i> Xem kết quả
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Result -->
+                <div id="result-container" class="mt-5 hidden animate-fade-in-up">
+                    <div class="bg-pink-50 border border-pink-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Phân độ</h3>
+                        <div id="main-result" class="score-box mb-3 bg-white text-4xl text-pink-700">Killip I</div>
+                        <div id="sub-result-container"
+                            class="bg-white p-3 rounded-lg border border-pink-100 inline-block w-full">
+                            <p id="sub-result" class="result-text text-pink-700 leading-relaxed font-bold text-base">...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const mainResult = document.getElementById('main-result');
+            const subResult = document.getElementById('sub-result');
+            const clearBtn = document.getElementById('clearBtn');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const selected = document.querySelector('input[name="killip"]:checked').value;
+                const killipClass = parseInt(selected);
+
+                let className = `Killip ${convertToRoman(killipClass)}`;
+                let mortality = "";
+
+                switch (killipClass) {
+                    case 1: mortality = "Tử vong ~ 6% (Dữ liệu cũ: 0-5%)"; break;
+                    case 2: mortality = "Tử vong ~ 17% (Dữ liệu cũ: 10-20%)"; break;
+                    case 3: mortality = "Tử vong ~ 38% (Dữ liệu cũ: 35-45%)"; break;
+                    case 4: mortality = "Tử vong ~ 81% (Dữ liệu cũ: 85-95%)"; break;
+                    // Note: Modern Reperfusion era mortality is lower, but Killip remains prognostic.
+                    // Using widely cited approximate values.
+                }
+
+                mainResult.textContent = className;
+                subResult.innerHTML = `<span class="font-bold text-gray-700">Tiên lượng:</span> ${mortality}`;
+
+                resultContainer.classList.remove('hidden');
+
+                // History
+                let recent = JSON.parse(localStorage.getItem('recentTools')) || [];
+                recent = recent.filter(t => t.id !== 'killip');
+                recent.unshift({ id: 'killip', name: 'Killip Class', icon: 'fa-stairs', color: 'pink', url: window.location.href, timestamp: Date.now() });
+                localStorage.setItem('recentTools', JSON.stringify(recent.slice(0, 5)));
+
+                // Scroll
+                setTimeout(() => {
+                    const rect = resultContainer.getBoundingClientRect();
+                    if (rect.bottom > window.innerHeight) {
+                        window.scrollBy({ top: 100, behavior: 'smooth' });
+                    }
+                }, 100);
+            });
+
+            clearBtn.addEventListener('click', () => {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                mainResult.textContent = "--";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                document.getElementById('k1').checked = true;
+            });
+        });
+
+        function convertToRoman(num) {
+            const romans = ["", "I", "II", "III", "IV"];
+            return romans[num] || num;
+        }
+
+        // Toggle Drawer Helpers
+        window.openDrawer = function (e) {
+            e?.preventDefault();
+            document.getElementById('drawer-menu').classList.remove('translate-x-full');
+            const ol = document.getElementById('drawer-overlay');
+            ol.classList.remove('hidden');
+            setTimeout(() => ol.classList.remove('opacity-0'), 10);
+        }
+        window.closeDrawer = function () {
+            document.getElementById('drawer-menu').classList.add('translate-x-full');
+            const ol = document.getElementById('drawer-overlay');
+            ol.classList.add('opacity-0');
+            setTimeout(() => ol.classList.add('hidden'), 300);
+        }
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>

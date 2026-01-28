@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ACR TI-RADS 2017 - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .input-label {
+            font-size: 0.875rem;
+            color: #374151;
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .dark .input-label {
+            color: #e2e8f0;
+        }
+
+        .input-field {
+            background-color: #fff;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+
+        .score-box {
+            background-color: #f0fdf4;
+            color: #15803d;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #dcfce7;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">ACR TI-RADS 2017</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-green-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">ACR TI-RADS 2017</h1>
+                        <p class="text-green-100 text-xs">Phân loại tổn thương nhân tuyến giáp</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-wave-square text-3xl text-green-300 opacity-50"></i>
+            </div>
+
+            <div class="p-3 md:p-6">
+                <!-- FORM -->
+                <form id="tool-form" class="space-y-4">
+                    <div><label class="input-label">1. Cấu trúc (Composition)</label>
+                        <select id="comp" class="input-field">
+                            <option value="0">Nang hoặc gần như nang (0)</option>
+                            <option value="0">Dạng bọt biển (0)</option>
+                            <option value="1">Hỗn hợp đặc-nang (1)</option>
+                            <option value="2">Đặc hoặc gần như đặc (2)</option>
+                        </select>
+                    </div>
+                    <div><label class="input-label">2. Hồi âm (Echogenicity)</label>
+                        <select id="echo" class="input-field">
+                            <option value="0">Trống âm (0)</option>
+                            <option value="1">Tăng âm hoặc đồng âm (1)</option>
+                            <option value="2">Giảm âm (2)</option>
+                            <option value="3">Rất giảm âm (3)</option>
+                        </select>
+                    </div>
+                    <div><label class="input-label">3. Hình dáng (Shape)</label>
+                        <select id="shape" class="input-field">
+                            <option value="0">Rộng hơn cao (ngang) (0)</option>
+                            <option value="3">Cao hơn rộng (dọc) (3)</option>
+                        </select>
+                    </div>
+                    <div><label class="input-label">4. Đường bờ (Margin)</label>
+                        <select id="margin" class="input-field">
+                            <option value="0">Nhẵn (0)</option>
+                            <option value="0">Không rõ (0)</option>
+                            <option value="2">Có thùy hoặc không đều (2)</option>
+                            <option value="3">Xâm lấn vỏ bao/ngoài tuyến giáp (3)</option>
+                        </select>
+                    </div>
+                    <div><label class="input-label">5. Vôi hóa (Echogenic Foci)</label>
+                        <select id="foci" class="input-field">
+                            <option value="0">Không có hoặc xảo ảnh đuôi sao chổi (0)</option>
+                            <option value="1">Vôi hóa to (1)</option>
+                            <option value="2">Vôi hóa viền (2)</option>
+                            <option value="3">Vi vôi hóa (nốt tăng âm dạng chấm) (3)</option>
+                        </select>
+                    </div>
+
+                    <div id="action-buttons" class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-rotate-right mr-2"></i> Nhập lại</button>
+                        <button type="submit"
+                            class="flex-1 bg-green-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-green-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-calculator mr-2"></i> Tính toán</button>
+                    </div>
+                </form>
+
+                <!-- RESULT -->
+                <div id="result-container" class="mt-6 hidden animate-fade-in-up">
+                    <div class="bg-green-50 border border-green-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Tổng điểm</h3>
+                        <div id="score" class="score-box mb-3 bg-white text-4xl text-green-600">--</div>
+                        <div class="bg-white p-3 rounded-lg border border-green-100 inline-block w-full">
+                            <p id="level" class="result-text text-green-700 leading-relaxed font-bold text-lg">...</p>
+                            <p id="advice" class="text-sm text-gray-600 mt-2">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <script type="module" src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const scoreEl = document.getElementById('score');
+            const levelEl = document.getElementById('level');
+            const adviceEl = document.getElementById('advice');
+            const clearBtn = document.getElementById('clearBtn');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const comp = parseInt(document.getElementById('comp').value);
+                const echo = parseInt(document.getElementById('echo').value);
+                const shape = parseInt(document.getElementById('shape').value);
+                const margin = parseInt(document.getElementById('margin').value);
+                const foci = parseInt(document.getElementById('foci').value);
+                const total = comp + echo + shape + margin + foci;
+
+                scoreEl.innerText = total;
+                let level = "";
+                let advice = "";
+
+                if (total == 0 || total <= 2) {
+                    level = "TR1 - Lành tính / TR2 - Không nghi ngờ"; advice = "Không cần FNA";
+                } else if (total == 3) {
+                    level = "TR3 - Nghi ngờ thấp"; advice = "FNA nếu ≥ 2.5 cm. Theo dõi nếu ≥ 1.5 cm.";
+                } else if (total <= 6) {
+                    level = "TR4 - Nghi ngờ trung bình"; advice = "FNA nếu ≥ 1.5 cm. Theo dõi nếu ≥ 1.0 cm.";
+                } else {
+                    level = "TR5 - Nghi ngờ cao"; advice = "FNA nếu ≥ 1.0 cm. Theo dõi nếu ≥ 0.5 cm.";
+                }
+
+                levelEl.innerText = level;
+                adviceEl.innerHTML = `<b>Khuyến cáo:</b> ${advice}`;
+                resultContainer.classList.remove('hidden');
+            });
+
+            clearBtn.addEventListener('click', function () {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                scoreEl.innerText = "--";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

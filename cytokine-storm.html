@@ -1,0 +1,674 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thang điểm HScore (Cytokine Storm) - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- APP FEEL OPTIMIZATIONS --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            /* Đảm bảo khoảng trống dưới cùng đủ lớn để không bị che bởi menu */
+            padding-bottom: 100px;
+
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .result-text,
+        input,
+        textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Custom Radio Style */
+        .hscore-option:checked+label {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+
+        .hscore-option:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+            width: 1.25rem;
+            margin-left: 0.5rem;
+        }
+
+        .check-icon {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-box {
+            background-color: #fee2e2;
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fecaca;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">
+            HScore (Cytokine Storm)
+        </h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Thang điểm HScore</h1>
+                        <p class="text-red-100 text-xs">Dự báo nguy cơ Hội chứng bão Cytokine (HLH/MAS)</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-biohazard text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-3 md:p-6">
+                <form id="tool-form" class="space-y-4" novalidate>
+
+                    <!-- Group 1: Cơ địa & Lâm sàng -->
+                    <div class="space-y-2">
+                        <h3 class="text-base font-bold text-red-800 border-b border-red-200 pb-1 flex items-center">
+                            <span
+                                class="bg-red-100 text-red-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">1</span>
+                            Đặc điểm lâm sàng & Cơ địa
+                        </h3>
+
+                        <!-- 1. Ức chế miễn dịch -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tình trạng Ức chế miễn
+                                dịch?</label>
+                            <div class="grid grid-cols-1 gap-2">
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="immuno" id="immuno_0"
+                                        value="0" checked>
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="immuno_0">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Không</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">0đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="immuno" id="immuno_18"
+                                        value="18">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="immuno_18">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Có (HIV dương
+                                            tính, dùng thuốc ức chế MD)</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">18đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Nhiệt độ -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nhiệt độ cao nhất (⁰C)</label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="temp" id="temp_0" value="0"
+                                        checked>
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="temp_0">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">&lt; 38.4
+                                        </div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">0đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="temp" id="temp_33"
+                                        value="33">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="temp_33">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">38.4 - 39.4
+                                        </div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">33đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="temp" id="temp_49"
+                                        value="49">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="temp_49">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">&gt; 39.4
+                                        </div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">49đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Gan Lách -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Gan / Lách to</label>
+                            <div class="grid grid-cols-1 gap-2">
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="organ" id="organ_0"
+                                        value="0" checked>
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="organ_0">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Không</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">0đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="organ" id="organ_23"
+                                        value="23">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="organ_23">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Gan HOẶC Lách
+                                            to</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">23đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="organ" id="organ_38"
+                                        value="38">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="organ_38">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Cả Gan VÀ
+                                            Lách to</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">38đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group 2: Xét nghiệm máu -->
+                    <div class="space-y-2">
+                        <h3 class="text-base font-bold text-red-800 border-b border-red-200 pb-1 flex items-center">
+                            <span
+                                class="bg-red-100 text-red-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">2</span>
+                            Cận lâm sàng
+                        </h3>
+
+                        <!-- 4. Số dòng tế bào máu giảm -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Số dòng tế bào máu giảm <span
+                                    class="text-xs font-normal text-gray-500 block">(Hb ≤ 9.2 g/dL, BC ≤ 5 G/L, TC ≤ 110
+                                    G/L)</span></label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="cyto" id="cyto_0" value="0"
+                                        checked>
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="cyto_0">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">1 Dòng</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">0đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="cyto" id="cyto_24"
+                                        value="24">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="cyto_24">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">2 Dòng</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">24đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="cyto" id="cyto_34"
+                                        value="34">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="cyto_34">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">3 Dòng</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">34đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Ferritin -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Ferritin (ng/mL)</label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="ferritin" id="ferritin_0"
+                                        value="0" checked>
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="ferritin_0">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">&lt; 2000
+                                        </div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">0đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="ferritin" id="ferritin_35"
+                                        value="35">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="ferritin_35">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">2000 - 6000
+                                        </div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">35đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="ferritin" id="ferritin_50"
+                                        value="50">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="ferritin_50">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">&gt; 6000
+                                        </div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">50đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 6. Triglyceride / Fibrinogen -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Triglyceride > 1.5 mmol/L
+                                <span class="text-red-500 font-bold">HOẶC</span> Fibrinogen ≤ 2.5 g/L</label>
+                            <div class="grid grid-cols-1 gap-2">
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="trig" id="trig_0" value="0"
+                                        checked>
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="trig_0">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Không</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">0đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="trig" id="trig_44"
+                                        value="44">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="trig_44">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Có</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">44đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 7. AST -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Men gan AST (SGOT)</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="ast" id="ast_0" value="0"
+                                        checked>
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="ast_0">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">&lt; 30 IU/L
+                                        </div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">0đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="ast" id="ast_19" value="19">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="ast_19">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">&ge; 30 IU/L
+                                        </div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">19đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 8. Thực bào máu -->
+                        <div class="mb-3">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Hình ảnh thực bào máu tủy
+                                xương</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="hemophag" id="hemophag_0"
+                                        value="0" checked>
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="hemophag_0">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Không</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">0đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                                <div class="relative">
+                                    <input class="sr-only hscore-option" type="radio" name="hemophag" id="hemophag_35"
+                                        value="35">
+                                    <label
+                                        class="flex items-center p-2.5 md:p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                                        for="hemophag_35">
+                                        <div class="flex-1 font-medium text-gray-700 text-sm md:text-base">Có</div>
+                                        <div class="text-red-600 font-bold text-sm whitespace-nowrap">35đ</div>
+                                        <div
+                                            class="check-icon w-0 opacity-0 transform scale-50 text-red-500 overflow-hidden flex-shrink-0">
+                                            <i class="fas fa-check-circle"></i></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div id="action-buttons" class="mt-5 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-red-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
+                        </button>
+                    </div>
+                </form>
+
+                <div id="result-container" class="mt-5 hidden animate-fade-in-up">
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Tổng điểm HScore</h3>
+                        <div id="main-result" class="score-box mb-3 bg-white text-4xl text-red-700">--</div>
+                        <div id="sub-result-container"
+                            class="bg-white p-3 rounded-lg border border-red-100 inline-block w-full">
+                            <p id="sub-result" class="result-text text-red-700 leading-relaxed font-bold text-base">
+                                ...</p>
+                            <p id="recommendation" class="text-xs text-gray-600 mt-1">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 mb-6">Vui lòng nhập đầy đủ thông tin.</p>
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none transition">
+                Đóng
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'F12' ||
+                (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A'))) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        function useTool(id, name, icon, color, url) {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            recentTools = recentTools.filter(tool => tool.id !== id);
+            recentTools.unshift({
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+                url: url,
+                timestamp: new Date().getTime()
+            });
+            if (recentTools.length > 5) {
+                recentTools.pop();
+            }
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
+        }
+
+        function openDrawer(e) {
+            if (e) e.preventDefault();
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            drawer.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        const modal = document.getElementById('notification-modal');
+        const modalMessage = document.getElementById('modal-message');
+
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
+                modalMessage.textContent = message;
+                modal.classList.remove('hidden');
+            }
+        }
+
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const mainResult = document.getElementById('main-result');
+            const subResult = document.getElementById('sub-result');
+            const recommendation = document.getElementById('recommendation');
+            const clearBtn = document.getElementById('clearBtn');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Get values
+                const immuno = parseInt(document.querySelector('input[name="immuno"]:checked').value);
+                const temp = parseInt(document.querySelector('input[name="temp"]:checked').value);
+                const organ = parseInt(document.querySelector('input[name="organ"]:checked').value);
+                const cyto = parseInt(document.querySelector('input[name="cyto"]:checked').value);
+                const ferritin = parseInt(document.querySelector('input[name="ferritin"]:checked').value);
+                const trig = parseInt(document.querySelector('input[name="trig"]:checked').value);
+                const ast = parseInt(document.querySelector('input[name="ast"]:checked').value);
+                const hemophag = parseInt(document.querySelector('input[name="hemophag"]:checked').value);
+
+                const totalScore = immuno + temp + organ + cyto + ferritin + trig + ast + hemophag;
+
+                let probability = "";
+                if (totalScore <= 90) probability = "< 1%";
+                else if (totalScore <= 120) probability = "1 - 5%";
+                else if (totalScore <= 160) probability = "10 - 40%";
+                else if (totalScore <= 180) probability = "60 - 80%";
+                else if (totalScore <= 200) probability = "80 - 96%";
+                else probability = "> 99%";
+
+                mainResult.textContent = `${totalScore} Điểm`;
+                subResult.textContent = `Nguy cơ bão Cytokine (HLH): ${probability}`;
+
+                let advice = "";
+                if (totalScore >= 169) {
+                    advice = "Nguy cơ Rất Cao. Cần hội chẩn chuyên gia Huyết học/Truyền nhiễm ngay lập tức.";
+                    subResult.className = "result-text text-red-700 leading-relaxed font-bold text-base animate-pulse";
+                } else {
+                    advice = "Cân nhắc lâm sàng và theo dõi sát các chỉ số.";
+                    subResult.className = "result-text text-red-700 leading-relaxed font-bold text-base";
+                }
+                recommendation.textContent = advice;
+
+                resultContainer.classList.remove('hidden');
+
+                useTool(
+                    'cytokine-storm',
+                    'HScore (Cytokine Storm)',
+                    'fa-biohazard',
+                    'text-red-600',
+                    window.location.href
+                );
+
+                // Scroll Logic
+                setTimeout(() => {
+                    const bottomNavHeight = 70;
+                    const rect = resultContainer.getBoundingClientRect();
+                    const isCutOff = rect.bottom > (window.innerHeight - bottomNavHeight);
+
+                    if (isCutOff) {
+                        const scrollAmount = rect.bottom - (window.innerHeight - bottomNavHeight) + 15;
+                        window.scrollBy({
+                            top: scrollAmount,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 150);
+            });
+
+            clearBtn.addEventListener('click', function () {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                mainResult.textContent = "--";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Reset checked to defaults if needed or just let native reset handle it (defaults are checked=true in HTML)
+                // Re-selecting defaults explicitly to ensure logic visual sync if needed:
+                document.getElementById('immuno_0').checked = true;
+                document.getElementById('temp_0').checked = true;
+                document.getElementById('organ_0').checked = true;
+                document.getElementById('cyto_0').checked = true;
+                document.getElementById('ferritin_0').checked = true;
+                document.getElementById('trig_0').checked = true;
+                document.getElementById('ast_0').checked = true;
+                document.getElementById('hemophag_0').checked = true;
+            });
+
+            document.querySelectorAll('.hscore-option').forEach(radio => {
+                // Prevent uncheck on double click if standard radio behavior is desired, 
+                // but glasgow had this. We can keep it or remove it. 
+                // Glasgow code: this.checked = false; (which allows unselecting? usually radios must have one selected)
+                // In generic scoring, usually one MUST be selected. I'll keep standard radio behavior (no uncheck).
+            });
+        });
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>

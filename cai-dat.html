@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cài đặt - Máy tính Y học</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Nunito:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&family=Patrick+Hand&family=Oswald:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <meta name="theme-color" content="#0d9488">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enable dark mode strategy
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0ea5e9',
+                        secondary: '#14b8a6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            -webkit-game-button-highlight-color: transparent;
+            touch-action: pan-x pan-y;
+        }
+
+        /* Dark mode overrides removed to use global settings.js */
+    </style>
+</head>
+
+<body class="text-slate-800 bg-slate-50 bg-pattern min-h-screen pb-24 md:pb-0">
+
+    <main class="md:pt-20 p-5 max-w-2xl mx-auto flex flex-col min-h-screen">
+        <h1 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <a href="index.html" class="text-slate-400 hover:text-teal-600 transition"><i
+                    class="fa-solid fa-arrow-left"></i></a>
+            Cài đặt
+        </h1>
+
+        <!-- State: Chưa đăng nhập -->
+        <div id="login-required"
+            class="hidden flex flex-col items-center justify-center py-10 bg-white rounded-2xl shadow-sm border border-slate-100 text-center">
+            <div
+                class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-4 dark:bg-slate-700">
+                <i class="fa-solid fa-lock text-3xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-700 mb-2 dark:text-white">Yêu cầu đăng nhập</h3>
+            <p class="text-slate-500 mb-6 px-4 dark:text-slate-300">Vui lòng đăng nhập để đồng bộ và tùy chỉnh cài đặt
+                cá nhân của bạn.</p>
+            <button onclick="openDrawer(); setTimeout(() => document.getElementById('login-btn-mobile').click(), 300);"
+                class="bg-teal-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-teal-700 transition shadow-lg shadow-teal-200/50">
+                Đăng nhập ngay
+            </button>
+        </div>
+
+        <!-- State: Đã đăng nhập -->
+        <div id="settings-panel" class="hidden flex-col gap-6 animate-fade-in">
+            <!-- Theme -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2 text-lg"><i
+                        class="fa-solid fa-moon text-blue-500"></i> Giao diện</h3>
+                <div class="flex items-center justify-between p-2">
+                    <span class="font-medium text-slate-700 dark:text-slate-200">Chế độ Tối (Dark Mode)</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="toggle-darkmode" class="sr-only peer"
+                            onchange="updateSetting('theme', this.checked ? 'dark' : 'light')">
+                        <div
+                            class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 dark:bg-slate-700 dark:border-slate-600">
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Font Size -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2 text-lg"><i
+                        class="fa-solid fa-text-height text-teal-500"></i> Cỡ chữ</h3>
+                <div class="grid grid-cols-4 gap-3">
+                    <button onclick="updateSetting('fontSize', 'small')"
+                        class="py-3 rounded-xl border border-slate-200 hover:border-teal-500 hover:text-teal-600 hover:bg-teal-50 transition text-xs setting-font-btn dark:border-slate-600 dark:hover:bg-slate-700"
+                        data-size="small">Nhỏ</button>
+                    <button onclick="updateSetting('fontSize', 'medium')"
+                        class="py-3 rounded-xl border border-slate-200 hover:border-teal-500 hover:text-teal-600 hover:bg-teal-50 transition text-base font-medium setting-font-btn dark:border-slate-600 dark:hover:bg-slate-700"
+                        data-size="medium">Vừa</button>
+                    <button onclick="updateSetting('fontSize', 'large')"
+                        class="py-3 rounded-xl border border-slate-200 hover:border-teal-500 hover:text-teal-600 hover:bg-teal-50 transition text-lg font-bold setting-font-btn dark:border-slate-600 dark:hover:bg-slate-700"
+                        data-size="large">Lớn</button>
+                    <button onclick="updateSetting('fontSize', 'xl')"
+                        class="py-3 rounded-xl border border-slate-200 hover:border-teal-500 hover:text-teal-600 hover:bg-teal-50 transition text-xl font-extrabold setting-font-btn dark:border-slate-600 dark:hover:bg-slate-700"
+                        data-size="xl">XL</button>
+                </div>
+                <p class="text-xs text-slate-400 mt-3 text-center italic">Chọn kích thước văn bản phù hợp với mắt bạn.
+                </p>
+            </div>
+
+            <!-- Font Family -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2 text-lg"><i
+                        class="fa-solid fa-font text-purple-500"></i> Kiểu chữ</h3>
+                <div class="space-y-3">
+                    <label
+                        class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition dark:border-slate-600 dark:hover:bg-slate-700">
+                        <input type="radio" name="fontFamily" value="inter"
+                            onchange="updateSetting('fontFamily', 'inter')"
+                            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500">
+                        <span class="ml-3 font-medium text-slate-700 dark:text-slate-200"
+                            style="font-family: 'Inter', sans-serif;">Inter (Mặc định - Hiện đại)</span>
+                    </label>
+                    <label
+                        class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition dark:border-slate-600 dark:hover:bg-slate-700">
+                        <input type="radio" name="fontFamily" value="roboto"
+                            onchange="updateSetting('fontFamily', 'roboto')"
+                            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500">
+                        <span class="ml-3 font-medium text-slate-700 dark:text-slate-200"
+                            style="font-family: 'Roboto', sans-serif;">Roboto (Truyền thống)</span>
+                    </label>
+                    <label
+                        class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition dark:border-slate-600 dark:hover:bg-slate-700">
+                        <input type="radio" name="fontFamily" value="opensans"
+                            onchange="updateSetting('fontFamily', 'opensans')"
+                            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500">
+                        <span class="ml-3 font-medium text-slate-700 dark:text-slate-200"
+                            style="font-family: 'Open Sans', sans-serif;">Open Sans (Trung tính)</span>
+                    </label>
+                    <label
+                        class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition dark:border-slate-600 dark:hover:bg-slate-700">
+                        <input type="radio" name="fontFamily" value="lora"
+                            onchange="updateSetting('fontFamily', 'lora')"
+                            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500">
+                        <span class="ml-3 font-medium text-slate-700 dark:text-slate-200"
+                            style="font-family: 'Lora', serif;">Lora (Có chân - Dễ đọc)</span>
+                    </label>
+                    <label
+                        class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition dark:border-slate-600 dark:hover:bg-slate-700">
+                        <input type="radio" name="fontFamily" value="nunito"
+                            onchange="updateSetting('fontFamily', 'nunito')"
+                            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500">
+                        <span class="ml-3 font-medium text-slate-700 dark:text-slate-200"
+                            style="font-family: 'Nunito', sans-serif;">Nunito (Bo tròn - Thân thiện)</span>
+                    </label>
+                    <label
+                        class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition dark:border-slate-600 dark:hover:bg-slate-700">
+                        <input type="radio" name="fontFamily" value="patrick"
+                            onchange="updateSetting('fontFamily', 'patrick')"
+                            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500">
+                        <span class="ml-3 font-medium text-slate-700 dark:text-slate-200"
+                            style="font-family: 'Patrick Hand', cursive;">Patrick Hand (Viết tay)</span>
+                    </label>
+                    <label
+                        class="flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition dark:border-slate-600 dark:hover:bg-slate-700">
+                        <input type="radio" name="fontFamily" value="system"
+                            onchange="updateSetting('fontFamily', 'system')"
+                            class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500">
+                        <span class="ml-3 font-medium text-slate-700 dark:text-slate-200"
+                            style="font-family: system-ui;">System UI (Theo thiết bị)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="text-center text-slate-400 text-sm mt-4">
+                Thay đổi sẽ được lưu tự động trên thiết bị này.
+            </div>
+        </div>
+    </main>
+
+    <!-- Import App Core -->
+    <!-- Quan trọng: đặt type="module" để chạy cùng module system của app.js -->
+    <script type="module" src="app.js"></script>
+
+    <script>
+        // --- LOGIC XỬ LÝ SETTINGS ---
+
+        function getSettings() {
+            try { return JSON.parse(localStorage.getItem('mtyh_settings')) || {}; }
+            catch { return {}; }
+        }
+
+        function saveSettings(s) {
+            localStorage.setItem('mtyh_settings', JSON.stringify(s));
+            if (window.applyMtyhSettings) window.applyMtyhSettings(); // Gọi hàm apply toàn cục từ settings.js
+            if (window.applySettings) window.applySettings();
+        }
+
+        window.updateSetting = function (key, value) {
+            const current = getSettings();
+            current[key] = value;
+            saveSettings(current);
+            renderActiveState();
+        }
+
+        function renderActiveState() {
+            const s = getSettings();
+
+            // Dark mode toggle
+            const toggle = document.getElementById('toggle-darkmode');
+            if (toggle) toggle.checked = (s.theme === 'dark');
+
+            // Font size buttons
+            const currentSize = s.fontSize || 'medium';
+            document.querySelectorAll('.setting-font-btn').forEach(btn => {
+                if (btn.dataset.size === currentSize) {
+                    // Active state: Light mode uses Teal-50
+                    btn.classList.add('bg-teal-50', 'border-teal-500', 'text-teal-700', 'ring-1', 'ring-teal-500');
+                    if (document.documentElement.classList.contains('dark')) {
+                        // FIX: High contrast for Dark Mode (Teal-600 active background + White text)
+                        btn.classList.remove('bg-teal-50', 'text-teal-700');
+                        btn.classList.add('bg-teal-600', 'text-white', 'border-teal-400');
+                    }
+                } else {
+                    btn.classList.remove('bg-teal-50', 'border-teal-500', 'text-teal-700', 'ring-1', 'ring-teal-500', 'bg-teal-600', 'text-white', 'border-teal-400');
+                    // Reset to default dark style if needed in CSS or auto-handled
+                }
+            });
+
+            // Font family radios
+            const currentFont = s.fontFamily || 'inter';
+            document.querySelectorAll('input[name="fontFamily"]').forEach(radio => {
+                radio.checked = (radio.value === currentFont);
+            });
+        }
+
+        // --- AUTH CHECKER ---
+        function checkAuthLoop() {
+            // Kiểm tra trạng thái login thông qua UI elements do app.js quản lý
+            // Vì app.js chạy module nên biến scope riêng, ta dựa vào DOM
+            const mobileLoginBtn = document.getElementById('login-btn-mobile');
+
+            // Nếu nút login mobile bị ẩn => Đã đăng nhập
+            const isLogged = mobileLoginBtn && mobileLoginBtn.classList.contains('hidden');
+
+            const loginPanel = document.getElementById('login-required');
+            const settingsPanel = document.getElementById('settings-panel');
+
+            if (isLogged) {
+                if (loginPanel) loginPanel.classList.add('hidden');
+                if (settingsPanel) {
+                    settingsPanel.classList.remove('hidden');
+                    settingsPanel.classList.add('flex');
+                }
+                renderActiveState();
+            } else {
+                if (loginPanel) loginPanel.classList.remove('hidden');
+                if (settingsPanel) {
+                    settingsPanel.classList.add('hidden');
+                    settingsPanel.classList.remove('flex');
+                }
+            }
+        }
+
+        // Chạy kiểm tra định kỳ
+        setInterval(checkAuthLoop, 1000); // Check mỗi giây
+        document.addEventListener('DOMContentLoaded', () => {
+            renderActiveState();
+            setTimeout(checkAuthLoop, 500);
+        });
+
+    </script>
+</body>
+
+</html>

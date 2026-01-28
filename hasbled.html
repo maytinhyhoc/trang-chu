@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 
 <head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thang điểm HAS-BLED</title>
@@ -11,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#f472b6">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png">
 
@@ -56,7 +58,7 @@
 
         /* Custom Radio Button Styling */
         input[type="radio"] {
-            accent-color: #4f46e5;
+            accent-color: #ec4899;
             width: 1.25rem;
             height: 1.25rem;
             cursor: pointer;
@@ -80,32 +82,25 @@
 
 <body>
 
-    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-        <a href="#" onclick="history.back(); return false;"
-            class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
-            <i class="fa-solid fa-chevron-left text-lg"></i>
-        </a>
-        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">
             Thang điểm HAS-BLED
         </h1>
-        <div class="w-8"></div>
     </header>
 
     <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-4xl">
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
 
-            <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
+            <div class="hidden md:flex bg-pink-600 p-6 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <a href="#" onclick="history.back(); return false;"
-                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
+
                     <div>
                         <h1 class="text-2xl font-bold">Thang điểm HAS-BLED</h1>
-                        <p class="text-indigo-100 mt-1 text-sm">Đánh giá nguy cơ chảy máu ở bệnh nhân rung nhĩ</p>
+                        <p class="text-pink-100 mt-1 text-sm">Đánh giá nguy cơ chảy máu ở bệnh nhân rung nhĩ</p>
                     </div>
                 </div>
-                <i class="fa-solid fa-heart-pulse text-4xl text-indigo-300 opacity-50"></i>
+                <i class="fa-solid fa-heart-pulse text-4xl text-pink-300 opacity-50"></i>
             </div>
 
             <div class="p-4 md:p-8">
@@ -113,16 +108,16 @@
 
                     <div class="py-3 first:pt-0">
                         <label class="block text-base font-semibold text-gray-800 mb-2">
-                            <span class="text-indigo-600">H</span> - Huyết áp không kiểm soát (HATT > 160mmHg)
+                            <span class="text-pink-600">H</span> - Huyết áp không kiểm soát (HATT > 160mmHg)
                         </label>
                         <div class="flex gap-6 pl-2">
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="hypertension" value="1">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Có (+1)</span>
                             </label>
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="hypertension" value="0">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Không</span>
                             </label>
@@ -131,22 +126,22 @@
 
                     <div class="py-3">
                         <label class="block text-base font-semibold text-gray-800 mb-2">
-                            <span class="text-indigo-600">A</span> - Chức năng Thận/Gan bất thường
+                            <span class="text-pink-600">A</span> - Chức năng Thận/Gan bất thường
                         </label>
                         <div class="space-y-2 pl-2">
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="renal_liver" value="0">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Không có</span>
                             </label>
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="renal_liver" value="1">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Chỉ một (Thận <strong>HOẶC</strong>
                                     Gan) (+1)</span>
                             </label>
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="renal_liver" value="2">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Cả hai (Thận <strong>VÀ</strong>
                                     Gan) (+2)</span>
@@ -156,16 +151,16 @@
 
                     <div class="py-3">
                         <label class="block text-base font-semibold text-gray-800 mb-2">
-                            <span class="text-indigo-600">S</span> - Tiền sử đột quỵ
+                            <span class="text-pink-600">S</span> - Tiền sử đột quỵ
                         </label>
                         <div class="flex gap-6 pl-2">
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="stroke" value="1">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Có (+1)</span>
                             </label>
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="stroke" value="0">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Không</span>
                             </label>
@@ -174,16 +169,16 @@
 
                     <div class="py-3">
                         <label class="block text-base font-semibold text-gray-800 mb-2">
-                            <span class="text-indigo-600">B</span> - Tiền sử chảy máu nặng
+                            <span class="text-pink-600">B</span> - Tiền sử chảy máu nặng
                         </label>
                         <div class="flex gap-6 pl-2">
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="bleeding" value="1">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Có (+1)</span>
                             </label>
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="bleeding" value="0">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Không</span>
                             </label>
@@ -192,15 +187,15 @@
 
                     <div class="py-3">
                         <label class="block text-base font-semibold text-gray-800 mb-2">
-                            <span class="text-indigo-600">L</span> - INR không ổn định (TTR < 60%) </label>
+                            <span class="text-pink-600">L</span> - INR không ổn định (TTR < 60%) </label>
                                 <div class="flex gap-6 pl-2">
                                     <label
-                                        class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                        class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                         <input type="radio" name="labile_inr" value="1">
                                         <span class="ml-2 text-sm text-gray-700 font-medium">Có (+1)</span>
                                     </label>
                                     <label
-                                        class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                        class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                         <input type="radio" name="labile_inr" value="0">
                                         <span class="ml-2 text-sm text-gray-700 font-medium">Không</span>
                                     </label>
@@ -209,16 +204,16 @@
 
                     <div class="py-3">
                         <label class="block text-base font-semibold text-gray-800 mb-2">
-                            <span class="text-indigo-600">E</span> - Người cao tuổi (> 65 tuổi)
+                            <span class="text-pink-600">E</span> - Người cao tuổi (> 65 tuổi)
                         </label>
                         <div class="flex gap-6 pl-2">
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="elderly" value="1">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Có (+1)</span>
                             </label>
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 flex-1 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="elderly" value="0">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Không</span>
                             </label>
@@ -227,22 +222,22 @@
 
                     <div class="py-3">
                         <label class="block text-base font-semibold text-gray-800 mb-2">
-                            <span class="text-indigo-600">D</span> - Sử dụng thuốc / Rượu bia
+                            <span class="text-pink-600">D</span> - Sử dụng thuốc / Rượu bia
                         </label>
                         <div class="space-y-2 pl-2">
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="drugs_alcohol" value="0">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Không có cả hai</span>
                             </label>
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="drugs_alcohol" value="1">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Chỉ một (Thuốc
                                     <strong>HOẶC</strong> Rượu) (+1)</span>
                             </label>
                             <label
-                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-indigo-500 has-checked:bg-indigo-50 transition">
+                                class="flex items-center cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 has-checked:border-pink-500 has-checked:bg-pink-50 transition">
                                 <input type="radio" name="drugs_alcohol" value="2">
                                 <span class="ml-2 text-sm text-gray-700 font-medium">Cả hai (Thuốc <strong>VÀ</strong>
                                     Rượu) (+2)</span>
@@ -252,7 +247,7 @@
 
                     <div class="mt-8 flex flex-col sm:flex-row gap-3 pt-4">
                         <button type="submit"
-                            class="flex-1 bg-indigo-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-200 hover:shadow-xl transition transform active:scale-95 flex items-center justify-center">
+                            class="flex-1 bg-pink-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-pink-200 hover:shadow-xl transition transform active:scale-95 flex items-center justify-center">
                             <i class="fa-solid fa-calculator mr-2"></i> Tính điểm
                         </button>
                         <button type="button" id="clearBtn"
@@ -264,22 +259,22 @@
 
                 <div id="result-container" class="mt-8 hidden animate-fade-in-up">
                     <div
-                        class="bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 rounded-2xl p-6 text-center shadow-inner relative overflow-hidden">
+                        class="bg-gradient-to-br from-pink-50 to-white border border-pink-100 rounded-2xl p-6 text-center shadow-inner relative overflow-hidden">
                         <div
-                            class="absolute top-0 right-0 w-24 h-24 bg-indigo-100 rounded-bl-full opacity-50 -mr-4 -mt-4">
+                            class="absolute top-0 right-0 w-24 h-24 bg-pink-100 rounded-bl-full opacity-50 -mr-4 -mt-4">
                         </div>
 
-                        <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 relative z-10">Kết
+                        <h3 class="text-xs font-bold text-pink-400 uppercase tracking-widest mb-2 relative z-10">Kết
                             quả HAS-BLED</h3>
 
                         <div class="flex items-center justify-center gap-2 mb-4 relative z-10">
                             <span id="hasbled-score-display"
-                                class="text-6xl font-extrabold text-indigo-600 tracking-tighter drop-shadow-sm">0</span>
+                                class="text-6xl font-extrabold text-pink-600 tracking-tighter drop-shadow-sm">0</span>
                             <span class="text-xl text-gray-400 font-medium self-end mb-2">điểm</span>
                         </div>
 
                         <div
-                            class="bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-indigo-50 shadow-sm text-left relative z-10">
+                            class="bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-pink-50 shadow-sm text-left relative z-10">
                             <p class="text-xs font-bold text-gray-400 uppercase mb-1">Đánh giá nguy cơ:</p>
                             <p id="evaluation-text" class="result-text text-lg font-bold text-gray-800 leading-relaxed">
                                 ...
@@ -290,7 +285,7 @@
 
                 <div class="mt-8 p-5 bg-gray-50 rounded-xl border border-gray-100 text-sm text-gray-600">
                     <h4 class="font-bold text-gray-800 mb-3 flex items-center">
-                        <i class="fa-solid fa-circle-info text-indigo-500 mr-2"></i>Ý nghĩa lâm sàng
+                        <i class="fa-solid fa-circle-info text-pink-500 mr-2"></i>Ý nghĩa lâm sàng
                     </h4>
                     <ul class="space-y-3 pl-1">
                         <li class="flex items-start gap-2">
@@ -323,7 +318,7 @@
             <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
             <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
             <button onclick="hideModal()"
-                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-pink-600 text-base font-medium text-white hover:bg-pink-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
@@ -436,7 +431,7 @@
                     'has-bled',
                     'Thang điểm HAS-BLED',
                     'fa-heart-pulse',
-                    'text-indigo-600',
+                    'text-pink-600',
                     window.location.href
                 );
             });

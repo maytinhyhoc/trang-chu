@@ -1,0 +1,389 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thang điểm Geneva (Revised) - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .result-text,
+        input,
+        textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        .geneva-option:checked+label {
+            background-color: #fce7f3;
+            border-color: #ec4899;
+            color: #be185d;
+        }
+
+        .geneva-option:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .check-icon {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-box {
+            background-color: #fce7f3;
+            color: #be185d;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fbcfe8;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">
+            Thang điểm Geneva
+        </h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+
+            <!-- Header -->
+            <div class="hidden md:flex bg-pink-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Thang điểm Geneva (Sửa đổi)</h1>
+                        <p class="text-pink-100 text-xs">Đánh giá xác suất lâm sàng Thuyên tắc phổi (PE)</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-lungs text-3xl text-pink-300 opacity-50"></i>
+            </div>
+
+            <div class="p-3 md:p-6">
+                <form id="tool-form" class="space-y-4" novalidate>
+
+                    <!-- Group: Yếu tố nguy cơ -->
+                    <div class="space-y-2">
+                        <h3 class="text-base font-bold text-pink-800 border-b border-pink-200 pb-1">
+                            Yếu tố nguy cơ & Tiền sử
+                        </h3>
+
+                        <!-- Age -->
+                        <div
+                            class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <label for="age" class="flex-1 font-medium text-gray-800 cursor-pointer select-none">Tuổi >
+                                65</label>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="age"
+                                    class="geneva-option w-5 h-5 text-pink-600 rounded border-gray-300 focus:ring-pink-500"
+                                    value="1">
+                                <span class="text-sm font-bold text-pink-600 min-w-[25px] text-right">+1</span>
+                            </div>
+                        </div>
+
+                        <!-- Prev DVT/PE -->
+                        <div
+                            class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <label for="prev" class="flex-1 font-medium text-gray-800 cursor-pointer select-none">Tiền
+                                sử DVT hoặc PE</label>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="prev"
+                                    class="geneva-option w-5 h-5 text-pink-600 rounded border-gray-300 focus:ring-pink-500"
+                                    value="3">
+                                <span class="text-sm font-bold text-pink-600 min-w-[25px] text-right">+3</span>
+                            </div>
+                        </div>
+
+                        <!-- Surgery -->
+                        <div
+                            class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex-1">
+                                <label for="surgery"
+                                    class="font-medium text-gray-800 cursor-pointer block select-none">Phẫu thuật / Gãy
+                                    xương</label>
+                                <p class="text-xs text-gray-500 mt-0.5">Phẫu thuật (gây mê toàn thân) hoặc gãy xương chi
+                                    dưới trong 1 tháng qua</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="surgery"
+                                    class="geneva-option w-5 h-5 text-pink-600 rounded border-gray-300 focus:ring-pink-500"
+                                    value="2">
+                                <span class="text-sm font-bold text-pink-600 min-w-[25px] text-right">+2</span>
+                            </div>
+                        </div>
+
+                        <!-- Cancer -->
+                        <div
+                            class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex-1">
+                                <label for="cancer"
+                                    class="font-medium text-gray-800 cursor-pointer block select-none">Ung thư đang hoạt
+                                    động</label>
+                                <p class="text-xs text-gray-500 mt-0.5">U đặc/Máu, đang điều trị hoặc đã chữa khỏi < 1
+                                        năm</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="cancer"
+                                    class="geneva-option w-5 h-5 text-pink-600 rounded border-gray-300 focus:ring-pink-500"
+                                    value="2">
+                                <span class="text-sm font-bold text-pink-600 min-w-[25px] text-right">+2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group: Triệu chứng -->
+                    <div class="space-y-2 mt-4">
+                        <h3 class="text-base font-bold text-pink-800 border-b border-pink-200 pb-1">
+                            Triệu chứng lâm sàng
+                        </h3>
+
+                        <!-- Unilateral Pain -->
+                        <div
+                            class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <label for="leg_pain"
+                                class="flex-1 font-medium text-gray-800 cursor-pointer select-none">Đau 1 bên chi
+                                dưới</label>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="leg_pain"
+                                    class="geneva-option w-5 h-5 text-pink-600 rounded border-gray-300 focus:ring-pink-500"
+                                    value="3">
+                                <span class="text-sm font-bold text-pink-600 min-w-[25px] text-right">+3</span>
+                            </div>
+                        </div>
+
+                        <!-- Hemoptysis -->
+                        <div
+                            class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <label for="hemo" class="flex-1 font-medium text-gray-800 cursor-pointer select-none">Ho ra
+                                máu</label>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="hemo"
+                                    class="geneva-option w-5 h-5 text-pink-600 rounded border-gray-300 focus:ring-pink-500"
+                                    value="2">
+                                <span class="text-sm font-bold text-pink-600 min-w-[25px] text-right">+2</span>
+                            </div>
+                        </div>
+
+                        <!-- Palpation Pain -->
+                        <div
+                            class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex-1">
+                                <label for="palpation"
+                                    class="font-medium text-gray-800 cursor-pointer block select-none">Đau khi sờ nắn
+                                    tĩnh mạch sâu</label>
+                                <p class="text-xs text-gray-500 mt-0.5">Đau khu trú tĩnh mạch sâu và phù 1 bên chi</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="palpation"
+                                    class="geneva-option w-5 h-5 text-pink-600 rounded border-gray-300 focus:ring-pink-500"
+                                    value="4">
+                                <span class="text-sm font-bold text-pink-600 min-w-[25px] text-right">+4</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group: Nhịp tim -->
+                    <div class="space-y-2 mt-4">
+                        <h3 class="text-base font-bold text-pink-800 border-b border-pink-200 pb-1">
+                            Nhịp tim (Chỉ chọn 1)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <div class="relative">
+                                <input class="sr-only geneva-option geneva-hr" type="radio" name="hr" id="hr_0"
+                                    value="0" checked>
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all font-medium text-sm md:text-base text-gray-700"
+                                    for="hr_0">
+                                    <span class="flex-1">&lt; 75 lần/phút</span>
+                                    <span class="text-pink-600 font-bold ml-2">0</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50"><i
+                                            class="fas fa-check-circle text-pink-500"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input class="sr-only geneva-option geneva-hr" type="radio" name="hr" id="hr_3"
+                                    value="3">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all font-medium text-sm md:text-base text-gray-700"
+                                    for="hr_3">
+                                    <span class="flex-1">75 - 94 lần/phút</span>
+                                    <span class="text-pink-600 font-bold ml-2">+3</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50"><i
+                                            class="fas fa-check-circle text-pink-500"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input class="sr-only geneva-option geneva-hr" type="radio" name="hr" id="hr_5"
+                                    value="5">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all font-medium text-sm md:text-base text-gray-700"
+                                    for="hr_5">
+                                    <span class="flex-1">&ge; 95 lần/phút</span>
+                                    <span class="text-pink-600 font-bold ml-2">+5</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50"><i
+                                            class="fas fa-check-circle text-pink-500"></i></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div id="action-buttons" class="mt-5 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-pink-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-pink-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Result -->
+                <div id="result-container" class="mt-5 hidden animate-fade-in-up">
+                    <div class="bg-pink-50 border border-pink-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Tổng điểm Geneva</h3>
+                        <div id="main-result" class="score-box mb-3 bg-white text-4xl text-pink-700">0</div>
+                        <div id="sub-result-container"
+                            class="bg-white p-3 rounded-lg border border-pink-100 inline-block w-full">
+                            <p id="sub-result" class="result-text text-pink-700 leading-relaxed font-bold text-base">...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const mainResult = document.getElementById('main-result');
+            const subResult = document.getElementById('sub-result');
+            const clearBtn = document.getElementById('clearBtn');
+            // Checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"].geneva-option');
+            // Radios
+            const radios = document.querySelectorAll('input[type="radio"].geneva-option');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let score = 0;
+
+                checkboxes.forEach(cb => {
+                    if (cb.checked) score += parseInt(cb.value);
+                });
+
+                // Add radio value
+                const selectedRadio = document.querySelector('input[name="hr"]:checked');
+                if (selectedRadio) score += parseInt(selectedRadio.value);
+
+                mainResult.textContent = `${score} Điểm`;
+
+                let risk = "";
+                let probability = "";
+
+                if (score <= 3) {
+                    risk = "Nguy cơ Thấp";
+                    probability = "~ 8%";
+                } else if (score <= 10) {
+                    risk = "Nguy cơ Trung bình";
+                    probability = "~ 28%";
+                } else {
+                    risk = "Nguy cơ Cao";
+                    probability = "~ 74%";
+                }
+
+                subResult.innerHTML = `<span class="font-bold text-lg text-pink-800">${risk}</span><br><span class="text-gray-600 text-sm">Xác suất PE: ${probability}</span>`;
+
+                resultContainer.classList.remove('hidden');
+
+                // History
+                let recent = JSON.parse(localStorage.getItem('recentTools')) || [];
+                recent = recent.filter(t => t.id !== 'geneva');
+                recent.unshift({ id: 'geneva', name: 'Geneva Score (PE)', icon: 'fa-lungs', color: 'pink', url: window.location.href, timestamp: Date.now() });
+                localStorage.setItem('recentTools', JSON.stringify(recent.slice(0, 5)));
+
+                // Scroll
+                setTimeout(() => {
+                    const rect = resultContainer.getBoundingClientRect();
+                    if (rect.bottom > window.innerHeight) {
+                        window.scrollBy({ top: 100, behavior: 'smooth' });
+                    }
+                }, 100);
+            });
+
+            clearBtn.addEventListener('click', () => {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                mainResult.textContent = "0";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                document.getElementById('hr_0').checked = true;
+            });
+        });
+
+        // Toggle Drawer Helpers
+        window.openDrawer = function (e) {
+            e?.preventDefault();
+            document.getElementById('drawer-menu').classList.remove('translate-x-full');
+            const ol = document.getElementById('drawer-overlay');
+            ol.classList.remove('hidden');
+            setTimeout(() => ol.classList.remove('opacity-0'), 10);
+        }
+        window.closeDrawer = function () {
+            document.getElementById('drawer-menu').classList.add('translate-x-full');
+            const ol = document.getElementById('drawer-overlay');
+            ol.classList.add('opacity-0');
+            setTimeout(() => ol.classList.add('hidden'), 300);
+        }
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>

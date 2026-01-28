@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Phân loại Marshall (CT Sọ não) - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: pan-y;
+        }
+
+        .option-card {
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            background-color: #fee2e2;
+            border-color: #fca5a5;
+        }
+
+        .dark .option-card:hover {
+            background-color: #7f1d1d;
+            border-color: #991b1b;
+        }
+
+        .option-card.selected {
+            background-color: #fca5a5;
+            border-color: #dc2626;
+            color: #7f1d1d;
+        }
+
+        .dark .option-card.selected {
+            background-color: #991b1b;
+            border-color: #f87171;
+            color: #fef2f2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Mobile Header -->
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 shadow-sm z-40 h-[60px] flex items-center justify-center px-4 transition-colors duration-300">
+        <h1 class="text-center text-lg font-bold text-gray-800 dark:text-white truncate px-2">
+            Phân loại Marshall
+        </h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div
+            class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-red-100 dark:border-slate-700 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Marshall CT Classification</h1>
+                        <p class="text-red-100 text-xs">Phân loại tổn thương Chấn thương sọ não trên CT Scan</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-brain text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-3 md:p-6 space-y-6">
+
+                <div class="space-y-3" id="options-container">
+                    <!-- Options injected via JS -->
+                </div>
+
+                <div class="flex justify-center my-4">
+                    <button id="reset-btn"
+                        class="bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
+                    </button>
+                </div>
+
+                <!-- Result -->
+                <div
+                    class="bg-gray-100 dark:bg-slate-700/50 p-4 rounded-lg border-t border-gray-200 dark:border-slate-600">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-sm font-semibold uppercase text-gray-500 dark:text-gray-400">Kết quả</span>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-red-600 dark:text-red-400 mb-1" id="result-title">Chưa chọn
+                        </div>
+                        <p class="text-sm text-gray-700 dark:text-gray-300" id="result-desc">Vui lòng chọn đặc điểm hình
+                            ảnh CT scan.</p>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-gray-200 dark:border-slate-600">
+                        <span class="text-xs font-bold text-gray-500 uppercase">Tiên lượng tử vong (Mortality)</span>
+                        <div class="text-lg font-bold text-gray-800 dark:text-white" id="result-mortality">--</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- UI Elements like Glasgow -->
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+        <div
+            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
+            <button onclick="hideModal()"
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+                Đóng
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        // Common Utils
+        function useTool(id, name, icon, color, url) {
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            recentTools = recentTools.filter(tool => tool.id !== id);
+            recentTools.unshift({
+                id: id,
+                name: name,
+                icon: icon,
+                color: color,
+                url: url,
+                timestamp: new Date().getTime()
+            });
+            if (recentTools.length > 5) {
+                recentTools.pop();
+            }
+            localStorage.setItem('recentTools', JSON.stringify(recentTools));
+        }
+
+        function openDrawer(e) {
+            if (e) e.preventDefault();
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            if (drawer && overlay) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                drawer.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            if (drawer && overlay) {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 300);
+            }
+        }
+
+        const modal = document.getElementById('notification-modal');
+        const modalMessage = document.getElementById('modal-message');
+
+        window.showModal = function (message) {
+            if (modal && modalMessage) {
+                modalMessage.textContent = message;
+                modal.classList.remove('hidden');
+            }
+        }
+
+        window.hideModal = function () {
+            if (modal) modal.classList.add('hidden');
+        }
+
+        // Logic Marshall
+        const marshalls = [
+            {
+                grade: 'Tổn thương Lan tỏa I (Diffuse Injury I)',
+                criteria: 'Không có tổn thương thấy được trên CT scan.',
+                mortality: '9.6%'
+            },
+            {
+                grade: 'Tổn thương Lan tỏa II (Diffuse Injury II)',
+                criteria: 'Bể đáy còn, đường giữa lệch 0-5mm. Không có tổn thương khối > 25cc.',
+                mortality: '13.5%'
+            },
+            {
+                grade: 'Tổn thương Lan tỏa III (Diffuse Injury III - Swelling)',
+                criteria: 'Bể đáy bị ép hoặc mất (xóa bể đáy). Đường giữa lệch 0-5mm. Không có tổn thương khối > 25cc.',
+                mortality: '34%'
+            },
+            {
+                grade: 'Tổn thương Lan tỏa IV (Diffuse Injury IV - Shift)',
+                criteria: 'Đường giữa lệch > 5mm. Không có tổn thương khối > 25cc.',
+                mortality: '56.2%'
+            },
+            {
+                grade: 'Tổn thương Khối khu trú V (Evacuated Mass V)',
+                criteria: 'Bất kỳ tổn thương nào đã được phẫu thuật lấy bỏ.',
+                mortality: '~ 60% (Tham khảo)'
+            },
+            {
+                grade: 'Tổn thương Khối khu trú VI (Non-evacuated Mass VI)',
+                criteria: 'Tổn thương khối mật độ cao/hỗn hợp > 25cc, chưa phẫu thuật.',
+                mortality: '> 90% (Tiên lượng rất nặng)'
+            }
+        ];
+
+        function render() {
+            const container = document.getElementById('options-container');
+            container.innerHTML = marshalls.map((m, idx) => `
+                <div class="option-card p-4 rounded-lg bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 flex items-start gap-3"
+                    onclick="selectOption(${idx}, this)">
+                    <div class="mt-1 min-w-[24px] h-6 flex items-center justify-center rounded-full bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 text-xs font-bold ring-1 ring-red-200 dark:ring-red-800">
+                        ${idx + 1}
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800 dark:text-gray-100 text-sm md:text-base">${m.grade}</h3>
+                        <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1">${m.criteria}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.selectOption = function (idx, el) {
+            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+
+            const m = marshalls[idx];
+            document.getElementById('result-title').innerText = m.grade;
+            document.getElementById('result-desc').innerText = m.criteria;
+            document.getElementById('result-mortality').innerText = m.mortality;
+
+            // Save history when selected
+            useTool(
+                'marshall',
+                'Phân loại Marshall',
+                'fa-brain',
+                'text-red-600',
+                window.location.href
+            );
+
+            // Auto scroll to result if needed
+            const resultBox = document.getElementById('result-title').parentElement.parentElement;
+            setTimeout(() => {
+                const rect = resultBox.getBoundingClientRect();
+                if (rect.bottom > window.innerHeight) {
+                    resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            render();
+
+            document.getElementById('reset-btn').addEventListener('click', () => {
+                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                document.getElementById('result-title').innerText = 'Chưa chọn';
+                document.getElementById('result-desc').innerText = 'Vui lòng chọn đặc điểm hình ảnh CT scan.';
+                document.getElementById('result-mortality').innerText = '--';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>

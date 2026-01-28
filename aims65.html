@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thang điểm AIMS65 - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .aims-option:checked+label {
+            background-color: #fef2f2;
+            border-color: #dc2626;
+            color: #991b1b;
+        }
+
+        .aims-option:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .check-icon {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-box {
+            background-color: #fef2f2;
+            color: #991b1b;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            border: 1px solid #fecaca;
+            text-align: center;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">Thang điểm AIMS65</h1>
+    </header>
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-700 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Thang điểm AIMS65</h1>
+                        <p class="text-red-100 text-xs">Tiên lượng tử vong do xuất huyết tiêu hóa trên</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-droplet text-3xl text-red-300 opacity-50"></i>
+            </div>
+            <div class="p-3 md:p-6">
+                <form id="tool-form" class="space-y-4" novalidate>
+                    <!-- Albumin -->
+                    <div
+                        class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <label for="albumin" class="flex-1 font-medium text-gray-800 cursor-pointer select-none">Albumin
+                            &lt; 3.0 g/dL (30 g/L)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="albumin"
+                                class="aims-option w-5 h-5 text-red-600 rounded border-gray-300 focus:ring-red-500"
+                                value="1">
+                            <span class="text-sm font-bold text-red-600 min-w-[25px] text-right">+1</span>
+                        </div>
+                    </div>
+                    <!-- INR -->
+                    <div
+                        class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <label for="inr" class="flex-1 font-medium text-gray-800 cursor-pointer select-none">INR &gt;
+                            1.5</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="inr"
+                                class="aims-option w-5 h-5 text-red-600 rounded border-gray-300 focus:ring-red-500"
+                                value="1">
+                            <span class="text-sm font-bold text-red-600 min-w-[25px] text-right">+1</span>
+                        </div>
+                    </div>
+                    <!-- Mental -->
+                    <div
+                        class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <label for="mental" class="flex-1 font-medium text-gray-800 cursor-pointer select-none">Tri giác
+                            thay đổi (Hôn mê, lú lẫn)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="mental"
+                                class="aims-option w-5 h-5 text-red-600 rounded border-gray-300 focus:ring-red-500"
+                                value="1">
+                            <span class="text-sm font-bold text-red-600 min-w-[25px] text-right">+1</span>
+                        </div>
+                    </div>
+                    <!-- SBP -->
+                    <div
+                        class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <label for="sbp" class="flex-1 font-medium text-gray-800 cursor-pointer select-none">Huyết áp
+                            tâm thu &le; 90 mmHg</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="sbp"
+                                class="aims-option w-5 h-5 text-red-600 rounded border-gray-300 focus:ring-red-500"
+                                value="1">
+                            <span class="text-sm font-bold text-red-600 min-w-[25px] text-right">+1</span>
+                        </div>
+                    </div>
+                    <!-- Age -->
+                    <div
+                        class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <label for="age" class="flex-1 font-medium text-gray-800 cursor-pointer select-none">Tuổi &gt;
+                            65</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="age"
+                                class="aims-option w-5 h-5 text-red-600 rounded border-gray-300 focus:ring-red-500"
+                                value="1">
+                            <span class="text-sm font-bold text-red-600 min-w-[25px] text-right">+1</span>
+                        </div>
+                    </div>
+
+                    <div id="action-buttons" class="mt-5 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-red-700 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-red-800 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
+                        </button>
+                    </div>
+                </form>
+
+                <div id="result-container" class="mt-5 hidden animate-fade-in-up">
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Tổng điểm AIMS65</h3>
+                        <div id="main-result" class="score-box mb-3 bg-white text-4xl text-red-800">0</div>
+                        <div id="sub-result-container"
+                            class="bg-white p-3 rounded-lg border border-red-100 inline-block w-full">
+                            <p id="sub-result" class="result-text text-red-800 leading-relaxed font-bold text-base">...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const mainResult = document.getElementById('main-result');
+            const subResult = document.getElementById('sub-result');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let score = 0;
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => { if (cb.checked) score += 1; });
+
+                mainResult.textContent = score + " Điểm";
+                let mortality = "";
+                // Based on validation studies
+                if (score === 0) mortality = "Nguy cơ rất thấp (Tử vong ~0.3%)";
+                else if (score === 1) mortality = "Nguy cơ thấp (Tử vong ~1-2%)";
+                else if (score === 2) mortality = "Nguy cơ trung bình (Tử vong ~3-5%)";
+                else if (score === 3) mortality = "Nguy cơ cao (Tử vong ~10-15%)";
+                else if (score >= 4) mortality = "Nguy cơ rất cao (Tử vong >20%)";
+
+                subResult.textContent = mortality;
+                resultContainer.classList.remove('hidden');
+
+                let recent = JSON.parse(localStorage.getItem('recentTools')) || [];
+                recent = recent.filter(t => t.id !== 'aims65');
+                recent.unshift({ id: 'aims65', name: 'AIMS65', icon: 'fa-droplet', color: 'red', url: window.location.href, timestamp: Date.now() });
+                localStorage.setItem('recentTools', JSON.stringify(recent.slice(0, 5)));
+
+                setTimeout(() => { if (resultContainer.getBoundingClientRect().bottom > window.innerHeight) window.scrollBy({ top: 100, behavior: 'smooth' }); }, 100);
+            });
+            document.getElementById('clearBtn').addEventListener('click', () => {
+                form.reset(); resultContainer.classList.add('hidden'); mainResult.textContent = "0";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        window.openDrawer = function (e) { e?.preventDefault(); document.getElementById('drawer-menu').classList.remove('translate-x-full'); document.getElementById('drawer-overlay').classList.remove('hidden'); setTimeout(() => document.getElementById('drawer-overlay').classList.remove('opacity-0'), 10); }
+        window.closeDrawer = function () { document.getElementById('drawer-menu').classList.add('translate-x-full'); document.getElementById('drawer-overlay').classList.add('opacity-0'); setTimeout(() => document.getElementById('drawer-overlay').classList.add('hidden'), 300); }
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>

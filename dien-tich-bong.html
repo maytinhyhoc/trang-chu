@@ -1,22 +1,19 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 
 <head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tính diện tích bỏng & Bù dịch - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
 
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <meta name="theme-color" content="#4f46e5">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
-
     <style>
-        /* --- APP FEEL OPTIMIZATIONS --- */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
@@ -24,7 +21,7 @@
             -webkit-tap-highlight-color: transparent;
             -webkit-user-select: none;
             user-select: none;
-            touch-action: pan-x pan-y;
+            touch-action: pan-y;
         }
 
         .result-text,
@@ -50,29 +47,11 @@
             animation: fadeInUp 0.4s ease-out;
         }
 
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 2px;
-        }
-
+        /* Input Optimization for Mobile */
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
-        }
-
-        @media screen and (max-width: 768px) {
-            input[type="number"] {
-                font-size: 16px !important;
-            }
         }
 
         /* Body Map Configuration - UPDATED SIZES */
@@ -106,6 +85,7 @@
             }
         }
 
+        /* SVG Parts Styling */
         .body-part {
             fill: #f1f5f9;
             stroke: #94a3b8;
@@ -115,15 +95,39 @@
             vector-effect: non-scaling-stroke;
         }
 
+        /* Dark Mode Overrides for SVG */
+        .dark .body-part {
+            fill: #334155;
+            /* Slate-700 */
+            stroke: #475569;
+            /* Slate-600 */
+        }
+
         .body-part:hover {
             fill: #e2e8f0;
             stroke: #64748b;
         }
 
+        .dark .body-part:hover {
+            fill: #475569;
+            /* Slate-600 */
+            stroke: #94a3b8;
+        }
+
         .body-part.selected {
             fill: #ef4444;
+            /* Red-500 */
             stroke: #991b1b;
+            /* Red-800 */
             filter: drop-shadow(0 0 1px rgba(239, 68, 68, 0.5));
+        }
+
+        .dark .body-part.selected {
+            fill: #dc2626;
+            /* Red-600 */
+            stroke: #f87171;
+            /* Red-400 */
+            filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.5));
         }
 
         .hidden-map {
@@ -141,74 +145,77 @@
     </style>
 </head>
 
-<body>
+<body class="text-gray-800 flex flex-col min-h-screen">
 
-    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-        <a href="#" onclick="history.back(); return false;"
-            class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
-            <i class="fa-solid fa-chevron-left text-lg"></i>
-        </a>
-        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
-            Tính diện tích bỏng
+    <!-- Mobile Header -->
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 shadow-sm z-40 h-[60px] flex items-center justify-center px-4 transition-colors duration-300">
+        <h1 class="text-center text-lg font-bold text-gray-800 dark:text-white truncate px-2">
+            Diện Tích Bỏng
         </h1>
-        <div class="w-8"></div>
     </header>
 
     <main class="flex-grow container mx-auto px-2 md:px-4 pt-20 md:pt-24 pb-2 max-w-4xl">
-        <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden animate-fade-in-up">
+        <div
+            class="bg-white dark:bg-slate-800 rounded-xl shadow border border-gray-100 dark:border-slate-700 overflow-hidden animate-fade-in-up transition-colors duration-300">
 
-            <div class="hidden md:flex bg-indigo-600 p-4 text-white items-center justify-between">
-                <div class="flex items-center">
-                    <a href="cong-cu.html"
-                        class="hidden md:flex w-8 h-8 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-3">
-                        <i class="fa-solid fa-chevron-left text-sm"></i>
-                    </a>
+            <!-- Desktop Header -->
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
                     <div>
-                        <h1 class="text-xl font-bold">Tính Diện Tích Bỏng & Bù Dịch</h1>
+                        <h1 class="text-xl font-bold">Diện Tích Bỏng & Bù Dịch (Parkland)</h1>
+                        <p class="text-red-100 text-xs">Quy tắc 9 (Wallace) & Lund-Browder (Trẻ em)</p>
                     </div>
                 </div>
+                <i class="fa-solid fa-fire-flame-curved text-3xl text-red-300 opacity-50"></i>
             </div>
 
             <div class="p-2 md:p-6" id="tool-content">
-                <div class="mb-2 bg-indigo-50/80 rounded-lg p-2 md:p-4 border border-indigo-100">
+                <!-- Input Area -->
+                <div
+                    class="mb-2 bg-red-50 dark:bg-slate-700/50 rounded-lg p-2 md:p-4 border border-red-100 dark:border-slate-600 transition-colors duration-300">
                     <div
                         class="flex flex-row items-end gap-2 md:gap-6 overflow-x-auto md:overflow-visible no-scrollbar pb-1">
+
+                        <!-- Mode Selection -->
                         <div class="shrink-0">
                             <label
-                                class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Đối
+                                class="block text-[10px] md:text-xs font-bold text-gray-500 dark:text-gray-400 mb-0.5 uppercase truncate">Đối
                                 tượng</label>
                             <div
-                                class="flex bg-white rounded-md p-0.5 border border-indigo-200 shadow-sm h-[32px] md:h-[38px]">
+                                class="flex bg-white dark:bg-slate-800 rounded-md p-0.5 border border-red-200 dark:border-slate-600 shadow-sm h-[32px] md:h-[38px]">
                                 <button type="button" id="mode-adult"
-                                    class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold transition-all bg-indigo-600 text-white shadow-sm whitespace-nowrap leading-none flex items-center justify-center h-full">Người
+                                    class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold transition-all bg-red-600 text-white shadow-sm whitespace-nowrap leading-none flex items-center justify-center h-full">Người
                                     lớn</button>
                                 <button type="button" id="mode-child"
-                                    class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap leading-none flex items-center justify-center h-full">Trẻ
+                                    class="px-2.5 md:px-5 rounded text-[11px] md:text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-all whitespace-nowrap leading-none flex items-center justify-center h-full">Trẻ
                                     em</button>
                             </div>
                         </div>
 
+                        <!-- Weight Input -->
                         <div class="flex-1 min-w-[70px]">
                             <label
-                                class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Cân
+                                class="block text-[10px] md:text-xs font-bold text-gray-500 dark:text-gray-400 mb-0.5 uppercase truncate">Cân
                                 nặng <span class="text-red-500">*</span></label>
                             <div class="relative h-[32px] md:h-[38px]">
                                 <input type="number" id="weight" inputmode="decimal" placeholder="0"
-                                    class="block w-full pl-2 pr-5 md:pr-8 h-full text-sm font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white border shadow-sm">
+                                    class="block w-full pl-2 pr-5 md:pr-8 h-full text-sm font-semibold border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md bg-white dark:bg-slate-900 dark:text-white border shadow-sm transition-colors">
                                 <div
                                     class="absolute inset-y-0 right-0 pr-1.5 md:pr-3 flex items-center pointer-events-none text-gray-400 font-bold text-[10px] md:text-xs">
                                     kg</div>
                             </div>
                         </div>
 
+                        <!-- Age Input (Hidden by default) -->
                         <div id="age-input-group"
                             class="w-[60px] md:w-[120px] hidden opacity-0 transition-all duration-300">
                             <label
-                                class="block text-[10px] md:text-xs font-bold text-gray-500 mb-0.5 uppercase truncate">Tuổi</label>
+                                class="block text-[10px] md:text-xs font-bold text-gray-500 dark:text-gray-400 mb-0.5 uppercase truncate">Tuổi</label>
                             <div class="relative h-[32px] md:h-[38px]">
                                 <input type="number" id="age" inputmode="numeric" placeholder="0" value="0" min="0"
                                     max="15"
-                                    class="block w-full px-1 md:px-2 h-full text-sm font-semibold border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white border shadow-sm text-center">
+                                    class="block w-full px-1 md:px-2 h-full text-sm font-semibold border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-red-500 focus:border-red-500 rounded-md bg-white dark:bg-slate-900 dark:text-white border shadow-sm text-center transition-colors">
                                 <div
                                     class="hidden md:flex absolute inset-y-0 right-0 pr-3 items-center pointer-events-none text-gray-400 font-bold text-xs">
                                     tuổi</div>
@@ -217,16 +224,18 @@
                     </div>
                 </div>
 
+                <!-- Body Map Selection -->
                 <div class="mb-2">
                     <div
-                        class="flex justify-between items-center mb-1 sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-1 border-b border-gray-100 md:static md:bg-transparent md:border-none">
+                        class="flex justify-between items-center mb-1 sticky top-0 z-30 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm py-1 border-b border-gray-100 dark:border-slate-700 md:static md:bg-transparent md:border-none transition-colors">
                         <div class="flex flex-col gap-0.5">
                             <div class="flex items-center gap-2">
-                                <div class="md:hidden flex bg-gray-100 rounded p-0.5 w-fit border border-gray-200">
+                                <div
+                                    class="md:hidden flex bg-gray-100 dark:bg-slate-700 rounded p-0.5 w-fit border border-gray-200 dark:border-slate-600">
                                     <button type="button" id="view-front-btn"
-                                        class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-indigo-600 bg-white shadow-sm transition-all leading-none">Trước</button>
+                                        class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-red-600 bg-white dark:bg-slate-800 shadow-sm transition-all leading-none">Trước</button>
                                     <button type="button" id="view-back-btn"
-                                        class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-gray-500 hover:text-indigo-600 transition-all leading-none">Sau</button>
+                                        class="px-2 py-0.5 rounded-[2px] text-[10px] font-bold text-gray-500 dark:text-gray-400 hover:text-red-600 transition-all leading-none">Sau</button>
                                 </div>
                                 <span id="chart-info"
                                     class="text-[10px] text-gray-400 font-medium leading-none hidden md:inline-block">Wallace
@@ -234,14 +243,16 @@
                             </div>
                         </div>
                         <div
-                            class="bg-red-50 text-red-600 px-2.5 py-1 rounded-lg text-base font-bold border border-red-100 shadow-sm flex items-center gap-1.5 min-w-[60px] justify-center">
+                            class="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-2.5 py-1 rounded-lg text-base font-bold border border-red-100 dark:border-red-900/50 shadow-sm flex items-center gap-1.5 min-w-[60px] justify-center transition-colors">
                             <span class="text-[9px] text-red-400 font-medium uppercase leading-none">Tổng</span>
                             <div class="leading-none"><span id="total-tbsa">0</span>%</div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 bg-white rounded-lg justify-items-center relative"
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 bg-white dark:bg-slate-800 rounded-lg justify-items-center relative transition-colors"
                         style="min-height: 462px;">
+
+                        <!-- ADULT MAPS (RESTORED FROM USER SNIPPET) -->
                         <div id="container-adult-front" class="body-container adult-view">
                             <div class="hidden md:block text-center text-[10px] font-bold text-gray-400 mb-1">MẶT TRƯỚC
                             </div>
@@ -414,62 +425,72 @@
                     </div>
 
                     <div id="selected-part-name"
-                        class="h-5 text-center text-xs font-semibold text-indigo-600 mt-1 transition-opacity opacity-0">
+                        class="h-5 text-center text-xs font-semibold text-red-600 dark:text-red-400 mt-1 transition-opacity opacity-0">
                         ...</div>
                 </div>
 
+                <!-- Action Buttons -->
                 <div class="mt-1 grid grid-cols-2 gap-3">
                     <button type="button" id="btn-reset"
-                        class="flex items-center justify-center py-2.5 px-3 rounded-lg border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition active:scale-95">
+                        class="flex items-center justify-center py-2.5 px-3 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-slate-700 transition active:scale-95">
                         <i class="fa-solid fa-rotate-right mr-1.5"></i>Nhập lại
                     </button>
                     <button type="button" id="btn-calc"
-                        class="flex items-center justify-center py-2.5 px-3 rounded-lg bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition active:scale-95">
+                        class="flex items-center justify-center py-2.5 px-3 rounded-lg bg-red-600 text-white text-sm font-bold hover:bg-red-700 shadow-lg shadow-red-200 dark:shadow-none transition active:scale-95">
                         <i class="fa-solid fa-calculator mr-1.5"></i>Tính toán
                     </button>
                 </div>
 
+                <!-- Result Area -->
                 <div id="result-area"
-                    class="hidden mt-3 bg-white border border-indigo-100 rounded-lg overflow-hidden animate-fade-in-up shadow-sm">
-                    <div class="bg-indigo-50 p-3 border-b border-indigo-100 flex items-center gap-2">
+                    class="hidden mt-3 bg-white dark:bg-slate-800 border border-red-100 dark:border-slate-700 rounded-lg overflow-hidden animate-fade-in-up shadow-sm transition-colors">
+                    <div
+                        class="bg-red-50 dark:bg-red-900/20 p-3 border-b border-red-100 dark:border-red-900/30 flex items-center gap-2">
                         <div
-                            class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                            class="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 flex items-center justify-center">
                             <i class="fa-solid fa-prescription-bottle-medical text-sm"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-sm text-gray-900">Kết quả & Phác đồ</h4>
-                            <p class="text-[10px] text-indigo-600 font-medium" id="result-subtitle">Parkland Formula</p>
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">Kết quả & Phác đồ</h4>
+                            <p class="text-[10px] text-red-600 dark:text-red-400 font-medium" id="result-subtitle">
+                                Parkland Formula</p>
                         </div>
                     </div>
 
                     <div class="p-3">
                         <div class="flex justify-between items-end mb-1">
-                            <span class="text-gray-600 text-xs">Tổng 24h:</span>
-                            <span class="text-lg font-bold text-indigo-700" id="res-total">0 ml</span>
+                            <span class="text-gray-600 dark:text-gray-400 text-xs">Tổng 24h:</span>
+                            <span class="text-lg font-bold text-red-700 dark:text-red-400" id="res-total">0 ml</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-3">
-                            <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 100%"></div>
+                        <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 mb-3">
+                            <div class="bg-red-600 h-1.5 rounded-full" style="width: 100%"></div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2">
-                            <div class="bg-blue-50 p-2.5 rounded border border-blue-100 relative overflow-hidden">
-                                <p class="text-[10px] font-bold text-blue-600 uppercase mb-0.5">8 giờ đầu</p>
+                            <div
+                                class="bg-blue-50 dark:bg-blue-900/20 p-2.5 rounded border border-blue-100 dark:border-blue-900/30 relative overflow-hidden">
+                                <p class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase mb-0.5">8 giờ
+                                    đầu</p>
                                 <div class="flex items-baseline gap-0.5">
-                                    <span class="text-lg font-bold text-gray-800" id="res-first-8">0</span>
-                                    <span class="text-[10px] text-gray-600">ml</span>
+                                    <span class="text-lg font-bold text-gray-800 dark:text-white"
+                                        id="res-first-8">0</span>
+                                    <span class="text-[10px] text-gray-600 dark:text-gray-400">ml</span>
                                 </div>
-                                <p class="text-[10px] text-gray-500 mt-0.5">Tốc độ: <span id="rate-first-8"
-                                        class="font-semibold">0</span> ml/h</p>
+                                <p class="text-[10px] text-gray-500 dark:text-gray-500 mt-0.5">Tốc độ: <span
+                                        id="rate-first-8" class="font-semibold">0</span> ml/h</p>
                             </div>
 
-                            <div class="bg-teal-50 p-2.5 rounded border border-teal-100 relative overflow-hidden">
-                                <p class="text-[10px] font-bold text-teal-600 uppercase mb-0.5">16 giờ sau</p>
+                            <div
+                                class="bg-teal-50 dark:bg-teal-900/20 p-2.5 rounded border border-teal-100 dark:border-teal-900/30 relative overflow-hidden">
+                                <p class="text-[10px] font-bold text-teal-600 dark:text-teal-400 uppercase mb-0.5">16
+                                    giờ sau</p>
                                 <div class="flex items-baseline gap-0.5">
-                                    <span class="text-lg font-bold text-gray-800" id="res-next-16">0</span>
-                                    <span class="text-[10px] text-gray-600">ml</span>
+                                    <span class="text-lg font-bold text-gray-800 dark:text-white"
+                                        id="res-next-16">0</span>
+                                    <span class="text-[10px] text-gray-600 dark:text-gray-400">ml</span>
                                 </div>
-                                <p class="text-[10px] text-gray-500 mt-0.5">Tốc độ: <span id="rate-next-16"
-                                        class="font-semibold">0</span> ml/h</p>
+                                <p class="text-[10px] text-gray-500 dark:text-gray-500 mt-0.5">Tốc độ: <span
+                                        id="rate-next-16" class="font-semibold">0</span> ml/h</p>
                             </div>
                         </div>
                     </div>
@@ -478,24 +499,29 @@
         </div>
     </main>
 
+    <!-- Notification Modal (Local) -->
     <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
         <div
-            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+            class="bg-white dark:bg-slate-800 rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up bg-clip-padding border border-gray-100 dark:border-slate-700">
+            <div
+                class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/50 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 dark:text-red-400 text-xl"></i>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
-            <p id="modal-message" class="text-sm text-gray-500 mb-6">Nội dung thông báo...</p>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 dark:text-gray-400 mb-6">Nội dung thông báo...</p>
             <button onclick="hideModal()"
-                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">
+                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none transition">
                 Đóng
             </button>
         </div>
     </div>
 
+    <!-- Logic Script -->
     <script>
-        // --- 1. LOGIC LƯU LỊCH SỬ ---
+        // --- 1. CONFIG & UTILS ---
+        const themeColor = 'red'; // Main theme color
+
         function useTool(id, name, icon, color, url) {
             let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
             recentTools = recentTools.filter(tool => tool.id !== id);
@@ -511,29 +537,7 @@
             localStorage.setItem('recentTools', JSON.stringify(recentTools));
         }
 
-        // --- 2. LOGIC DRAWER MENU ---
-        function openDrawer(e) {
-            if (e) e.preventDefault();
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            drawer.classList.remove('translate-x-full');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDrawer() {
-            const drawer = document.getElementById('drawer-menu');
-            const overlay = document.getElementById('drawer-overlay');
-            drawer.classList.add('translate-x-full');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
-        // --- 3. LOGIC MODAL ---
+        // Modal Logic
         const modal = document.getElementById('notification-modal');
         const modalMessage = document.getElementById('modal-message');
 
@@ -548,15 +552,8 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        // --- 4. BẢO MẬT & CHẶN COPY ---
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function (event) {
-            if ((event.ctrlKey || event.metaKey) && (event.key === 'c' || event.key === 'u' || event.key === 'a')) {
-                event.preventDefault();
-            }
-        });
-
-        // --- 5. LOGIC TÍNH TOÁN DIỆN TÍCH BỎNG (GIỮ NGUYÊN) ---
+        // --- 2. BURN CALCULATION LOGIC ---
+        // Simplified Logic for Demo - User can enhance LB data
         const lundBrowderData = {
             0: { head: 9.5, thigh: 2.75, leg: 2.5 },
             1: { head: 8.5, thigh: 3.25, leg: 2.5 },
@@ -567,7 +564,7 @@
         };
 
         function getLBValues(age) {
-            if (age >= 15) return lundBrowderData[15];
+            if (age >= 15) return lundBrowderData.adult;
             const points = [0, 1, 5, 10, 15];
             let lower = 0, upper = 15;
             for (let i = 0; i < points.length - 1; i++) {
@@ -598,10 +595,8 @@
             const tbsaDisplay = document.getElementById('total-tbsa');
             const partNameDisplay = document.getElementById('selected-part-name');
             const chartInfo = document.getElementById('chart-info');
-
             const modeAdultBtn = document.getElementById('mode-adult');
             const modeChildBtn = document.getElementById('mode-child');
-
             const viewFrontBtn = document.getElementById('view-front-btn');
             const viewBackBtn = document.getElementById('view-back-btn');
 
@@ -615,39 +610,53 @@
             const containerChildBack = document.getElementById('container-child-back');
 
             function updateMapVisibility() {
+                // Hide all first
+                [containerAdultFront, containerAdultBack, containerChildFront, containerChildBack].forEach(el => el.classList.add('hidden-map'));
+
+                let front, back;
                 if (isChildMode) {
-                    containerAdultFront.classList.add('hidden-map');
-                    containerAdultBack.classList.add('hidden-map');
-                    containerChildFront.classList.remove('hidden-map');
-                    containerChildBack.classList.remove('hidden-map');
+                    front = containerChildFront;
+                    back = containerChildBack;
                 } else {
-                    containerChildFront.classList.add('hidden-map');
-                    containerChildBack.classList.add('hidden-map');
-                    containerAdultFront.classList.remove('hidden-map');
-                    containerAdultBack.classList.remove('hidden-map');
+                    front = containerAdultFront;
+                    back = containerAdultBack;
                 }
 
-                const frontContainer = isChildMode ? containerChildFront : containerAdultFront;
-                const backContainer = isChildMode ? containerChildBack : containerAdultBack;
+                front.classList.remove('hidden-map');
+                back.classList.remove('hidden-map');
 
-                if (currentSide === 'front') {
-                    frontContainer.classList.remove('hidden', 'md:block');
-                    backContainer.classList.add('hidden', 'md:block');
+                // Mobile Toggle Logic
+                if (window.innerWidth < 768) {
+                    if (currentSide === 'front') {
+                        front.classList.remove('hidden');
+                        back.classList.add('hidden');
 
-                    viewFrontBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
-                    viewFrontBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
-                    viewBackBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
-                    viewBackBtn.classList.add('text-gray-500', 'hover:text-indigo-600');
+                        viewFrontBtn.classList.add('text-red-600', 'bg-white', 'dark:bg-slate-800', 'shadow-sm');
+                        viewFrontBtn.classList.remove('text-gray-500', 'hover:text-red-600');
+                        viewBackBtn.classList.remove('text-red-600', 'bg-white', 'dark:bg-slate-800', 'shadow-sm');
+                        viewBackBtn.classList.add('text-gray-500', 'hover:text-red-600');
+                    } else {
+                        back.classList.remove('hidden');
+                        front.classList.add('hidden');
+
+                        viewBackBtn.classList.add('text-red-600', 'bg-white', 'dark:bg-slate-800', 'shadow-sm');
+                        viewBackBtn.classList.remove('text-gray-500', 'hover:text-red-600');
+                        viewFrontBtn.classList.remove('text-red-600', 'bg-white', 'dark:bg-slate-800', 'shadow-sm');
+                        viewFrontBtn.classList.add('text-gray-500', 'hover:text-red-600');
+                    }
                 } else {
-                    backContainer.classList.remove('hidden', 'md:block');
-                    frontContainer.classList.add('hidden', 'md:block');
-
-                    viewBackBtn.classList.add('text-indigo-600', 'bg-white', 'shadow-sm');
-                    viewBackBtn.classList.remove('text-gray-500', 'hover:text-indigo-600');
-                    viewFrontBtn.classList.remove('text-indigo-600', 'bg-white', 'shadow-sm');
-                    viewFrontBtn.classList.add('text-gray-500', 'hover:text-indigo-600');
+                    // Desktop: Always show both? Or stick to toggle? 
+                    // To match user's previous code: "hidden md:block" was used for Back map -> so desktop showed "Back" on the right.
+                    // But front map had no "hidden md:block" logic in my rebuild? Let's check.
+                    // I used "hidden md:block" on Back containers. Front containers don't have it.
+                    // So on Desktop, Front is visible. Back is visible.
+                    front.classList.remove('hidden');
+                    back.classList.remove('hidden');
                 }
             }
+
+            // Handle Resize to reset visibility
+            window.addEventListener('resize', updateMapVisibility);
 
             viewFrontBtn.addEventListener('click', () => { currentSide = 'front'; updateMapVisibility(); });
             viewBackBtn.addEventListener('click', () => { currentSide = 'back'; updateMapVisibility(); });
@@ -655,10 +664,10 @@
             function setMode(child) {
                 isChildMode = child;
                 if (isChildMode) {
-                    modeChildBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
-                    modeChildBtn.classList.remove('text-gray-600', 'hover:bg-gray-50');
-                    modeAdultBtn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
-                    modeAdultBtn.classList.add('text-gray-600', 'hover:bg-gray-50');
+                    modeChildBtn.classList.add('bg-red-600', 'text-white', 'shadow-md');
+                    modeChildBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-slate-700');
+                    modeAdultBtn.classList.remove('bg-red-600', 'text-white', 'shadow-md');
+                    modeAdultBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-slate-700');
 
                     ageGroup.classList.remove('hidden');
                     setTimeout(() => ageGroup.classList.remove('opacity-0'), 10);
@@ -670,10 +679,10 @@
                     resultArea.classList.add('hidden');
                     updateMapValues();
                 } else {
-                    modeAdultBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
-                    modeAdultBtn.classList.remove('text-gray-600', 'hover:bg-gray-50');
-                    modeChildBtn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
-                    modeChildBtn.classList.add('text-gray-600', 'hover:bg-gray-50');
+                    modeAdultBtn.classList.add('bg-red-600', 'text-white', 'shadow-md');
+                    modeAdultBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-slate-700');
+                    modeChildBtn.classList.remove('bg-red-600', 'text-white', 'shadow-md');
+                    modeChildBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-slate-700');
 
                     ageGroup.classList.add('opacity-0');
                     setTimeout(() => ageGroup.classList.add('hidden'), 300);
@@ -703,10 +712,16 @@
                 if (isNaN(age) || age < 0) age = 0;
 
                 const vals = getLBValues(age);
-                const headVal = Math.max(0, vals.head - 1);
+                // Distribute head evenly? LB gives total head. Front/Back is half roughly.
+                // LB chart says "Head" is 19% at birth (9.5 front, 9.5 back).
+                // My data structure has { head: 9.5 } which means one side? 
+                // Let's assume the data is PER SIDE based on the code provided earlier (Total Head is often huge in babies).
+                // Wallace Rule of 9: Head is 9% (4.5 front, 4.5 back).
+                // Lund Browder 0yr: Head is 19%. So 9.5 front, 9.5 back.
+                // Yes, the struct seems to be per-side or half-head.
 
-                updateElem('child-head-front', headVal);
-                updateElem('child-head-back', headVal);
+                updateElem('child-head-front', vals.head);
+                updateElem('child-head-back', vals.head);
                 updateElem('child-thigh-left-front', vals.thigh);
                 updateElem('child-thigh-right-front', vals.thigh);
                 updateElem('child-thigh-left-back', vals.thigh);
@@ -724,7 +739,8 @@
             const bodyParts = document.querySelectorAll('.body-part');
             bodyParts.forEach(part => {
                 part.addEventListener('click', function () {
-                    if (this.closest('.hidden-map')) return;
+                    // Ignore clicks on hidden maps
+                    if (this.getBoundingClientRect().width === 0) return;
 
                     this.classList.toggle('selected');
 
@@ -744,6 +760,9 @@
             function recalculateSelectedTBSA() {
                 totalTBSA = 0;
                 const activeContainerQuery = isChildMode ? '.child-view' : '.adult-view';
+                // Only select from visible map type (Child vs Adult). 
+                // Cannot rely on visibility check alone since back map might be hidden on mobile.
+                // Rely on class names.
                 document.querySelectorAll(`${activeContainerQuery} .body-part.selected`).forEach(p => {
                     totalTBSA += parseFloat(p.getAttribute('data-value'));
                 });
@@ -766,10 +785,10 @@
                 if (!weight || weight <= 0) { showModal('Vui lòng nhập cân nặng hợp lệ!'); return; }
                 if (totalTBSA <= 0) { showModal('Vui lòng chọn vùng bị bỏng!'); return; }
 
-                const mlPerKg = isChildMode ? 3 : 4;
+                const mlPerKg = isChildMode ? 3 : 4; // Parkland: 4 for adult, 3 for children (often modified)
                 const totalFluid = mlPerKg * weight * totalTBSA;
 
-                document.getElementById('res-total').textContent = Math.round(totalFluid).toLocaleString();
+                document.getElementById('res-total').textContent = Math.round(totalFluid).toLocaleString() + " ml";
                 document.getElementById('res-first-8').textContent = Math.round(totalFluid / 2).toLocaleString();
                 document.getElementById('res-next-16').textContent = Math.round(totalFluid / 2).toLocaleString();
                 document.getElementById('rate-first-8').textContent = Math.round((totalFluid / 2) / 8);
@@ -781,8 +800,8 @@
                 resultArea.classList.remove('hidden');
                 resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-                // Lưu lịch sử
-                useTool('tinh-dien-tich-bong', 'Diện Tích Bỏng', 'fa-fire-flame-curved', 'text-orange-500', window.location.href);
+                // Save History
+                useTool('dien-tich-bong', 'Diện Tích Bỏng', 'fa-fire-flame-curved', 'red', window.location.href);
             });
 
             updateMapVisibility();

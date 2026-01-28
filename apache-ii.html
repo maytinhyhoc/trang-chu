@@ -1,30 +1,81 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 
 <head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Công Cụ Y Học</title>
+    <title>APACHE II - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <meta name="theme-color" content="#4f46e5">
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
-            padding-bottom: 80px;
-            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 100px;
             -webkit-user-select: none;
             user-select: none;
-            touch-action: pan-x pan-y;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .result-text,
-        input,
-        textarea {
-            -webkit-user-select: text;
-            user-select: text;
+        .input-label {
+            font-size: 0.875rem;
+            color: #374151;
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .dark .input-label {
+            color: #e2e8f0;
+        }
+
+        .input-field {
+            background-color: #fff;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .score-box {
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fee2e2;
+        }
+
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #dc2626;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #dc2626;
         }
 
         @keyframes fadeInUp {
@@ -42,539 +93,348 @@
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out;
         }
-
-        /* Ẩn mũi tên input number */
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* Custom Radio Style Optimized */
-        .radio-card:checked+div {
-            border-color: #4f46e5;
-            background-color: #eef2ff;
-            color: #4f46e5;
-        }
-
-        .radio-card:checked+div .check-icon {
-            opacity: 1;
-            transform: scale(1);
-            width: auto;
-            margin-left: 8px;
-        }
-
-        .radio-card+div .check-icon {
-            opacity: 0;
-            transform: scale(0.5);
-            width: 0;
-            margin-left: 0;
-            transition: all 0.2s ease;
-        }
-
-        /* [MỚI] Fix lỗi tự động Zoom trên iOS/Mobile */
-        @media screen and (max-width: 768px) {
-
-            input[type="number"],
-            input[type="text"],
-            select {
-                font-size: 16px !important;
-            }
-        }
     </style>
 </head>
 
-<body>
+<body class="text-gray-800 flex flex-col min-h-screen">
 
-    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-        <a href="#" onclick="history.back(); return false;"
-            class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
-            <i class="fa-solid fa-chevron-left text-lg"></i></a>
-        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">APACHE II</h1>
-        <div class="w-8"></div>
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">APACHE II</h1>
     </header>
 
-    <main class="flex-grow container mx-auto px-3 pt-20 md:pt-24 pb-4 max-w-6xl">
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
         <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
-            <div class="hidden md:flex bg-indigo-600 p-4 text-white items-center justify-between">
-                <div class="flex items-center">
-                    <a href="#" onclick="history.back(); return false;"
-                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
-                        <i class="fa-solid fa-chevron-left"></i></a>
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
                     <div>
-                        <h1 class="text-2xl font-bold">Thang điểm APACHE II</h1>
-                        <p class="text-indigo-100 text-sm">Đánh giá mức độ nặng & Tiên lượng</p>
+                        <h1 class="text-xl font-bold">Thang điển APACHE II</h1>
+                        <p class="text-red-100 text-xs">Acute Physiology and Chronic Health Evaluation II</p>
                     </div>
                 </div>
-                <i class="fa-solid fa-calculator text-4xl text-indigo-300 opacity-50"></i>
+                <i class="fa-solid fa-notes-medical text-3xl text-red-300 opacity-50"></i>
             </div>
 
-            <div class="p-3 md:p-8" id="tool-content">
+            <div class="p-3 md:p-6">
+                <form id="tool-form" class="space-y-4">
 
-                <div class="lg:grid lg:grid-cols-2 lg:gap-10">
+                    <!-- Phần A: Sinh lý học cấp tính -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-slate-700 mb-3"><i class="fa-solid fa-heart-pulse mr-2"></i>A. Điểm
+                            sinh lý học (Physiology)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                    <div class="space-y-6">
-
-                        <div>
-                            <h3
-                                class="text-indigo-600 font-bold mb-3 flex items-center uppercase text-xs md:text-base tracking-wide border-b border-indigo-50 pb-2">
-                                <i class="fa-solid fa-user mr-2"></i>Thông tin cơ bản
-                            </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">Tuổi
-                                        (năm)</label>
-                                    <input type="number" id="age" inputmode="numeric"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none text-gray-800 font-medium text-base"
-                                        placeholder="Nhập tuổi...">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3
-                                class="text-indigo-600 font-bold mb-3 flex items-center uppercase text-xs md:text-base tracking-wide border-b border-indigo-50 pb-2">
-                                <i class="fa-solid fa-heart-pulse mr-2"></i>Dấu hiệu sinh tồn
-                            </h3>
-                            <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">Nhiệt độ
-                                        (°C)</label>
-                                    <input type="number" id="temp" step="0.1" inputmode="decimal"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                        placeholder="38.5">
-                                </div>
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">MAP
-                                        (mmHg)</label>
-                                    <input type="number" id="map" inputmode="numeric"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                        placeholder="80">
-                                </div>
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">Mạch
-                                        (lần/p)</label>
-                                    <input type="number" id="hr" inputmode="numeric"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                        placeholder="100">
-                                </div>
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">Thở
-                                        (lần/p)</label>
-                                    <input type="number" id="rr" inputmode="numeric"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                        placeholder="20">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3
-                                class="text-indigo-600 font-bold mb-3 flex items-center uppercase text-xs md:text-base tracking-wide border-b border-indigo-50 pb-2">
-                                <i class="fa-solid fa-lungs mr-2"></i>Oxy hóa máu
-                            </h3>
-
-                            <div class="mb-3">
-                                <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">Nồng độ
-                                    FiO2?</label>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <label class="cursor-pointer group">
-                                        <input type="radio" name="fio2_level" value="low" checked
-                                            class="radio-card sr-only" onchange="toggleOxygenInput()">
-                                        <div
-                                            class="border border-gray-300 rounded-lg p-2 md:p-3 text-center hover:bg-gray-50 transition flex items-center justify-center h-full">
-                                            <span class="font-semibold text-xs md:text-sm">FiO2 &lt; 50%</span>
-                                            <i class="fa-solid fa-circle-check check-icon text-indigo-600"></i>
-                                        </div>
-                                    </label>
-                                    <label class="cursor-pointer group">
-                                        <input type="radio" name="fio2_level" value="high" class="radio-card sr-only"
-                                            onchange="toggleOxygenInput()">
-                                        <div
-                                            class="border border-gray-300 rounded-lg p-2 md:p-3 text-center hover:bg-gray-50 transition flex items-center justify-center h-full">
-                                            <span class="font-semibold text-xs md:text-sm">FiO2 &ge; 50%</span>
-                                            <i class="fa-solid fa-circle-check check-icon text-indigo-600"></i>
-                                        </div>
-                                    </label>
-                                </div>
+                            <div><label class="input-label">1. Thân nhiệt (°C)</label>
+                                <select id="temp" class="input-field">
+                                    <option value="4">≥ 41 (4đ)</option>
+                                    <option value="3">39 - 40.9 (3đ)</option>
+                                    <option value="1">38.5 - 38.9 (1đ)</option>
+                                    <option value="0">36 - 38.4 (0đ)</option>
+                                    <option value="1">34 - 35.9 (1đ)</option>
+                                    <option value="2">32 - 33.9 (2đ)</option>
+                                    <option value="3">30 - 31.9 (3đ)</option>
+                                    <option value="4">≤ 29.9 (4đ)</option>
+                                </select>
                             </div>
 
-                            <div id="input-pao2">
-                                <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">PaO2
-                                    (mmHg)</label>
-                                <input type="number" id="pao2" inputmode="numeric"
-                                    class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                    placeholder="Ví dụ: 70">
-                            </div>
-                            <div id="input-aado2" class="hidden">
-                                <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">A-aDO2
-                                    (mmHg)</label>
-                                <input type="number" id="aado2" inputmode="numeric"
-                                    class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                    placeholder="Gradient Oxy phế nang - mao mạch">
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="space-y-6 mt-6 lg:mt-0">
-
-                        <div>
-                            <h3
-                                class="text-indigo-600 font-bold mb-3 flex items-center uppercase text-xs md:text-base tracking-wide border-b border-indigo-50 pb-2">
-                                <i class="fa-solid fa-flask mr-2"></i>Xét nghiệm máu
-                            </h3>
-                            <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">pH</label>
-                                    <input type="number" id="ph" step="0.01" inputmode="decimal"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                        placeholder="7.4">
-                                </div>
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">Na+
-                                        (mmol/L)</label>
-                                    <input type="number" id="na" inputmode="numeric"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                        placeholder="135">
-                                </div>
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">K+
-                                        (mmol/L)</label>
-                                    <input type="number" id="k" step="0.1" inputmode="decimal"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                        placeholder="4.0">
-                                </div>
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">Hct
-                                        (%)</label>
-                                    <input type="number" id="hct" step="0.1" inputmode="decimal"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                        placeholder="35">
-                                </div>
-                                <div>
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">WBC
-                                        (x10⁹/L)</label>
-                                    <input type="number" id="wbc" step="0.1" inputmode="decimal"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                        placeholder="8.0">
-                                </div>
-                                <div class="col-span-1 flex flex-col justify-end">
-                                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">Creatinine
-                                        (mg/dL)</label>
-                                    <input type="number" id="creat" step="0.1" inputmode="decimal"
-                                        class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base mb-2"
-                                        placeholder="0.9">
-                                    <label class="flex items-center space-x-2 cursor-pointer select-none">
-                                        <input type="checkbox" id="arf"
-                                            class="w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
-                                        <span class="text-xs md:text-sm text-red-600 font-semibold">Suy thận cấp?</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3
-                                class="text-indigo-600 font-bold mb-3 flex items-center uppercase text-xs md:text-base tracking-wide border-b border-indigo-50 pb-2">
-                                <i class="fa-solid fa-brain mr-2"></i>Thần kinh & Tiền sử
-                            </h3>
-
-                            <div class="mb-4">
-                                <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">Điểm Glasgow
-                                    (GCS) thực tế</label>
-                                <input type="number" id="gcs" max="15" min="3" inputmode="numeric"
-                                    class="w-full px-3 py-2 md:px-4 md:py-2.5 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 transition outline-none font-medium text-base"
-                                    placeholder="3 - 15">
+                            <div><label class="input-label">2. Huyết áp trung bình (MAP)</label>
+                                <select id="map" class="input-field">
+                                    <option value="4">≥ 160 (4đ)</option>
+                                    <option value="3">130 - 159 (3đ)</option>
+                                    <option value="2">110 - 129 (2đ)</option>
+                                    <option value="0">70 - 109 (0đ)</option>
+                                    <option value="2">50 - 69 (2đ)</option>
+                                    <option value="4">≤ 49 (4đ)</option>
+                                </select>
                             </div>
 
-                            <div class="mb-4">
-                                <label
-                                    class="flex items-center space-x-3 cursor-pointer bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-200 hover:bg-gray-100 transition">
-                                    <input type="checkbox" id="chronic_history"
-                                        class="w-5 h-5 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500 flex-shrink-0">
-                                    <div class="text-sm text-gray-700">
-                                        <span class="font-bold block text-gray-800 text-xs md:text-sm">Bệnh mạn tính
-                                            nặng?</span>
-                                        <span class="text-gray-500 leading-tight block mt-1 text-xs md:text-sm">Xơ gan,
-                                            Tim độ IV, COPD, Thẩm phân, Suy giảm MD.</span>
-                                    </div>
-                                </label>
+                            <div><label class="input-label">3. Nhịp tim (lần/phút)</label>
+                                <select id="hr" class="input-field">
+                                    <option value="4">≥ 180 (4đ)</option>
+                                    <option value="3">140 - 179 (3đ)</option>
+                                    <option value="2">110 - 139 (2đ)</option>
+                                    <option value="0">70 - 109 (0đ)</option>
+                                    <option value="2">55 - 69 (2đ)</option>
+                                    <option value="3">40 - 54 (3đ)</option>
+                                    <option value="4">≤ 39 (4đ)</option>
+                                </select>
                             </div>
 
-                            <div class="space-y-3">
-                                <label class="block text-xs md:text-sm font-medium text-gray-700">Loại nhập viện</label>
-                                <div class="grid grid-cols-1 gap-3">
-                                    <label
-                                        class="flex items-center p-2 md:p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                        <input type="radio" name="admission_type" value="non_op" checked
-                                            class="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500 flex-shrink-0">
-                                        <span class="ml-3 text-xs md:text-sm text-gray-700">Không phẫu thuật (Nội
-                                            khoa)</span>
-                                    </label>
-                                    <label
-                                        class="flex items-center p-2 md:p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                        <input type="radio" name="admission_type" value="elective"
-                                            class="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500 flex-shrink-0">
-                                        <span class="ml-3 text-xs md:text-sm text-gray-700">Mổ phiên (Có chương
-                                            trình)</span>
-                                    </label>
-                                    <label
-                                        class="flex items-center p-2 md:p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                        <input type="radio" name="admission_type" value="emergency"
-                                            class="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500 flex-shrink-0">
-                                        <span class="ml-3 text-xs md:text-sm text-gray-700 font-medium">Phẫu thuật cấp
-                                            cứu</span>
-                                    </label>
+                            <div><label class="input-label">4. Nhịp thở (lần/phút)</label>
+                                <select id="rr" class="input-field">
+                                    <option value="4">≥ 50 (4đ)</option>
+                                    <option value="3">35 - 49 (3đ)</option>
+                                    <option value="1">25 - 34 (1đ)</option>
+                                    <option value="0">12 - 24 (0đ)</option>
+                                    <option value="1">10 - 11 (1đ)</option>
+                                    <option value="2">6 - 9 (2đ)</option>
+                                    <option value="4">≤ 5 (4đ)</option>
+                                </select>
+                            </div>
+
+                            <div><label class="input-label">5. Oxy hóa máu (AaDO2 hoặc PaO2)</label>
+                                <select id="oxy" class="input-field">
+                                    <option value="0">FiO2<0.5 & PaO2>70 (0đ)</option>
+                                    <option value="1">FiO2<0.5 & PaO2 61-70 (1đ)</option>
+                                    <option value="3">FiO2<0.5 & PaO2 55-60 (3đ)</option>
+                                    <option value="4">FiO2<0.5 & PaO2 <55 (4đ)</option>
+                                    <option value="0">FiO2≥0.5 & AaDO2 <200 (0đ)</option>
+                                    <option value="2">FiO2≥0.5 & AaDO2 200-349 (2đ)</option>
+                                    <option value="3">FiO2≥0.5 & AaDO2 350-499 (3đ)</option>
+                                    <option value="4">FiO2≥0.5 & AaDO2 ≥500 (4đ)</option>
+                                </select>
+                            </div>
+
+                            <div><label class="input-label">6. pH máu động mạch</label>
+                                <select id="ph" class="input-field">
+                                    <option value="4">≥ 7.7 (4đ)</option>
+                                    <option value="3">7.6 - 7.69 (3đ)</option>
+                                    <option value="1">7.5 - 7.59 (1đ)</option>
+                                    <option value="0">7.33 - 7.49 (0đ)</option>
+                                    <option value="2">7.25 - 7.32 (2đ)</option>
+                                    <option value="3">7.15 - 7.24 (3đ)</option>
+                                    <option value="4">
+                                        < 7.15 (4đ)</option>
+                                </select>
+                            </div>
+
+                            <div><label class="input-label">7. Natri máu (mmol/L)</label>
+                                <select id="na" class="input-field">
+                                    <option value="4">≥ 180 (4đ)</option>
+                                    <option value="3">160 - 179 (3đ)</option>
+                                    <option value="2">156 - 159 (2đ)</option>
+                                    <option value="1">151 - 155 (1đ)</option>
+                                    <option value="0">130 - 150 (0đ)</option>
+                                    <option value="2">120 - 129 (2đ)</option>
+                                    <option value="3">111 - 119 (3đ)</option>
+                                    <option value="4">≤ 110 (4đ)</option>
+                                </select>
+                            </div>
+
+                            <div><label class="input-label">8. Kali máu (mmol/L)</label>
+                                <select id="k" class="input-field">
+                                    <option value="4">≥ 7 (4đ)</option>
+                                    <option value="3">6 - 6.9 (3đ)</option>
+                                    <option value="1">5.5 - 5.9 (1đ)</option>
+                                    <option value="0">3.5 - 5.4 (0đ)</option>
+                                    <option value="1">3 - 3.4 (1đ)</option>
+                                    <option value="2">2.5 - 2.9 (2đ)</option>
+                                    <option value="4">
+                                        < 2.5 (4đ)</option>
+                                </select>
+                            </div>
+
+                            <div><label class="input-label">9. Creatinine (mg/dL)</label>
+                                <select id="cr" class="input-field">
+                                    <option value="4">≥ 3.5 (4đ)</option>
+                                    <option value="3">2 - 3.4 (3đ)</option>
+                                    <option value="2">1.5 - 1.9 (2đ)</option>
+                                    <option value="0">0.6 - 1.4 (0đ)</option>
+                                    <option value="2">
+                                        < 0.6 (2đ)</option>
+                                </select>
+                                <div class="mt-2 flex items-center">
+                                    <input type="checkbox" id="arf"
+                                        class="mr-2 w-4 h-4 text-red-600 focus:ring-red-500 rounded">
+                                    <label for="arf" class="text-sm font-medium text-gray-700">Suy thận cấp (Gấp đôi
+                                        điểm Cr)</label>
                                 </div>
+                            </div>
+
+                            <div><label class="input-label">10. Hct (%)</label>
+                                <select id="hct" class="input-field">
+                                    <option value="4">≥ 60 (4đ)</option>
+                                    <option value="2">50 - 59.9 (2đ)</option>
+                                    <option value="1">46 - 49.9 (1đ)</option>
+                                    <option value="0">30 - 45.9 (0đ)</option>
+                                    <option value="2">20 - 29.9 (2đ)</option>
+                                    <option value="4">
+                                        < 20 (4đ)</option>
+                                </select>
+                            </div>
+
+                            <div><label class="input-label">11. Bạch cầu (x10³/mm³)</label>
+                                <select id="wbc" class="input-field">
+                                    <option value="4">≥ 40 (4đ)</option>
+                                    <option value="2">20 - 39.9 (2đ)</option>
+                                    <option value="1">15 - 19.9 (1đ)</option>
+                                    <option value="0">3 - 14.9 (0đ)</option>
+                                    <option value="2">1 - 2.9 (2đ)</option>
+                                    <option value="4">
+                                        < 1 (4đ)</option>
+                                </select>
+                            </div>
+
+                            <div><label class="input-label">12. Điểm Glasgow (GCS)</label>
+                                <select id="gcs" class="input-field">
+                                    <option value="0">15 (0đ)</option>
+                                    <option value="1">14 (1đ)</option>
+                                    <option value="2">13 (2đ)</option>
+                                    <option value="3">12 (3đ)</option>
+                                    <option value="4">11 (4đ)</option>
+                                    <option value="5">10 (5đ)</option>
+                                    <option value="6">9 (6đ)</option>
+                                    <option value="7">8 (7đ)</option>
+                                    <option value="8">7 (8đ)</option>
+                                    <option value="9">6 (9đ)</option>
+                                    <option value="10">5 (10đ)</option>
+                                    <option value="11">4 (11đ)</option>
+                                    <option value="12">3 (12đ)</option>
+                                </select>
+                                <p class="text-xs text-gray-500 mt-1">Điểm cộng = 15 - GCS thực tế</p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="mt-8">
-                    <div
-                        class="grid grid-cols-2 gap-4 sticky bottom-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-xl shadow-lg border border-gray-100 md:static md:bg-transparent md:p-0 md:shadow-none md:border-0 md:w-2/3 md:mx-auto lg:w-1/2">
-                        <button type="button" id="btn-reset"
-                            class="flex items-center justify-center py-2.5 px-4 md:py-3 md:px-6 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition active:scale-95 text-sm md:text-base">
-                            <i class="fa-solid fa-rotate-right mr-2"></i>Nhập lại
-                        </button>
-                        <button type="button" id="btn-calc"
-                            class="flex items-center justify-center py-2.5 px-4 md:py-3 md:px-6 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 shadow-md shadow-indigo-200 transition active:scale-95 text-sm md:text-base">
-                            <i class="fa-solid fa-calculator mr-2"></i>Tính điểm
-                        </button>
+
+                    <!-- Phần B: Tuổi -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-slate-700 mb-3"><i class="fa-solid fa-cake-candles mr-2"></i>B. Tuổi
+                        </h3>
+                        <select id="age" class="input-field">
+                            <option value="0">≤ 44 (0đ)</option>
+                            <option value="2">45 - 54 (2đ)</option>
+                            <option value="3">55 - 64 (3đ)</option>
+                            <option value="5">65 - 74 (5đ)</option>
+                            <option value="6">≥ 75 (6đ)</option>
+                        </select>
                     </div>
 
-                    <div id="result-area"
-                        class="hidden mt-8 p-4 md:p-8 bg-indigo-50 rounded-xl border border-indigo-100 animate-fade-in-up scroll-mt-20 max-w-2xl mx-auto">
-                        <div class="text-center">
-                            <h3 class="text-gray-500 text-sm md:text-base font-bold uppercase tracking-wider mb-4">Kết
-                                quả APACHE II</h3>
-                            <div class="flex items-center justify-center gap-8 mb-4">
-                                <div class="text-right">
-                                    <div class="text-sm md:text-base text-gray-500 mb-1">Điểm số</div>
-                                    <div class="text-4xl md:text-5xl font-bold text-indigo-700"><span
-                                            id="total-score">0</span></div>
-                                </div>
-                                <div class="w-px h-16 bg-indigo-200"></div>
-                                <div class="text-left">
-                                    <div class="text-sm md:text-base text-gray-500 mb-1">Nguy cơ tử vong</div>
-                                    <div class="text-4xl md:text-5xl font-bold text-red-600"><span
-                                            id="mortality-rate">0%</span></div>
-                                </div>
+                    <!-- Phần C: Sức khỏe mạn tính -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-slate-700 mb-3"><i class="fa-solid fa-notes-medical mr-2"></i>C. Sức
+                            khỏe mạn tính</h3>
+                        <div class="space-y-2">
+                            <div class="relative">
+                                <input type="checkbox" id="chronic" class="mr-2">
+                                <label for="chronic" class="font-semibold text-gray-700">Có bệnh lý nặng cơ quan
+                                    đích?</label>
+                                <p class="text-xs text-gray-500 ml-6">Xơ gan, Suy tim IV, COPD nặng, Chạy thận, Suy giảm
+                                    miễn dịch...</p>
+                            </div>
+
+                            <div id="surgery-type" class="mt-2 ml-6 hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Loại bệnh nhân:</label>
+                                <select id="surg" class="input-field text-sm">
+                                    <option value="5">Không phẫu thuật hoặc Phẫu thuật cấp cứu (5đ)</option>
+                                    <option value="2">Phẫu thuật theo chương trình (2đ)</option>
+                                </select>
                             </div>
                         </div>
-                        <div
-                            class="mt-4 text-xs md:text-sm text-gray-500 bg-white p-4 rounded-lg border border-indigo-100 text-center">
-                            <i class="fa-solid fa-circle-info mr-1"></i> Kết quả chỉ mang tính tham khảo và hỗ trợ lâm
-                            sàng.
+                    </div>
+
+                    <div id="action-buttons" class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-rotate-right mr-2"></i> Nhập lại</button>
+                    </div>
+                </form>
+
+                <!-- RESULT -->
+                <div id="result-container" class="mt-6 hidden animate-fade-in-up">
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Tổng điểm APACHE II
+                        </h3>
+                        <div id="result" class="score-box mb-3 bg-white text-4xl text-red-600">--</div>
+                        <div class="bg-white p-3 rounded-lg border border-red-100 inline-block w-full">
+                            <p id="mortality" class="result-text text-red-700 leading-relaxed font-bold text-lg">...</p>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
 
-    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
-        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
-        <div
-            class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center transform transition-all scale-100 animate-fade-in-up">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
-            </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
-            <p id="modal-message" class="text-sm text-gray-500 mb-6">...</p>
-            <button onclick="hideModal()"
-                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition">Đóng</button>
-        </div>
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
     </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
 
+    <script type="module" src="app.js"></script>
     <script>
-        // --- 1. TIỆN ÍCH HỆ THỐNG ---
-        function useTool(id, name, icon, color, url) {
-            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
-            recentTools = recentTools.filter(tool => tool.id !== id);
-            recentTools.unshift({ id, name, icon, color, url, timestamp: new Date().getTime() });
-            if (recentTools.length > 5) recentTools.pop();
-            localStorage.setItem('recentTools', JSON.stringify(recentTools));
-        }
-
-        function openDrawer(e) { if (e) e.preventDefault(); document.getElementById('drawer-overlay').classList.remove('hidden'); setTimeout(() => document.getElementById('drawer-overlay').classList.remove('opacity-0'), 10); document.getElementById('drawer-menu').classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; }
-        function closeDrawer() { const d = document.getElementById('drawer-menu'); const o = document.getElementById('drawer-overlay'); d.classList.add('translate-x-full'); o.classList.add('opacity-0'); setTimeout(() => { o.classList.add('hidden'); document.body.style.overflow = ''; }, 300); }
-        window.showModal = function (msg) { const m = document.getElementById('notification-modal'); if (m) { document.getElementById('modal-message').textContent = msg; m.classList.remove('hidden'); } };
-        window.hideModal = function () { const m = document.getElementById('notification-modal'); if (m) m.classList.add('hidden'); };
-
-        // --- 2. BẢO MẬT (CHẶN COPY/F12) ---
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'F12' || (event.ctrlKey && (['u', 'U', 'c', 'C', 'a', 'A', 's', 'S', 'p', 'P'].includes(event.key)))) {
-                event.preventDefault(); return false;
-            }
-        });
-
-        // --- 3. LOGIC CÔNG CỤ (APACHE II) ---
-        window.toggleOxygenInput = function () {
-            const isLowFiO2 = document.querySelector('input[name="fio2_level"][value="low"]').checked;
-            const pao2Div = document.getElementById('input-pao2');
-            const aado2Div = document.getElementById('input-aado2');
-
-            if (isLowFiO2) {
-                pao2Div.classList.remove('hidden');
-                aado2Div.classList.add('hidden');
-                document.getElementById('aado2').value = '';
-            } else {
-                pao2Div.classList.add('hidden');
-                aado2Div.classList.remove('hidden');
-                document.getElementById('pao2').value = '';
-            }
-        };
-
-        function getPoints(value, ranges) {
-            if (value === '' || value === null || isNaN(value)) return 0;
-            value = parseFloat(value);
-            for (let i = 0; i < ranges.length; i++) {
-                const r = ranges[i];
-                if (value >= r.min && value <= r.max) return r.points;
-            }
-            return 0;
-        }
-
         document.addEventListener('DOMContentLoaded', function () {
-            useTool('apache_ii', 'Thang điểm APACHE II', 'fa-heart-pulse', 'indigo', window.location.href);
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const resultEl = document.getElementById('result');
+            const mortEl = document.getElementById('mortality');
+            const clearBtn = document.getElementById('clearBtn');
+            const chronicCb = document.getElementById('chronic');
+            const surgeryDiv = document.getElementById('surgery-type');
 
-            // A. Xử lý nút RESET
-            document.getElementById('btn-reset').addEventListener('click', function () {
-                const inputs = document.querySelectorAll('input[type="number"]');
-                inputs.forEach(input => input.value = '');
-                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-                document.querySelector('input[name="fio2_level"][value="low"]').click();
-                document.querySelector('input[name="admission_type"][value="non_op"]').click();
+            function calculate() {
+                let score = 0;
 
-                document.getElementById('result-area').classList.add('hidden');
+                // A. Physiology
+                score += parseInt(document.getElementById('temp').value);
+                score += parseInt(document.getElementById('map').value);
+                score += parseInt(document.getElementById('hr').value);
+                score += parseInt(document.getElementById('rr').value);
+                score += parseInt(document.getElementById('oxy').value);
+                score += parseInt(document.getElementById('ph').value);
+                score += parseInt(document.getElementById('na').value);
+                score += parseInt(document.getElementById('k').value);
+
+                let crScore = parseInt(document.getElementById('cr').value);
+                if (document.getElementById('arf').checked) crScore *= 2;
+                score += crScore;
+
+                score += parseInt(document.getElementById('hct').value);
+                score += parseInt(document.getElementById('wbc').value);
+                score += parseInt(document.getElementById('gcs').value);
+
+                // B. Age
+                score += parseInt(document.getElementById('age').value);
+
+                // C. Chronic Health
+                if (chronicCb.checked) {
+                    score += parseInt(document.getElementById('surg').value);
+                }
+
+                resultEl.innerText = score;
+
+                // Mortality Estimate (Approx)
+                let mort = 0;
+                if (score <= 4) mort = 4;
+                else if (score <= 9) mort = 8;
+                else if (score <= 14) mort = 15;
+                else if (score <= 19) mort = 25;
+                else if (score <= 24) mort = 40;
+                else if (score <= 29) mort = 55;
+                else if (score <= 34) mort = 75;
+                else mort = 85;
+
+                mortEl.innerText = `Tỷ lệ tử vong ước tính: ~${mort}%`;
+                resultContainer.classList.remove('hidden');
+            }
+
+            // Event Listeners
+            const inputs = form.querySelectorAll('select, input');
+            inputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    if (input.id === 'chronic') {
+                        if (input.checked) surgeryDiv.classList.remove('hidden');
+                        else surgeryDiv.classList.add('hidden');
+                    }
+                    calculate();
+                });
+            });
+
+            clearBtn.addEventListener('click', function () {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                surgeryDiv.classList.add('hidden');
+                resultEl.innerText = "--";
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
-
-            // B. Xử lý nút TÍNH ĐIỂM
-            document.getElementById('btn-calc').addEventListener('click', function () {
-                const requiredIds = ['age', 'temp', 'map', 'hr', 'rr', 'ph', 'na', 'k', 'hct', 'wbc', 'creat', 'gcs'];
-                for (const id of requiredIds) {
-                    if (document.getElementById(id).value === '') {
-                        showModal('Vui lòng nhập đầy đủ các chỉ số!');
-                        return;
-                    }
-                }
-
-                const isLowFiO2 = document.querySelector('input[name="fio2_level"][value="low"]').checked;
-                if (isLowFiO2 && document.getElementById('pao2').value === '') { showModal('Vui lòng nhập chỉ số PaO2!'); return; }
-                if (!isLowFiO2 && document.getElementById('aado2').value === '') { showModal('Vui lòng nhập chỉ số A-aDO2!'); return; }
-
-                const gcs = parseFloat(document.getElementById('gcs').value);
-                if (gcs < 3 || gcs > 15) { showModal('Điểm GCS phải từ 3 đến 15!'); return; }
-
-                let totalScore = 0;
-
-                // B. Điểm Tuổi
-                const age = parseFloat(document.getElementById('age').value);
-                if (age <= 44) totalScore += 0;
-                else if (age <= 54) totalScore += 2;
-                else if (age <= 64) totalScore += 3;
-                else if (age <= 74) totalScore += 5;
-                else totalScore += 6;
-
-                // A. Điểm Sinh Lý
-                const temp = parseFloat(document.getElementById('temp').value);
-                totalScore += getPoints(temp, [{ min: 41, max: 999, points: 4 }, { min: 39, max: 40.9, points: 3 }, { min: 38.5, max: 38.9, points: 1 }, { min: 36, max: 38.4, points: 0 }, { min: 34, max: 35.9, points: 1 }, { min: 32, max: 33.9, points: 2 }, { min: 30, max: 31.9, points: 3 }, { min: -99, max: 29.9, points: 4 }]);
-
-                const map = parseFloat(document.getElementById('map').value);
-                totalScore += getPoints(map, [{ min: 160, max: 999, points: 4 }, { min: 130, max: 159, points: 3 }, { min: 110, max: 129, points: 2 }, { min: 70, max: 109, points: 0 }, { min: 50, max: 69, points: 2 }, { min: -99, max: 49, points: 4 }]);
-
-                const hr = parseFloat(document.getElementById('hr').value);
-                totalScore += getPoints(hr, [{ min: 180, max: 999, points: 4 }, { min: 140, max: 179, points: 3 }, { min: 110, max: 139, points: 2 }, { min: 70, max: 109, points: 0 }, { min: 55, max: 69, points: 2 }, { min: 40, max: 54, points: 3 }, { min: -99, max: 39, points: 4 }]);
-
-                const rr = parseFloat(document.getElementById('rr').value);
-                totalScore += getPoints(rr, [{ min: 50, max: 999, points: 4 }, { min: 35, max: 49, points: 3 }, { min: 25, max: 34, points: 1 }, { min: 12, max: 24, points: 0 }, { min: 10, max: 11, points: 1 }, { min: 6, max: 9, points: 2 }, { min: -99, max: 5, points: 4 }]);
-
-                if (isLowFiO2) {
-                    const pao2 = parseFloat(document.getElementById('pao2').value);
-                    totalScore += getPoints(pao2, [{ min: 70, max: 999, points: 0 }, { min: 61, max: 70, points: 1 }, { min: 55, max: 60, points: 3 }, { min: -99, max: 54.9, points: 4 }]);
-                } else {
-                    const aado2 = parseFloat(document.getElementById('aado2').value);
-                    totalScore += getPoints(aado2, [{ min: 500, max: 9999, points: 4 }, { min: 350, max: 499, points: 3 }, { min: 200, max: 349, points: 2 }, { min: -99, max: 199, points: 0 }]);
-                }
-
-                const ph = parseFloat(document.getElementById('ph').value);
-                totalScore += getPoints(ph, [{ min: 7.7, max: 14, points: 4 }, { min: 7.6, max: 7.69, points: 3 }, { min: 7.5, max: 7.59, points: 1 }, { min: 7.33, max: 7.49, points: 0 }, { min: 7.25, max: 7.32, points: 2 }, { min: 7.15, max: 7.24, points: 3 }, { min: 0, max: 7.149, points: 4 }]);
-
-                const na = parseFloat(document.getElementById('na').value);
-                totalScore += getPoints(na, [{ min: 180, max: 999, points: 4 }, { min: 160, max: 179, points: 3 }, { min: 155, max: 159, points: 2 }, { min: 150, max: 154, points: 1 }, { min: 130, max: 149, points: 0 }, { min: 120, max: 129, points: 2 }, { min: 111, max: 119, points: 3 }, { min: -99, max: 110, points: 4 }]);
-
-                const k = parseFloat(document.getElementById('k').value);
-                totalScore += getPoints(k, [{ min: 7, max: 99, points: 4 }, { min: 6, max: 6.9, points: 3 }, { min: 5.5, max: 5.9, points: 1 }, { min: 3.5, max: 5.4, points: 0 }, { min: 3, max: 3.4, points: 1 }, { min: 2.5, max: 2.9, points: 2 }, { min: -99, max: 2.4, points: 4 }]);
-
-                const creat = parseFloat(document.getElementById('creat').value);
-                const isARF = document.getElementById('arf').checked;
-                let creatPoints = getPoints(creat, [{ min: 3.5, max: 99, points: 4 }, { min: 2, max: 3.4, points: 3 }, { min: 1.5, max: 1.9, points: 2 }, { min: 0.6, max: 1.4, points: 0 }, { min: -99, max: 0.59, points: 2 }]);
-                if (isARF && creatPoints > 0) creatPoints *= 2;
-                totalScore += creatPoints;
-
-                const hct = parseFloat(document.getElementById('hct').value);
-                totalScore += getPoints(hct, [{ min: 60, max: 100, points: 4 }, { min: 50, max: 59.9, points: 2 }, { min: 46, max: 49.9, points: 1 }, { min: 30, max: 45.9, points: 0 }, { min: 20, max: 29.9, points: 2 }, { min: 0, max: 19.9, points: 4 }]);
-
-                const wbc = parseFloat(document.getElementById('wbc').value);
-                totalScore += getPoints(wbc, [{ min: 40, max: 999, points: 4 }, { min: 20, max: 39.9, points: 2 }, { min: 15, max: 19.9, points: 1 }, { min: 3, max: 14.9, points: 0 }, { min: 1, max: 2.9, points: 2 }, { min: 0, max: 0.9, points: 4 }]);
-
-                totalScore += (15 - gcs);
-
-                const hasChronic = document.getElementById('chronic_history').checked;
-                const admissionType = document.querySelector('input[name="admission_type"]:checked').value;
-                let chronicPoints = 0;
-                if (hasChronic) {
-                    if (admissionType === 'non_op' || admissionType === 'emergency') chronicPoints = 5;
-                    else if (admissionType === 'elective') chronicPoints = 2;
-                }
-                totalScore += chronicPoints;
-
-                let logit = -3.517 + (totalScore * 0.146);
-                if (admissionType === 'emergency') logit += 0.603;
-                const risk = Math.exp(logit) / (1 + Math.exp(logit));
-                const riskPercent = (risk * 100).toFixed(1);
-
-                document.getElementById('total-score').textContent = totalScore;
-                document.getElementById('mortality-rate').textContent = riskPercent + '%';
-
-                // --- LOGIC SMART SCROLL ---
-                const resultArea = document.getElementById('result-area');
-                resultArea.classList.remove('hidden');
-
-                const rect = resultArea.getBoundingClientRect();
-                const viewportHeight = window.innerHeight;
-
-                if (rect.bottom > viewportHeight) {
-                    window.scrollBy({
-                        top: rect.bottom - viewportHeight + 20,
-                        behavior: 'smooth'
-                    });
-                }
-            });
         });
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
     </script>
-    <script type="module" src="app.js"></script>
 </body>
 
 </html>

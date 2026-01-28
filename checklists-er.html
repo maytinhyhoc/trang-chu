@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Checklists Cấp Cứu - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .checklist-group {
+            margin-bottom: 2rem;
+        }
+
+        .checklist-group h3 {
+            font-weight: 700;
+            color: #991b1b;
+            border-bottom: 2px solid #fca5a5;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        .check-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            items-center;
+            transition: all 0.2s;
+        }
+
+        .check-item:active {
+            transform: scale(0.98);
+        }
+
+        .check-item.checked {
+            background-color: #f0fdf4;
+            border-color: #22c55e;
+        }
+
+        .strikethrough {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+
+        .check-circle {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            display: flex;
+            items-center;
+            justify-content: center;
+        }
+
+        .check-item.checked .check-circle {
+            border-color: #22c55e;
+            background-color: #22c55e;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">Checklists Cấp Cứu</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Checklists Cấp Cứu</h1>
+                        <p class="text-red-100 text-xs">Các bảng kiểm quan trọng cho quy trình cấp cứu</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-list-check text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-4 md:p-6">
+                <!-- Tabs -->
+                <div class="flex space-x-2 mb-6 overflow-x-auto pb-2">
+                    <button
+                        class="tab-btn active px-4 py-2 bg-red-600 text-white rounded-lg whitespace-nowrap font-bold shadow-sm"
+                        onclick="showTab('rsi')">RSI (Đặt NKQ)</button>
+                    <button
+                        class="tab-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg whitespace-nowrap font-medium hover:bg-gray-300"
+                        onclick="showTab('stemi')">STEMI</button>
+                    <button
+                        class="tab-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg whitespace-nowrap font-medium hover:bg-gray-300"
+                        onclick="showTab('stroke')">Đột quỵ</button>
+                    <button
+                        class="tab-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg whitespace-nowrap font-medium hover:bg-gray-300"
+                        onclick="showTab('postrosch')">Sau ROSC</button>
+                </div>
+
+                <!-- RSI Tab -->
+                <div id="rsi" class="tab-content">
+                    <div class="checklist-group">
+                        <h3>Chuẩn bị (7P)</h3>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Preparation:
+                                Máy hút, O2, Bóng, Lưỡi đèn, NKQ, Monitor</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div>
+                            <span>Preoxygenation: Thở oxy 100% (3-5 phút)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Pretreatment:
+                                Fentanyl / Lidocaine (nếu cần)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Paralysis +
+                                Induction: Ketamine/Etomidate + Rocuronium/Succin</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Positioning:
+                                Kê cao vai, tư thế Sniffing</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Placement:
+                                Đặt ống nội khí quản</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div>
+                            <span>Post-intubation: Nghe phổi, EtCO2, Cố định, X-quang</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEMI Tab -->
+                <div id="stemi" class="tab-content hidden">
+                    <div class="checklist-group">
+                        <h3>Nhồi máu cơ tim ST chênh lên</h3>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Đo ECG 12
+                                chuyển đạo trong 10 phút</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Oxy (nếu SpO2
+                                < 90%)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Aspirin 300mg
+                                (nhai)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>P2Y12
+                                (Clopidogrel 300-600mg / Ticagrelor)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Nitroglycerin
+                                (nếu đau ngực, HA ổn)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Heparin /
+                                Enoxaparin</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Kích hoạt
+                                Cath-lab (PCI < 90 phút)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stroke Tab -->
+                <div id="stroke" class="tab-content hidden">
+                    <div class="checklist-group">
+                        <h3>Đột quỵ cấp</h3>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Kiểm tra
+                                đường huyết (loại trừ hạ ĐH)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Thang điểm
+                                FAST dương tính</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Xác định thời
+                                gian khởi phát (< 4.5h?)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Chụp CT Sọ
+                                não không cản quang khẩn</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Đánh giá
+                                thang NIHSS</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Kiểm soát
+                                huyết áp (< 185/110 nếu tiêu sợi huyết)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post-ROSC Tab -->
+                <div id="postrosch" class="tab-content hidden">
+                    <div class="checklist-group">
+                        <h3>Chăm sóc sau ngừng tuần hoàn</h3>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Bảo vệ đường
+                                thở (Nội khí quản)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Kiểm soát Oxy
+                                (SpO2 92-98%) & CO2 (PaCO2 35-45)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Huyết động:
+                                Duy trì MAP > 65 mmHg</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>ECG 12 chuyển
+                                đạo (Tìm nguyên nhân Tim mạch)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Kiểm soát
+                                nhiệt độ mục tiêu (TTM 32-36°C)</span>
+                        </div>
+                        <div class="check-item" onclick="toggleCheck(this)">
+                            <div class="check-circle"><i class="fa-solid fa-check text-xs"></i></div><span>Kiểm soát
+                                đường huyết & điện giải</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-6">
+                    <button onclick="resetChecks()" class="text-sm text-gray-500 hover:text-red-600 underline">Reset
+                        Checklists</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <script type="module" src="app.js"></script>
+    <script>
+        window.showTab = function (id) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-red-600', 'text-white', 'active');
+                el.classList.add('bg-gray-200', 'text-gray-700');
+            });
+
+            // Highlight active btn
+            const activeBtn = document.querySelector(`button[onclick="showTab('${id}')"]`);
+            activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            activeBtn.classList.add('bg-red-600', 'text-white', 'active');
+        }
+
+        window.toggleCheck = function (el) {
+            el.classList.toggle('checked');
+            const nav = el.querySelector('span');
+            nav.classList.toggle('strikethrough');
+        }
+
+        window.resetChecks = function () {
+            document.querySelectorAll('.check-item').forEach(el => {
+                el.classList.remove('checked');
+                el.querySelector('span').classList.remove('strikethrough');
+            });
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 
 <head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Máy tính Y học</title>
@@ -45,11 +47,7 @@
         body {
             -webkit-tap-highlight-color: transparent;
             touch-action: pan-x pan-y;
-            /* Chặn bôi đen văn bản */
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+            touch-action: pan-x pan-y;
         }
 
         /* Nền họa tiết chấm bi mờ */
@@ -91,25 +89,7 @@
         }
     </style>
 
-    <script>
-        // Chặn Menu Chuột phải
-        document.addEventListener('contextmenu', event => event.preventDefault());
 
-        // Chặn Phím tắt (Ctrl+C, Ctrl+A, F12...)
-        document.addEventListener('keydown', function (e) {
-            if (e.ctrlKey && (['c', 'u', 'a', 's'].includes(e.key.toLowerCase()))) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.keyCode == 123) { e.preventDefault(); return false; } // F12
-            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i') { e.preventDefault(); return false; }
-        });
-
-        // Chặn Zoom trên Desktop
-        document.addEventListener('wheel', function (e) {
-            if (e.ctrlKey) { e.preventDefault(); }
-        }, { passive: false });
-    </script>
 </head>
 
 <body
@@ -129,7 +109,8 @@
         <div class="md:hidden mb-8 flex items-center justify-between relative z-10">
             <div>
                 <!-- Mobile: text-sm, PC: reverted to default logic (hidden on PC anyway) -->
-                <h2 class="text-sm text-slate-500 font-bold uppercase tracking-widest mb-1">Chào mừng bạn đến với</h2>
+                <h2 class="text-sm text-slate-500 font-bold uppercase tracking-widest mb-1 text-dark-muted">Chào mừng
+                    bạn đến với</h2>
                 <h1
                     class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
                     Máy tính Y học</h1>
@@ -142,6 +123,17 @@
                     class="relative w-12 h-12 object-contain bg-white rounded-xl shadow-sm p-1.5 ring-1 ring-slate-100"
                     onerror="this.src='https://placehold.co/48x48/e0f2fe/0284c7?text=YHS'">
             </div>
+        </div>
+
+        <!-- SEARCH BAR (NEW) -->
+        <div class="mb-8 relative group z-30">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                <i
+                    class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+            </div>
+            <input type="text" id="home-search-input" placeholder="Tìm bệnh, công cụ (VD: sxh, glasgow...)"
+                class="w-full pl-11 pr-4 py-4 rounded-2xl border-none shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] bg-white/80 backdrop-blur-xl focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-slate-700 text-base placeholder:text-slate-400 transition-all"
+                onkeydown="if(event.key === 'Enter') window.location.href = 'cong-cu.html?q=' + encodeURIComponent(this.value)">
         </div>
 
         <div id="install-guide"
@@ -157,7 +149,8 @@
                             <i class="fa-solid fa-cloud-arrow-down"></i> Cài đặt ứng dụng
                         </h3>
                         <!-- Mobile: text-base, PC/Tablet: text-sm -->
-                        <p class="text-blue-50 text-base md:text-sm opacity-90 mb-4">Truy cập nhanh hơn, hoạt động offline.</p>
+                        <p class="text-blue-50 text-base md:text-sm opacity-90 mb-4">Truy cập nhanh hơn, hoạt động
+                            offline.</p>
                     </div>
                     <button onclick="document.getElementById('install-guide').style.display='none'"
                         class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition text-white">
@@ -165,7 +158,8 @@
                     </button>
                 </div>
 
-                <div id="ios-instructions" class="hidden text-base md:text-sm bg-black/10 rounded-xl p-3 border border-white/10">
+                <div id="ios-instructions"
+                    class="hidden text-base md:text-sm bg-black/10 rounded-xl p-3 border border-white/10">
                     <div class="flex items-center gap-3">
                         <span
                             class="w-6 h-6 flex items-center justify-center bg-white text-blue-600 rounded-full font-bold text-xs shrink-0">1</span>
@@ -180,7 +174,8 @@
                     </div>
                 </div>
 
-                <div id="android-instructions" class="hidden text-base md:text-sm bg-black/10 rounded-xl p-3 border border-white/10">
+                <div id="android-instructions"
+                    class="hidden text-base md:text-sm bg-black/10 rounded-xl p-3 border border-white/10">
                     <div class="flex items-center gap-3">
                         <span
                             class="w-6 h-6 flex items-center justify-center bg-white text-blue-600 rounded-full font-bold text-xs shrink-0">1</span>
@@ -276,7 +271,7 @@
 
     <script>
         // --- CẤU HÌNH ---
-        const FEATURED_IDS = ['antibiotic', 'infusion-time', 'drip-rate', 'diet'];
+        const FEATURED_IDS = ['antibiotic', 'thoi-gian-truyen', 'dem-giot', 'diet'];
         let ALL_TOOLS_FLAT = [];
 
         // --- HÀM HỖ TRỢ ---
@@ -353,7 +348,7 @@
             if (!recentTools.length) return;
 
             const uniqueTools = [];
-            const seenKeys = new Set(); 
+            const seenKeys = new Set();
 
             for (let tool of recentTools) {
                 let standardTool = findToolInfo(tool.id) || findToolInfo(tool.url);
@@ -506,16 +501,16 @@
 
         // --- KHỞI CHẠY ---
         document.addEventListener('DOMContentLoaded', () => {
-            flattenToolsLibrary(); 
-            renderFeaturedTools(); 
-            renderRecentTools();   
+            flattenToolsLibrary();
+            renderFeaturedTools();
+            renderRecentTools();
 
             // --- PHÁT HIỆN THIẾT BỊ (Đã cập nhật để bao gồm iPadOS mới) ---
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            
+
             // Regex cơ bản cho điện thoại
             let isMobile = /iPad|iPhone|iPod|android/i.test(userAgent);
-            
+
             // Phát hiện iPadOS 13+ (Báo cáo là Macintosh nhưng có cảm ứng)
             if (!isMobile && navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /MacIntel/.test(navigator.platform)) {
                 isMobile = true;
@@ -535,9 +530,9 @@
                     const android = document.getElementById('android-instructions');
                     if (android) android.classList.remove('hidden');
                 }
-            } 
+            }
             // Logic hiển thị hướng dẫn cài đặt Desktop (CHỈ hiện khi KHÔNG PHẢI Mobile/Tablet)
-            else if (!isMobile) { 
+            else if (!isMobile) {
                 const desktopGuide = document.getElementById('desktop-install-guide');
                 if (desktopGuide) desktopGuide.classList.remove('hidden');
             }
@@ -562,5 +557,3 @@
 </body>
 
 </html>
-
-

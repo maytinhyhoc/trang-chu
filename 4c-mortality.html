@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>4C Mortality Score (COVID-19) - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .input-label {
+            font-size: 0.875rem;
+            color: #374151;
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .dark .input-label {
+            color: #e2e8f0;
+        }
+
+        .input-field {
+            background-color: #fff;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .score-box {
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fee2e2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .gender-option {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: white;
+        }
+
+        .gender-option:hover {
+            background-color: #f3f4f6;
+        }
+
+        .gender-option.selected {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        /* Dark Mode Support for Gender Option */
+        .dark .gender-option {
+            background-color: #1e293b;
+            /* slate-800 */
+            border-color: #334155;
+            /* slate-700 */
+            color: #e2e8f0;
+            /* slate-200 */
+        }
+
+        .dark .gender-option:hover {
+            background-color: #334155;
+            /* slate-700 */
+        }
+
+        .dark .gender-option.selected {
+            background-color: #7f1d1d;
+            /* red-900 */
+            border-color: #f87171;
+            /* red-400 */
+            color: #fef2f2;
+            /* red-50 */
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">4C Mortality Score</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Thang điển 4C Mortality</h1>
+                        <p class="text-red-100 text-xs">Tiên lượng tử vong ở bệnh nhân nội trú COVID-19</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-virus-covid text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-4 md:p-6">
+                <!-- FORM -->
+                <form id="tool-form" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="input-label">Tuổi</label>
+                            <select id="age" class="input-field">
+                                <option value="0">
+                                    < 50 (0đ)</option>
+                                <option value="2">50 - 59 (2đ)</option>
+                                <option value="4">60 - 69 (4đ)</option>
+                                <option value="6">70 - 79 (6đ)</option>
+                                <option value="7">≥ 80 (7đ)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="input-label">Giới tính</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="gender-option selected" onclick="selectSex(0, this)">
+                                    <i class="fa-solid fa-venus text-2xl mb-1 text-pink-500"></i>
+                                    <span class="font-semibold text-sm">Nữ (0đ)</span>
+                                </div>
+                                <div class="gender-option" onclick="selectSex(1, this)">
+                                    <i class="fa-solid fa-mars text-2xl mb-1 text-blue-500"></i>
+                                    <span class="font-semibold text-sm">Nam (1đ)</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="sex" value="0">
+                        </div>
+
+                        <div>
+                            <label class="input-label">Số lượng bệnh nền</label>
+                            <select id="comorb" class="input-field">
+                                <option value="0">0 (0đ)</option>
+                                <option value="1">1 (1đ)</option>
+                                <option value="2">≥ 2 (2đ)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="input-label">Nhịp thở (lần/phút)</label>
+                            <select id="rr" class="input-field">
+                                <option value="0">
+                                    < 20 (0đ)</option>
+                                <option value="1">20 - 29 (1đ)</option>
+                                <option value="2">≥ 30 (2đ)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="input-label">SpO₂ (%) lúc khí trời</label>
+                            <select id="spo2" class="input-field">
+                                <option value="0">≥ 92% (0đ)</option>
+                                <option value="2">
+                                    < 92% (2đ)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="input-label">Glasgow (GCS)</label>
+                            <select id="gcs" class="input-field">
+                                <option value="0">15 (0đ)</option>
+                                <option value="2">≤ 14 (2đ)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="input-label">Urea máu (mmol/L)</label>
+                            <select id="urea" class="input-field">
+                                <option value="0">≤ 7 (0đ)</option>
+                                <option value="1">7.1 - 14 (1đ)</option>
+                                <option value="3">> 14 (3đ)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="input-label">CRP (mg/L)</label>
+                            <select id="crp" class="input-field">
+                                <option value="0">
+                                    < 50 (0đ)</option>
+                                <option value="1">50 - 99 (1đ)</option>
+                                <option value="2">≥ 100 (2đ)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="action-buttons" class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-rotate-right mr-2"></i> Nhập lại</button>
+                        <button type="submit"
+                            class="flex-1 bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-red-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-calculator mr-2"></i> Tính toán</button>
+                    </div>
+                </form>
+
+                <!-- RESULT -->
+                <div id="result-container" class="mt-6 hidden animate-fade-in-up">
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Tổng điểm 4C Mortality
+                        </h3>
+                        <div id="result" class="score-box mb-3 bg-white text-4xl text-red-600">--</div>
+                        <div class="bg-white p-3 rounded-lg border border-red-100 inline-block w-full">
+                            <p id="risk" class="result-text text-red-700 leading-relaxed font-bold text-lg">...</p>
+                            <p id="mort" class="text-sm text-gray-600 mt-1">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <script type="module" src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const resultEl = document.getElementById('result');
+            const riskEl = document.getElementById('risk');
+            const mortEl = document.getElementById('mort');
+            const clearBtn = document.getElementById('clearBtn');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                let score = 0;
+                score += parseInt(document.getElementById('age').value);
+                score += parseInt(document.getElementById('sex').value);
+                score += parseInt(document.getElementById('comorb').value);
+                score += parseInt(document.getElementById('rr').value);
+                score += parseInt(document.getElementById('spo2').value);
+                score += parseInt(document.getElementById('gcs').value);
+                score += parseInt(document.getElementById('urea').value);
+                score += parseInt(document.getElementById('crp').value);
+
+                resultEl.innerText = score;
+
+                let risk = "";
+                let mort = "";
+                // 4C Score interpretation
+                if (score <= 3) { risk = "Thấp (Low)"; mort = "Tử vong: 1.2%"; }
+                else if (score <= 8) { risk = "Trung bình (Intermediate)"; mort = "Tử vong: 9.9%"; }
+                else if (score <= 14) { risk = "Cao (High)"; mort = "Tử vong: 31.4%"; }
+                else { risk = "Rất cao (Very High)"; mort = "Tử vong: 61.5%"; }
+
+                riskEl.innerText = `Nguy cơ: ${risk}`;
+                mortEl.innerText = mort;
+
+                resultContainer.classList.remove('hidden');
+            });
+
+            window.selectSex = function (val, el) {
+                document.getElementById('sex').value = val;
+                document.querySelectorAll('.gender-option').forEach(opt => opt.classList.remove('selected'));
+                el.classList.add('selected');
+            }
+
+            clearBtn.addEventListener('click', function () {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                resultEl.innerText = "--";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

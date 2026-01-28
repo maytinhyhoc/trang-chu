@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CAM-ICU - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .feature-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .feature-box h3 {
+            color: #dc2626;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-option {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-option input {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.75rem;
+            accent-color: #dc2626;
+        }
+
+        .feature-option label {
+            font-size: 0.95rem;
+            color: #374151;
+        }
+
+        .score-box {
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fee2e2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">CAM-ICU</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">CAM-ICU</h1>
+                        <p class="text-red-100 text-xs">Confusion Assessment Method for the ICU (Chẩn đoán Sảng)</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-head-side-virus text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-4 md:p-6">
+                <!-- FORM -->
+                <form id="tool-form">
+
+                    <!-- Feature 1 -->
+                    <div class="feature-box">
+                        <h3>1. Khởi phát cấp tính hoặc Thay đổi thất thường</h3>
+                        <div class="space-y-2">
+                            <div class="feature-option">
+                                <input type="radio" name="f1" id="f1_yes" value="yes">
+                                <label for="f1_yes">Có (Thay đổi ý thức so với nền hoặc dao động trong 24h)</label>
+                            </div>
+                            <div class="feature-option">
+                                <input type="radio" name="f1" id="f1_no" value="no" checked>
+                                <label for="f1_no">Không</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="feature-box">
+                        <h3>2. Mất tập trung (Inattention)</h3>
+                        <p class="text-xs text-gray-500 mb-2">Test bóp tay khi nghe chữ 'A' (SAVEAHAART) hoặc nhìn hình.
+                        </p>
+                        <div class="space-y-2">
+                            <div class="feature-option">
+                                <input type="radio" name="f2" id="f2_yes" value="yes">
+                                <label for="f2_yes">Có (Sai > 2 lỗi)</label>
+                            </div>
+                            <div class="feature-option">
+                                <input type="radio" name="f2" id="f2_no" value="no" checked>
+                                <label for="f2_no">Không (0 - 2 lỗi)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="feature-box">
+                        <h3>3. Rối loạn cấp độ ý thức</h3>
+                        <div class="space-y-2">
+                            <div class="feature-option">
+                                <input type="radio" name="f3" id="f3_yes" value="yes">
+                                <label for="f3_yes">Có (RASS không phải 0)</label>
+                            </div>
+                            <div class="feature-option">
+                                <input type="radio" name="f3" id="f3_no" value="no" checked>
+                                <label for="f3_no">Không (RASS = 0: Tỉnh táo, an thần nhẹ)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="feature-box">
+                        <h3>4. Tư duy vô tổ chức (Disorganized Thinking)</h3>
+                        <p class="text-xs text-gray-500 mb-2">Trả lời sai câu hỏi đơn giản (Đá trôi trên nước không?...)
+                            hoặc không làm theo lệnh.</p>
+                        <div class="space-y-2">
+                            <div class="feature-option">
+                                <input type="radio" name="f4" id="f4_yes" value="yes">
+                                <label for="f4_yes">Có (Sai > 1 câu/lệnh)</label>
+                            </div>
+                            <div class="feature-option">
+                                <input type="radio" name="f4" id="f4_no" value="no" checked>
+                                <label for="f4_no">Không</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="action-buttons" class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                        <button type="button" id="clearBtn"
+                            class="bg-white text-gray-700 border border-gray-300 font-bold py-2 px-6 rounded-full shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-rotate-right mr-2"></i> Nhập lại</button>
+                    </div>
+                </form>
+
+                <!-- RESULT -->
+                <div id="result-container" class="mt-6 hidden animate-fade-in-up">
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Kết quả</h3>
+                        <div class="bg-white p-3 rounded-lg border border-red-100 inline-block w-full">
+                            <p id="result" class="result-text text-red-700 leading-relaxed font-bold text-xl">...</p>
+                        </div>
+                        <div class="mt-4 p-3 bg-white/50 rounded-lg text-sm text-gray-600 text-left">
+                            <p><b>Quy tắc:</b> Dương tính nếu (1 VÀ 2) + (3 HOẶC 4).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <script type="module" src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const resultEl = document.getElementById('result');
+            const clearBtn = document.getElementById('clearBtn');
+
+            function calc() {
+                const f1 = document.querySelector('input[name="f1"]:checked').value === 'yes';
+                const f2 = document.querySelector('input[name="f2"]:checked').value === 'yes';
+                const f3 = document.querySelector('input[name="f3"]:checked').value === 'yes';
+                const f4 = document.querySelector('input[name="f4"]:checked').value === 'yes';
+
+                // CAM-ICU Positive = (1 AND 2) AND (3 OR 4)
+                if (f1 && f2 && (f3 || f4)) {
+                    resultEl.innerText = "CAM-ICU (+): DƯƠNG TÍNH VỚI SẢNG";
+                    resultEl.className = "result-text text-red-700 leading-relaxed font-bold text-xl";
+                } else {
+                    resultEl.innerText = "CAM-ICU (-): KHÔNG CÓ SẢNG";
+                    resultEl.className = "result-text text-green-600 leading-relaxed font-bold text-xl";
+                }
+                resultContainer.classList.remove('hidden');
+            }
+
+            // Auto-calc on change
+            document.querySelectorAll('input[type="radio"]').forEach(r => {
+                r.addEventListener('change', calc);
+            });
+
+            // Initial Calc
+            calc();
+
+            clearBtn.addEventListener('click', function () {
+                form.reset();
+                calc(); // Re-calc to show negative default
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            clearBtn.addEventListener('click', function () {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

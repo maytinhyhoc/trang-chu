@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Phân độ AKIN (Thận cấp) - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .akin-option:checked+label {
+            background-color: #e0f2fe;
+            border-color: #0284c7;
+            color: #0369a1;
+        }
+
+        .akin-option:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .check-icon {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-box {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            border: 1px solid #bae6fd;
+            text-align: center;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">Phân độ AKIN</h1>
+    </header>
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-sky-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Phân độ AKIN</h1>
+                        <p class="text-sky-100 text-xs">Acute Kidney Injury Network - Tổn thương thận cấp</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-filter text-3xl text-sky-300 opacity-50"></i>
+            </div>
+            <div class="p-3 md:p-6">
+                <form id="tool-form" class="space-y-4" novalidate>
+                    <!-- Creatinine Criterion -->
+                    <div class="space-y-2">
+                        <h3 class="text-base font-bold text-sky-800 border-b border-sky-200 pb-1">1. Dựa trên Creatinine
+                            huyết thanh (Trong 48h)</h3>
+                        <div class="grid grid-cols-1 gap-2">
+                            <div class="relative"><input class="sr-only akin-option" type="radio" name="cr" id="c0"
+                                    value="0" checked><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="c0"><span class="flex-1">Tăng &lt; 0.3 mg/dL hoặc tăng &lt; 1.5 lần</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-sky-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only akin-option" type="radio" name="cr" id="c1"
+                                    value="1"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="c1"><span class="flex-1">Tăng &ge; 0.3 mg/dL (&ge; 26.5 &mu;mol/L) HOẶC tăng
+                                        1.5 - 1.9 lần</span><span class="text-sky-600 font-bold ml-2">Độ 1</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-sky-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only akin-option" type="radio" name="cr" id="c2"
+                                    value="2"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="c2"><span class="flex-1">Tăng 2.0 - 2.9 lần giá trị nền</span><span
+                                        class="text-sky-600 font-bold ml-2">Độ 2</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-sky-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only akin-option" type="radio" name="cr" id="c3"
+                                    value="3"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="c3"><span class="flex-1">Tăng &ge; 3.0 lần HOẶC Cr &ge; 4.0 mg/dL (kèm tăng cấp
+                                        &ge;0.5) HOẶC chạy thận nhân tạo</span><span
+                                        class="text-sky-600 font-bold ml-2">Độ 3</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-sky-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                        </div>
+                    </div>
+
+                    <!-- Urine Output Criterion -->
+                    <div class="space-y-2 mt-4">
+                        <h3 class="text-base font-bold text-sky-800 border-b border-sky-200 pb-1">2. Dựa trên Lượng nước
+                            tiểu (UO)</h3>
+                        <div class="grid grid-cols-1 gap-2">
+                            <div class="relative"><input class="sr-only akin-option" type="radio" name="uo" id="u0"
+                                    value="0" checked><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="u0"><span class="flex-1">&gt; 0.5 ml/kg/giờ</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-sky-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only akin-option" type="radio" name="uo" id="u1"
+                                    value="1"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="u1"><span class="flex-1">&lt; 0.5 ml/kg/giờ trong &ge; 6 giờ</span><span
+                                        class="text-sky-600 font-bold ml-2">Độ 1</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-sky-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only akin-option" type="radio" name="uo" id="u2"
+                                    value="2"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="u2"><span class="flex-1">&lt; 0.5 ml/kg/giờ trong &ge; 12 giờ</span><span
+                                        class="text-sky-600 font-bold ml-2">Độ 2</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-sky-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only akin-option" type="radio" name="uo" id="u3"
+                                    value="3"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="u3"><span class="flex-1">&lt; 0.3 ml/kg/giờ trong &ge; 24 giờ HOẶC Vô niệu &ge;
+                                        12 giờ</span><span class="text-sky-600 font-bold ml-2">Độ 3</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-sky-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                        </div>
+                    </div>
+
+
+                    <div id="action-buttons" class="mt-5 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-sky-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-sky-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
+                        </button>
+                    </div>
+                </form>
+
+                <div id="result-container" class="mt-5 hidden animate-fade-in-up">
+                    <div class="bg-sky-50 border border-sky-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Kết quả phân độ AKIN
+                        </h3>
+                        <div id="main-result" class="score-box mb-3 bg-white text-4xl text-sky-700">--</div>
+                        <div id="sub-result-container"
+                            class="bg-white p-3 rounded-lg border border-sky-100 inline-block w-full">
+                            <p id="sub-result" class="result-text text-sky-700 leading-relaxed font-bold text-base">...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const mainResult = document.getElementById('main-result');
+            const subResult = document.getElementById('sub-result');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const crVal = parseInt(document.querySelector('input[name="cr"]:checked').value);
+                const uoVal = parseInt(document.querySelector('input[name="uo"]:checked').value);
+                const maxStage = Math.max(crVal, uoVal);
+
+                let stage = "";
+                if (maxStage === 0) stage = "Không đủ tiêu chuẩn chẩn đoán AKI";
+                else stage = "AKIN Độ " + maxStage;
+
+                mainResult.textContent = stage;
+                subResult.textContent = maxStage > 0 ? "Tổn thương thận cấp (AKI)" : "Chức năng thận ổn định hoặc chưa đủ tiêu chuẩn AKI";
+
+                resultContainer.classList.remove('hidden');
+
+                let recent = JSON.parse(localStorage.getItem('recentTools')) || [];
+                recent = recent.filter(t => t.id !== 'akin');
+                recent.unshift({ id: 'akin', name: 'AKIN', icon: 'fa-filter', color: 'blue', url: window.location.href, timestamp: Date.now() });
+                localStorage.setItem('recentTools', JSON.stringify(recent.slice(0, 5)));
+
+                setTimeout(() => { if (resultContainer.getBoundingClientRect().bottom > window.innerHeight) window.scrollBy({ top: 100, behavior: 'smooth' }); }, 100);
+            });
+            document.getElementById('clearBtn').addEventListener('click', () => {
+                form.reset(); resultContainer.classList.add('hidden'); mainResult.textContent = "--";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                document.getElementById('c0').checked = true; document.getElementById('u0').checked = true;
+            });
+        });
+        window.openDrawer = function (e) { e?.preventDefault(); document.getElementById('drawer-menu').classList.remove('translate-x-full'); document.getElementById('drawer-overlay').classList.remove('hidden'); setTimeout(() => document.getElementById('drawer-overlay').classList.remove('opacity-0'), 10); }
+        window.closeDrawer = function () { document.getElementById('drawer-menu').classList.add('translate-x-full'); document.getElementById('drawer-overlay').classList.add('opacity-0'); setTimeout(() => document.getElementById('drawer-overlay').classList.add('hidden'), 300); }
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>

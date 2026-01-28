@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đánh giá Độ giãn nở Phổi (Lung Compliance) - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Config -->
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 70px;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: pan-y;
+        }
+
+        .input-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .dark .input-group label {
+            color: #d1d5db;
+        }
+
+        .input-group input {
+            transition: all 0.2s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #ef4444;
+            border-color: #ef4444;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Mobile Header -->
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 shadow-sm z-40 h-[60px] flex items-center justify-center px-4 transition-colors duration-300">
+        <h1 class="text-center text-lg font-bold text-gray-800 dark:text-white truncate px-2">
+            Độ Giãn Nở Phổi (Compliance)
+        </h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-2 md:px-4 pt-20 md:pt-24 pb-2 max-w-2xl">
+        <div
+            class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-red-100 dark:border-slate-700 overflow-hidden">
+            <div class="bg-red-600 p-4 text-white flex justify-between items-center">
+                <h1 class="text-xl font-bold"><i class="fa-solid fa-lungs mr-2"></i>Độ Giãn Nở Phổi (Compliance)</h1>
+            </div>
+
+            <div class="p-6 space-y-6">
+
+                <!-- Inputs -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="input-group">
+                        <label class="block mb-1">Thể tích khí lưu thông (Vt)</label>
+                        <div class="relative">
+                            <input type="number" id="vt" placeholder="400"
+                                class="w-full p-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg text-center font-bold text-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                            <span class="absolute right-3 top-3 text-gray-400 text-xs font-bold">mL</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="block mb-1">PEEP</label>
+                        <div class="relative">
+                            <input type="number" id="peep" placeholder="5"
+                                class="w-full p-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg text-center font-bold text-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                            <span class="absolute right-3 top-3 text-gray-400 text-xs font-bold">cmH2O</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="block mb-1">Áp lực cao nguyên (Pplat)</label>
+                        <div class="relative">
+                            <input type="number" id="pplat" placeholder="20"
+                                class="w-full p-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg text-center font-bold text-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                            <span class="absolute right-3 top-3 text-gray-400 text-xs font-bold">cmH2O</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">*Để tính C-Static</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="block mb-1">Áp lực đỉnh (Ppeak)</label>
+                        <div class="relative">
+                            <input type="number" id="ppeak" placeholder="25"
+                                class="w-full p-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg text-center font-bold text-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                            <span class="absolute right-3 top-3 text-gray-400 text-xs font-bold">cmH2O</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">*Để tính C-Dynamic</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-2">
+                    <button onclick="calculate()"
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg shadow transition-all active:scale-95">
+                        <i class="fa-solid fa-calculator mr-2"></i>Tính Toán
+                    </button>
+                    <button onclick="reset()"
+                        class="px-4 py-3 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-all">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                </div>
+
+                <!-- Result -->
+                <div id="result-box"
+                    class="hidden bg-red-50 dark:bg-slate-700/50 rounded-lg border border-red-100 dark:border-slate-600 p-4 animate-fade-in-up space-y-3">
+
+                    <div class="flex justify-between items-center border-b border-red-100 dark:border-slate-600 pb-2">
+                        <span class="text-sm font-semibold text-gray-600 dark:text-gray-300">C-Static (Giãn nở
+                            Tĩnh)</span>
+                        <div class="text-right">
+                            <span id="c-stat" class="text-2xl font-bold text-red-600 dark:text-red-400">--</span>
+                            <span class="text-xs font-bold text-gray-500 ml-1">mL/cmH2O</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-semibold text-gray-600 dark:text-gray-300">C-Dynamic (Giãn nở
+                            Động)</span>
+                        <div class="text-right">
+                            <span id="c-dyn" class="text-2xl font-bold text-blue-600 dark:text-blue-400">--</span>
+                            <span class="text-xs font-bold text-gray-500 ml-1">mL/cmH2O</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-800 p-2 rounded">
+                        <p class="font-bold mb-1"><i class="fa-solid fa-circle-info mr-1 text-red-500"></i>Nhận định:
+                        </p>
+                        <p id="interpretation">...</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initApp } from './app.js';
+
+        // Wait for DOM
+        window.calculate = function () {
+            const vt = parseFloat(document.getElementById('vt').value);
+            const peep = parseFloat(document.getElementById('peep').value);
+            const pplat = parseFloat(document.getElementById('pplat').value);
+            const ppeak = parseFloat(document.getElementById('ppeak').value);
+
+            if (!vt || isNaN(peep)) {
+                alert("Vui lòng nhập Vt và PEEP!");
+                return;
+            }
+
+            const resultBox = document.getElementById('result-box');
+            let cStatText = "--";
+            let cDynText = "--";
+            let interpretation = "";
+
+            // Calc C-Stat
+            if (pplat && (pplat - peep) > 0) {
+                const cStat = vt / (pplat - peep);
+                cStatText = cStat.toFixed(1);
+
+                if (cStat < 50) interpretation += "<br>- <span class='text-red-600 font-bold'>C-Stat thấp (< 50)</span>: Độ giãn nở phổi kém (ARDS, Phổi đông đặc, Tràn dịch/khí).";
+                else if (cStat > 100) interpretation += "<br>- <span class='text-green-600 font-bold'>C-Stat cao</span>: Phổi giãn nở tốt (Khí phế thũng).";
+                else interpretation += "<br>- <span class='text-blue-600 font-bold'>C-Stat bình thường</span> (50-100).";
+            }
+
+            // Calc C-Dyn
+            if (ppeak && (ppeak - peep) > 0) {
+                const cDyn = vt / (ppeak - peep);
+                cDynText = cDyn.toFixed(1);
+
+                if (pplat && (ppeak - pplat) > 5) {
+                    interpretation += "<br>- <span class='text-amber-600 font-bold'>Chênh lệch (Ppeak - Pplat) > 5</span>: Gợi ý tăng sức cản đường thở (Co thắt, Đờm tắc, Ống NKQ nhỏ/gập).";
+                }
+            }
+
+            document.getElementById('c-stat').innerText = cStatText;
+            document.getElementById('c-dyn').innerText = cDynText;
+            document.getElementById('interpretation').innerHTML = interpretation || "Chưa đủ dữ liệu để nhận định.";
+
+            resultBox.classList.remove('hidden');
+
+            // Save history
+            let recentTools = JSON.parse(localStorage.getItem('recentTools')) || [];
+            recentTools = recentTools.filter(t => t.id !== 'compliance');
+            recentTools.unshift({
+                id: 'compliance', name: 'Độ giãn nở Phổi', icon: 'fa-lungs', color: 'red', url: window.location.href, timestamp: Date.now()
+            });
+            localStorage.setItem('recentTools', JSON.stringify(recentTools.slice(0, 5)));
+        }
+
+        window.reset = function () {
+            document.querySelectorAll('input').forEach(i => i.value = '');
+            document.getElementById('result-box').classList.add('hidden');
+        }
+    </script>
+</body>
+
+</html>

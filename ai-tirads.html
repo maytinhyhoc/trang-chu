@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI TI-RADS 2019 - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tirads-option:checked+label {
+            background-color: #ccfbf1;
+            border-color: #14b8a6;
+            color: #0f766e;
+        }
+
+        .tirads-option:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .check-icon {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-box {
+            background-color: #ccfbf1;
+            color: #0f766e;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            border: 1px solid #99f6e4;
+            text-align: center;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">AI TI-RADS 2019</h1>
+    </header>
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-teal-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">AI TI-RADS 2019 (ACR)</h1>
+                        <p class="text-teal-100 text-xs">Phân loại nguy cơ ác tính nhân tuyến giáp (Phiên bản AI)</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-bullseye text-3xl text-teal-300 opacity-50"></i>
+            </div>
+            <div class="p-3 md:p-6">
+                <form id="tool-form" class="space-y-6" novalidate>
+                    <!-- Composition -->
+                    <div class="space-y-2">
+                        <h3 class="text-base font-bold text-teal-800 border-b border-teal-200 pb-1">1. Thành phần</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="comp"
+                                    id="comp0" value="0" checked><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="comp0"><span class="flex-1">Nang / Bọt biển / Hỗn hợp</span><span
+                                        class="text-teal-600 font-bold ml-2">0</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="comp"
+                                    id="comp2" value="2"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="comp2"><span class="flex-1">Đặc (hoặc gần như đặc)</span><span
+                                        class="text-teal-600 font-bold ml-2">+2</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                        </div>
+                    </div>
+                    <!-- Echogenicity -->
+                    <div class="space-y-2">
+                        <h3 class="text-base font-bold text-teal-800 border-b border-teal-200 pb-1">2. Cấu trúc âm</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="echo"
+                                    id="echo0" value="0" checked><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="echo0"><span class="flex-1">Trống âm / Tăng âm / Đồng âm</span><span
+                                        class="text-teal-600 font-bold ml-2">0</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="echo"
+                                    id="echo2" value="2"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="echo2"><span class="flex-1">Giảm âm</span><span
+                                        class="text-teal-600 font-bold ml-2">+2</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="echo"
+                                    id="echo3" value="3"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="echo3"><span class="flex-1">Rất giảm âm</span><span
+                                        class="text-teal-600 font-bold ml-2">+3</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                        </div>
+                    </div>
+                    <!-- Shape -->
+                    <div class="space-y-2">
+                        <h3 class="text-base font-bold text-teal-800 border-b border-teal-200 pb-1">3. Hình dáng</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="shape"
+                                    id="shape0" value="0" checked><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="shape0"><span class="flex-1">Rộng hơn cao (ngang)</span><span
+                                        class="text-teal-600 font-bold ml-2">0</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="shape"
+                                    id="shape3" value="3"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="shape3"><span class="flex-1">Cao hơn rộng (dọc)</span><span
+                                        class="text-teal-600 font-bold ml-2">+3</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                        </div>
+                    </div>
+                    <!-- Margin -->
+                    <div class="space-y-2">
+                        <h3 class="text-base font-bold text-teal-800 border-b border-teal-200 pb-1">4. Đường bờ</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="margin"
+                                    id="margin0" value="0" checked><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="margin0"><span class="flex-1">Đều / Không rõ</span><span
+                                        class="text-teal-600 font-bold ml-2">0</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="margin"
+                                    id="margin2" value="2"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="margin2"><span class="flex-1">Đa cung / Không đều</span><span
+                                        class="text-teal-600 font-bold ml-2">+2</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="margin"
+                                    id="margin3" value="3"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="margin3"><span class="flex-1">Xâm lấn vỏ bao</span><span
+                                        class="text-teal-600 font-bold ml-2">+3</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                        </div>
+                    </div>
+                    <!-- Foci -->
+                    <div class="space-y-2">
+                        <h3 class="text-base font-bold text-teal-800 border-b border-teal-200 pb-1">5. Vôi hóa
+                            (Echogenic Foci)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="foci"
+                                    id="foci0" value="0" checked><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="foci0"><span class="flex-1">Không / Vôi hóa to / Vôi hóa viền / Đuôi sao
+                                        chổi</span><span class="text-teal-600 font-bold ml-2">0</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                            <div class="relative"><input class="sr-only tirads-option" type="radio" name="foci"
+                                    id="foci3" value="3"><label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all text-gray-700"
+                                    for="foci3"><span class="flex-1">Vi vôi hóa (Punctate)</span><span
+                                        class="text-teal-600 font-bold ml-2">+3</span>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 ml-2 text-teal-500"><i
+                                            class="fas fa-check-circle"></i></div>
+                                </label></div>
+                        </div>
+                    </div>
+
+                    <div id="action-buttons" class="mt-5 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-teal-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-teal-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-calculator mr-2"></i> Tính toán
+                        </button>
+                    </div>
+                </form>
+
+                <div id="result-container" class="mt-5 hidden animate-fade-in-up">
+                    <div class="bg-teal-50 border border-teal-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Tổng điểm AI TI-RADS
+                        </h3>
+                        <div id="main-result" class="score-box mb-3 bg-white text-4xl text-teal-700">0</div>
+                        <div id="sub-result-container"
+                            class="bg-white p-3 rounded-lg border border-teal-100 inline-block w-full">
+                            <p id="sub-result" class="result-text text-teal-700 leading-relaxed font-bold text-base">...
+                            </p>
+                            <p id="recommendation" class="text-xs text-gray-600 mt-1">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const mainResult = document.getElementById('main-result');
+            const subResult = document.getElementById('sub-result');
+            const rec = document.getElementById('recommendation');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let score = 0;
+                ['comp', 'echo', 'shape', 'margin', 'foci'].forEach(name => {
+                    const el = document.querySelector(`input[name="${name}"]:checked`);
+                    if (el) score += parseInt(el.value);
+                });
+
+                mainResult.textContent = score + " Điểm";
+                let tr = "", size = "";
+
+                if (score === 0) { tr = "TR1: Lành tính"; size = "Không cần FNA"; }
+                else if (score <= 2) { tr = "TR2: Không nghi ngờ"; size = "Không cần FNA"; }
+                else if (score === 3) { tr = "TR3: Nghi ngờ thấp"; size = "FNA nếu ≥ 2.5cm, Theo dõi nếu ≥ 1.5cm"; }
+                else if (score <= 6) { tr = "TR4: Nghi ngờ trung bình"; size = "FNA nếu ≥ 1.5cm, Theo dõi nếu ≥ 1.0cm"; }
+                else { tr = "TR5: Nghi ngờ cao"; size = "FNA nếu ≥ 1.0cm, Theo dõi nếu ≥ 0.5cm"; }
+
+                subResult.textContent = tr;
+                rec.textContent = "Khuyến cáo (kích thước nhân): " + size;
+                resultContainer.classList.remove('hidden');
+
+                let recent = JSON.parse(localStorage.getItem('recentTools')) || [];
+                recent = recent.filter(t => t.id !== 'ai-tirads');
+                recent.unshift({ id: 'ai-tirads', name: 'AI TI-RADS', icon: 'fa-bullseye', color: 'teal', url: window.location.href, timestamp: Date.now() });
+                localStorage.setItem('recentTools', JSON.stringify(recent.slice(0, 5)));
+
+                setTimeout(() => { if (resultContainer.getBoundingClientRect().bottom > window.innerHeight) window.scrollBy({ top: 100, behavior: 'smooth' }); }, 100);
+            });
+            document.getElementById('clearBtn').addEventListener('click', () => {
+                form.reset(); resultContainer.classList.add('hidden'); mainResult.textContent = "0";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Reset to 0 vals
+                document.getElementById('comp0').checked = true; document.getElementById('echo0').checked = true;
+                document.getElementById('shape0').checked = true; document.getElementById('margin0').checked = true;
+                document.getElementById('foci0').checked = true;
+            });
+        });
+        window.openDrawer = function (e) { e?.preventDefault(); document.getElementById('drawer-menu').classList.remove('translate-x-full'); document.getElementById('drawer-overlay').classList.remove('hidden'); setTimeout(() => document.getElementById('drawer-overlay').classList.remove('opacity-0'), 10); }
+        window.closeDrawer = function () { document.getElementById('drawer-menu').classList.add('translate-x-full'); document.getElementById('drawer-overlay').classList.add('opacity-0'); setTimeout(() => document.getElementById('drawer-overlay').classList.add('hidden'), 300); }
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
