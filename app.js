@@ -14,8 +14,8 @@
     const allowedDomains = [
         'localhost',
         '127.0.0.1',
-        'maytinhyhoc.github.io',
         'may-tinh-y-hoc.firebaseapp.com',
+        'maytinhyhoc.vercel.app',
     ];
     const currentDomain = window.location.hostname;
 
