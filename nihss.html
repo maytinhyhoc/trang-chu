@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 
 <head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thang điểm NIHSS</title>
@@ -93,15 +95,11 @@
 
 <body>
 
-    <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center px-4">
-        <a href="#" onclick="history.back(); return false;"
-            class="p-2 -ml-2 text-gray-600 hover:text-indigo-600 transition">
-            <i class="fa-solid fa-chevron-left text-lg"></i>
-        </a>
-        <h1 class="flex-1 text-center text-lg font-bold text-gray-800 truncate px-2">
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">
             Thang điểm NIHSS
         </h1>
-        <div class="w-8"></div>
     </header>
 
     <main class="flex-grow container mx-auto px-4 pt-20 md:pt-24 pb-4 max-w-6xl">
@@ -109,10 +107,7 @@
 
             <div class="hidden md:flex bg-indigo-600 p-6 text-white items-center justify-between">
                 <div class="flex items-center">
-                    <a href="#" onclick="history.back(); return false;"
-                        class="hidden md:flex w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-400 items-center justify-center text-white transition shadow-sm mr-4">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
+
                     <div>
                         <h1 class="text-2xl font-bold">Thang điểm NIHSS</h1>
                         <p class="text-indigo-100 mt-1 text-sm">Đánh giá mức độ lâm sàng bệnh nhân đột quỵ não cấp</p>

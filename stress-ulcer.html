@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dự phòng Loét - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .abc-checkbox:checked+label {
+            background-color: #fef2f2;
+            border-color: #dc2626;
+            color: #b91c1c;
+        }
+
+        .abc-checkbox:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+            width: 1.25rem;
+            margin-left: 0.5rem;
+        }
+
+        .check-icon {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-box {
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fee2e2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">Dự phòng loét Stress</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Dự phòng Loét do Stress</h1>
+                        <p class="text-red-100 text-xs">ASHP Guidelines (Chỉ định PPI/H2RA phòng ngừa xuất huyết tiêu
+                            hóa)</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-pills text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-4 md:p-6">
+                <!-- FORM -->
+                <form id="tool-form" class="space-y-6">
+
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <h3 class="font-bold text-red-800 mb-3 uppercase text-sm tracking-wide">Yếu tố nguy cơ CHÍNH
+                            (Major)</h3>
+                        <p class="text-xs text-red-600 mb-2">Chỉ cần 1 yếu tố => Có chỉ định dự phòng.</p>
+                        <div class="space-y-2">
+                            <div class="relative">
+                                <input class="sr-only abc-checkbox major" type="checkbox" id="major1">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"
+                                    for="major1">
+                                    <div class="flex-1 text-gray-700 text-sm">Thở máy > 48 giờ</div>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-red-600 flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input class="sr-only abc-checkbox major" type="checkbox" id="major2">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"
+                                    for="major2">
+                                    <div class="flex-1 text-gray-700 text-sm">Rối loạn đông máu (PLT < 50k, INR> 1.5,
+                                            aPTT > 2 lần)</div>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-red-600 flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input class="sr-only abc-checkbox major" type="checkbox" id="major3">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"
+                                    for="major3">
+                                    <div class="flex-1 text-gray-700 text-sm">Tiền sử loét hoặc xuất huyết tiêu hóa
+                                        trong 1 năm</div>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-red-600 flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input class="sr-only abc-checkbox major" type="checkbox" id="major4">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"
+                                    for="major4">
+                                    <div class="flex-1 text-gray-700 text-sm">Chấn thương sọ não, Tủy sống hoặc Bỏng
+                                        nặng (>35%)</div>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-red-600 flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h3 class="font-bold text-gray-700 mb-3 uppercase text-sm tracking-wide">Yếu tố nguy cơ PHỤ
+                            (Minor)</h3>
+                        <p class="text-xs text-gray-500 mb-2">Cần ≥ 2 yếu tố => Có chỉ định dự phòng.</p>
+                        <div class="space-y-2">
+                            <div class="relative">
+                                <input class="sr-only abc-checkbox minor" type="checkbox" id="minor1">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"
+                                    for="minor1">
+                                    <div class="flex-1 text-gray-700 text-sm">Nhiễm trùng huyết (Sepsis)</div>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-red-600 flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input class="sr-only abc-checkbox minor" type="checkbox" id="minor2">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"
+                                    for="minor2">
+                                    <div class="flex-1 text-gray-700 text-sm">Nằm ICU > 1 tuần</div>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-red-600 flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input class="sr-only abc-checkbox minor" type="checkbox" id="minor3">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"
+                                    for="minor3">
+                                    <div class="flex-1 text-gray-700 text-sm">Xuất huyết tiêu hóa ẩn (FOBT dương tính) >
+                                        6 ngày</div>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-red-600 flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input class="sr-only abc-checkbox minor" type="checkbox" id="minor4">
+                                <label
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"
+                                    for="minor4">
+                                    <div class="flex-1 text-gray-700 text-sm">Dùng Corticoid liều cao (> 250mg
+                                        Hydrocortisone/ngày)</div>
+                                    <div class="check-icon w-0 opacity-0 transform scale-50 text-red-600 flex-shrink-0">
+                                        <i class="fas fa-check-circle"></i></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="action-buttons" class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <button type="button" id="clearBtn"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-rotate-right mr-2"></i> Nhập lại</button>
+                        <button type="submit"
+                            class="flex-1 bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-red-700 transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-calculator mr-2"></i> Đánh giá</button>
+                    </div>
+                </form>
+
+                <!-- RESULT -->
+                <div id="result-container" class="mt-6 hidden animate-fade-in-up">
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Kết quả</h3>
+                        <div class="bg-white p-3 rounded-lg border border-red-100 inline-block w-full">
+                            <p id="recommend" class="result-text text-red-700 leading-relaxed font-bold text-lg">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <script type="module" src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('tool-form');
+            const resultContainer = document.getElementById('result-container');
+            const recEl = document.getElementById('recommend');
+            const clearBtn = document.getElementById('clearBtn');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                let majorCount = 0;
+                let minorCount = 0;
+
+                document.querySelectorAll('.major').forEach(el => { if (el.checked) majorCount++; });
+                document.querySelectorAll('.minor').forEach(el => { if (el.checked) minorCount++; });
+
+                let rec = "";
+                if (majorCount >= 1 || minorCount >= 2) {
+                    rec = "CÓ CHỈ ĐỊNH dự phòng loét dạ dày do Stress (Dùng PPI hoặc H2RA)";
+                    recEl.className = "result-text text-red-700 leading-relaxed font-bold text-lg";
+                } else {
+                    rec = "KHÔNG CÓ chỉ định dự phòng thường quy";
+                    recEl.className = "result-text text-green-600 leading-relaxed font-bold text-lg";
+                }
+
+                recEl.innerText = rec;
+
+                resultContainer.classList.remove('hidden');
+            });
+
+            clearBtn.addEventListener('click', function () {
+                form.reset();
+                resultContainer.classList.add('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

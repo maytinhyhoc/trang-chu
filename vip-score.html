@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VIP Score - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .score-option {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: start;
+        }
+
+        .score-option:hover {
+            border-color: #fca5a5;
+            background-color: #fef2f2;
+        }
+
+        .score-option.selected {
+            border-color: #dc2626;
+            background-color: #fef2f2;
+            box-shadow: 0 0 0 1px #dc2626;
+        }
+
+        .score-option input {
+            display: none;
+        }
+
+        .score-circle {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            display: flex;
+            items-center;
+            justify-content: center;
+            margin-top: 0.1rem;
+        }
+
+        .score-option.selected .score-circle {
+            border-color: #dc2626;
+            background-color: #dc2626;
+        }
+
+        .score-circle::after {
+            content: '';
+            width: 0.5rem;
+            height: 0.5rem;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .score-option.selected .score-circle::after {
+            opacity: 1;
+        }
+
+        .score-box {
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #fee2e2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">VIP Score</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Thang điển VIP</h1>
+                        <p class="text-red-100 text-xs">Visual Infusion Phlebitis Score (Đánh giá viêm tĩnh mạch)</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-syringe text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-4 md:p-6">
+                <!-- FORM -->
+                <form id="tool-form">
+                    <p class="text-sm text-gray-500 italic mb-4">Chọn mức độ phù hợp nhất với vị trí đặt đường truyền:
+                    </p>
+
+                    <label class="score-option" onclick="selectOption(this)">
+                        <input type="radio" name="vip" value="0">
+                        <div class="score-circle"></div>
+                        <div>
+                            <div class="font-bold text-gray-800">VIP 0: Không có dấu hiệu viêm</div>
+                            <div class="text-sm text-gray-600">Vị trí truyền bình thường.</div>
+                        </div>
+                    </label>
+
+                    <label class="score-option" onclick="selectOption(this)">
+                        <input type="radio" name="vip" value="1">
+                        <div class="score-circle"></div>
+                        <div>
+                            <div class="font-bold text-gray-800">VIP 1: Có thể có viêm sớm</div>
+                            <div class="text-sm text-gray-600">Đau nhẹ, đỏ da gần vị trí tiêm.</div>
+                        </div>
+                    </label>
+
+                    <label class="score-option" onclick="selectOption(this)">
+                        <input type="radio" name="vip" value="2">
+                        <div class="score-circle"></div>
+                        <div>
+                            <div class="font-bold text-gray-800">VIP 2: Viêm tĩnh mạch giai đoạn sớm</div>
+                            <div class="text-sm text-gray-600">Đau + (Đỏ da HOẶC Sưng nề).</div>
+                        </div>
+                    </label>
+
+                    <label class="score-option" onclick="selectOption(this)">
+                        <input type="radio" name="vip" value="3">
+                        <div class="score-circle"></div>
+                        <div>
+                            <div class="font-bold text-gray-800">VIP 3: Viêm tĩnh mạch trung bình</div>
+                            <div class="text-sm text-gray-600">Đau dọc theo tĩnh mạch + Đỏ da + Sưng nề.</div>
+                        </div>
+                    </label>
+
+                    <label class="score-option" onclick="selectOption(this)">
+                        <input type="radio" name="vip" value="4">
+                        <div class="score-circle"></div>
+                        <div>
+                            <div class="font-bold text-gray-800">VIP 4: Viêm tĩnh mạch tiến triển</div>
+                            <div class="text-sm text-gray-600">Như trên + Sờ thấy thừng tĩnh mạch (Palpable venous
+                                cord).</div>
+                        </div>
+                    </label>
+
+                    <label class="score-option" onclick="selectOption(this)">
+                        <input type="radio" name="vip" value="5">
+                        <div class="score-circle"></div>
+                        <div>
+                            <div class="font-bold text-gray-800">VIP 5: Viêm tĩnh mạch huyết khối</div>
+                            <div class="text-sm text-gray-600">Tất cả dấu hiệu trên + Sốt.</div>
+                        </div>
+                    </label>
+
+                    <div id="action-buttons" class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <button type="button" onClick="window.location.reload()"
+                            class="flex-1 bg-white text-gray-700 border border-gray-300 font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-gray-50 transition flex items-center justify-center text-sm"><i
+                                class="fa-solid fa-rotate-right mr-2"></i> Nhập lại</button>
+                    </div>
+                </form>
+
+                <!-- RESULT -->
+                <div id="result-container" class="mt-6 hidden animate-fade-in-up">
+                    <div class="bg-red-50 border border-red-100 rounded-xl p-4 text-center">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Khuyến cáo xử trí</h3>
+                        <div class="bg-white p-4 rounded-lg border border-red-100 inline-block w-full">
+                            <p id="action"
+                                class="result-text text-red-700 leading-relaxed font-bold text-base md:text-lg">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+
+    <script type="module" src="app.js"></script>
+    <script>
+        window.selectOption = function (el) {
+            document.querySelectorAll('.score-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+            calculate();
+        }
+
+        function calculate() {
+            const selected = document.querySelector('input[name="vip"]:checked');
+            if (!selected) return;
+
+            const score = parseInt(selected.value);
+            let action = "";
+
+            switch (score) {
+                case 0: action = "Bình thường. Tiếp tục theo dõi."; break;
+                case 1: action = "Cân nhắc rút kim nếu không cần thiết hoặc theo dõi sát mỗi 4h."; break;
+                case 2: action = "RÚT KIM ngay. Thay đổi vị trí tiêm truyền."; break;
+                case 3: action = "RÚT KIM ngay. Theo dõi & Điều trị viêm tĩnh mạch."; break;
+                case 4: action = "RÚT KIM ngay. Điều trị viêm. Cân nhắc kháng sinh nếu nhiễm trùng."; break;
+                case 5: action = "RÚT KIM ngay. Điều trị tích cực viêm tĩnh mạch huyết khối."; break;
+            }
+
+            const actionEl = document.getElementById('action');
+            const resultContainer = document.getElementById('result-container');
+
+            actionEl.innerText = action;
+            resultContainer.classList.remove('hidden');
+
+            setTimeout(() => {
+                const rect = resultContainer.getBoundingClientRect();
+                if (rect.bottom > window.innerHeight) {
+                    resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }, 100);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initial check or setup if needed
+        });
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

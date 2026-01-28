@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PAS Score - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">PAS Score</h1>
+    </header>
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-slate-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">PAS Score</h1>
+                        <p class="text-slate-100 text-xs">Viêm ruột thừa trẻ em</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-bacteria text-3xl text-slate-300 opacity-50"></i>
+            </div>
+            <div class="p-8 flex flex-col items-center justify-center text-center min-h-[300px]">
+                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-person-digging text-3xl text-slate-400"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800 mb-2">Tính năng đang phát triển</h2>
+                <p class="text-slate-500 max-w-md">Công cụ này đang được cập nhật. Vui lòng quay lại sau!</p>
+                <a href="index.html"
+                    class="mt-6 inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-xl text-slate-700 bg-slate-100 hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Về trang chủ
+                </a>
+            </div>
+        </div>
+    </main>
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <script type="module" src="app.js"></script>
+    <script>
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sepsis Bundle (1 Hour) - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .bundle-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .bundle-item:hover {
+            border-color: #dc2626;
+            background-color: #fef2f2;
+        }
+
+        .bundle-item.active {
+            border-color: #dc2626;
+            background-color: #fef2f2;
+            border-left: 4px solid #dc2626;
+        }
+
+        .bundle-title {
+            font-weight: 700;
+            color: #dc2626;
+            font-size: 1.125rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bundle-desc {
+            color: #4b5563;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .bundle-item.active .bundle-desc {
+            display: block;
+        }
+
+        .check-icon {
+            color: #e5e7eb;
+            font-size: 1.5rem;
+            transition: color 0.2s;
+        }
+
+        .bundle-item.active .check-icon {
+            color: #dc2626;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">Sepsis Bundle (1h)</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+            <div class="hidden md:flex bg-red-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Gói 1 Giờ Nhiễm Trùng Huyết</h1>
+                        <p class="text-red-100 text-xs">Hour-1 Bundle (Surviving Sepsis Campaign 2021)</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-hourglass-start text-3xl text-red-300 opacity-50"></i>
+            </div>
+
+            <div class="p-4 md:p-6">
+                <p class="text-slate-600 mb-4 text-sm text-center">Bắt đầu tính giờ ngay khi nghi ngờ Sepsis. Chạm để
+                    đánh dấu hoàn thành.</p>
+
+                <div class="bundle-item" onclick="toggle(this)">
+                    <div class="bundle-title"><span>1. Lactate máu</span><i
+                            class="fa-solid fa-circle-check check-icon"></i></div>
+                    <div class="bundle-desc">Định lượng Lactate máu ngay. Đo lại nếu > 2 mmol/L.</div>
+                </div>
+                <div class="bundle-item" onclick="toggle(this)">
+                    <div class="bundle-title"><span>2. Cấy máu</span><i class="fa-solid fa-circle-check check-icon"></i>
+                    </div>
+                    <div class="bundle-desc">Lấy 2 mẫu cấy máu (trước khi dùng kháng sinh).</div>
+                </div>
+                <div class="bundle-item" onclick="toggle(this)">
+                    <div class="bundle-title"><span>3. Kháng sinh phổ rộng</span><i
+                            class="fa-solid fa-circle-check check-icon"></i></div>
+                    <div class="bundle-desc">Tiêm kháng sinh tĩnh mạch phổ rộng ngay lập tức.</div>
+                </div>
+                <div class="bundle-item" onclick="toggle(this)">
+                    <div class="bundle-title"><span>4. Bù dịch (30ml/kg)</span><i
+                            class="fa-solid fa-circle-check check-icon"></i></div>
+                    <div class="bundle-desc">Bắt đầu bù tinh thể 30ml/kg nếu tụt HA hoặc Lactate ≥ 4 mmol/L.</div>
+                </div>
+                <div class="bundle-item" onclick="toggle(this)">
+                    <div class="bundle-title"><span>5. Vận mạch</span><i
+                            class="fa-solid fa-circle-check check-icon"></i></div>
+                    <div class="bundle-desc">Dùng vận mạch nếu tụt HA kháng trị với dịch (Duy trì MAP ≥ 65 mmHg).</div>
+                </div>
+
+                <div class="mt-4 p-4 bg-green-50 rounded-xl border border-green-200 text-green-800 hidden animate-fade-in-up text-center font-bold"
+                    id="congrats">
+                    <i class="fa-solid fa-star mr-2"></i> Đã hoàn thành Bundle!
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="drawer-menu"
+        class="fixed top-0 right-0 z-[70] w-64 h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300">
+    </div>
+    <div id="drawer-overlay" onclick="closeDrawer()"
+        class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <script type="module" src="app.js"></script>
+    <script>
+        function toggle(el) {
+            el.classList.toggle('active');
+            const total = document.querySelectorAll('.bundle-item').length;
+            const active = document.querySelectorAll('.bundle-item.active').length;
+            const congrats = document.getElementById('congrats');
+            if (active === total) congrats.classList.remove('hidden');
+            else congrats.classList.add('hidden');
+        }
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer-menu');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+
+</html>

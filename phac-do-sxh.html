@@ -1,0 +1,1197 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <script src="settings.js"></script>
+    <script src="protection.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Phác đồ Điều trị Sốt xuất huyết - Công Cụ Y Học</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/maytinhyhoc/trang-chu/main/logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding-bottom: 100px;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .result-text,
+        input,
+        textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Custom Checkbox */
+        .sxh-checkbox:checked+label {
+            background-color: #eef2ff;
+            border-color: #6366f1;
+            color: #4338ca;
+        }
+
+        .sxh-checkbox:checked+label .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .check-icon {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <header
+        class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-40 h-[60px] flex items-center justify-center px-4">
+        <h1 class="text-center text-lg font-bold text-gray-800 truncate px-2">Phác đồ SXH Dengue</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto px-3 pt-16 md:pt-20 pb-2 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in-up">
+
+            <div class="hidden md:flex bg-indigo-600 p-4 text-white items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <h1 class="text-xl font-bold">Phác đồ Điều trị Sốt xuất huyết (BYT)</h1>
+                        <p class="text-indigo-100 text-xs">Phân độ, bù dịch và xử trí theo hướng dẫn mới nhất</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-mosquito text-3xl text-indigo-300 opacity-50"></i>
+            </div>
+
+            <div class="p-4 md:p-6 space-y-6">
+
+                <!-- 1. THÔNG TIN BỆNH NHÂN -->
+                <section id="info-section">
+                    <h3 class="text-indigo-800 font-bold border-b border-indigo-100 pb-2 mb-4 flex items-center">
+                        <span
+                            class="bg-indigo-100 text-indigo-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">1</span>
+                        Thông tin Bệnh nhân
+                    </h3>
+
+                    <!-- Chọn nhóm tuổi - Đã được căn giữa -->
+                    <!-- Chọn nhóm tuổi - Đã được căn giữa -->
+                    <div class="mb-4 flex flex-col items-center justify-center">
+                        <div class="flex gap-3 bg-gray-100 p-1 rounded-lg w-fit">
+                            <label
+                                class="flex-1 px-4 py-2 cursor-pointer rounded-md transition hover:bg-white text-center whitespace-nowrap">
+                                <input type="radio" name="patientType" value="adult" class="sr-only peer" checked
+                                    onchange="togglePatientType()">
+                                <span
+                                    class="text-sm font-medium text-gray-600 peer-checked:text-indigo-700 peer-checked:font-bold">Người
+                                    lớn</span>
+                            </label>
+                            <label
+                                class="flex-1 px-4 py-2 cursor-pointer rounded-md transition hover:bg-white text-center whitespace-nowrap">
+                                <input type="radio" name="patientType" value="child" class="sr-only peer"
+                                    onchange="togglePatientType()">
+                                <span
+                                    class="text-sm font-medium text-gray-600 peer-checked:text-indigo-700 peer-checked:font-bold">Trẻ
+                                    em</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Các trường thông tin khác -->
+                    <div class="space-y-3">
+                        <!-- Grid các input -->
+                        <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-2">
+                            <!-- Cân nặng -->
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Cân nặng (kg)</label>
+                                <input type="number" id="weight"
+                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    placeholder="VD: 50" oninput="calculateBMI()">
+                            </div>
+
+                            <!-- Chiều cao -->
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Chiều cao (cm)</label>
+                                <input type="number" id="height"
+                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    placeholder="VD: 160" oninput="calculateBMI()">
+                            </div>
+
+                            <!-- Tuổi (luôn hiển thị để tự động phân loại) -->
+                            <div id="age-container">
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Tuổi</label>
+                                <input type="number" id="age"
+                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    placeholder="VD: 10" oninput="validateAge()">
+                            </div>
+
+                            <!-- Giới tính -->
+                            <div id="gender-container" class="col-span-1">
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Giới tính</label>
+                                <select id="gender"
+                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    oninput="calculateBMI()">
+                                    <option value="male">Nam</option>
+                                    <option value="female">Nữ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kết quả BMI & Cân nặng hiệu chỉnh -->
+                    <!-- Kết quả BMI & Cân nặng hiệu chỉnh -->
+                    <div id="bmi-result"
+                        class="mt-3 text-sm bg-blue-50 text-blue-800 p-2 px-3 rounded-lg hidden flex items-center justify-between">
+                        <div class="flex gap-4">
+                            <span>BMI: <b id="bmi-val">--</b></span>
+                            <span>CN Tính dịch: <b id="calc-weight-val">--</b> kg</span>
+                        </div>
+                        <span id="obese-alert" class="hidden text-orange-600 font-bold text-xs"><i
+                                class="fa-solid fa-triangle-exclamation"></i> Béo phì</span>
+                    </div>
+                </section>
+
+                <!-- 2. PHÂN ĐỘ -->
+                <section id="grading-section">
+                    <h3 class="text-indigo-800 font-bold border-b border-indigo-100 pb-2 mb-4 flex items-center">
+                        <span
+                            class="bg-indigo-100 text-indigo-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">2</span>
+                        Triệu chứng & Phân độ
+                    </h3>
+
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-sm text-gray-600 uppercase">Dấu hiệu nặng (Sốc / Suy tạng)</h4>
+                        <div class="grid grid-cols-1 gap-2">
+                            <div class="relative">
+                                <input type="checkbox" id="sym-shock" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="sym-shock"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition border-l-4 border-l-red-500">
+                                    <div class="flex-1 font-medium text-gray-700">Mạch nhanh/nhỏ, HA tụt/kẹt, chi lạnh,
+                                        vật vã</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-red-600"><i
+                                            class="fa-solid fa-circle-check"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="sym-bleeding-severe" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="sym-bleeding-severe"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition border-l-4 border-l-red-500">
+                                    <div class="flex-1 font-medium text-gray-700">Xuất huyết nặng (Tiêu hóa, Phổi,
+                                        Não...)</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-red-600"><i
+                                            class="fa-solid fa-circle-check"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="sym-organ" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="sym-organ"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition border-l-4 border-l-red-500">
+                                    <div class="flex-1 font-medium text-gray-700">Suy tạng nặng (Men gan >= 1000, Rối
+                                        loạn tri giác...)</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-red-600"><i
+                                            class="fa-solid fa-circle-check"></i></div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <h4 class="font-semibold text-sm text-gray-600 uppercase mt-4">Dấu hiệu cảnh báo</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="relative">
+                                <input type="checkbox" id="sym-abdo-pain" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="sym-abdo-pain"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div class="flex-1 text-gray-700">Đau bụng nhiều/liên tục</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-indigo-600"><i
+                                            class="fa-solid fa-circle-check"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="sym-vomit" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="sym-vomit"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div class="flex-1 text-gray-700">Nôn nhiều (>= 3 lần/1h)</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-indigo-600"><i
+                                            class="fa-solid fa-circle-check"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="sym-lethargy" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="sym-lethargy"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div class="flex-1 text-gray-700">Lừ đừ, vật vã</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-indigo-600"><i
+                                            class="fa-solid fa-circle-check"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="sym-liver" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="sym-liver"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div class="flex-1 text-gray-700">Gan to > 2cm</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-indigo-600"><i
+                                            class="fa-solid fa-circle-check"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="sym-mucosa" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="sym-mucosa"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div class="flex-1 text-gray-700">Xuất huyết niêm mạc</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-indigo-600"><i
+                                            class="fa-solid fa-circle-check"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="sym-hct" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="sym-hct"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div class="flex-1 text-gray-700">Hct tăng + TC giảm nhanh</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-indigo-600"><i
+                                            class="fa-solid fa-circle-check"></i></div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <h4 class="font-semibold text-sm text-gray-600 uppercase mt-4">Cơ địa / Hoàn cảnh (Nhập viện)
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="relative">
+                                <input type="checkbox" id="risk-infant" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="risk-infant"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div class="flex-1 text-gray-700">Trẻ nhũ nhi / Người già</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-blue-600"><i
+                                            class="fa-solid fa-hospital"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="risk-chronic" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="risk-chronic"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div class="flex-1 text-gray-700">Bệnh mạn tính / Phụ nữ có thai</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-blue-600"><i
+                                            class="fa-solid fa-hospital"></i></div>
+                                </label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="risk-social" class="sr-only sxh-checkbox"
+                                    onchange="runClassification()">
+                                <label for="risk-social"
+                                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div class="flex-1 text-gray-700">Nhà xa / Sống một mình</div>
+                                    <div class="check-icon w-5 h-5 opacity-0 text-blue-600"><i
+                                            class="fa-solid fa-hospital"></i></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KẾT LUẬN PHÂN ĐỘ -->
+                    <div id="grading-result" class="mt-6 p-4 rounded-xl text-center hidden animate-fade-in-up border-2">
+                        <div class="uppercase text-xs font-bold tracking-wider mb-1 opacity-70">Kết luận phân độ</div>
+                        <div id="grade-title" class="text-2xl font-bold mb-2">--</div>
+                        <div id="grade-desc" class="text-sm">--</div>
+
+                        <div class="mt-4 flex justify-center">
+                            <button onclick="startTreatment()" id="btn-start-treatment"
+                                class="bg-white border-2 border-current px-6 py-2 rounded-full font-bold shadow-sm hover:shadow-md transition transform active:scale-95 flex items-center">
+                                Xem Phác đồ Điệu trị <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. ĐIỀU TRỊ (WIZARD) -->
+                <section id="treatment-section" class="hidden">
+                    <h3
+                        class="text-indigo-800 font-bold border-b border-indigo-100 pb-2 mb-4 flex items-center justify-between">
+                        <span class="flex items-center">
+                            <span
+                                class="bg-indigo-100 text-indigo-700 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs font-bold">3</span>
+                            Điều trị
+                        </span>
+                        <button onclick="resetTreatment()"
+                            class="text-xs text-gray-500 underline hover:text-indigo-600">Làm lại</button>
+                    </h3>
+
+                    <div id="treatment-steps-container" class="space-y-4">
+                        <!-- Nội dung các bước sẽ được render bằng JS -->
+                    </div>
+                </section>
+
+                <div class="mt-8 flex gap-3">
+                    <button onclick="location.reload()"
+                        class="flex-1 bg-gray-100 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-200 transition">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Nhập lại
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Thông báo -->
+    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center z-[80] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="hideModal()"></div>
+        <div class="bg-white rounded-xl shadow-xl p-6 relative z-10 w-11/12 max-w-sm text-center animate-fade-in-up">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Thông báo</h3>
+            <p id="modal-message" class="text-sm text-gray-500 mb-6">...</p>
+            <button onclick="hideModal()"
+                class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // DỮ LIỆU CÂN NẶNG HIỆU CHỈNH TRẺ EM (Phụ lục 9)
+        // [Tuổi, Nam, Nữ]
+        const ADJ_WEIGHT_TABLE = {
+            2: { m: 13, f: 12 },
+            3: { m: 14, f: 14 },
+            4: { m: 16, f: 16 },
+            5: { m: 18, f: 18 },
+            6: { m: 21, f: 20 },
+            7: { m: 23, f: 23 },
+            8: { m: 26, f: 26 },
+            9: { m: 29, f: 29 },
+            10: { m: 32, f: 33 },
+            11: { m: 36, f: 37 },
+            12: { m: 40, f: 42 },
+            13: { m: 45, f: 46 },
+            14: { m: 51, f: 49 },
+            15: { m: 56, f: 52 },
+            16: { m: 61, f: 54 }
+        };
+
+        let currentData = {
+            type: 'adult', // child | teen | adult
+            age: 0,
+            weight: 0,
+            adjWeight: 0,
+            isObese: false,
+            grade: null, // 'shock', 'warning', 'risk', 'home'
+            hasRiskFactors: false
+        };
+
+        // --- HÀM UI CƠ BẢN ---
+        function showModal(msg) {
+            document.getElementById('modal-message').innerText = msg;
+            document.getElementById('notification-modal').classList.remove('hidden');
+        }
+        function hideModal() {
+            document.getElementById('notification-modal').classList.add('hidden');
+        }
+
+        function togglePatientType() {
+            const type = document.querySelector('input[name="patientType"]:checked').value;
+            const ageInput = document.getElementById('age');
+            const ageContainer = document.getElementById('age-container');
+
+            // Luôn hiển thị trường tuổi
+            ageContainer.classList.remove('hidden');
+
+            // Lưu type vào currentData
+            currentData.type = type;
+
+            // Kiểm tra tuổi nếu đã nhập
+            if (ageInput && ageInput.value) {
+                validateAge();
+            }
+
+            calculateBMI();
+        }
+
+        // Hàm kiểm tra và tự động phân loại tuổi
+        function validateAge() {
+            const ageInput = document.getElementById('age');
+            const age = parseInt(ageInput.value);
+            const currentType = document.querySelector('input[name="patientType"]:checked').value;
+
+            if (!age || isNaN(age)) return;
+
+            // Nếu đang chọn "Trẻ em"
+            if (currentType === 'child') {
+                if (age >= 13 && age <= 16) {
+                    // Tự động phân loại vào thiếu niên (nhưng vẫn giữ UI là "Trẻ em")
+                    currentData.type = 'teen';
+                    currentData.age = age;
+                    showToast('info', `Tuổi ${age}: Tự động phân loại vào nhóm Thiếu niên (13-16 tuổi)`);
+                } else if (age > 16) {
+                    // Hiển thị thông báo và tự chuyển sang "Người lớn"
+                    showToast('warning', `Tuổi ${age} > 16: Tự động chuyển sang nhóm Người lớn`);
+                    document.querySelector('input[name="patientType"][value="adult"]').checked = true;
+                    currentData.type = 'adult';
+                    currentData.age = age;
+                } else {
+                    // Trẻ em bình thường (< 13 tuổi)
+                    currentData.type = 'child';
+                    currentData.age = age;
+                }
+            } else if (currentType === 'adult') {
+                // Người lớn
+                if (age <= 16) {
+                    showToast('warning', `Tuổi ${age} <= 16: Tự động chuyển sang nhóm Trẻ em`);
+                    document.querySelector('input[name="patientType"][value="child"]').checked = true;
+                    togglePatientType();
+                    return;
+                }
+                currentData.type = 'adult';
+                currentData.age = age;
+            }
+
+            calculateBMI();
+        }
+
+        // Hàm hiển thị thông báo toast
+        function showToast(type, message) {
+            const toast = document.createElement('div');
+            const bgColor = type === 'warning' ? 'bg-orange-500' : 'bg-blue-500';
+            toast.className = `fixed top-4 right-4 ${bgColor} text-white px-4 py-3 rounded-lg shadow-lg z-50 animate-fade-in`;
+            toast.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-${type === 'warning' ? 'triangle-exclamation' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transition-opacity');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function calculateBMI() {
+            const w = parseFloat(document.getElementById('weight').value);
+            const h = parseFloat(document.getElementById('height').value);
+            const type = currentData.type || document.querySelector('input[name="patientType"]:checked').value;
+            const gender = document.getElementById('gender').value;
+            const age = parseInt(document.getElementById('age').value);
+
+            const resultDiv = document.getElementById('bmi-result');
+            const bmiEl = document.getElementById('bmi-val');
+            const obeseAlert = document.getElementById('obese-alert');
+            const calcWEl = document.getElementById('calc-weight-val');
+
+            if (!w || !h) {
+                resultDiv.classList.add('hidden');
+                return;
+            }
+
+            const bmi = w / ((h / 100) * (h / 100));
+            bmiEl.innerText = bmi.toFixed(1);
+            resultDiv.classList.remove('hidden');
+
+            // Logic tính cân nặng điều trị
+            let finalW = w;
+            let isObese = false;
+
+            if (type === 'adult') {
+                // Người lớn: BMI >= 25 -> Hiệu chỉnh
+                if (bmi >= 25) {
+                    isObese = true;
+                    // IBW
+                    let ibw = 0;
+                    if (gender === 'male') {
+                        ibw = 50 + 0.91 * (h - 152.4);
+                    } else {
+                        ibw = 45.5 + 0.91 * (h - 152.4);
+                    }
+                    // AdjBW = IBW + 0.4 * (Actual - IBW)
+                    finalW = ibw + 0.4 * (w - ibw);
+                }
+            } else {
+                // Trẻ em: Phức tạp hơn. Ở đây ta dùng BMI >= 85th percentile (tương đối >= 23 với trẻ VN lớn, hoặc thấp hơn).
+                // Để đơn giản và an toàn, ta dùng mốc BMI >= 25 như người lớn HOẶC check bảng nếu có.
+                // Phụ lục 9 nói: "Sử dụng cân nặng hiệu chỉnh ở trẻ dư cân hoặc béo phì".
+                // Ta tạm dùng ngưỡng BMI 24 cho trẻ em để cảnh báo Dư cân, hoặc nếu BMI > 28 là Béo phì.
+                // Tốt nhất: Nếu BMI > 24, coi là dư cân và dùng bảng Phụ lục 9.
+
+                if (bmi >= 24) {
+                    isObese = true;
+                    // Lookup table
+                    if (age >= 2 && age <= 16 && ADJ_WEIGHT_TABLE[age]) {
+                        finalW = (gender === 'male') ? ADJ_WEIGHT_TABLE[age].m : ADJ_WEIGHT_TABLE[age].f;
+                    } else {
+                        // Nếu không có trong bảng (VD < 2 tuổi mà béo phì? Hiếm, dùng công thức người lớn tạm hoặc giữ nguyên)
+                        // Với trẻ < 2 tuổi béo phì rất khó, ta giữ nguyên.
+                        if (age > 16) {/* Đã switch sang adult */ }
+                        else {
+                            // Mặc định xài công thức người lớn nếu ko có bảng
+                            let ibw = (gender === 'male') ? 50 + 0.91 * (h - 152.4) : 45.5 + 0.91 * (h - 152.4);
+                            if (ibw > 0) finalW = ibw + 0.4 * (w - ibw);
+                        }
+                    }
+                }
+            }
+
+            // Format
+            finalW = Math.round(finalW);
+            if (isObese) {
+                obeseAlert.classList.remove('hidden');
+            } else {
+                obeseAlert.classList.add('hidden');
+            }
+            calcWEl.innerText = finalW;
+
+            // Save state
+            currentData.weight = w;
+            currentData.adjWeight = finalW;
+            currentData.type = type;
+            currentData.isObese = isObese;
+
+            // Cập nhật lại phân độ nếu đang hiện (để reset flow nếu cần)
+        }
+
+        // --- PHÂN LOẠI ---
+        function runClassification() {
+            // Checkboxes
+            const shock = document.getElementById('sym-shock').checked;
+            const severeBleed = document.getElementById('sym-bleeding-severe').checked;
+            const organ = document.getElementById('sym-organ').checked;
+
+            const warningParams = [
+                'sym-abdo-pain', 'sym-vomit', 'sym-lethargy',
+                'sym-liver', 'sym-mucosa', 'sym-hct'
+            ];
+            const hasWarning = warningParams.some(id => document.getElementById(id).checked);
+
+            const riskParams = ['risk-infant', 'risk-chronic', 'risk-social'];
+            const hasRisk = riskParams.some(id => document.getElementById(id).checked);
+            currentData.hasRiskFactors = hasRisk;
+
+            let grade = 'home';
+            let title = 'Điều trị Ngoại trú';
+            let desc = 'Theo dõi tại y tế cơ sở. Bù dịch bằng đường uống. Tái khám hàng ngày.';
+            let colorClass = 'text-green-600 bg-green-50 border-green-200';
+            let btnClass = 'text-green-600 border-green-600';
+
+            if (shock || severeBleed || organ) {
+                grade = 'shock';
+                title = 'SXH DENGUE NẶNG';
+                desc = 'Nhập Hồi sức cấp cứu ngay. Điều trị chống sốc/cầm máu.';
+                colorClass = 'text-red-700 bg-red-50 border-red-200';
+                btnClass = 'text-red-700 border-red-700';
+            } else if (hasWarning) {
+                grade = 'warning';
+                title = 'SXH DENGUE CÓ DẤU HIỆU CẢNH BÁO';
+                desc = 'Nhập viện điều trị. Xem xét truyền dịch nếu không uống được hoặc nôn nhiều.';
+                colorClass = 'text-orange-700 bg-orange-50 border-orange-200';
+                btnClass = 'text-orange-700 border-orange-700';
+            } else if (hasRisk) {
+                grade = 'risk';
+                title = 'SXH DENGUE TRÊN CƠ ĐỊA ĐẶC BIỆT';
+                desc = 'Cần nhập viện theo dõi vì nguy cơ trở nặng hoặc không thể tự theo dõi.';
+                colorClass = 'text-yellow-700 bg-yellow-50 border-yellow-200';
+                btnClass = 'text-yellow-700 border-yellow-700';
+            }
+
+            const resultBox = document.getElementById('grading-result');
+            const titleEl = document.getElementById('grade-title');
+            const descEl = document.getElementById('grade-desc');
+            const btn = document.getElementById('btn-start-treatment');
+
+            if (!shock && !severeBleed && !organ && !hasWarning && !hasRisk && !document.getElementById('weight').value) {
+                // Chưa nhập gì đáng kể
+                resultBox.classList.add('hidden');
+                return;
+            }
+
+            titleEl.innerText = title;
+            descEl.innerText = desc;
+
+            // Reset classes
+            resultBox.className = `mt-6 p-4 rounded-xl text-center animate-fade-in-up border-2 ${colorClass}`;
+            btn.className = `bg-white border-2 px-6 py-2 rounded-full font-bold shadow-sm hover:shadow-md transition flex items-center ${btnClass}`;
+
+            resultBox.classList.remove('hidden');
+            currentData.grade = grade;
+
+            // Hide treatment if checked boxes change
+            document.getElementById('treatment-section').classList.add('hidden');
+        }
+
+        // --- ĐIỀU TRỊ (WIZARD FLOW) ---
+        function startTreatment() {
+            if (!currentData.weight) {
+                showModal("Vui lòng nhập cân nặng, chiều cao trước.");
+                document.getElementById('weight').focus();
+                return;
+            }
+            document.getElementById('treatment-section').classList.remove('hidden');
+            document.getElementById('treatment-steps-container').innerHTML = ''; // Reset steps
+            renderFirstStep();
+
+            // Scroll to treatment
+            setTimeout(() => {
+                document.getElementById('treatment-section').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        function resetTreatment() {
+            document.getElementById('treatment-steps-container').innerHTML = '';
+            document.getElementById('treatment-section').classList.add('hidden');
+        }
+
+        function w() { return currentData.adjWeight; } // Helper for weight
+
+        // Helper render step
+        function createStepHTML(id, title, content, actions = []) {
+            let actionButtons = '';
+            if (actions.length > 0) {
+                actionButtons = `<div class="mt-3 flex flex-wrap gap-2">`;
+                actions.forEach(act => {
+                    let btnColor = 'bg-indigo-600 hover:bg-indigo-700 text-white';
+                    if (act.type === 'bad') btnColor = 'bg-red-600 hover:bg-red-700 text-white';
+                    if (act.type === 'good') btnColor = 'bg-green-600 hover:bg-green-700 text-white';
+                    if (act.type === 'neutral') btnColor = 'bg-gray-500 hover:bg-gray-600 text-white';
+
+                    actionButtons += `
+                        <button onclick="${act.fn}" class="${btnColor} py-2 px-4 rounded-lg text-sm font-semibold shadow-sm transition">
+                            ${act.label}
+                        </button>
+                    `;
+                });
+                actionButtons += `</div>`;
+            }
+
+            return `
+                <div id="${id}" class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm animate-fade-in-up border-l-4 border-l-indigo-500">
+                    <h4 class="font-bold text-indigo-900 mb-2 text-lg">${title}</h4>
+                    <div class="text-gray-700 space-y-2 mb-3 text-sm md:text-base">
+                        ${content}
+                    </div>
+                    ${actionButtons}
+                </div>
+            `;
+        }
+
+        function addStep(html) {
+            const container = document.getElementById('treatment-steps-container');
+            // Remove old "next steps" if re-rendering from middle? 
+            // For strict flow, we usually just append. user can Reset to start over.
+            container.innerHTML += html;
+            // Auto scroll to new step
+            setTimeout(() => {
+                container.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        function renderFirstStep() {
+            const container = document.getElementById('treatment-steps-container');
+            container.innerHTML = '';
+
+            if (currentData.grade === 'home' || currentData.grade === 'risk') {
+                renderHomeTreatment();
+            }
+            else if (currentData.grade === 'warning') {
+                renderWarningStart();
+            }
+            else if (currentData.grade === 'shock') {
+                renderShockStart();
+            }
+        }
+
+        // --- PHÁC ĐỒ NGOẠI TRÚ ---
+        function renderHomeTreatment() {
+            addStep(createStepHTML('step-home', 'Điều trị Ngoại trú / Có yếu tố nguy cơ', `
+                <ul class="list-disc pl-5 space-y-1">
+                    <li><b>Hạ sốt:</b> Paracetamol 10-15mg/kg (${Math.round(10 * w())}-${Math.round(15 * w())}mg) mỗi 4-6h. Tối đa 60mg/kg/ngày.</li>
+                    <li><b>Bù dịch:</b> Uống nhiều nước oresol, nước trái cây, cháo loãng.</li>
+                    <li><b>Theo dõi:</b> Tái khám mỗi ngày. Theo dõi dấu hiệu cảnh báo/sốc.</li>
+                    <li><b>Nhập viện ngay nếu:</b> Đau bụng, nôn nhiều, chảy máu, tay chân lạnh, vật vã.</li>
+                </ul>
+            `));
+        }
+
+        // --- PHÁC ĐỒ CẢNH BÁO (WARNING) ---
+        function renderWarningStart() {
+            // Phân loại theo nhóm tuổi
+            if (currentData.type === 'adult') renderAdultWarningStart();
+            else if (currentData.type === 'teen') renderTeenWarningStart();
+            else renderChildWarningStart();
+        }
+
+
+        // === NGƯỜI LỚN (≥16 tuổi) - CẢNH BÁO (Phụ lục 6) ===
+        function renderAdultWarningStart() {
+            addStep(createStepHTML('ad-w-check', 'Đánh giá chỉ định truyền dịch', `
+                <p><b>Chỉ định truyền dịch khi:</b></p>
+                <ul class="list-disc pl-5">
+                    <li>Nôn ói nhiều, không uống được</li>
+                    <li>Hct cao hoặc có dấu mất nước</li>
+                </ul>
+            `, [
+                { label: 'Uống được (Không truyền)', fn: 'renderAdultWarnOral()', type: 'good' },
+                { label: 'Cần truyền dịch', fn: 'renderAdultWarnIV1()', type: 'bad' }
+            ]));
+        }
+
+        window.renderAdultWarnOral = function () {
+            addStep(createStepHTML('ad-w-oral', 'Theo dõi', `
+                <p>Khuyến khích uống nước, theo dõi LS, Hct mỗi 4-6h.</p>
+            `, [{ label: 'Chuyển Truyền dịch', fn: 'renderAdultWarnIV1()', type: 'bad' }]));
+        }
+
+        window.renderAdultWarnIV1 = function () {
+            const rate = 6;
+            const total = Math.round(w() * rate);
+            addStep(createStepHTML('ad-w-1', 'Bước 1: 6 ml/kg/giờ', `
+                <p>Dịch: <b>Ringer Lactate</b> hoặc <b>NaCl 0.9%</b></p>
+                <p>Tốc độ: <b>${rate} ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>1-2 giờ</b></p>
+            `, [
+                { label: 'Cải thiện (LS ổn định)', fn: 'renderAdultWarnIV2()', type: 'good' },
+                { label: 'Có biểu hiện sốc', fn: 'renderAdultShockStart(true)', type: 'bad' }
+            ]));
+        }
+
+        window.renderAdultWarnIV2 = function () {
+            const rate = 3;
+            const total = Math.round(w() * rate);
+            addStep(createStepHTML('ad-w-2', 'Bước 2: 3 ml/kg/giờ', `
+                <p>Dịch: RL/NaCl 0.9%</p>
+                <p>Tốc độ: <b>${rate} ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>2-4 giờ</b></p>
+                <p class="text-sm text-gray-500 mt-2">Theo dõi LS, Hct mỗi 2-4 giờ</p>
+            `, [
+                { label: 'Tiếp tục ổn định', fn: 'renderAdultWarnIV3()', type: 'good' },
+                { label: 'Diễn tiến nặng/Sốc', fn: 'renderAdultShockStart(true)', type: 'bad' }
+            ]));
+        }
+
+        window.renderAdultWarnIV3 = function () {
+            const rate = 1.5;
+            const total = Math.round(w() * rate);
+            addStep(createStepHTML('ad-w-3', 'Bước 3: 1.5 ml/kg/giờ', `
+                <p>Dịch: RL/NaCl 0.9%</p>
+                <p>Tốc độ: <b>${rate} ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>6-18 giờ</b></p>
+            `, [
+                { label: 'LS ổn định → Ngưng dịch', fn: 'renderStopFluid()', type: 'good' },
+                { label: 'Chưa ổn định', fn: 'renderAdultShockStart(true)', type: 'bad' }
+            ]));
+        }
+
+        // === THIẾU NIÊN (13-16 tuổi) - CẢNH BÁO (Phụ lục 5) ===
+        function renderTeenWarningStart() {
+            addStep(createStepHTML('tn-w-check1', 'Đánh giá Chi/Mạch', `
+                <p>Bệnh nhân có: <b>Tay chân mát, mạch nhanh, HA bình thường</b>?</p>
+            `, [
+                { label: 'Có', fn: 'renderTeenWarnHigh()', type: 'bad' },
+                { label: 'Không', fn: 'renderTeenWarnCheck2()', type: 'good' }
+            ]));
+        }
+
+        window.renderTeenWarnHigh = function () {
+            const total = Math.round(w() * 10);
+            addStep(createStepHTML('tn-w-high', 'Truyền 10 ml/kg/giờ', `
+                <p>Tốc độ: <b>10 ml/kg/giờ</b> (${total} ml/giờ). RL/NaCl 0.9%</p>
+                <p>Thời gian: <b>1 giờ</b></p>
+            `, [
+                { label: 'Cải thiện', fn: 'renderTeenWarnStep1()', type: 'good' },
+                { label: 'Không cải thiện', fn: 'renderTeenWarnToShock()', type: 'bad' }
+            ]));
+        }
+
+        window.renderTeenWarnCheck2 = function () {
+            addStep(createStepHTML('tn-w-check2', 'Đánh giá chỉ định truyền', `
+                <p>Có ≥1 dấu hiệu: Lừ đừ, không uống được, nôn nhiều, mất nước, Hct cao?</p>
+            `, [
+                { label: 'Không → Uống nước', fn: 'renderTeenWarnOral()', type: 'good' },
+                { label: 'Có → Truyền dịch', fn: 'renderTeenWarnStep1()', type: 'bad' }
+            ]));
+        }
+
+        window.renderTeenWarnOral = function () {
+            addStep(createStepHTML('tn-w-oral', 'Cho uống, theo dõi', `
+                <p>Theo dõi LS, Hct mỗi 4-6h. Nếu nôn nhiều → Truyền dịch</p>
+            `, [{ label: 'Chuyển Truyền', fn: 'renderTeenWarnStep1()', type: 'bad' }]));
+        }
+
+        window.renderTeenWarnStep1 = function () {
+            const total = Math.round(w() * 6.5);
+            addStep(createStepHTML('tn-w-1', 'Bước 1: 6-7 ml/kg/giờ', `
+                <p>Tốc độ: <b>6-7 ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>1-2 giờ</b> (nửa thời gian trẻ em)</p>
+            `, [
+                { label: 'Cải thiện', fn: 'renderTeenWarnStep2()', type: 'good' },
+                { label: 'Nặng lên', fn: 'renderTeenWarnToShock()', type: 'bad' }
+            ]));
+        }
+
+        window.renderTeenWarnStep2 = function () {
+            const total = Math.round(w() * 5);
+            addStep(createStepHTML('tn-w-2', 'Bước 2: 5 ml/kg/giờ', `
+                <p>Tốc độ: <b>5 ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>1-2 giờ</b></p>
+            `, [
+                { label: 'Cải thiện', fn: 'renderTeenWarnStep3()', type: 'good' },
+                { label: 'Nặng lên', fn: 'renderTeenWarnToShock()', type: 'bad' }
+            ]));
+        }
+
+        window.renderTeenWarnStep3 = function () {
+            const total = Math.round(w() * 3);
+            addStep(createStepHTML('tn-w-3', 'Bước 3: 3 ml/kg/giờ', `
+                <p>Tốc độ: <b>3 ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>2-4 giờ</b></p>
+            `, [
+                { label: 'Cải thiện', fn: 'renderTeenWarnStep4()', type: 'good' },
+                { label: 'Nặng lên', fn: 'renderTeenWarnToShock()', type: 'bad' }
+            ]));
+        }
+
+        window.renderTeenWarnStep4 = function () {
+            const total = Math.round(w() * 1.5);
+            addStep(createStepHTML('tn-w-4', 'Bước 4: 1.5 ml/kg/giờ', `
+                <p>Tốc độ: <b>1.5 ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>4-12 giờ</b></p>
+            `, [
+                { label: 'Ổn định → Ngưng (12-24h)', fn: 'renderStopFluid()', type: 'good' }
+            ]));
+        }
+
+        window.renderTeenWarnToShock = function () {
+            addStep(createStepHTML('tn-w-shock', 'Chuyển Sốc', `
+                <p class="text-red-700 font-bold">Diễn tiến nặng → Sốc SXH Dengue</p>
+            `, [{ label: 'Xem Phác đồ Sốc', fn: 'renderTeenShockStart()', type: 'bad' }]));
+        }
+
+        // === TRẺ EM (<13 tuổi) - CẢNH BÁO (Phụ lục 4) ===
+        function renderChildWarningStart() {
+            addStep(createStepHTML('ch-w-check1', 'Đánh giá Chi/Mạch', `
+                <p>Có: <b>Tay chân mát, mạch nhanh, HA bình thường</b>?</p>
+            `, [
+                { label: 'Có', fn: 'renderChildWarnHigh()', type: 'bad' },
+                { label: 'Không', fn: 'renderChildWarnCheck2()', type: 'good' }
+            ]));
+        }
+
+        window.renderChildWarnHigh = function () {
+            const total = Math.round(w() * 10);
+            addStep(createStepHTML('ch-w-high', 'Truyền 10 ml/kg/giờ', `
+                <p>Tốc độ: <b>10 ml/kg/giờ</b> (${total} ml/giờ). RL/NaCl 0.9%</p>
+                <p>Đánh giá sau 1 giờ</p>
+            `, [
+                { label: 'Cải thiện', fn: 'renderChildWarnStep1()', type: 'good' },
+                { label: 'Không cải thiện', fn: 'renderChildWarnToShock()', type: 'bad' }
+            ]));
+        }
+
+        window.renderChildWarnCheck2 = function () {
+            addStep(createStepHTML('ch-w-check2', 'Chỉ định truyền dịch', `
+                <p>Có ≥1: Lừ đừ, không uống, nôn nhiều, mất nước, Hct cao?</p>
+            `, [
+                { label: 'Không → Uống', fn: 'renderChildWarnOral()', type: 'good' },
+                { label: 'Có → Truyền', fn: 'renderChildWarnStep1()', type: 'bad' }
+            ]));
+        }
+
+        window.renderChildWarnOral = function () {
+            addStep(createStepHTML('ch-w-oral', 'Theo dõi', `
+                <p>Uống nước, theo dõi LS, Hct mỗi 4-6h</p>
+            `, [{ label: 'Chuyển Truyền', fn: 'renderChildWarnStep1()', type: 'bad' }]));
+        }
+
+        window.renderChildWarnStep1 = function () {
+            const total = Math.round(w() * 6.5);
+            addStep(createStepHTML('ch-w-1', 'Bước 1: 6-7 ml/kg/giờ', `
+                <p>Tốc độ: <b>6-7 ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>1-3 giờ</b></p>
+            `, [
+                { label: 'Cải thiện', fn: 'renderChildWarnStep2()', type: 'good' },
+                { label: 'Nặng lên', fn: 'renderChildWarnToShock()', type: 'bad' }
+            ]));
+        }
+
+        window.renderChildWarnStep2 = function () {
+            const total = Math.round(w() * 5);
+            addStep(createStepHTML('ch-w-2', 'Bước 2: 5 ml/kg/giờ', `
+                <p>Tốc độ: <b>5 ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>2-4 giờ</b></p>
+            `, [
+                { label: 'Cải thiện', fn: 'renderChildWarnStep3()', type: 'good' },
+                { label: 'Nặng lên', fn: 'renderChildWarnToShock()', type: 'bad' }
+            ]));
+        }
+
+        window.renderChildWarnStep3 = function () {
+            const total = Math.round(w() * 3);
+            addStep(createStepHTML('ch-w-3', 'Bước 3: 3 ml/kg/giờ', `
+                <p>Tốc độ: <b>3 ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>2-4 giờ</b></p>
+                <p>Đánh giá: Mạch, HA ổn, Hct giảm, tiểu ≥0.5ml/kg/h</p>
+            `, [
+                { label: 'Ổn định → Ngưng (24-48h)', fn: 'renderStopFluid()', type: 'good' },
+                { label: 'Nặng lên', fn: 'renderChildWarnToShock()', type: 'bad' }
+            ]));
+        }
+
+        window.renderChildWarnToShock = function () {
+            addStep(createStepHTML('ch-w-shock', 'Chuyển Sốc', `
+                <p class="text-red-700 font-bold">Diễn tiến nặng. Kiểm tra tổng dịch đã truyền:</p>
+                <p>- Nếu <60ml/kg: Tăng RL/NaCl 10-20ml/kg/h x 1h</p>
+                <p>- Nếu >60ml/kg: CPT 10-20ml/kg/h x 1h</p>
+            `, [{ label: 'Xem Phác đồ Sốc', fn: 'renderChildShockStart()', type: 'bad' }]));
+        }
+
+        // --- PHÁC ĐỒ SỐC (SHOCK) ---
+        function renderShockStart() {
+            if (currentData.type === 'adult') renderAdultShockStart();
+            else if (currentData.type === 'teen') renderTeenShockStart();
+            else renderChildShockStart();
+        }
+
+        // === NGƯỜI LỚN - SỐC (Phụ lục 16.1) ===
+        window.renderAdultShockStart = function (fromWarn = false) {
+            const rate = 15;
+            const total = Math.round(w() * rate);
+            addStep(createStepHTML('ad-s-1', fromWarn ? 'Xử trí Sốc (từ Cảnh báo)' : 'Xử trí Sốc ban đầu', `
+                <p class="font-bold text-red-600">Thở Oxy. Truyền RL/NaCl 0.9%</p>
+                <p>Tốc độ: <b>${rate} ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>1 giờ</b></p>
+            `, [
+                { label: 'Cải thiện (M giảm, HA bt, Hiệu áp >20)', fn: 'renderAdultShockStep(10, 2)', type: 'good' },
+                { label: 'KHÔNG Cải thiện', fn: 'renderAdultShockCheckHct()', type: 'bad' }
+            ]));
+        }
+
+        window.renderAdultShockStep = function (rate, hours) {
+            const total = Math.round(w() * rate);
+            let nextFn = '';
+            let timeText = hours + ' giờ';
+
+            if (rate === 10) { nextFn = 'renderAdultShockStep(6, 2)'; }
+            else if (rate === 6) { nextFn = 'renderAdultShockStep(3, 7)'; timeText = '2 giờ'; }
+            else if (rate === 3) { nextFn = 'renderAdultShockStep(1.5, 12)'; timeText = '5-7 giờ'; }
+            else if (rate === 1.5) { nextFn = 'renderStopFluid()'; timeText = '12 giờ'; }
+
+            addStep(createStepHTML(`ad-s-${rate}`, `Sốc cải thiện: ${rate} ml/kg/giờ`, `
+                <p>Tốc độ: <b>${rate} ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>${timeText}</b></p>
+            `, [
+                { label: 'Tiếp tục cải thiện', fn: nextFn, type: 'good' },
+                { label: 'Tái sốc / Xấu đi', fn: 'renderAdultShockCheckHct()', type: 'bad' }
+            ]));
+        }
+
+        window.renderAdultShockCheckHct = function () {
+            addStep(createStepHTML('ad-s-hct', 'Đánh giá Hct', `
+                <p>Đo Hct ngay. So sánh với Hct lúc vào sốc.</p>
+            `, [
+                { label: 'Hct Cao (Tăng/Không đổi/Giảm <20%)', fn: 'renderAdultColloid()', type: 'neutral' },
+                { label: 'Hct Thấp (Giảm >20% hoặc <35%)', fn: 'renderBleeding()', type: 'bad' }
+            ]));
+        }
+
+        window.renderAdultColloid = function () {
+            const total = Math.round(w() * 10);
+            addStep(createStepHTML('ad-s-cpt', 'Truyền Cao Phân Tử', `
+                <p>Chuyển sang <b>Cao phân tử</b></p>
+                <p>Liều: <b>10-15 ml/kg/giờ</b> (${total} ml)</p>
+                <p>Thời gian: <b>1 giờ</b></p>
+            `, [
+                { label: 'Cải thiện', fn: 'renderAdultShockStep(10, 2)', type: 'good' },
+                { label: 'Không cải thiện', fn: 'showModal("Hội chẩn chuyên gia & Xem PL18")', type: 'bad' }
+            ]));
+        }
+
+
+        // === THIẾU NIÊN - SỐC (Phụ lục 11) ===
+        function renderTeenShockStart() {
+            const total = Math.round(w() * 20);
+            addStep(createStepHTML('tn-s-1', 'Hồi sức ban đầu', `
+                <p class="font-bold text-red-600">Thở Oxy + RL/NaCl 0.9%</p>
+                <p>Liều: <b>20 ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>1 giờ</b></p>
+            `, [
+                { label: 'Cải thiện LS, Hct', fn: 'renderTeenShockStep(10)', type: 'good' },
+                { label: 'Không cải thiện', fn: 'renderTeenShockCheckHct()', type: 'bad' }
+            ]));
+        }
+
+        window.renderTeenShockStep = function (rate) {
+            const total = Math.round(w() * rate);
+            let nextFn = '';
+            let time = '1 giờ';
+
+            if (rate === 10) { nextFn = 'renderTeenShockStep(7.5)'; }
+            else if (rate === 7.5) { nextFn = 'renderTeenShockStep(5)'; }
+            else if (rate === 5) { nextFn = 'renderTeenShockStep(3)'; }
+            else if (rate === 3) { nextFn = 'renderTeenShockStep(1.5)'; time = '4-6 giờ'; }
+            else if (rate === 1.5) { nextFn = 'renderStopFluid()'; time = '12-18 giờ'; }
+
+            addStep(createStepHTML(`tn-s-${rate}`, `Giảm liều: ${rate} ml/kg/giờ`, `
+                <p>Tốc độ: <b>${rate} ml/kg/giờ</b> (${total} ml/giờ)</p>
+                <p>Thời gian: <b>${time}</b></p>
+            `, [
+                { label: 'Tiếp tục cải thiện', fn: nextFn, type: 'good' },
+                { label: 'Không cải thiện', fn: 'renderTeenShockCheckHct()', type: 'bad' }
+            ]));
+        }
+
+        window.renderTeenShockCheckHct = function () {
+            addStep(createStepHTML('tn-s-hct', 'Đánh giá Hct', `
+                <p>Đo Hct ngay.</p>
+            `, [
+                { label: 'Hct Cao (≥40%)', fn: 'renderTeenColloid()', type: 'neutral' },
+                { label: 'Hct Thấp (≤35% / Giảm >20%)', fn: 'renderBleeding()', type: 'bad' }
+            ]));
+        }
+
+        window.renderTeenColloid = function () {
+            const total = Math.round(w() * 10);
+            addStep(createStepHTML('tn-s-cpt', 'Cao Phân Tử', `
+                <p>CPT <b>10-20 ml/kg/giờ</b> (${total} ml)</p>
+                <p>Thời gian: <b>1 giờ</b> (nửa thời gian trẻ em)</p>
+            `, [
+                { label: 'Cải thiện', fn: 'renderTeenShockStep(10)', type: 'good' },
+                { label: 'Không cải thiện', fn: 'showModal("Đo CVP, Hội chẩn")', type: 'bad' }
+            ]));
+        }
+
+        // === TRẺ EM - SỐC (Phụ lục 8) ===
+        window.renderChildShockStart = function () {
+            // Hỏi mức độ tụt HA
+            addStep(createStepHTML('ch-s-ask', 'Đánh giá Huyết áp', `
+                <p class="mb-2">Kiểm tra HA và Mạch:</p>
+             `, [
+                { label: 'Sốc (Kẹt <= 20mmHg / Tụt nhẹ)', fn: 'renderChildShockBolus(false)', type: 'bad' },
+                { label: 'Sốc Nặng / HA=0 / Tụt sâu', fn: 'renderChildShockBolus(true)', type: 'bad' }
+            ]));
+        }
+
+        window.renderChildShockBolus = function (isSevere) {
+            const rate = 20;
+            const total = Math.round(w() * rate);
+            const duration = isSevere ? '15 PHÚT' : '1 GIỜ';
+            const title = isSevere ? 'Chống sốc NẶNG (HA=0)' : 'Chống sốc Thông thường';
+
+            addStep(createStepHTML('ch-s-bolus', title, `
+                <p class="font-bold text-red-600">Thở Oxy + Truyền dịch cấp cứu.</p>
+                <p>Dịch: <b>Ringer Lactate / NaCl 0.9%</b>.</p>
+                <p>Liều: <b>${rate} ml/kg</b> (${total} ml).</p>
+                <p>Thời gian truyền: <b>${duration}</b>.</p>
+             `, [
+                { label: 'Cải thiện', fn: 'renderChildShockValA()', type: 'good' }, // Nhánh A
+                { label: 'Không cải thiện', fn: 'renderChildShockValB()', type: 'bad' } // Nhánh B
+            ]));
+        }
+
+        // Nhánh A - Trẻ em (Cải thiện)
+        window.renderChildShockValA = function () {
+            // 10ml/kg -> 7.5 -> 5 -> 3
+            renderChildShockStep(10);
+        }
+
+        window.renderChildShockStep = function (rate) {
+            const total = Math.round(w() * rate);
+            let nextFn = '';
+            let time = '1 - 2 giờ';
+
+            if (rate === 10) nextFn = 'renderChildShockStep(7.5)';
+            else if (rate === 7.5) nextFn = 'renderChildShockStep(5)';
+            else if (rate === 5) {
+                time = '3 - 4 giờ';
+                nextFn = 'renderChildShockStep(3)';
+            }
+            else if (rate === 3) {
+                time = '4 - 6 giờ';
+                nextFn = 'renderStopFluid()';
+            }
+
+            addStep(createStepHTML(`ch-s-${rate}`, `Cải thiện: Giảm liều ${rate} ml/kg/h`, `
+                <p>Dịch: RL / NaCl 0.9%.</p>
+                <p>Tốc độ: <b>${rate} ml/kg/giờ</b> (${total} ml/giờ).</p>
+                <p>Thời gian: <b>${time}</b>.</p>
+             `, [
+                { label: 'Tiếp tục cải thiện', fn: nextFn, type: 'good' },
+                { label: 'Không cải thiện', fn: 'renderChildColloid()', type: 'bad' } // Chuyển nhánh B (Co phan tu)
+            ]));
+        }
+
+        // Nhánh B - Trẻ em (Không cải thiện -> Check Hct)
+        window.renderChildShockValB = function () {
+            addStep(createStepHTML('ch-s-check-hct', 'Đánh giá Hct (Sốc không cải thiện)', `
+                <p>Đo lại Hct ngay lập tức.</p>
+             `, [
+                { label: 'Hct Cao (>= 40% / Tăng)', fn: 'renderChildColloid()', type: 'neutral' },
+                { label: 'Hct Thấp (<= 35% / Giảm nhanh)', fn: 'renderBleeding()', type: 'bad' }
+            ]));
+        }
+
+        window.renderChildColloid = function () {
+            const rate = 10; // -20
+            const total = Math.round(w() * rate);
+            addStep(createStepHTML('ch-s-colloid', 'Truyền Cao Phân Tử', `
+                <p>Chuyển sang <b>Cao phân tử</b>.</p>
+                <p>Liều: <b>10 - 20 ml/kg/giờ</b> (Tính 10ml: ${total} ml).</p>
+                <p>Thời gian: <b>1 giờ</b>.</p>
+             `, [
+                { label: 'Cải thiện', fn: 'renderChildColloidDown()', type: 'good' },
+                { label: 'Không cải thiện', fn: 'showModal("Đo CVP, Huyết áp xâm lấn, Hội chẩn ngay.")', type: 'bad' }
+            ]));
+        }
+
+        window.renderChildColloidDown = function () {
+            // Giả lập giảm liều CPT: 10 -> 7.5 -> 5
+            addStep(createStepHTML('ch-s-cp-down', 'Giảm liều Cao phân tử', `
+                 <p>Giảm dần CPT: <b>10 -> 7.5 -> 5 ml/kg/h</b>.</p>
+                 <p>Khi ổn định hoàn toàn -> Cắt CPT chuyển sang Điện giải.</p>
+             `, [{ label: 'Đã chuyển sang Điện giải', fn: 'renderChildShockValA()', type: 'good' }]));
+        }
+
+
+        // --- CHUNG: XUẤT HUYẾT / NGƯNG DỊCH ---
+        window.renderBleeding = function () {
+            addStep(createStepHTML('bleeding', 'Nghi ngờ Xuất huyết', `
+                <p class="text-red-600 font-bold">Xử trí Xuất huyết nặng</p>
+                <p>- Truyền Hồng cầu lắng: <b>5 - 10 ml/kg</b>.</p>
+                <p>- Hoặc Máu toàn phần: <b>10 - 20 ml/kg</b>.</p>
+                <p>- Giữ duy trì Cao phân tử 10ml/kg/h song song (nếu sốc).</p>
+             `, []));
+        }
+
+        window.renderStopFluid = function () {
+            addStep(createStepHTML('stop-fluid', 'Kết thúc truyền dịch', `
+                <p class="text-green-700 font-bold">Lâm sàng ổn định. Ngưng dịch truyền.</p>
+                <p>Tiếp tục theo dõi tại phòng bệnh 12-24 giờ tiếp theo.</p>
+             `, []));
+        }
+
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
